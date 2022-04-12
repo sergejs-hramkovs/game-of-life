@@ -9,9 +9,9 @@ namespace GameOfLife
     public class Field
     {
         private int _fieldHeight { get; set; }
-        public int _fieldWidth { get; set; }
+        private int _fieldWidth { get; set; }
 
-        string[,] fieldArray;
+        private string[,] fieldArray;
 
         public Field(int height, int width)
         {
@@ -19,7 +19,11 @@ namespace GameOfLife
             _fieldWidth = width;
         }
 
-        public void CreateField()
+        /// <summary>
+        /// Initial creation of an empty gaming field.
+        /// </summary>
+        /// <returns></returns>
+        public string[,] CreateField()
         {
             fieldArray = new string[_fieldWidth, _fieldHeight];
 
@@ -27,27 +31,47 @@ namespace GameOfLife
             {
                 for (int i = 0; i < _fieldWidth; i++)
                 {
-                    fieldArray[i, j] = "-";
+                    // Creating padding for now to avoid wrapping issues.
+                    if (j == 0 || i == 0 || j == _fieldHeight - 1 || i == _fieldWidth - 1)
+                    {
+                        fieldArray[i, j] = "#";
+                    }
+                    // ----------
+
+                    else
+                    {
+                        fieldArray[i, j] = "-";
+                    }
                 }
             }
+
+            return fieldArray;
         }
 
-        public void DrawField()
+        /// <summary>
+        /// Function that draws the field.
+        /// </summary>
+        /// <param name="field"></param>
+        public void DrawField(string [,] field)
         {
             Console.WriteLine();
 
-            for (int j = 0; j < _fieldHeight; j++)
+            for (int j = 0; j < field.GetLength(0); j++)
             {
-                for (int i = 0; i < _fieldWidth; i++)
+                for (int i = 0; i < field.GetLength(1); i++)
                 {
-                    Console.Write(" " + fieldArray[i, j]);
+                    Console.Write(" " + field[i, j]);
                 }
 
                 Console.WriteLine();
             }
         }
 
-        public void SeedField()
+        /// <summary>
+        /// Seeding the field with user input cells.
+        /// </summary>
+        /// <returns></returns>
+        public string[,] SeedField()
         {
             int cellX;
             int cellY;
@@ -64,7 +88,7 @@ namespace GameOfLife
                 {
                     Console.WriteLine();
                     Console.WriteLine("The seeding has been stopped!");
-                    break;
+                    return fieldArray;
                 }
 
                 cellX = Convert.ToInt32(input);
@@ -76,14 +100,16 @@ namespace GameOfLife
                 {
                     Console.WriteLine();
                     Console.WriteLine("The seeding has been stopped!");
-                    break;
+                    return fieldArray;
                 }
 
                 cellY = Convert.ToInt32(input);      
 
-                fieldArray[cellX - 1, cellY - 1] = "X";
-                DrawField();
-            }            
+                fieldArray[cellX, cellY] = "X";
+                DrawField(fieldArray);
+            }
+            
+            return fieldArray;
         }
     }
 }
