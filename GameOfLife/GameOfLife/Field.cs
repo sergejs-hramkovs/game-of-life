@@ -31,17 +31,19 @@ namespace GameOfLife
             {
                 for (int i = 0; i < _fieldWidth; i++)
                 {
-                    // Creating padding for now to avoid wrapping issues.
-                    if (j == 0 || i == 0 || j == _fieldHeight - 1 || i == _fieldWidth - 1)
-                    {
-                        fieldArray[i, j] = "#";
-                    }
-                    // ----------
+                    //// Creating padding for now to avoid wrapping issues.
+                    //if (j == 0 || i == 0 || j == _fieldHeight - 1 || i == _fieldWidth - 1)
+                    //{
+                    //    fieldArray[i, j] = "#";
+                    //}
+                    //// ----------
 
-                    else
-                    {
-                        fieldArray[i, j] = "-";
-                    }
+                    //else
+                    //{
+                    //    fieldArray[i, j] = "-";
+                    //}
+
+                    fieldArray[i, j] = "-";
                 }
             }
 
