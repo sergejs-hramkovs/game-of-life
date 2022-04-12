@@ -14,6 +14,10 @@ namespace GameOfLife
         public List<int> cellsToBeBornX = new List<int>();
         public List<int> cellsToBeBornY = new List<int>();
 
+        /// <summary>
+        /// Checks dead and alive cells according to the rules
+        /// </summary>
+        /// <param name="field"></param>
         public void CheckCells(string[,] field)
         {
             int neigboursCountOfAlive = 0;
@@ -79,6 +83,11 @@ namespace GameOfLife
             }
         }
 
+        /// <summary>
+        /// Removes or creates new cells according to the rules
+        /// </summary>
+        /// <param name="field"></param>
+        /// <returns></returns>
         public string[,] FieldRefresh(string[,] field)
         {
             for (int i = 0; i < cellsToDieX.Count; i++)
@@ -91,22 +100,13 @@ namespace GameOfLife
                 field[cellsToBeBornX[i], cellsToBeBornY[i]] = "X";
             }
 
+            cellsToBeBornX.Clear();
+            cellsToBeBornY.Clear();
+
+            cellsToDieX.Clear();
+            cellsToDieY.Clear();
+
             return field;
-        }
-
-        public void DrawFieldNew(string[,] field)
-        {
-            Console.WriteLine("Generation 1: ");
-
-            for (int j = 0; j < field.GetLength(0); j++)
-            {
-                for (int i = 0; i < field.GetLength(1); i++)
-                {
-                    Console.Write(" " + field[i, j]);
-                }
-
-                Console.WriteLine();
-            }
         }
     }
 }
