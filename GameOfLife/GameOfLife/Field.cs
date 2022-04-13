@@ -74,11 +74,13 @@ namespace GameOfLife
                 if (seedingChoice == "M")
                 {
                     ManualSeeding();
+
                     return fieldArray;
                 }
                 else if (seedingChoice == "R")
                 {
                     RandomSeeding();
+
                     return fieldArray;
                 }
                 else
@@ -126,14 +128,12 @@ namespace GameOfLife
                     {
                         cellY = resultY;
                     }
-
                     else
                     {
                         Console.WriteLine("\nWrong Input!");
                         continue;
                     }
                 }
-
                 else
                 {
                     Console.WriteLine("\nWrong Input!");
@@ -144,12 +144,10 @@ namespace GameOfLife
                 {
                     fieldArray[cellX, cellY] = "X";
                 }
-
                 else
                 {
                     fieldArray[cellX, cellY] = "-";
                 }
-
                 DrawField(fieldArray);
             }
         }
@@ -174,7 +172,6 @@ namespace GameOfLife
                     fieldArray[randomX, randomY] = "X";
                 }
             }
-
             return fieldArray;
         }
     }

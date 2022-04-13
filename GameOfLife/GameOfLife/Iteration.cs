@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GameOfLife
+﻿namespace GameOfLife
 {
     public class Iteration
     {
@@ -14,13 +8,22 @@ namespace GameOfLife
         public List<int> cellsToBeBornY = new List<int>();
 
         /// <summary>
-        /// Checks dead and alive cells according to the rules.
+        /// Applies checks for alive and dead cells according to the rules.
         /// </summary>
         /// <param name="field"></param>
         public void CheckCells(string[,] field)
         {
+            CheckAlive(field);
+            CheckDead(field);
+        }
+
+        /// <summary>
+        /// Determines if an alive cell dies before the next generation.
+        /// </summary>
+        /// <param name="field"></param>
+        public void CheckAlive(string[,] field)
+        {
             int neigboursCountOfAlive = 0;
-            int neigboursCountOfDead = 0;
             bool wrappedX = false;
             bool wrappedY = false;
 
@@ -77,7 +80,24 @@ namespace GameOfLife
                         }
                         neigboursCountOfAlive = 0;
                     }
+                }
+            }
+        }
 
+        /// <summary>
+        /// Determines if a dead cell is reborn before the next generation.
+        /// </summary>
+        /// <param name="field"></param>
+        public void CheckDead(string[,] field)
+        {
+            int neigboursCountOfDead = 0;
+            bool wrappedX = false;
+            bool wrappedY = false;
+
+            for (int i = 0; i < field.GetLength(0); i++)
+            {
+                for (int j = 0; j < field.GetLength(1); j++)
+                {
                     if (field[i, j] == "-")
                     {
                         for (int neighbourX = i - 1; neighbourX <= i + 1; neighbourX++)
@@ -147,7 +167,6 @@ namespace GameOfLife
             cellsToBeBornY.Clear();
             cellsToDieX.Clear();
             cellsToDieY.Clear();
-
             return field;
         }
     }
