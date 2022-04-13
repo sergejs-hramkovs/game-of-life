@@ -89,7 +89,7 @@ namespace GameOfLife
                             return fieldArray;
                         }
 
-                        if (int.TryParse(input, out var resultX))
+                        if (int.TryParse(input, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
                         {
                             cellX = resultX;
 
@@ -102,7 +102,7 @@ namespace GameOfLife
                                 return fieldArray;
                             }
 
-                            if (int.TryParse(input, out var resultY))
+                            if (int.TryParse(input, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(0))
                             {
                                 cellY = resultY;
                             }
