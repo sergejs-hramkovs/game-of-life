@@ -10,7 +10,6 @@ namespace GameOfLife
     {
         private int _fieldHeight { get; set; }
         private int _fieldWidth { get; set; }
-
         private string[,] fieldArray;
 
         public Field(int height, int width)
@@ -58,14 +57,11 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Seeding the field with user input cells.
+        /// Function to choose how to seed the field - manually or automatically.
         /// </summary>
         /// <returns></returns>
-        public string[,] SeedField()
+        public string[,] ChooseSeedingOption()
         {
-            int cellX;
-            int cellY;
-            string input;
             string seedingChoice;
 
             while (true)
@@ -77,90 +73,108 @@ namespace GameOfLife
 
                 if (seedingChoice == "M")
                 {
-                    while (true)
-                    {
-                        Console.WriteLine("\nTo stop seeding enter 'stop'");
-                        Console.Write("\nEnter X coordinate of the cell: ");
-                        input = Console.ReadLine();
-
-                        if (input == "stop")
-                        {
-                            Console.WriteLine("\nThe seeding has been stopped!");
-                            return fieldArray;
-                        }
-
-                        if (int.TryParse(input, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
-                        {
-                            cellX = resultX;
-
-                            Console.Write("\nEnter Y coordinate of the cell: ");
-                            input = Console.ReadLine();
-
-                            if (input == "stop")
-                            {
-                                Console.WriteLine("\nThe seeding has been stopped!");
-                                return fieldArray;
-                            }
-
-                            if (int.TryParse(input, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(0))
-                            {
-                                cellY = resultY;
-                            }
-
-                            else
-                            {
-                                Console.WriteLine("\nWrong Input!");
-                                continue;
-                            }
-                        }
-
-                        else
-                        {
-                            Console.WriteLine("\nWrong Input!");
-                            continue;
-                        }
-
-                        if (fieldArray[cellX, cellY] == "-")
-                        {
-                            fieldArray[cellX, cellY] = "X";
-                        }
-                        else
-                        {
-                            fieldArray[cellX, cellY] = "-";
-                        }
-                        
-                        DrawField(fieldArray);
-                    }
-                }
-
-                else if (seedingChoice == "R")
-                {
-                    Random random = new Random();
-                    int aliveCellCount = random.Next(1, _fieldWidth * _fieldHeight);
-                    int randomX, randomY;
-
-                    for (int i = 1; i <= aliveCellCount; i++)
-                    {
-
-                        randomX = random.Next(0, fieldArray.GetLength(0) - 1);
-                        randomY = random.Next(0, fieldArray.GetLength(1) - 1);
-
-                        if (fieldArray[randomX, randomY] != "X")
-                        {
-                            fieldArray[randomX, randomY] = "X";
-                        }
-                      
-                    }
-
+                    ManualSeeding();
                     return fieldArray;
                 }
-
-                else             
+                else if (seedingChoice == "R")
+                {
+                    RandomSeeding();
+                    return fieldArray;
+                }
+                else
                 {
                     Console.WriteLine("Wrong Input!");
                 }
-            }         
-            
+            }
+        }
+
+        /// <summary>
+        /// Cell seeding coordinates are entered manually by the user.
+        /// </summary>
+        /// <returns></returns>
+        public string[,] ManualSeeding()
+        {
+            string input;
+            int cellX;
+            int cellY;
+
+            while (true)
+            {
+                Console.WriteLine("\nTo stop seeding enter 'stop'");
+                Console.Write("\nEnter X coordinate of the cell: ");
+                input = Console.ReadLine();
+
+                if (input == "stop")
+                {
+                    Console.WriteLine("\nThe seeding has been stopped!");
+                    return fieldArray;
+                }
+
+                if (int.TryParse(input, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
+                {
+                    cellX = resultX;
+                    Console.Write("\nEnter Y coordinate of the cell: ");
+                    input = Console.ReadLine();
+
+                    if (input == "stop")
+                    {
+                        Console.WriteLine("\nThe seeding has been stopped!");
+                        return fieldArray;
+                    }
+
+                    if (int.TryParse(input, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(0))
+                    {
+                        cellY = resultY;
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("\nWrong Input!");
+                        continue;
+                    }
+                }
+
+                else
+                {
+                    Console.WriteLine("\nWrong Input!");
+                    continue;
+                }
+
+                if (fieldArray[cellX, cellY] == "-")
+                {
+                    fieldArray[cellX, cellY] = "X";
+                }
+
+                else
+                {
+                    fieldArray[cellX, cellY] = "-";
+                }
+
+                DrawField(fieldArray);
+            }
+        }
+
+        /// <summary>
+        /// Cell amount and coordinates are generated automatically and randomly.
+        /// </summary>
+        /// <returns></returns>
+        public string [,] RandomSeeding()
+        {
+            Random random = new Random();
+            int aliveCellCount = random.Next(1, _fieldWidth * _fieldHeight);
+            int randomX, randomY;
+
+            for (int i = 1; i <= aliveCellCount; i++)
+            {
+                randomX = random.Next(0, fieldArray.GetLength(0) - 1);
+                randomY = random.Next(0, fieldArray.GetLength(1) - 1);
+
+                if (fieldArray[randomX, randomY] != "X")
+                {
+                    fieldArray[randomX, randomY] = "X";
+                }
+            }
+
             return fieldArray;
         }
     }

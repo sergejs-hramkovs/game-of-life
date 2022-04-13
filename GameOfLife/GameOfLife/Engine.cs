@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GameOfLife;
-
-namespace GameOfLife
+﻿namespace GameOfLife
 {
     public class Engine
     {
@@ -15,12 +8,11 @@ namespace GameOfLife
         string[,] gameField;
 
         /// <summary>
-        /// Initiate field size choice
+        /// Initiate field size choice.
         /// </summary>
         public void Start()
-        {       
+        {
             string fieldSizeChoice;
-
             Console.WriteLine("Welcome to the Game of Life!");
 
             while (true)
@@ -67,19 +59,16 @@ namespace GameOfLife
                                 {
                                     break;
                                 }
-
                                 else
                                 {
                                     Console.WriteLine("\nWrong Input!");
                                 }
                             }
-
                             else
                             {
                                 Console.WriteLine("\nWrong Input!");
                             }
-                        }             
-                        
+                        }
                         break;
 
                     default:
@@ -96,7 +85,7 @@ namespace GameOfLife
                 {
                     Console.WriteLine("\nWrong input!");
                 }
-            }         
+            }
         }
 
         /// <summary>
@@ -106,15 +95,11 @@ namespace GameOfLife
         {
             Field field = new Field(height, width);
             Iteration iteration = new Iteration();
-
             gameField = field.CreateField();
             field.DrawField(gameField);
-
-            gameField = field.SeedField();
-
+            gameField = field.ChooseSeedingOption();
             Console.Clear();
             Console.CursorVisible = false;
-
 
             while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape))
             {

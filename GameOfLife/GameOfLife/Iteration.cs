@@ -10,12 +10,11 @@ namespace GameOfLife
     {
         public List<int> cellsToDieX = new List<int>();
         public List<int> cellsToDieY = new List<int>();
-
         public List<int> cellsToBeBornX = new List<int>();
         public List<int> cellsToBeBornY = new List<int>();
 
         /// <summary>
-        /// Checks dead and alive cells according to the rules
+        /// Checks dead and alive cells according to the rules.
         /// </summary>
         /// <param name="field"></param>
         public void CheckCells(string[,] field)
@@ -76,7 +75,6 @@ namespace GameOfLife
                             cellsToDieX.Add(i);
                             cellsToDieY.Add(j);
                         }
-
                         neigboursCountOfAlive = 0;
                     }
 
@@ -122,7 +120,6 @@ namespace GameOfLife
                             cellsToBeBornX.Add(i);
                             cellsToBeBornY.Add(j);
                         }
-
                         neigboursCountOfDead = 0;
                     }
                 }
@@ -130,7 +127,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Removes or creates new cells according to the rules
+        /// Removes or creates new cells according to the rules.
         /// </summary>
         /// <param name="field"></param>
         /// <returns></returns>
@@ -148,7 +145,6 @@ namespace GameOfLife
 
             cellsToBeBornX.Clear();
             cellsToBeBornY.Clear();
-
             cellsToDieX.Clear();
             cellsToDieY.Clear();
 
