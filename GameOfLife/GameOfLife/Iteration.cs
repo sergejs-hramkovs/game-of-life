@@ -42,37 +42,31 @@
                                     neighbourX = field.GetLength(0) - 1;
                                     wrappedX = true;
                                 }
-
                                 if (neighbourY == -1)
                                 {
                                     neighbourY = field.GetLength(1) - 1;
                                     wrappedY = true;
                                 }
-
                                 if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == "X")
                                 {
                                     neigboursCountOfAlive++;
                                 }
-
                                 if (neighbourX == i && neighbourY == j && neigboursCountOfAlive > 0)
                                 {
                                     neigboursCountOfAlive--;
                                 }
-
                                 if (wrappedY)
                                 {
                                     neighbourY = j - 1;
                                     wrappedY = false;
                                 }
                             }
-
                             if (wrappedX)
                             {
                                 neighbourX = i - 1;
                                 wrappedX = false;
                             }
                         }
-
                         if (neigboursCountOfAlive < 2 || neigboursCountOfAlive > 3)
                         {
                             cellsToDieX.Add(i);
@@ -109,18 +103,15 @@
                                     neighbourX = field.GetLength(0) - 1;
                                     wrappedX = true;
                                 }
-
                                 if (neighbourY == -1)
                                 {
                                     neighbourY = field.GetLength(1) - 1;
                                     wrappedY = true;
                                 }
-
                                 if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == "X")
                                 {
                                     neigboursCountOfDead++;
                                 }
-
                                 if (wrappedY)
                                 {
                                     neighbourY = j - 1;
@@ -157,12 +148,10 @@
             {
                 field[cellsToDieX[i], cellsToDieY[i]] = "-";
             }
-
             for (int i = 0; i < cellsToBeBornX.Count; i++)
             {
                 field[cellsToBeBornX[i], cellsToBeBornY[i]] = "X";
             }
-
             cellsToBeBornX.Clear();
             cellsToBeBornY.Clear();
             cellsToDieX.Clear();

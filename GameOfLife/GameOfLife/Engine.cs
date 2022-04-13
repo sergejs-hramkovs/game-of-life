@@ -76,7 +76,6 @@
                         width = 10;
                         break;
                 }
-
                 if (fieldSizeChoice == "1" || fieldSizeChoice == "2" || fieldSizeChoice == "3" || fieldSizeChoice == "4" || fieldSizeChoice == "5")
                 {
                     break;
