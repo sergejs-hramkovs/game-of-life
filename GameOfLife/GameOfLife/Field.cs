@@ -60,7 +60,7 @@ namespace GameOfLife
         /// Function to choose how to seed the field - manually or automatically.
         /// </summary>
         /// <returns></returns>
-        public string[,] ChooseSeedingOption()
+        public string[,] SeedField()
         {
             string seedingChoice;
 

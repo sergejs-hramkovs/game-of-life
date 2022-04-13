@@ -96,7 +96,7 @@
             Iteration iteration = new Iteration();
             gameField = field.CreateField();
             field.DrawField(gameField);
-            gameField = field.ChooseSeedingOption();
+            gameField = field.SeedField();
             Console.Clear();
             Console.CursorVisible = false;
 
