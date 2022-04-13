@@ -71,8 +71,6 @@ namespace GameOfLife
                             }
                         }
 
-                        //Console.WriteLine($"Alive_cell({i}, {j}); Count = {neigboursCountOfAlive}");
-
                         if (neigboursCountOfAlive < 2 || neigboursCountOfAlive > 3)
                         {
                             cellsToDieX.Add(i);
@@ -118,8 +116,6 @@ namespace GameOfLife
                                 wrappedX = false;
                             }
                         }
-
-                        //Console.WriteLine($"Dead_cell({i}, {j}); Count = {neigboursCountOfDead}");
 
                         if (neigboursCountOfDead == 3)
                         {
