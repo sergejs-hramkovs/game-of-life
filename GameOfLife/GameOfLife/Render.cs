@@ -12,6 +12,12 @@ namespace GameOfLife
         static Field field;
         static Iteration iteration;
 
+        /// <summary>
+        /// Method for initial rendering of the game field.
+        /// </summary>
+        /// <param name="height"></param>
+        /// <param name="width"></param>
+        /// <param name="inputField"></param>
         public static void InitialRender(int height, int width, string[,] inputField)
         {
             gameField = inputField;
@@ -23,6 +29,10 @@ namespace GameOfLife
             Console.Clear();
             Console.CursorVisible = false;
         }
+
+        /// <summary>
+        /// Method for rendering the game field between the generations.
+        /// </summary>
         public static void RuntimeRender()
         {
             field.DrawField(gameField);
