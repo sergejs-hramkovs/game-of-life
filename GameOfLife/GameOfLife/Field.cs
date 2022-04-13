@@ -80,7 +80,7 @@ namespace GameOfLife
                     while (true)
                     {
                         Console.WriteLine("\nTo stop seeding enter 'stop'");
-                        Console.Write("Enter X coordinate of the cell: ");
+                        Console.Write("\nEnter X coordinate of the cell: ");
                         input = Console.ReadLine();
 
                         if (input == "stop")
@@ -89,18 +89,36 @@ namespace GameOfLife
                             return fieldArray;
                         }
 
-                        cellX = Convert.ToInt32(input);
-
-                        Console.Write("Enter Y coordinate of the cell: ");
-                        input = Console.ReadLine();
-
-                        if (input == "stop")
+                        if (int.TryParse(input, out var resultX))
                         {
-                            Console.WriteLine("\nThe seeding has been stopped!");
-                            return fieldArray;
+                            cellX = resultX;
+
+                            Console.Write("\nEnter Y coordinate of the cell: ");
+                            input = Console.ReadLine();
+
+                            if (input == "stop")
+                            {
+                                Console.WriteLine("\nThe seeding has been stopped!");
+                                return fieldArray;
+                            }
+
+                            if (int.TryParse(input, out var resultY))
+                            {
+                                cellY = resultY;
+                            }
+
+                            else
+                            {
+                                Console.WriteLine("\nWrong Input!");
+                                continue;
+                            }
                         }
 
-                        cellY = Convert.ToInt32(input);
+                        else
+                        {
+                            Console.WriteLine("\nWrong Input!");
+                            continue;
+                        }
 
                         if (fieldArray[cellX, cellY] == "-")
                         {
