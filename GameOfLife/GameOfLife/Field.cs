@@ -106,7 +106,15 @@ namespace GameOfLife
 
                         cellY = Convert.ToInt32(input);
 
-                        fieldArray[cellX, cellY] = "X";
+                        if (fieldArray[cellX, cellY] == "-")
+                        {
+                            fieldArray[cellX, cellY] = "X";
+                        }
+                        else
+                        {
+                            fieldArray[cellX, cellY] = "-";
+                        }
+                        
                         DrawField(fieldArray);
                     }
                 }
