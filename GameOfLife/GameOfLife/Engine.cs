@@ -14,6 +14,9 @@ namespace GameOfLife
         int generation = 1;
         string[,] gameField;
 
+        /// <summary>
+        /// Initiate field size choice
+        /// </summary>
         public void Start()
         {       
             string fieldSizeChoice;
@@ -22,14 +25,13 @@ namespace GameOfLife
 
             while (true)
             {
-                Console.WriteLine();
-                Console.WriteLine("Choose the field size:");
+                Console.WriteLine("\nChoose the field size:");
                 Console.WriteLine("1. 3x3");
                 Console.WriteLine("2. 5x5");
                 Console.WriteLine("3. 10x10");
                 Console.WriteLine("4. 20x20");
                 Console.WriteLine("5. Custom");
-                Console.Write("Choice: ");
+                Console.Write("\nChoice: ");
                 fieldSizeChoice = Console.ReadLine();
 
                 switch (fieldSizeChoice)
@@ -58,21 +60,11 @@ namespace GameOfLife
                         while (true)
                         {
                             Console.Write("\nEnter the height of the field: ");
-                            if (int.TryParse(Console.ReadLine(), out height))
+                            if (int.TryParse(Console.ReadLine(), out height) && height > 0)
                             {
-                                if (height < 0)
-                                {
-                                    height = Math.Abs(height);
-                                }
-
                                 Console.Write("\nEnter the width of the field: ");
-                                if (int.TryParse(Console.ReadLine(), out width))
+                                if (int.TryParse(Console.ReadLine(), out width) && width > 0)
                                 {
-                                    if (width < 0)
-                                    {
-                                        width = Math.Abs(height);
-                                    }
-
                                     break;
                                 }
 
@@ -107,6 +99,9 @@ namespace GameOfLife
             }         
         }
 
+        /// <summary>
+        /// Main process of the game.
+        /// </summary>
         public void Run()
         {
             Field field = new Field(height, width);
@@ -129,7 +124,7 @@ namespace GameOfLife
                 field.DrawField(gameField);
                 iteration.CheckCells(gameField);
                 gameField = iteration.FieldRefresh(gameField);
-                Thread.Sleep(100);
+                Thread.Sleep(1000);
                 generation++;
             }
         }

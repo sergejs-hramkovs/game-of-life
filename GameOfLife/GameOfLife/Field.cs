@@ -70,25 +70,22 @@ namespace GameOfLife
 
             while (true)
             {
-                Console.WriteLine();
-                Console.WriteLine("1. To seed the field manually enter 'M'");
+                Console.WriteLine("\n1. To seed the field manually enter 'M'");
                 Console.WriteLine("2. To seed the field automatically and randomly enter 'R'");
-                Console.Write("Choice: ");
+                Console.Write("\nChoice: ");
                 seedingChoice = Console.ReadLine();
 
                 if (seedingChoice == "M")
                 {
                     while (true)
                     {
-                        Console.WriteLine();
-                        Console.WriteLine("To stop seeding enter 'stop'");
+                        Console.WriteLine("\nTo stop seeding enter 'stop'");
                         Console.Write("Enter X coordinate of the cell: ");
                         input = Console.ReadLine();
 
                         if (input == "stop")
                         {
-                            Console.WriteLine();
-                            Console.WriteLine("The seeding has been stopped!");
+                            Console.WriteLine("\nThe seeding has been stopped!");
                             return fieldArray;
                         }
 
@@ -99,8 +96,7 @@ namespace GameOfLife
 
                         if (input == "stop")
                         {
-                            Console.WriteLine();
-                            Console.WriteLine("The seeding has been stopped!");
+                            Console.WriteLine("\nThe seeding has been stopped!");
                             return fieldArray;
                         }
 
