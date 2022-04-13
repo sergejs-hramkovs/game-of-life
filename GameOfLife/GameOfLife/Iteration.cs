@@ -92,7 +92,7 @@
             {
                 for (int j = 0; j < field.GetLength(1); j++)
                 {
-                    if (field[i, j] == "-")
+                    if (field[i, j] == ".")
                     {
                         for (int neighbourX = i - 1; neighbourX <= i + 1; neighbourX++)
                         {
@@ -146,7 +146,7 @@
         {
             for (int i = 0; i < cellsToDieX.Count; i++)
             {
-                field[cellsToDieX[i], cellsToDieY[i]] = "-";
+                field[cellsToDieX[i], cellsToDieY[i]] = ".";
             }
             for (int i = 0; i < cellsToBeBornX.Count; i++)
             {

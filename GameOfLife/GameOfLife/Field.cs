@@ -30,7 +30,7 @@ namespace GameOfLife
             {
                 for (int i = 0; i < _fieldWidth; i++)
                 {
-                    fieldArray[i, j] = "-";
+                    fieldArray[i, j] = ".";
                 }
             }
 
@@ -140,13 +140,13 @@ namespace GameOfLife
                     continue;
                 }
 
-                if (fieldArray[cellX, cellY] == "-")
+                if (fieldArray[cellX, cellY] == ".")
                 {
                     fieldArray[cellX, cellY] = "X";
                 }
                 else
                 {
-                    fieldArray[cellX, cellY] = "-";
+                    fieldArray[cellX, cellY] = ".";
                 }
                 DrawField(fieldArray);
             }
