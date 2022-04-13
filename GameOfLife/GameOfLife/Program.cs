@@ -20,17 +20,19 @@ field.DrawField(gameField);
 gameField = field.SeedField();
 
 Console.Clear();
+Console.CursorVisible = false;
+
 
 while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape))
 {
+    Console.SetCursorPosition(0, 0);
     Console.WriteLine("Press ESC to stop");
     Console.WriteLine();
     Console.WriteLine($"Generation: {generation}");
     field.DrawField(gameField);
     iteration.CheckCells(gameField);
     gameField = iteration.FieldRefresh(gameField);
-    Thread.Sleep(1000);
-    generation++;
-    Console.Clear();
+    Thread.Sleep(100);  
+    generation++;    
 }
 

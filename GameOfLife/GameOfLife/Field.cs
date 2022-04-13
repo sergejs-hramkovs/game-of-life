@@ -31,18 +31,6 @@ namespace GameOfLife
             {
                 for (int i = 0; i < _fieldWidth; i++)
                 {
-                    //// Creating padding for now to avoid wrapping issues.
-                    //if (j == 0 || i == 0 || j == _fieldHeight - 1 || i == _fieldWidth - 1)
-                    //{
-                    //    fieldArray[i, j] = "#";
-                    //}
-                    //// ----------
-
-                    //else
-                    //{
-                    //    fieldArray[i, j] = "-";
-                    //}
-
                     fieldArray[i, j] = "-";
                 }
             }
@@ -78,38 +66,78 @@ namespace GameOfLife
             int cellX;
             int cellY;
             string input;
-            
+            string seedingChoice;
+
             while (true)
             {
                 Console.WriteLine();
-                Console.WriteLine("To stop seeding enter 'stop'");
-                Console.Write("Enter X coordinate of the cell: ");
-                input = Console.ReadLine();
+                Console.WriteLine("1. To seed the field manually enter 'M'");
+                Console.WriteLine("2. To seed the field automatically and randomly enter 'R'");
+                Console.Write("Choice: ");
+                seedingChoice = Console.ReadLine();
 
-                if (input == "stop")
+                if (seedingChoice == "M")
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("The seeding has been stopped!");
+                    while (true)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("To stop seeding enter 'stop'");
+                        Console.Write("Enter X coordinate of the cell: ");
+                        input = Console.ReadLine();
+
+                        if (input == "stop")
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine("The seeding has been stopped!");
+                            return fieldArray;
+                        }
+
+                        cellX = Convert.ToInt32(input);
+
+                        Console.Write("Enter Y coordinate of the cell: ");
+                        input = Console.ReadLine();
+
+                        if (input == "stop")
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine("The seeding has been stopped!");
+                            return fieldArray;
+                        }
+
+                        cellY = Convert.ToInt32(input);
+
+                        fieldArray[cellX, cellY] = "X";
+                        DrawField(fieldArray);
+                    }
+                }
+
+                else if (seedingChoice == "R")
+                {
+                    Random random = new Random();
+                    int aliveCellCount = random.Next(1, _fieldWidth * _fieldHeight);
+                    int randomX, randomY;
+
+                    for (int i = 1; i <= aliveCellCount; i++)
+                    {
+
+                        randomX = random.Next(0, fieldArray.GetLength(0) - 1);
+                        randomY = random.Next(0, fieldArray.GetLength(1) - 1);
+
+                        if (fieldArray[randomX, randomY] != "X")
+                        {
+                            fieldArray[randomX, randomY] = "X";
+                        }
+                      
+                    }
+
                     return fieldArray;
                 }
 
-                cellX = Convert.ToInt32(input);
-
-                Console.Write("Enter Y coordinate of the cell: ");
-                input = Console.ReadLine();
-
-                if (input == "stop")
+                else             
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("The seeding has been stopped!");
-                    return fieldArray;
+                    Console.WriteLine("Wrong Input!");
                 }
-
-                cellY = Convert.ToInt32(input);      
-
-                fieldArray[cellX, cellY] = "X";
-                DrawField(fieldArray);
-            }
+            }         
             
             return fieldArray;
         }
