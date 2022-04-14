@@ -36,12 +36,15 @@ namespace GameOfLife
         /// <summary>
         /// Method for rendering the game field between the generations.
         /// </summary>
-        public static void RuntimeRender()
+        public static void RuntimeRender(int delay)
         {
             Console.WriteLine("Press ESC to stop");
+            Console.WriteLine("Change the delay using left and right arrows");
             Console.WriteLine($"\nGeneration: {generation}");
             Console.WriteLine($"Alive cells: {CountAlive()}   ");
             Console.WriteLine($"Dead cells: {CountDead()}   ");
+            Console.WriteLine($"Current delay between generations: {delay / 1000.0} seconds  ");
+            
             field.DrawField(gameField);
             iteration.CheckCells(gameField);
             gameField = iteration.FieldRefresh(gameField);

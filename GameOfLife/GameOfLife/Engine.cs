@@ -4,7 +4,9 @@
     {
         int height;
         int width;
+        int delay = 1000;
         string[,] gameField;
+        ConsoleKeyInfo cki;
 
         /// <summary>
         /// Initiate field size choice.
@@ -93,12 +95,30 @@
         {
             Render.InitialRender(height, width, gameField);
 
-            while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape))
+            do
             {
-                Console.SetCursorPosition(0, 0);
-                Render.RuntimeRender();
-                Thread.Sleep(1000);
-            }
+                while (Console.KeyAvailable == false)
+                {
+                    Console.SetCursorPosition(0, 0);
+                    Render.RuntimeRender(delay);
+                    Thread.Sleep(delay);
+                }
+                cki = Console.ReadKey(true);
+
+                switch (cki.Key)
+                {
+                    case ConsoleKey.LeftArrow:
+                        if (delay > 100)
+                        {
+                            delay -= 100;
+                        }     
+                        break;
+
+                    case ConsoleKey.RightArrow:
+                        delay += 100;
+                        break;
+                }
+            } while (cki.Key != ConsoleKey.Escape);
         }
     }
 }
