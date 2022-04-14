@@ -99,17 +99,40 @@
             switch (keyPressed.Key)
             {
                 case ConsoleKey.LeftArrow:
-                    if (timeDelay > 100)
+                    if (timeDelay <= 100 && timeDelay > 10)
+                    {
+                        timeDelay -= 10;
+                    }
+                    else if (timeDelay > 100)
                     {
                         timeDelay -= 100;
                     }
                     break;
 
                 case ConsoleKey.RightArrow:
-                    timeDelay += 100;
+                    if (timeDelay < 100)
+                    {
+                        timeDelay += 10;
+                    }
+                    else
+                    {
+                        timeDelay += 100;
+                    }     
                     break;
             }
             return timeDelay;
+        }
+
+        /// <summary>
+        /// Method to pause the game by pressing the Spacebar.
+        /// </summary>
+        /// <param name="keyPressed"></param>
+        public void Pause(ConsoleKeyInfo keyPressed)
+        {
+            if (keyPressed.Key == ConsoleKey.Spacebar)
+            {
+                Console.ReadKey();
+            }
         }
 
         /// <summary>
@@ -129,6 +152,7 @@
                 }
                 cki = Console.ReadKey(true);
                 delay = ChangeDelay(delay, cki);
+                Pause(cki);
             } while (cki.Key != ConsoleKey.Escape);
         }
     }

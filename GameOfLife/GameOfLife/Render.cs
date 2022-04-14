@@ -39,6 +39,7 @@ namespace GameOfLife
         public static void RuntimeRender(int delay)
         {
             Console.WriteLine("Press ESC to stop");
+            Console.WriteLine("Press Spacebar to pause");
             Console.WriteLine("Change the delay using left and right arrows");
             Console.WriteLine($"\nGeneration: {generation}");
             Console.WriteLine($"Alive cells: {CountAlive()}   ");
