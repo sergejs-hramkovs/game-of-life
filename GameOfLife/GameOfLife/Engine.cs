@@ -89,6 +89,30 @@
         }
 
         /// <summary>
+        /// Method to change the time delay if LeftArrow or RightArrow keys are pressed.
+        /// </summary>
+        /// <param name="timeDelay"></param>
+        /// <param name="keyPressed"></param>
+        /// <returns></returns>
+        public int ChangeDelay(int timeDelay, ConsoleKeyInfo keyPressed)
+        {
+            switch (keyPressed.Key)
+            {
+                case ConsoleKey.LeftArrow:
+                    if (timeDelay > 100)
+                    {
+                        timeDelay -= 100;
+                    }
+                    break;
+
+                case ConsoleKey.RightArrow:
+                    timeDelay += 100;
+                    break;
+            }
+            return timeDelay;
+        }
+
+        /// <summary>
         /// Main process of the game.
         /// </summary>
         public void Run()
@@ -104,20 +128,7 @@
                     Thread.Sleep(delay);
                 }
                 cki = Console.ReadKey(true);
-
-                switch (cki.Key)
-                {
-                    case ConsoleKey.LeftArrow:
-                        if (delay > 100)
-                        {
-                            delay -= 100;
-                        }     
-                        break;
-
-                    case ConsoleKey.RightArrow:
-                        delay += 100;
-                        break;
-                }
+                delay = ChangeDelay(delay, cki);
             } while (cki.Key != ConsoleKey.Escape);
         }
     }
