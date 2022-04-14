@@ -4,7 +4,6 @@
     {
         int height;
         int width;
-        int generation = 1;
         string[,] gameField;
 
         /// <summary>
@@ -97,11 +96,8 @@
             while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape))
             {
                 Console.SetCursorPosition(0, 0);
-                Console.WriteLine("Press ESC to stop");
-                Console.WriteLine($"\nGeneration: {generation}");
                 Render.RuntimeRender();
                 Thread.Sleep(1000);
-                generation++;
             }
         }
     }
