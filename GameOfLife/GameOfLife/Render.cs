@@ -29,6 +29,7 @@ namespace GameOfLife
             iteration = new Iteration();
             engine = new Engine();
             gameField = field.CreateField();
+            Console.Clear();
             field.DrawField(gameField);
             gameField = field.SeedField();
             Console.Clear();

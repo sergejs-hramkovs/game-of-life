@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GameOfLife
+﻿namespace GameOfLife
 {
     public class Field
     {
@@ -41,7 +35,7 @@ namespace GameOfLife
         /// Function that draws the field.
         /// </summary>
         /// <param name="field"></param>
-        public void DrawField(string [,] field)
+        public void DrawField(string[,] field)
         {
             Console.WriteLine();
 
@@ -66,25 +60,26 @@ namespace GameOfLife
 
             while (true)
             {
-                Console.WriteLine("\n1. To seed the field manually enter 'M'");
-                Console.WriteLine("2. To seed the field automatically and randomly enter 'R'");
-                Console.WriteLine("3. To choose objects from the library enter 'L'");
+                Console.WriteLine("\n1. Seed the field manually");
+                Console.WriteLine("2. Seed the field automatically and randomly");
+                Console.WriteLine("3. Choose cell patterns from the library");
                 Console.Write("\nChoice: ");
                 seedingChoice = Console.ReadLine();
 
-                if (seedingChoice == "M")
+                if (seedingChoice == "1")
                 {
                     ManualSeeding();
                     return fieldArray;
                 }
-                else if (seedingChoice == "R")
+                else if (seedingChoice == "2")
                 {
                     RandomSeeding();
                     return fieldArray;
                 }
-                else if (seedingChoice == "L")
+                else if (seedingChoice == "3")
                 {
-                    ChooseFromLibrary();
+                    Console.Clear();
+                    LibrarySeeding();
                     return fieldArray;
                 }
                 else
@@ -157,381 +152,6 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to choose a cell pattern from the premade library.
-        /// </summary>
-        /// <returns></returns>
-        public string[,] ChooseFromLibrary()
-        {
-            string input;
-            int coordinateX;
-            int coordinateY;
-
-            while (true)
-            {
-                Console.WriteLine("\n# To stop seeding enter 'stop'");
-                Console.WriteLine("\n1. To spawn a glider enter 'G'");
-                Console.WriteLine("2. To spawn a light-weight spaceship enter 'LW'");
-                Console.WriteLine("3. To spawn a middle-weight spaceship enter 'MW'");
-                Console.WriteLine("4. To spawn a heavy-weight spaceship enter 'HW'");
-                Console.WriteLine("\n5. To go back to manual seeding enter 'M'");
-                Console.Write("\nChoice: ");
-                input = Console.ReadLine();
-                if (input == "stop")
-                {
-                    Console.WriteLine("\nThe seeding has been stopped!");
-                    return fieldArray;
-                }
-                if (input == "M")
-                {
-                    ManualSeeding();
-                }
-                if (input == "G")
-                {
-                    Console.Write("\nEnter X coordinate of the glider: ");
-                    input = Console.ReadLine();
-
-                    if (int.TryParse(input, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
-                    {
-                        coordinateX = resultX;
-                        Console.Write("\nEnter Y coordinate of the glider: ");
-                        input = Console.ReadLine();
-
-                        if (int.TryParse(input, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(0))
-                        {
-                            coordinateY = resultY;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nWrong Input!");
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nWrong Input!");
-                        continue;
-                    }
-                    SeedGlider(coordinateX, coordinateY);
-                    DrawField(fieldArray);
-                }
-                if (input == "LW")
-                {
-                    Console.Write("\nEnter X coordinate of the LWSS: ");
-                    input = Console.ReadLine();
-
-                    if (int.TryParse(input, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
-                    {
-                        coordinateX = resultX;
-                        Console.Write("\nEnter Y coordinate of the LWSS: ");
-                        input = Console.ReadLine();
-
-                        if (int.TryParse(input, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(0))
-                        {
-                            coordinateY = resultY;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nWrong Input!");
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nWrong Input!");
-                        continue;
-                    }
-                    SeedLightweight(coordinateX, coordinateY);
-                    DrawField(fieldArray);
-                }
-                if (input == "MW")
-                {
-                    Console.Write("\nEnter X coordinate of the MWSS: ");
-                    input = Console.ReadLine();
-
-                    if (int.TryParse(input, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
-                    {
-                        coordinateX = resultX;
-                        Console.Write("\nEnter Y coordinate of the MWSS: ");
-                        input = Console.ReadLine();
-
-                        if (int.TryParse(input, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(0))
-                        {
-                            coordinateY = resultY;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nWrong Input!");
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nWrong Input!");
-                        continue;
-                    }
-                    SeedMiddleweight(coordinateX, coordinateY);
-                    DrawField(fieldArray);
-                }
-                if (input == "HW")
-                {
-                    Console.Write("\nEnter X coordinate of the HWSS: ");
-                    input = Console.ReadLine();
-
-                    if (int.TryParse(input, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
-                    {
-                        coordinateX = resultX;
-                        Console.Write("\nEnter Y coordinate of the HWSS: ");
-                        input = Console.ReadLine();
-
-                        if (int.TryParse(input, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(0))
-                        {
-                            coordinateY = resultY;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nWrong Input!");
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nWrong Input!");
-                        continue;
-                    }
-                    SeedHeavyweight(coordinateX, coordinateY);
-                    DrawField(fieldArray);
-                }
-                else
-                {
-                    Console.WriteLine("Wrong Input!");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Method to spawn a glider pattern.
-        /// </summary>
-        /// <param name="locationX"></param>
-        /// <param name="locationY"></param>
-        /// <returns></returns>
-        public string[,] SeedGlider(int locationX, int locationY)
-        {
-            for (int i = locationX; i < locationX + 3; i++)
-            {
-                for (int j = locationY; j < locationY + 3; j++)
-                {
-                    switch (i - locationX)
-                    {
-                        case 0:
-                            if (j - locationY == 2)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 1:
-                            if (j - locationY == 0 || j - locationY == 2)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 2:
-                            if (j - locationY == 1 || j - locationY == 2)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-                    }
-                }
-            }
-            return fieldArray;
-        }
-
-        /// <summary>
-        /// Method to spawn a light-weight spaceship pattern.
-        /// </summary>
-        /// <param name="locationX"></param>
-        /// <param name="locationY"></param>
-        /// <returns></returns>
-        public string[,] SeedLightweight(int locationX, int locationY)
-        {
-            for (int i = locationX; i < locationX + 5; i++)
-            {
-                for (int j = locationY; j < locationY + 4; j++)
-                {
-                    switch (i - locationX)
-                    {
-                        case 0:
-                            if (j - locationY == 0 || j - locationY == 2)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 1:
-                            if (j - locationY == 3)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 2:
-                            if (j - locationY == 3)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 3:
-                            if (j - locationY == 0 || j - locationY == 3)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 4:
-                            if (j - locationY == 1 || j - locationY == 2 || j - locationY == 3)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-                    }
-                }
-            }
-            return fieldArray;
-        }
-
-        /// <summary>
-        /// Method to spawn a middle-weight spaceship pattern.
-        /// </summary>
-        /// <param name="locationX"></param>
-        /// <param name="locationY"></param>
-        /// <returns></returns>
-        public string[,] SeedMiddleweight(int locationX, int locationY)
-        {
-            for (int i = locationX; i < locationX + 6; i++)
-            {
-                for (int j = locationY; j < locationY + 5; j++)
-                {
-                    switch (i - locationX)
-                    {
-                        case 0:
-                            if (j - locationY == 1 || j - locationY == 3)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 1:
-                            if (j - locationY == 0)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 2:
-                            if (j - locationY == 0 || j - locationY == 4)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 3:
-                            if (j - locationY == 0)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 4:
-                            if (j - locationY == 0 || j - locationY == 3)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 5:
-                            if (j - locationY == 0 || j - locationY == 1 || j - locationY == 2)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-                    }
-                }
-            }
-            return fieldArray;
-        }
-
-        /// <summary>
-        /// Method to spawn a heavy-weight spaceship pattern.
-        /// </summary>
-        /// <param name="locationX"></param>
-        /// <param name="locationY"></param>
-        /// <returns></returns>
-        public string[,] SeedHeavyweight(int locationX, int locationY)
-        {
-            for (int i = locationX; i < locationX + 7; i++)
-            {
-                for (int j = locationY; j < locationY + 5; j++)
-                {
-                    switch (i - locationX)
-                    {
-                        case 0:
-                            if (j - locationY == 1 || j - locationY == 3)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 1:
-                            if (j - locationY == 0)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 2:
-                            if (j - locationY == 0 || j - locationY == 4)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 3:
-                            if (j - locationY == 0 || j - locationY == 4)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 4:
-                            if (j - locationY == 0)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 5:
-                            if (j - locationY == 0 || j - locationY == 3)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-
-                        case 6:
-                            if (j - locationY == 0 || j - locationY == 1 || j - locationY == 2)
-                            {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
-                            }
-                            break;
-                    }
-                }
-            }
-            return fieldArray;
-        }
-
-        /// <summary>
         /// Cell amount and coordinates are generated automatically and randomly.
         /// </summary>
         /// <returns></returns>
@@ -552,6 +172,156 @@ namespace GameOfLife
                 }
             }
             return fieldArray;
+        }
+
+        /// <summary>
+        /// Method to choose a cell pattern from the premade library.
+        /// </summary>
+        /// <returns></returns>
+        public string[,] LibrarySeeding()
+        {
+            string inputPattern;
+            string inputCoordinates;
+            int coordinateX;
+            int coordinateY;
+            Library library = new Library(fieldArray);
+
+            while (true)
+            {
+                Console.WriteLine("\n# To stop seeding enter 'stop'");
+                Console.WriteLine("\n1. Spawn a glider");
+                Console.WriteLine("2. Spawn a light-weight spaceship");
+                Console.WriteLine("3. Spawn a middle-weight spaceship");
+                Console.WriteLine("4. Spawn a heavy-weight spaceship");
+                Console.Write("\nChoice: ");
+                inputPattern = Console.ReadLine();
+
+                if (inputPattern == "stop")
+                {
+                    Console.WriteLine("\nThe seeding has been stopped!");
+                    return fieldArray;
+                }
+                else if (inputPattern == "1")
+                {
+                    Console.Write("\nEnter X coordinate of the glider: ");
+                    inputCoordinates = Console.ReadLine();
+
+                    if (int.TryParse(inputCoordinates, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
+                    {
+                        coordinateX = resultX;
+                        Console.Write("\nEnter Y coordinate of the glider: ");
+                        inputCoordinates = Console.ReadLine();
+
+                        if (int.TryParse(inputCoordinates, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(1))
+                        {
+                            coordinateY = resultY;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nWrong Input!");
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nWrong Input!");
+                        continue;
+                    }
+                    library.SeedGlider(coordinateX, coordinateY);
+                    DrawField(fieldArray);
+                }
+                else if (inputPattern == "2")
+                {
+                    Console.Write("\nEnter X coordinate of the LWSS: ");
+                    inputCoordinates = Console.ReadLine();
+
+                    if (int.TryParse(inputCoordinates, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
+                    {
+                        coordinateX = resultX;
+                        Console.Write("\nEnter Y coordinate of the LWSS: ");
+                        inputCoordinates = Console.ReadLine();
+
+                        if (int.TryParse(inputCoordinates, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(1))
+                        {
+                            coordinateY = resultY;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nWrong Input!");
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nWrong Input!");
+                        continue;
+                    }
+                    library.SeedLightweight(coordinateX, coordinateY);
+                    DrawField(fieldArray);
+                }
+                else if (inputPattern == "3")
+                {
+                    Console.Write("\nEnter X coordinate of the MWSS: ");
+                    inputCoordinates = Console.ReadLine();
+
+                    if (int.TryParse(inputCoordinates, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
+                    {
+                        coordinateX = resultX;
+                        Console.Write("\nEnter Y coordinate of the MWSS: ");
+                        inputCoordinates = Console.ReadLine();
+
+                        if (int.TryParse(inputCoordinates, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(1))
+                        {
+                            coordinateY = resultY;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nWrong Input!");
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nWrong Input!");
+                        continue;
+                    }
+                    library.SeedMiddleweight(coordinateX, coordinateY);
+                    DrawField(fieldArray);
+                }
+                else if (inputPattern == "4")
+                {
+                    Console.Write("\nEnter X coordinate of the HWSS: ");
+                    inputCoordinates = Console.ReadLine();
+
+                    if (int.TryParse(inputCoordinates, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
+                    {
+                        coordinateX = resultX;
+                        Console.Write("\nEnter Y coordinate of the HWSS: ");
+                        inputCoordinates = Console.ReadLine();
+
+                        if (int.TryParse(inputCoordinates, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(1))
+                        {
+                            coordinateY = resultY;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nWrong Input!");
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nWrong Input!");
+                        continue;
+                    }
+                    library.SeedHeavyweight(coordinateX, coordinateY);
+                    DrawField(fieldArray);
+                }
+                else
+                {
+                    Console.WriteLine("Wrong Input!");
+                }
+            }
         }
     }
 }
