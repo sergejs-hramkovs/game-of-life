@@ -14,6 +14,7 @@ namespace GameOfLife
         static int generation = 1;
         static Field field;
         static Iteration iteration;
+        static Engine engine;
 
         /// <summary>
         /// Method for initial rendering of the game field.
@@ -26,6 +27,7 @@ namespace GameOfLife
             gameField = inputField;
             field = new Field(height, width);
             iteration = new Iteration();
+            engine = new Engine();
             gameField = field.CreateField();
             field.DrawField(gameField);
             gameField = field.SeedField();
@@ -42,56 +44,14 @@ namespace GameOfLife
             Console.WriteLine("Press Spacebar to pause");
             Console.WriteLine("Change the delay using left and right arrows");
             Console.WriteLine($"\nGeneration: {generation}");
-            Console.WriteLine($"Alive cells: {CountAlive()}   ");
-            Console.WriteLine($"Dead cells: {CountDead()}   ");
+            Console.WriteLine($"Alive cells: {engine.CountAlive(gameField)}   ");
+            Console.WriteLine($"Dead cells: {engine.CountDead(gameField)}   ");
             Console.WriteLine($"Current delay between generations: {delay / 1000.0} seconds  ");
             
             field.DrawField(gameField);
             iteration.CheckCells(gameField);
             gameField = iteration.FieldRefresh(gameField);
             generation++;
-        }
-
-        /// <summary>
-        /// Method to count the current number of alive cells on the field.
-        /// </summary>
-        /// <returns></returns>
-        public static int CountAlive()
-        {
-            aliveCellCount = 0;
-
-            for (int i = 0; i < gameField.GetLength(0); i++)
-            {
-                for (int j = 0; j < gameField.GetLength(0); j++)
-                {
-                    if (gameField[i, j] == "X")
-                    {
-                        aliveCellCount++;
-                    }                    
-                }
-            }
-            return aliveCellCount;
-        }
-
-        /// <summary>
-        /// Method to count the current number of dead cells on the field.
-        /// </summary>
-        /// <returns></returns>
-        public static int CountDead()
-        {
-            deadCellCount = 0;
-
-            for (int i = 0; i < gameField.GetLength(0); i++)
-            {
-                for (int j = 0; j < gameField.GetLength(0); j++)
-                {
-                    if (gameField[i, j] == ".")
-                    {
-                        deadCellCount++;
-                    }
-                }
-            }
-            return deadCellCount;
-        }
+        }       
     }
 }

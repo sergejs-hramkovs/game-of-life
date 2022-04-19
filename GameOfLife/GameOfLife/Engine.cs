@@ -155,5 +155,47 @@
                 Pause(cki);
             } while (cki.Key != ConsoleKey.Escape);
         }
+
+        /// <summary>
+        /// Method to count the current number of alive cells on the field.
+        /// </summary>
+        /// <returns></returns>
+        public int CountAlive(string[,] gameField)
+        {
+            int aliveCellCount = 0;
+
+            for (int i = 0; i < gameField.GetLength(0); i++)
+            {
+                for (int j = 0; j < gameField.GetLength(0); j++)
+                {
+                    if (gameField[i, j] == "X")
+                    {
+                        aliveCellCount++;
+                    }
+                }
+            }
+            return aliveCellCount;
+        }
+
+        /// <summary>
+        /// Method to count the current number of dead cells on the field.
+        /// </summary>
+        /// <returns></returns>
+        public int CountDead(string[,] gameField)
+        {
+            int deadCellCount = 0;
+
+            for (int i = 0; i < gameField.GetLength(0); i++)
+            {
+                for (int j = 0; j < gameField.GetLength(0); j++)
+                {
+                    if (gameField[i, j] == ".")
+                    {
+                        deadCellCount++;
+                    }
+                }
+            }
+            return deadCellCount;
+        }
     }
 }
