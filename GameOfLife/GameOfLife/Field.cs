@@ -5,6 +5,10 @@
         private int _fieldHeight { get; set; }
         private int _fieldWidth { get; set; }
         private string[,] fieldArray;
+        string inputCoordinates;
+        int coordinateX;
+        int coordinateY;
+        bool wrongInput = false;
 
         public Field(int height, int width)
         {
@@ -181,13 +185,16 @@
         public string[,] LibrarySeeding()
         {
             string inputPattern;
-            string inputCoordinates;
-            int coordinateX;
-            int coordinateY;
             Library library = new Library(fieldArray);
 
             while (true)
-            {
+            {   
+                DrawField(fieldArray);
+                if (wrongInput)
+                {
+                    Console.WriteLine("Wrong Input!");
+                    wrongInput = false;
+                }
                 Console.WriteLine("\n# To stop seeding enter 'stop'");
                 Console.WriteLine("\n1. Spawn a glider");
                 Console.WriteLine("2. Spawn a light-weight spaceship");
@@ -196,132 +203,85 @@
                 Console.Write("\nChoice: ");
                 inputPattern = Console.ReadLine();
 
-                if (inputPattern == "stop")
+                switch (inputPattern)
                 {
-                    Console.WriteLine("\nThe seeding has been stopped!");
-                    return fieldArray;
-                }
-                else if (inputPattern == "1")
-                {
-                    Console.Write("\nEnter X coordinate of the glider: ");
-                    inputCoordinates = Console.ReadLine();
+                    case "stop":
+                        Console.WriteLine("\nThe seeding has been stopped!");
+                        return fieldArray;
 
-                    if (int.TryParse(inputCoordinates, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
-                    {
-                        coordinateX = resultX;
-                        Console.Write("\nEnter Y coordinate of the glider: ");
-                        inputCoordinates = Console.ReadLine();
-
-                        if (int.TryParse(inputCoordinates, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(1))
+                    case "1":
+                        if (!EnterCoordinates())
                         {
-                            coordinateY = resultY;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nWrong Input!");
+                            wrongInput = true;
                             continue;
                         }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nWrong Input!");
-                        continue;
-                    }
-                    library.SeedGlider(coordinateX, coordinateY);
-                    DrawField(fieldArray);
-                }
-                else if (inputPattern == "2")
-                {
-                    Console.Write("\nEnter X coordinate of the LWSS: ");
-                    inputCoordinates = Console.ReadLine();
+                        library.SeedGlider(coordinateX, coordinateY);
+                        DrawField(fieldArray);
+                        break;
 
-                    if (int.TryParse(inputCoordinates, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
-                    {
-                        coordinateX = resultX;
-                        Console.Write("\nEnter Y coordinate of the LWSS: ");
-                        inputCoordinates = Console.ReadLine();
-
-                        if (int.TryParse(inputCoordinates, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(1))
+                    case "2":
+                        if (!EnterCoordinates())
                         {
-                            coordinateY = resultY;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nWrong Input!");
+                            wrongInput = true;
                             continue;
                         }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nWrong Input!");
-                        continue;
-                    }
-                    library.SeedLightweight(coordinateX, coordinateY);
-                    DrawField(fieldArray);
-                }
-                else if (inputPattern == "3")
-                {
-                    Console.Write("\nEnter X coordinate of the MWSS: ");
-                    inputCoordinates = Console.ReadLine();
+                        library.SeedLightweight(coordinateX, coordinateY);
+                        DrawField(fieldArray);
+                        break;
 
-                    if (int.TryParse(inputCoordinates, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
-                    {
-                        coordinateX = resultX;
-                        Console.Write("\nEnter Y coordinate of the MWSS: ");
-                        inputCoordinates = Console.ReadLine();
-
-                        if (int.TryParse(inputCoordinates, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(1))
+                    case "3":
+                        if (!EnterCoordinates())
                         {
-                            coordinateY = resultY;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nWrong Input!");
+                            wrongInput = true;
                             continue;
                         }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nWrong Input!");
-                        continue;
-                    }
-                    library.SeedMiddleweight(coordinateX, coordinateY);
-                    DrawField(fieldArray);
-                }
-                else if (inputPattern == "4")
-                {
-                    Console.Write("\nEnter X coordinate of the HWSS: ");
-                    inputCoordinates = Console.ReadLine();
+                        library.SeedMiddleweight(coordinateX, coordinateY);
+                        DrawField(fieldArray);
+                        break;
 
-                    if (int.TryParse(inputCoordinates, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
-                    {
-                        coordinateX = resultX;
-                        Console.Write("\nEnter Y coordinate of the HWSS: ");
-                        inputCoordinates = Console.ReadLine();
-
-                        if (int.TryParse(inputCoordinates, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(1))
+                    case "4":
+                        if (!EnterCoordinates())
                         {
-                            coordinateY = resultY;
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nWrong Input!");
+                            wrongInput = true;
                             continue;
                         }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nWrong Input!");
-                        continue;
-                    }
-                    library.SeedHeavyweight(coordinateX, coordinateY);
-                    DrawField(fieldArray);
+                        library.SeedHeavyweight(coordinateX, coordinateY);
+                        DrawField(fieldArray);
+                        break;
+
+                    default:
+                        Console.WriteLine("Wrong Input!");
+                        break;
+
+                }
+            }
+        }
+
+        public bool EnterCoordinates()
+        {
+            Console.Write("\nEnter X coordinate: ");
+            inputCoordinates = Console.ReadLine();
+
+            if (int.TryParse(inputCoordinates, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
+            {
+                coordinateX = resultX;
+                Console.Write("\nEnter Y coordinate: ");
+                inputCoordinates = Console.ReadLine();
+
+                if (int.TryParse(inputCoordinates, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(1))
+                {
+                    coordinateY = resultY;
                 }
                 else
                 {
-                    Console.WriteLine("Wrong Input!");
+                    return false;
                 }
             }
+            else
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

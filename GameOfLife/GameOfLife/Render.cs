@@ -48,6 +48,7 @@ namespace GameOfLife
             Console.WriteLine($"Alive cells: {engine.CountAlive(gameField)}   ");
             Console.WriteLine($"Dead cells: {engine.CountDead(gameField)}   ");
             Console.WriteLine($"Current delay between generations: {delay / 1000.0} seconds  ");
+            Console.WriteLine($"Number of generations per second: {Math.Round(1/ (delay / 1000.0), 2)}   ");
             
             field.DrawField(gameField);
             iteration.CheckCells(gameField);
