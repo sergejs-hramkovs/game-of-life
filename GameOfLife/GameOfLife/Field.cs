@@ -5,10 +5,11 @@
         private int _fieldHeight { get; set; }
         private int _fieldWidth { get; set; }
         private string[,] fieldArray;
-        string inputCoordinates;
-        int coordinateX;
-        int coordinateY;
-        bool wrongInput = false;
+        private string inputCoordinate;
+        private int coordinateX;
+        private int coordinateY;
+        private bool wrongInput = false;
+        private bool stop = false;
 
         public Field(int height, int width)
         {
@@ -106,60 +107,49 @@
         /// <returns></returns>
         public string[,] ManualSeeding()
         {
-            string input;
-            int cellX;
-            int cellY;
-
             while (true)
             {
-                Console.WriteLine("\nTo stop seeding enter 'stop'");
-                Console.Write("\nEnter X coordinate of the cell: ");
-                input = Console.ReadLine();
-
-                if (input == "stop")
+                Console.Clear();
+                if (!wrongInput)
                 {
-                    Console.WriteLine("\nThe seeding has been stopped!");
-                    return fieldArray;
+                    DrawField(fieldArray);
+                }
+                else if (wrongInput)
+                {
+                    DrawField(fieldArray);
+                    Console.WriteLine("\nWrong Input!");
+                    wrongInput = false;
                 }
 
-                if (int.TryParse(input, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
+                if (!EnterCoordinates())
                 {
-                    cellX = resultX;
-                    Console.Write("\nEnter Y coordinate of the cell: ");
-                    input = Console.ReadLine();
+                    wrongInput = true;
+                    continue;
+                }
+                else
+                {
+                    wrongInput = false;
+                }
 
-                    if (input == "stop")
+                // Without this "if" there is a problem with the displaying of the last cell.
+                if (!stop)
+                {
+                    if (fieldArray[coordinateX, coordinateY] == ".")
                     {
-                        Console.WriteLine("\nThe seeding has been stopped!");
-                        return fieldArray;
-                    }
-
-                    if (int.TryParse(input, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(0))
-                    {
-                        cellY = resultY;
+                        fieldArray[coordinateX, coordinateY] = "X";
                     }
                     else
                     {
-                        Console.WriteLine("\nWrong Input!");
-                        continue;
+                        fieldArray[coordinateX, coordinateY] = ".";
                     }
-                }
+                }             
                 else
                 {
-                    Console.WriteLine("\nWrong Input!");
-                    continue;
+                    stop = false;
+                    break;
                 }
-
-                if (fieldArray[cellX, cellY] == ".")
-                {
-                    fieldArray[cellX, cellY] = "X";
-                }
-                else
-                {
-                    fieldArray[cellX, cellY] = ".";
-                }
-                DrawField(fieldArray);
             }
+            return fieldArray;
         }
 
         /// <summary>
@@ -195,7 +185,7 @@
             Library library = new Library(fieldArray);
 
             while (true)
-            {   
+            {
                 if (!wrongInput)
                 {
                     DrawField(fieldArray);
@@ -268,18 +258,29 @@
             }
         }
 
+        /// <summary>
+        /// Method to process with user input coordinates.
+        /// </summary>
+        /// <returns></returns>
         public bool EnterCoordinates()
         {
+            Console.WriteLine("\nTo stop seeding enter 'stop'");
             Console.Write("\nEnter X coordinate: ");
-            inputCoordinates = Console.ReadLine();
-
-            if (int.TryParse(inputCoordinates, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
+            inputCoordinate = Console.ReadLine();
+            if (inputCoordinate == "stop")
+            {
+                return stop = true;
+            }
+            else if (int.TryParse(inputCoordinate, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
             {
                 coordinateX = resultX;
                 Console.Write("\nEnter Y coordinate: ");
-                inputCoordinates = Console.ReadLine();
-
-                if (int.TryParse(inputCoordinates, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(1))
+                inputCoordinate = Console.ReadLine();
+                if (inputCoordinate == "stop")
+                {
+                    return stop = true;
+                }
+                else if (int.TryParse(inputCoordinate, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(1))
                 {
                     coordinateY = resultY;
                 }

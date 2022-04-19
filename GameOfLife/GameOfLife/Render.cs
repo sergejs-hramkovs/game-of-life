@@ -9,8 +9,6 @@ namespace GameOfLife
     public static class Render
     {
         static string[,] gameField;
-        static int aliveCellCount;
-        static int deadCellCount;
         static int generation = 1;
         static Field field;
         static Iteration iteration;
@@ -45,7 +43,8 @@ namespace GameOfLife
             Console.WriteLine("Press Spacebar to pause");
             Console.WriteLine("Change the delay using left and right arrows");
             Console.WriteLine($"\nGeneration: {generation}");
-            Console.WriteLine($"Alive cells: {engine.CountAlive(gameField)}   ");
+            Console.WriteLine($"Alive cells: " +
+                $"{engine.CountAlive(gameField)}({(int)Math.Round((engine.CountAlive(gameField) / (double)engine.CountDead(gameField)) * 100)}%)   ");
             Console.WriteLine($"Dead cells: {engine.CountDead(gameField)}   ");
             Console.WriteLine($"Current delay between generations: {delay / 1000.0} seconds  ");
             Console.WriteLine($"Number of generations per second: {Math.Round(1/ (delay / 1000.0), 2)}   ");
@@ -54,6 +53,6 @@ namespace GameOfLife
             iteration.CheckCells(gameField);
             gameField = iteration.FieldRefresh(gameField);
             generation++;
-        }       
+        }
     }
 }
