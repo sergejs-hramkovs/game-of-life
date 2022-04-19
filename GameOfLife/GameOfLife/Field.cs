@@ -170,6 +170,7 @@ namespace GameOfLife
             {
                 Console.WriteLine("\nTo stop seeding enter 'stop'");
                 Console.WriteLine("To spawn a glider enter 'G'");
+                Console.WriteLine("To spawn a light-weight spaceship enter 'LW'");
                 Console.WriteLine("To go back to manual seeding enter 'M'");
                 input = Console.ReadLine();
                 if (input == "stop")
@@ -210,6 +211,35 @@ namespace GameOfLife
                     SeedGlider(coordinateX, coordinateY);
                     DrawField(fieldArray);
                 }
+                if (input == "LW")
+                {
+                    Console.Write("\nEnter X coordinate of the LWSS: ");
+                    input = Console.ReadLine();
+
+                    if (int.TryParse(input, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
+                    {
+                        coordinateX = resultX;
+                        Console.Write("\nEnter Y coordinate of the LWSS: ");
+                        input = Console.ReadLine();
+
+                        if (int.TryParse(input, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(0))
+                        {
+                            coordinateY = resultY;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nWrong Input!");
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nWrong Input!");
+                        continue;
+                    }
+                    SeedLightweight(coordinateX, coordinateY);
+                    DrawField(fieldArray);
+                }
             }
         }
 
@@ -243,6 +273,60 @@ namespace GameOfLife
 
                         case 2:
                             if (j - locationY == 1 || j - locationY == 2)
+                            {
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+                    }
+                }
+            }
+            return fieldArray;
+        }
+
+        /// <summary>
+        /// Method to spawn a light-weight spaceship pattern.
+        /// </summary>
+        /// <param name="locationX"></param>
+        /// <param name="locationY"></param>
+        /// <returns></returns>
+        public string[,] SeedLightweight(int locationX, int locationY)
+        {
+            for (int i = locationX; i < locationX + 5; i++)
+            {
+                for (int j = locationY; j < locationY + 4; j++)
+                {
+                    switch (i - locationX)
+                    {
+                        case 0:
+                            if (j - locationY == 0 || j - locationY == 2)
+                            {
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 1:
+                            if (j - locationY == 3)
+                            {
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 2:
+                            if (j - locationY == 3)
+                            {
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 3:
+                            if (j - locationY == 0 || j - locationY == 3)
+                            {
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 4:
+                            if (j - locationY == 1 || j - locationY == 2 || j - locationY == 3)
                             {
                                 fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
                             }
