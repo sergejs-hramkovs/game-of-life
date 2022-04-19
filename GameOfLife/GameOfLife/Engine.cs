@@ -7,6 +7,7 @@
         int delay = 1000;
         string[,] gameField;
         ConsoleKeyInfo cki;
+        bool wrongInput = false;
 
         /// <summary>
         /// Initiate field size choice.
@@ -17,7 +18,13 @@
             Console.WriteLine("Welcome to the Game of Life!");
 
             while (true)
-            {
+            {             
+                if (wrongInput)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Wrong Input!");
+                    wrongInput = false;
+                }
                 Console.WriteLine("\nChoose the field size:");
                 Console.WriteLine("1. 3x3");
                 Console.WriteLine("2. 5x5");
@@ -83,7 +90,7 @@
                 }
                 else
                 {
-                    Console.WriteLine("\nWrong input!");
+                    wrongInput = true;
                 }
             }
         }

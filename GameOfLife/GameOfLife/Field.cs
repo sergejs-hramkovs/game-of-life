@@ -64,6 +64,13 @@
 
             while (true)
             {
+                if (wrongInput)
+                {
+                    Console.Clear();
+                    DrawField(fieldArray);
+                    Console.WriteLine("\nWrong Input!");
+                    wrongInput = false;
+                }
                 Console.WriteLine("\n1. Seed the field manually");
                 Console.WriteLine("2. Seed the field automatically and randomly");
                 Console.WriteLine("3. Choose cell patterns from the library");
@@ -88,7 +95,7 @@
                 }
                 else
                 {
-                    Console.WriteLine("Wrong Input!");
+                    wrongInput = true;
                 }
             }
         }
@@ -189,10 +196,15 @@
 
             while (true)
             {   
-                DrawField(fieldArray);
+                if (!wrongInput)
+                {
+                    DrawField(fieldArray);
+                }
                 if (wrongInput)
                 {
-                    Console.WriteLine("Wrong Input!");
+                    Console.Clear();
+                    DrawField(fieldArray);
+                    Console.WriteLine("\nWrong Input!");
                     wrongInput = false;
                 }
                 Console.WriteLine("\n# To stop seeding enter 'stop'");
@@ -216,7 +228,7 @@
                             continue;
                         }
                         library.SeedGlider(coordinateX, coordinateY);
-                        DrawField(fieldArray);
+                        Console.Clear();
                         break;
 
                     case "2":
@@ -226,7 +238,7 @@
                             continue;
                         }
                         library.SeedLightweight(coordinateX, coordinateY);
-                        DrawField(fieldArray);
+                        Console.Clear();
                         break;
 
                     case "3":
@@ -236,7 +248,7 @@
                             continue;
                         }
                         library.SeedMiddleweight(coordinateX, coordinateY);
-                        DrawField(fieldArray);
+                        Console.Clear();
                         break;
 
                     case "4":
@@ -246,13 +258,12 @@
                             continue;
                         }
                         library.SeedHeavyweight(coordinateX, coordinateY);
-                        DrawField(fieldArray);
+                        Console.Clear();
                         break;
 
                     default:
-                        Console.WriteLine("Wrong Input!");
+                        wrongInput = true;
                         break;
-
                 }
             }
         }
