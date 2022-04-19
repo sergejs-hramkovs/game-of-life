@@ -17,13 +17,13 @@ namespace GameOfLife
         /// <summary>
         /// Method for initial rendering of the game field.
         /// </summary>
-        /// <param name="height"></param>
+        /// <param name="length"></param>
         /// <param name="width"></param>
         /// <param name="inputField"></param>
-        public static void InitialRender(int height, int width, string[,] inputField)
+        public static void InitialRender(int length, int width, string[,] inputField)
         {
             gameField = inputField;
-            field = new Field(height, width);
+            field = new Field(length, width);
             iteration = new Iteration();
             engine = new Engine();
             gameField = field.CreateField();

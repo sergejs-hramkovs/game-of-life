@@ -2,7 +2,7 @@
 {
     public class Engine
     {
-        int height;
+        int length;
         int width;
         int delay = 1000;
         string[,] gameField;
@@ -37,30 +37,36 @@
                 switch (fieldSizeChoice)
                 {
                     case "1":
-                        height = 3;
+                        length = 3;
                         width = 3;
                         break;
 
                     case "2":
-                        height = 5;
+                        length = 5;
                         width = 5;
                         break;
 
                     case "3":
-                        height = 10;
+                        length = 10;
                         width = 10;
                         break;
 
                     case "4":
-                        height = 20;
+                        length = 20;
                         width = 20;
                         break;
 
                     case "5":
                         while (true)
                         {
+                            if (wrongInput)
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Wrong Input!");
+                                wrongInput = false;
+                            }
                             Console.Write("\nEnter the height of the field: ");
-                            if (int.TryParse(Console.ReadLine(), out height) && height > 0)
+                            if (int.TryParse(Console.ReadLine(), out length) && length > 0)
                             {
                                 Console.Write("\nEnter the width of the field: ");
                                 if (int.TryParse(Console.ReadLine(), out width) && width > 0)
@@ -69,18 +75,18 @@
                                 }
                                 else
                                 {
-                                    Console.WriteLine("\nWrong Input!");
+                                    wrongInput = true;
                                 }
                             }
                             else
                             {
-                                Console.WriteLine("\nWrong Input!");
+                                wrongInput = true;
                             }
                         }
                         break;
 
                     default:
-                        height = 10;
+                        length = 10;
                         width = 10;
                         break;
                 }
@@ -147,7 +153,7 @@
         /// </summary>
         public void Run()
         {
-            Render.InitialRender(height, width, gameField);
+            Render.InitialRender(length, width, gameField);
 
             do
             {
