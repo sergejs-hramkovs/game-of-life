@@ -230,21 +230,21 @@ namespace GameOfLife
                         case 0:
                             if (j - locationY == 2)
                             {
-                                fieldArray[i, j] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
                             }
                             break;
 
                         case 1:
                             if (j - locationY == 0 || j - locationY == 2)
                             {
-                                fieldArray[i, j] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
                             }
                             break;
 
                         case 2:
                             if (j - locationY == 1 || j - locationY == 2)
                             {
-                                fieldArray[i, j] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
                             }
                             break;
                     }
