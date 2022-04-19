@@ -68,19 +68,23 @@ namespace GameOfLife
             {
                 Console.WriteLine("\n1. To seed the field manually enter 'M'");
                 Console.WriteLine("2. To seed the field automatically and randomly enter 'R'");
+                Console.WriteLine("3. To choose objects from the library enter 'L'");
                 Console.Write("\nChoice: ");
                 seedingChoice = Console.ReadLine();
 
                 if (seedingChoice == "M")
                 {
                     ManualSeeding();
-
                     return fieldArray;
                 }
                 else if (seedingChoice == "R")
                 {
                     RandomSeeding();
-
+                    return fieldArray;
+                }
+                else if (seedingChoice == "L")
+                {
+                    ChooseFromLibrary();
                     return fieldArray;
                 }
                 else
@@ -153,10 +157,107 @@ namespace GameOfLife
         }
 
         /// <summary>
+        /// Method to choose a cell pattern from the premade library.
+        /// </summary>
+        /// <returns></returns>
+        public string[,] ChooseFromLibrary()
+        {
+            string input;
+            int coordinateX;
+            int coordinateY;
+
+            while (true)
+            {
+                Console.WriteLine("\nTo stop seeding enter 'stop'");
+                Console.WriteLine("To spawn a glider enter 'G'");
+                Console.WriteLine("To go back to manual seeding enter 'M'");
+                input = Console.ReadLine();
+                if (input == "stop")
+                {
+                    Console.WriteLine("\nThe seeding has been stopped!");
+                    return fieldArray;
+                }
+                if (input == "M")
+                {
+                    ManualSeeding();
+                }
+                if (input == "G")
+                {
+                    Console.Write("\nEnter X coordinate of the glider: ");
+                    input = Console.ReadLine();
+
+                    if (int.TryParse(input, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
+                    {
+                        coordinateX = resultX;
+                        Console.Write("\nEnter Y coordinate of the glider: ");
+                        input = Console.ReadLine();
+
+                        if (int.TryParse(input, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(0))
+                        {
+                            coordinateY = resultY;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nWrong Input!");
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nWrong Input!");
+                        continue;
+                    }
+                    SeedGlider(coordinateX, coordinateY);
+                    DrawField(fieldArray);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method to spawn a glider pattern.
+        /// </summary>
+        /// <param name="locationX"></param>
+        /// <param name="locationY"></param>
+        /// <returns></returns>
+        public string[,] SeedGlider(int locationX, int locationY)
+        {
+            for (int i = locationX; i < locationX + 3; i++)
+            {
+                for (int j = locationY; j < locationY + 3; j++)
+                {
+                    switch (i - locationX)
+                    {
+                        case 0:
+                            if (j - locationY == 2)
+                            {
+                                fieldArray[i, j] = "X";
+                            }
+                            break;
+
+                        case 1:
+                            if (j - locationY == 0 || j - locationY == 2)
+                            {
+                                fieldArray[i, j] = "X";
+                            }
+                            break;
+
+                        case 2:
+                            if (j - locationY == 1 || j - locationY == 2)
+                            {
+                                fieldArray[i, j] = "X";
+                            }
+                            break;
+                    }
+                }
+            }
+            return fieldArray;
+        }
+
+        /// <summary>
         /// Cell amount and coordinates are generated automatically and randomly.
         /// </summary>
         /// <returns></returns>
-        public string [,] RandomSeeding()
+        public string[,] RandomSeeding()
         {
             Random random = new Random();
             int aliveCellCount = random.Next(1, _fieldWidth * _fieldHeight);
