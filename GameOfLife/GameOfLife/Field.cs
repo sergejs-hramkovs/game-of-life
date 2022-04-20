@@ -78,25 +78,23 @@
                 Console.Write("\nChoice: ");
                 seedingChoice = Console.ReadLine();
 
-                if (seedingChoice == "1")
+                switch (seedingChoice)
                 {
-                    ManualSeeding();
-                    return fieldArray;
-                }
-                else if (seedingChoice == "2")
-                {
-                    RandomSeeding();
-                    return fieldArray;
-                }
-                else if (seedingChoice == "3")
-                {
-                    Console.Clear();
-                    LibrarySeeding();
-                    return fieldArray;
-                }
-                else
-                {
-                    wrongInput = true;
+                    case "1":
+                        ManualSeeding();
+                        return fieldArray;
+
+                    case "2":
+                        RandomSeeding();
+                        return fieldArray;
+
+                    case "3":
+                        LibrarySeeding();
+                        return fieldArray;
+
+                    default:
+                        wrongInput = true;
+                        break;
                 }
             }
         }
