@@ -2,7 +2,7 @@
 {
     public class Field
     {
-        private int _fieldHeight { get; set; }
+        private int _fieldLength { get; set; }
         private int _fieldWidth { get; set; }
         private string[,] fieldArray;
         private string inputCoordinate;
@@ -11,21 +11,21 @@
         private bool wrongInput = false;
         private bool stop = false;
 
-        public Field(int height, int width)
+        public Field(int length, int width)
         {
-            _fieldHeight = height;
+            _fieldLength = length;
             _fieldWidth = width;
         }
 
         /// <summary>
         /// Initial creation of an empty gaming field.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns an array of a gamefield seeded with dead cells(.) .</returns>
         public string[,] CreateField()
         {
-            fieldArray = new string[_fieldWidth, _fieldHeight];
+            fieldArray = new string[_fieldWidth, _fieldLength];
 
-            for (int j = 0; j < _fieldHeight; j++)
+            for (int j = 0; j < _fieldLength; j++)
             {
                 for (int i = 0; i < _fieldWidth; i++)
                 {
@@ -37,9 +37,9 @@
         }
 
         /// <summary>
-        /// Function that draws the field.
+        /// Method that draws the field.
         /// </summary>
-        /// <param name="field"></param>
+        /// <param name="field">An array of a gamefield.</param>
         public void DrawField(string[,] field)
         {
             Console.WriteLine();
@@ -56,9 +56,9 @@
         }
 
         /// <summary>
-        /// Function to choose how to seed the field - manually or automatically.
+        /// Method to choose how to seed the field - manually or automatically.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns an array of a seeded gamefield.</returns>
         public string[,] SeedField()
         {
             string seedingChoice;
@@ -104,7 +104,7 @@
         /// <summary>
         /// Cell seeding coordinates are entered manually by the user.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns an array of manually seeded gamefield.</returns>
         public string[,] ManualSeeding()
         {
             while (true)
@@ -155,11 +155,11 @@
         /// <summary>
         /// Cell amount and coordinates are generated automatically and randomly.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns an array of randomly seeded gamefield.</returns>
         public string[,] RandomSeeding()
         {
             Random random = new Random();
-            int aliveCellCount = random.Next(1, _fieldWidth * _fieldHeight);
+            int aliveCellCount = random.Next(1, _fieldWidth * _fieldLength);
             int randomX, randomY;
 
             for (int i = 1; i <= aliveCellCount; i++)
@@ -178,7 +178,7 @@
         /// <summary>
         /// Method to choose a cell pattern from the premade library.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns an array of a gamefield seeded with objects from the library.</returns>
         public string[,] LibrarySeeding()
         {
             string inputPattern;
@@ -227,7 +227,7 @@
                             wrongInput = true;
                             continue;
                         }
-                        library.SeedLightweight(coordinateX, coordinateY);
+                        library.SeedLightWeight(coordinateX, coordinateY);
                         Console.Clear();
                         break;
 
@@ -237,7 +237,7 @@
                             wrongInput = true;
                             continue;
                         }
-                        library.SeedMiddleweight(coordinateX, coordinateY);
+                        library.SeedMiddleWeight(coordinateX, coordinateY);
                         Console.Clear();
                         break;
 
@@ -247,7 +247,7 @@
                             wrongInput = true;
                             continue;
                         }
-                        library.SeedHeavyweight(coordinateX, coordinateY);
+                        library.SeedHeavyWeight(coordinateX, coordinateY);
                         Console.Clear();
                         break;
 
@@ -259,9 +259,9 @@
         }
 
         /// <summary>
-        /// Method to process with user input coordinates.
+        /// Method to process user input coordinates.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns "stop = true" if the process of entering coordinates was stopped. Returns false if there is wrong input.</returns>
         public bool EnterCoordinates()
         {
             Console.WriteLine("\nTo stop seeding enter 'stop'");

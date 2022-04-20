@@ -18,9 +18,9 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn a glider pattern.
         /// </summary>
-        /// <param name="locationX"></param>
-        /// <param name="locationY"></param>
-        /// <returns></returns>
+        /// <param name="locationX">Horizontal location of the upper left corner of a glider.</param>
+        /// <param name="locationY">Vertical location of the upper left corner of a glider.</param>
+        /// <returns>Returns an array with gamefield elements with a glider seeded in it.</returns>
         public string[,] SeedGlider(int locationX, int locationY)
         {
             for (int i = locationX; i < locationX + 3; i++)
@@ -58,10 +58,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn a light-weight spaceship pattern.
         /// </summary>
-        /// <param name="locationX"></param>
-        /// <param name="locationY"></param>
-        /// <returns></returns>
-        public string[,] SeedLightweight(int locationX, int locationY)
+        /// <param name="locationX">Horizontal location of the upper left corner of a light-weight spaceship.</param>
+        /// <param name="locationY">Vertical location of the upper left corner of a light-weight spaceship.</param>
+        /// <returns>Returns an array with gamefield elements with a light-weight spaceship seeded in it.</returns>
+        public string[,] SeedLightWeight(int locationX, int locationY)
         {
             for (int i = locationX; i < locationX + 5; i++)
             {
@@ -112,10 +112,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn a middle-weight spaceship pattern.
         /// </summary>
-        /// <param name="locationX"></param>
-        /// <param name="locationY"></param>
-        /// <returns></returns>
-        public string[,] SeedMiddleweight(int locationX, int locationY)
+        /// <param name="locationX">Horizontal location of the upper left corner of a middle-weight spaceship.</param>
+        /// <param name="locationY">Vertical location of the upper left corner of a middle-weight spaceship.</param>
+        /// <returns>Returns an array with gamefield elements with a middle-weight spaceship seeded in it.</returns>
+        public string[,] SeedMiddleWeight(int locationX, int locationY)
         {
             for (int i = locationX; i < locationX + 6; i++)
             {
@@ -173,10 +173,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn a heavy-weight spaceship pattern.
         /// </summary>
-        /// <param name="locationX"></param>
-        /// <param name="locationY"></param>
-        /// <returns></returns>
-        public string[,] SeedHeavyweight(int locationX, int locationY)
+        /// <param name="locationX">Horizontal location of the upper left corner of a heavy-weight spaceship.</param>
+        /// <param name="locationY">Vertical location of the upper left corner of a heavy-weight spaceship.</param>
+        /// <returns>Returns an array with gamefield elements with a heavy-weight spaceship seeded in it.</returns>
+        public string[,] SeedHeavyWeight(int locationX, int locationY)
         {
             for (int i = locationX; i < locationX + 7; i++)
             {

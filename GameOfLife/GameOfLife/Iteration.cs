@@ -10,7 +10,7 @@
         /// <summary>
         /// Applies checks for alive and dead cells according to the rules.
         /// </summary>
-        /// <param name="field"></param>
+        /// <param name="field">An array of a gamefield.</param>
         public void CheckCells(string[,] field)
         {
             CheckAlive(field);
@@ -20,7 +20,7 @@
         /// <summary>
         /// Determines if an alive cell dies before the next generation.
         /// </summary>
-        /// <param name="field"></param>
+        /// <param name="field">An array of a gamefield.</param>
         public void CheckAlive(string[,] field)
         {
             int neigboursCountOfAlive = 0;
@@ -81,7 +81,7 @@
         /// <summary>
         /// Determines if a dead cell is reborn before the next generation.
         /// </summary>
-        /// <param name="field"></param>
+        /// <param name="field">An array of a gamefield.</param>
         public void CheckDead(string[,] field)
         {
             int neigboursCountOfDead = 0;
@@ -140,8 +140,8 @@
         /// <summary>
         /// Removes or creates new cells according to the rules.
         /// </summary>
-        /// <param name="field"></param>
-        /// <returns></returns>
+        /// <param name="field">An array of a gamefield.</param>
+        /// <returns>Returns an array of a gamefield after applying the rules of the game.</returns>
         public string[,] FieldRefresh(string[,] field)
         {
             for (int i = 0; i < cellsToDieX.Count; i++)

@@ -2,7 +2,7 @@
 {
     public class Engine
     {
-        int height;
+        int length;
         int width;
         int delay = 1000;
         string[,] gameField;
@@ -37,30 +37,36 @@
                 switch (fieldSizeChoice)
                 {
                     case "1":
-                        height = 3;
+                        length = 3;
                         width = 3;
                         break;
 
                     case "2":
-                        height = 5;
+                        length = 5;
                         width = 5;
                         break;
 
                     case "3":
-                        height = 10;
+                        length = 10;
                         width = 10;
                         break;
 
                     case "4":
-                        height = 20;
+                        length = 20;
                         width = 20;
                         break;
 
                     case "5":
                         while (true)
                         {
+                            if (wrongInput)
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Wrong Input!");
+                                wrongInput = false;
+                            }
                             Console.Write("\nEnter the height of the field: ");
-                            if (int.TryParse(Console.ReadLine(), out height) && height > 0)
+                            if (int.TryParse(Console.ReadLine(), out length) && length > 0)
                             {
                                 Console.Write("\nEnter the width of the field: ");
                                 if (int.TryParse(Console.ReadLine(), out width) && width > 0)
@@ -69,18 +75,18 @@
                                 }
                                 else
                                 {
-                                    Console.WriteLine("\nWrong Input!");
+                                    wrongInput = true;
                                 }
                             }
                             else
                             {
-                                Console.WriteLine("\nWrong Input!");
+                                wrongInput = true;
                             }
                         }
                         break;
 
                     default:
-                        height = 10;
+                        length = 10;
                         width = 10;
                         break;
                 }
@@ -98,9 +104,9 @@
         /// <summary>
         /// Method to change the time delay if LeftArrow or RightArrow keys are pressed.
         /// </summary>
-        /// <param name="timeDelay"></param>
-        /// <param name="keyPressed"></param>
-        /// <returns></returns>
+        /// <param name="timeDelay">Time delay in miliseconds between each generation.</param>
+        /// <param name="keyPressed">Parameters which stores Left and Right Arrow key presses.</param>
+        /// <returns>Returns changed time delay.</returns>
         public int ChangeDelay(int timeDelay, ConsoleKeyInfo keyPressed)
         {
             switch (keyPressed.Key)
@@ -133,7 +139,7 @@
         /// <summary>
         /// Method to pause the game by pressing the Spacebar.
         /// </summary>
-        /// <param name="keyPressed"></param>
+        /// <param name="keyPressed">Parameter which stores Spacebar key press.</param>
         public void Pause(ConsoleKeyInfo keyPressed)
         {
             if (keyPressed.Key == ConsoleKey.Spacebar)
@@ -147,7 +153,7 @@
         /// </summary>
         public void Run()
         {
-            Render.InitialRender(height, width, gameField);
+            Render.InitialRender(length, width, gameField);
 
             do
             {
@@ -166,7 +172,7 @@
         /// <summary>
         /// Method to count the current number of alive cells on the field.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns the number of alive cells currently in the gamefield array.</returns>
         public int CountAlive(string[,] gameField)
         {
             int aliveCellCount = 0;
@@ -187,7 +193,7 @@
         /// <summary>
         /// Method to count the current number of dead cells on the field.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns the number of dead cells currently in the gamefield array.</returns>
         public int CountDead(string[,] gameField)
         {
             int deadCellCount = 0;

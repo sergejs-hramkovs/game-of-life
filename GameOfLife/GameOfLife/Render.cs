@@ -17,13 +17,13 @@ namespace GameOfLife
         /// <summary>
         /// Method for initial rendering of the game field.
         /// </summary>
-        /// <param name="height"></param>
-        /// <param name="width"></param>
-        /// <param name="inputField"></param>
-        public static void InitialRender(int height, int width, string[,] inputField)
+        /// <param name="length">Horizontal dimension of a gamefield.</param>
+        /// <param name="width">Vertical dimension of a gamefield.</param>
+        /// <param name="inputField">An array of a gamefield.</param>
+        public static void InitialRender(int length, int width, string[,] inputField)
         {
             gameField = inputField;
-            field = new Field(height, width);
+            field = new Field(length, width);
             iteration = new Iteration();
             engine = new Engine();
             gameField = field.CreateField();
@@ -35,7 +35,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method for rendering the game field between the generations.
+        /// Method for rendering the gamefield between the generations.
         /// </summary>
         public static void RuntimeRender(int delay)
         {
