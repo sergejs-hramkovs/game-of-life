@@ -167,6 +167,13 @@
                 delay = ChangeDelay(delay, cki);
                 Pause(cki);
             } while (cki.Key != ConsoleKey.Escape);
+
+            Console.WriteLine("\nPress 'R' to restart");
+            cki = Console.ReadKey(true);
+            if (cki.Key == ConsoleKey.R)
+            {
+                Restart();
+            }
         }
 
         /// <summary>
@@ -209,6 +216,16 @@
                 }
             }
             return deadCellCount;
+        }
+
+        /// <summary>
+        /// Method to restart the game without rerunning the application.
+        /// </summary>
+        private void Restart()
+        {
+            Console.Clear();
+            Start();
+            Run();
         }
     }
 }
