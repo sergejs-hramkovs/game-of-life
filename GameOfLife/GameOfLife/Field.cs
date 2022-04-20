@@ -2,7 +2,7 @@
 {
     public class Field
     {
-        private int _fieldLength { get; set; }
+        private int _fieldHeight { get; set; }
         private int _fieldWidth { get; set; }
         private string[,] fieldArray;
         private string inputCoordinate;
@@ -11,9 +11,9 @@
         private bool wrongInput = false;
         private bool stop = false;
 
-        public Field(int length, int width)
+        public Field(int height, int width)
         {
-            _fieldLength = length;
+            _fieldHeight = height;
             _fieldWidth = width;
         }
 
@@ -23,11 +23,11 @@
         /// <returns></returns>
         public string[,] CreateField()
         {
-            fieldArray = new string[_fieldWidth, _fieldLength];
+            fieldArray = new string[_fieldWidth, _fieldHeight];
 
-            for (int i = 0; i < _fieldWidth; i++)
+            for (int j = 0; j < _fieldHeight; j++)
             {
-                for (int j = 0; j < _fieldLength; j++)
+                for (int i = 0; i < _fieldWidth; i++)
                 {
                     fieldArray[i, j] = ".";
                 }
@@ -44,9 +44,9 @@
         {
             Console.WriteLine();
 
-            for (int i = 0; i < field.GetLength(0); i++)
+            for (int j = 0; j < field.GetLength(0); j++)
             {
-                for (int j = 0; j < field.GetLength(1); j++)
+                for (int i = 0; i < field.GetLength(1); i++)
                 {
                     Console.Write(" " + field[i, j]);
                 }
@@ -159,7 +159,7 @@
         public string[,] RandomSeeding()
         {
             Random random = new Random();
-            int aliveCellCount = random.Next(1, _fieldWidth * _fieldLength);
+            int aliveCellCount = random.Next(1, _fieldWidth * _fieldHeight);
             int randomX, randomY;
 
             for (int i = 1; i <= aliveCellCount; i++)
