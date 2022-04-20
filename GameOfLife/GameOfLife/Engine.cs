@@ -2,12 +2,12 @@
 {
     public class Engine
     {
-        private int length;
-        private int width;
-        private int delay = 1000;
-        private string[,] gameField;
-        private ConsoleKeyInfo cki;
-        private bool wrongInput = false;
+        private int _length;
+        private int _width;
+        private int _delay = 1000;
+        private string[,] _gameField;
+        private ConsoleKeyInfo _cki;
+        private bool _wrongInput = false;
 
         /// <summary>
         /// Initiate field size choice.
@@ -18,12 +18,12 @@
             Console.WriteLine("Welcome to the Game of Life!");
 
             while (true)
-            {             
-                if (wrongInput)
+            {
+                if (_wrongInput)
                 {
                     Console.Clear();
                     Console.WriteLine("Wrong Input!");
-                    wrongInput = false;
+                    _wrongInput = false;
                 }
                 Console.WriteLine("\nChoose the field size:");
                 Console.WriteLine("1. 3x3");
@@ -37,57 +37,57 @@
                 switch (fieldSizeChoice)
                 {
                     case "1":
-                        length = 3;
-                        width = 3;
+                        _length = 3;
+                        _width = 3;
                         break;
 
                     case "2":
-                        length = 5;
-                        width = 5;
+                        _length = 5;
+                        _width = 5;
                         break;
 
                     case "3":
-                        length = 10;
-                        width = 10;
+                        _length = 10;
+                        _width = 10;
                         break;
 
                     case "4":
-                        length = 20;
-                        width = 20;
+                        _length = 20;
+                        _width = 20;
                         break;
 
                     case "5":
                         while (true)
                         {
-                            if (wrongInput)
+                            if (_wrongInput)
                             {
                                 Console.Clear();
                                 Console.WriteLine("Wrong Input!");
-                                wrongInput = false;
+                                _wrongInput = false;
                             }
                             Console.Write("\nEnter the height of the field: ");
-                            if (int.TryParse(Console.ReadLine(), out length) && length > 0)
+                            if (int.TryParse(Console.ReadLine(), out _length) && _length > 0)
                             {
                                 Console.Write("\nEnter the width of the field: ");
-                                if (int.TryParse(Console.ReadLine(), out width) && width > 0)
+                                if (int.TryParse(Console.ReadLine(), out _width) && _width > 0)
                                 {
                                     break;
                                 }
                                 else
                                 {
-                                    wrongInput = true;
+                                    _wrongInput = true;
                                 }
                             }
                             else
                             {
-                                wrongInput = true;
+                                _wrongInput = true;
                             }
                         }
                         break;
 
                     default:
-                        length = 10;
-                        width = 10;
+                        _length = 10;
+                        _width = 10;
                         break;
                 }
                 if (fieldSizeChoice == "1" || fieldSizeChoice == "2" || fieldSizeChoice == "3" || fieldSizeChoice == "4" || fieldSizeChoice == "5")
@@ -96,7 +96,7 @@
                 }
                 else
                 {
-                    wrongInput = true;
+                    _wrongInput = true;
                 }
             }
         }
@@ -123,14 +123,17 @@
                     break;
 
                 case ConsoleKey.RightArrow:
-                    if (timeDelay < 100)
+                    if (timeDelay < 2000)
                     {
-                        timeDelay += 10;
+                        if (timeDelay < 100)
+                        {
+                            timeDelay += 10;
+                        }
+                        else
+                        {
+                            timeDelay += 100;
+                        }
                     }
-                    else
-                    {
-                        timeDelay += 100;
-                    }     
                     break;
             }
             return timeDelay;
@@ -153,24 +156,24 @@
         /// </summary>
         public void Run()
         {
-            Render.InitialRender(length, width, gameField);
+            Render.InitialRender(_length, _width, _gameField);
 
             do
             {
                 while (Console.KeyAvailable == false)
                 {
                     Console.SetCursorPosition(0, 0);
-                    Render.RuntimeRender(delay);
-                    Thread.Sleep(delay);
+                    Render.RuntimeRender(_delay);
+                    Thread.Sleep(_delay);
                 }
-                cki = Console.ReadKey(true);
-                delay = ChangeDelay(delay, cki);
-                Pause(cki);
-            } while (cki.Key != ConsoleKey.Escape);
+                _cki = Console.ReadKey(true);
+                _delay = ChangeDelay(_delay, _cki);
+                Pause(_cki);
+            } while (_cki.Key != ConsoleKey.Escape);
 
             Console.WriteLine("\nPress 'R' to restart");
-            cki = Console.ReadKey(true);
-            if (cki.Key == ConsoleKey.R)
+            _cki = Console.ReadKey(true);
+            if (_cki.Key == ConsoleKey.R)
             {
                 Restart();
             }
@@ -223,6 +226,7 @@
         /// </summary>
         private void Restart()
         {
+            _delay = 1000;
             Console.Clear();
             Start();
             Run();

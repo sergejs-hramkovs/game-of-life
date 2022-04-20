@@ -2,8 +2,8 @@
 {
     public class Iteration
     {
-        private List<Tuple<int, int>> cellsToDie = new List<Tuple<int, int>>();
-        private List<Tuple<int, int>> cellsToBeBorn = new List<Tuple<int, int>>();
+        private List<(int x, int y)> _cellsToDie = new List<(int x, int y)>();
+        private List<(int x, int y)> _cellsToBeBorn = new List<(int x, int y)>();
 
         /// <summary>
         /// Applies checks for alive and dead cells according to the rules.
@@ -67,7 +67,7 @@
                         }
                         if (neigboursCountOfAlive < 2 || neigboursCountOfAlive > 3)
                         {
-                            cellsToDie.Add(new Tuple<int, int>(i, j));
+                            _cellsToDie.Add((i, j));
                         }
                         neigboursCountOfAlive = 0;
                     }
@@ -125,7 +125,7 @@
 
                         if (neigboursCountOfDead == 3)
                         {
-                            cellsToBeBorn.Add(new Tuple<int, int>(i, j));
+                            _cellsToBeBorn.Add((i, j));
                         }
                         neigboursCountOfDead = 0;
                     }
@@ -140,16 +140,16 @@
         /// <returns>Returns an array of a gamefield after applying the rules of the game.</returns>
         public string[,] FieldRefresh(string[,] field)
         {
-            foreach (Tuple<int, int> cell in cellsToDie)
+            foreach ((int x, int y) cell in _cellsToDie)
             {
-                field[cell.Item1, cell.Item2] = ".";
+                field[cell.x, cell.y] = ".";
             }
-            foreach (Tuple<int, int> cell in cellsToBeBorn)
+            foreach ((int x, int y) cell in _cellsToBeBorn)
             {
-                field[cell.Item1, cell.Item2] = "X";
+                field[cell.x, cell.y] = "X";
             }
-            cellsToBeBorn.Clear();
-            cellsToDie.Clear();
+            _cellsToBeBorn.Clear();
+            _cellsToDie.Clear();
             return field;
         }
     }

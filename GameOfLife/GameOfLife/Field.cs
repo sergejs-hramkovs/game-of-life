@@ -4,12 +4,12 @@
     {
         private int _fieldLength { get; set; }
         private int _fieldWidth { get; set; }
-        private string[,] fieldArray;
-        private string inputCoordinate;
-        private int coordinateX;
-        private int coordinateY;
-        private bool wrongInput = false;
-        private bool stop = false;
+        private string[,] _fieldArray;
+        private string _inputCoordinate;
+        private int _coordinateX;
+        private int _coordinateY;
+        private bool _wrongInput = false;
+        private bool _stop = false;
 
         public Field(int length, int width)
         {
@@ -23,17 +23,17 @@
         /// <returns>Returns an array of a gamefield seeded with dead cells(.) .</returns>
         public string[,] CreateField()
         {
-            fieldArray = new string[_fieldWidth, _fieldLength];
+            _fieldArray = new string[_fieldWidth, _fieldLength];
 
             for (int j = 0; j < _fieldLength; j++)
             {
                 for (int i = 0; i < _fieldWidth; i++)
                 {
-                    fieldArray[i, j] = ".";
+                    _fieldArray[i, j] = ".";
                 }
             }
 
-            return fieldArray;
+            return _fieldArray;
         }
 
         /// <summary>
@@ -65,12 +65,12 @@
 
             while (true)
             {
-                if (wrongInput)
+                if (_wrongInput)
                 {
                     Console.Clear();
-                    DrawField(fieldArray);
+                    DrawField(_fieldArray);
                     Console.WriteLine("\nWrong Input!");
-                    wrongInput = false;
+                    _wrongInput = false;
                 }
                 Console.WriteLine("\n1. Seed the field manually");
                 Console.WriteLine("2. Seed the field automatically and randomly");
@@ -82,19 +82,19 @@
                 {
                     case "1":
                         ManualSeeding();
-                        return fieldArray;
+                        return _fieldArray;
 
                     case "2":
                         RandomSeeding();
-                        return fieldArray;
+                        return _fieldArray;
 
                     case "3":
                         Console.Clear();
                         LibrarySeeding();
-                        return fieldArray;
+                        return _fieldArray;
 
                     default:
-                        wrongInput = true;
+                        _wrongInput = true;
                         break;
                 }
             }
@@ -109,46 +109,46 @@
             while (true)
             {
                 Console.Clear();
-                if (!wrongInput)
+                if (!_wrongInput)
                 {
-                    DrawField(fieldArray);
+                    DrawField(_fieldArray);
                 }
-                else if (wrongInput)
+                else if (_wrongInput)
                 {
-                    DrawField(fieldArray);
+                    DrawField(_fieldArray);
                     Console.WriteLine("\nWrong Input!");
-                    wrongInput = false;
+                    _wrongInput = false;
                 }
 
                 if (!EnterCoordinates())
                 {
-                    wrongInput = true;
+                    _wrongInput = true;
                     continue;
                 }
                 else
                 {
-                    wrongInput = false;
+                    _wrongInput = false;
                 }
 
                 // Without this "if" there is a problem with the displaying of the last cell.
-                if (!stop)
+                if (!_stop)
                 {
-                    if (fieldArray[coordinateX, coordinateY] == ".")
+                    if (_fieldArray[_coordinateX, _coordinateY] == ".")
                     {
-                        fieldArray[coordinateX, coordinateY] = "X";
+                        _fieldArray[_coordinateX, _coordinateY] = "X";
                     }
                     else
                     {
-                        fieldArray[coordinateX, coordinateY] = ".";
+                        _fieldArray[_coordinateX, _coordinateY] = ".";
                     }
                 }             
                 else
                 {
-                    stop = false;
+                    _stop = false;
                     break;
                 }
             }
-            return fieldArray;
+            return _fieldArray;
         }
 
         /// <summary>
@@ -163,15 +163,15 @@
 
             for (int i = 1; i <= aliveCellCount; i++)
             {
-                randomX = random.Next(0, fieldArray.GetLength(0) - 1);
-                randomY = random.Next(0, fieldArray.GetLength(1) - 1);
+                randomX = random.Next(0, _fieldArray.GetLength(0) - 1);
+                randomY = random.Next(0, _fieldArray.GetLength(1) - 1);
 
-                if (fieldArray[randomX, randomY] != "X")
+                if (_fieldArray[randomX, randomY] != "X")
                 {
-                    fieldArray[randomX, randomY] = "X";
+                    _fieldArray[randomX, randomY] = "X";
                 }
             }
-            return fieldArray;
+            return _fieldArray;
         }
 
         /// <summary>
@@ -181,20 +181,20 @@
         private string[,] LibrarySeeding()
         {
             string inputPattern;
-            Library library = new Library(fieldArray);
+            Library library = new Library(_fieldArray);
 
             while (true)
             {
-                if (!wrongInput)
+                if (!_wrongInput)
                 {
-                    DrawField(fieldArray);
+                    DrawField(_fieldArray);
                 }
-                if (wrongInput)
+                if (_wrongInput)
                 {
                     Console.Clear();
-                    DrawField(fieldArray);
+                    DrawField(_fieldArray);
                     Console.WriteLine("\nWrong Input!");
-                    wrongInput = false;
+                    _wrongInput = false;
                 }
                 Console.WriteLine("\n# To stop seeding enter 'stop'");
                 Console.WriteLine("\n1. Spawn a glider");
@@ -208,50 +208,50 @@
                 {
                     case "stop":
                         Console.WriteLine("\nThe seeding has been stopped!");
-                        return fieldArray;
+                        return _fieldArray;
 
                     case "1":
                         if (!EnterCoordinates())
                         {
-                            wrongInput = true;
+                            _wrongInput = true;
                             continue;
                         }
-                        library.SeedGlider(coordinateX, coordinateY);
+                        library.SeedGlider(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
                     case "2":
                         if (!EnterCoordinates())
                         {
-                            wrongInput = true;
+                            _wrongInput = true;
                             continue;
                         }
-                        library.SeedLightWeight(coordinateX, coordinateY);
+                        library.SeedLightWeight(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
                     case "3":
                         if (!EnterCoordinates())
                         {
-                            wrongInput = true;
+                            _wrongInput = true;
                             continue;
                         }
-                        library.SeedMiddleWeight(coordinateX, coordinateY);
+                        library.SeedMiddleWeight(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
                     case "4":
                         if (!EnterCoordinates())
                         {
-                            wrongInput = true;
+                            _wrongInput = true;
                             continue;
                         }
-                        library.SeedHeavyWeight(coordinateX, coordinateY);
+                        library.SeedHeavyWeight(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
                     default:
-                        wrongInput = true;
+                        _wrongInput = true;
                         break;
                 }
             }
@@ -265,23 +265,23 @@
         {
             Console.WriteLine("\nTo stop seeding enter 'stop'");
             Console.Write("\nEnter X coordinate: ");
-            inputCoordinate = Console.ReadLine();
-            if (inputCoordinate == "stop")
+            _inputCoordinate = Console.ReadLine();
+            if (_inputCoordinate == "stop")
             {
-                return stop = true;
+                return _stop = true;
             }
-            else if (int.TryParse(inputCoordinate, out var resultX) && resultX >= 0 && resultX < fieldArray.GetLength(0))
+            else if (int.TryParse(_inputCoordinate, out var resultX) && resultX >= 0 && resultX < _fieldArray.GetLength(0))
             {
-                coordinateX = resultX;
+                _coordinateX = resultX;
                 Console.Write("\nEnter Y coordinate: ");
-                inputCoordinate = Console.ReadLine();
-                if (inputCoordinate == "stop")
+                _inputCoordinate = Console.ReadLine();
+                if (_inputCoordinate == "stop")
                 {
-                    return stop = true;
+                    return _stop = true;
                 }
-                else if (int.TryParse(inputCoordinate, out var resultY) && resultY >= 0 && resultY < fieldArray.GetLength(1))
+                else if (int.TryParse(_inputCoordinate, out var resultY) && resultY >= 0 && resultY < _fieldArray.GetLength(1))
                 {
-                    coordinateY = resultY;
+                    _coordinateY = resultY;
                 }
                 else
                 {
