@@ -10,6 +10,7 @@
         private ConsoleKeyInfo _saveKey;
         private ConsoleKeyInfo _fieldSizeChoice;
         private bool _wrongInput = false;
+        private bool _loaded = false;
         private File _file;
         private Tuple<string[,], int, int, int> _renderReturnValues;
 
@@ -34,6 +35,7 @@
                 Console.WriteLine("3. 10x10");
                 Console.WriteLine("4. 20x20");
                 Console.WriteLine("5. Custom");
+                Console.WriteLine("\nTo load the field from the file press 'L'");
                 _fieldSizeChoice = Console.ReadKey(true);
 
                 switch (_fieldSizeChoice.Key)
@@ -87,6 +89,12 @@
                         }
                         break;
 
+                    case ConsoleKey.L:
+                        _file = new File();
+                        _gameField = _file.LoadFromFile();
+                        _loaded = true;
+                        break;
+
                     case ConsoleKey.Escape:
                         Environment.Exit(0);
                         break;
@@ -98,7 +106,7 @@
                 }
                 if (_fieldSizeChoice.Key == ConsoleKey.D1 || _fieldSizeChoice.Key == ConsoleKey.D2 ||
                     _fieldSizeChoice.Key == ConsoleKey.D3 || _fieldSizeChoice.Key == ConsoleKey.D4 ||
-                    _fieldSizeChoice.Key == ConsoleKey.D5)
+                    _fieldSizeChoice.Key == ConsoleKey.D5 || _fieldSizeChoice.Key == ConsoleKey.L)
                 {
                     break;
                 }
@@ -183,7 +191,8 @@
         /// </summary>
         public void Run()
         {
-            Render.InitialRender(_length, _width, _gameField);
+            Render.InitialRender(_length, _width, _gameField, _loaded);
+            _loaded = false;
             _file = new File();
 
             do
@@ -218,7 +227,7 @@
 
             for (int i = 0; i < gameField.GetLength(0); i++)
             {
-                for (int j = 0; j < gameField.GetLength(0); j++)
+                for (int j = 0; j < gameField.GetLength(1); j++)
                 {
                     if (gameField[i, j] == "X")
                     {
@@ -239,7 +248,7 @@
 
             for (int i = 0; i < gameField.GetLength(0); i++)
             {
-                for (int j = 0; j < gameField.GetLength(0); j++)
+                for (int j = 0; j < gameField.GetLength(1); j++)
                 {
                     if (gameField[i, j] == ".")
                     {

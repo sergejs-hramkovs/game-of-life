@@ -16,16 +16,22 @@
         /// <param name="length">Horizontal dimension of a gamefield.</param>
         /// <param name="width">Vertical dimension of a gamefield.</param>
         /// <param name="inputField">An array of a gamefield.</param>
-        public static void InitialRender(int length, int width, string[,] inputField)
+        public static void InitialRender(int length, int width, string[,] inputField, bool loaded)
         {
             gameField = inputField;
             field = new Field(length, width);
             iteration = new Iteration();
             engine = new Engine();
-            gameField = field.CreateField();
+            if (!loaded)
+            {
+                gameField = field.CreateField();
+            }
             Console.Clear();
             field.DrawField(gameField);
-            gameField = field.SeedField();
+            if (!loaded)
+            {
+                gameField = field.SeedField();
+            }
             Console.Clear();
             Console.CursorVisible = false;
         }
