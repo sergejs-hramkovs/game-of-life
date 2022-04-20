@@ -2,10 +2,8 @@
 {
     public class Iteration
     {
-        public List<int> cellsToDieX = new List<int>();
-        public List<int> cellsToDieY = new List<int>();
-        public List<int> cellsToBeBornX = new List<int>();
-        public List<int> cellsToBeBornY = new List<int>();
+        private List<Tuple<int, int>> cellsToDie = new List<Tuple<int, int>>();
+        private List<Tuple<int, int>> cellsToBeBorn = new List<Tuple<int, int>>();
 
         /// <summary>
         /// Applies checks for alive and dead cells according to the rules.
@@ -69,8 +67,7 @@
                         }
                         if (neigboursCountOfAlive < 2 || neigboursCountOfAlive > 3)
                         {
-                            cellsToDieX.Add(i);
-                            cellsToDieY.Add(j);
+                            cellsToDie.Add(new Tuple<int, int>(i, j));
                         }
                         neigboursCountOfAlive = 0;
                     }
@@ -128,8 +125,7 @@
 
                         if (neigboursCountOfDead == 3)
                         {
-                            cellsToBeBornX.Add(i);
-                            cellsToBeBornY.Add(j);
+                            cellsToBeBorn.Add(new Tuple<int, int>(i, j));
                         }
                         neigboursCountOfDead = 0;
                     }
@@ -144,18 +140,16 @@
         /// <returns>Returns an array of a gamefield after applying the rules of the game.</returns>
         public string[,] FieldRefresh(string[,] field)
         {
-            for (int i = 0; i < cellsToDieX.Count; i++)
+            foreach (Tuple<int, int> cell in cellsToDie)
             {
-                field[cellsToDieX[i], cellsToDieY[i]] = ".";
+                field[cell.Item1, cell.Item2] = ".";
             }
-            for (int i = 0; i < cellsToBeBornX.Count; i++)
+            foreach (Tuple<int, int> cell in cellsToBeBorn)
             {
-                field[cellsToBeBornX[i], cellsToBeBornY[i]] = "X";
+                field[cell.Item1, cell.Item2] = "X";
             }
-            cellsToBeBornX.Clear();
-            cellsToBeBornY.Clear();
-            cellsToDieX.Clear();
-            cellsToDieY.Clear();
+            cellsToBeBorn.Clear();
+            cellsToDie.Clear();
             return field;
         }
     }

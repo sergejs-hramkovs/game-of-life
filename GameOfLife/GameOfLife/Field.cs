@@ -89,6 +89,7 @@
                         return fieldArray;
 
                     case "3":
+                        Console.Clear();
                         LibrarySeeding();
                         return fieldArray;
 
