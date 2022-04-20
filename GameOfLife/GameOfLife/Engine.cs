@@ -7,7 +7,10 @@
         private int _delay = 1000;
         private string[,] _gameField;
         private ConsoleKeyInfo _cki;
+        private ConsoleKeyInfo _saveKey;
         private bool _wrongInput = false;
+        private File _file;
+        private Tuple<string[,], int, int, int> _renderReturnValues;
 
         /// <summary>
         /// Initiate field size choice.
@@ -147,7 +150,21 @@
         {
             if (keyPressed.Key == ConsoleKey.Spacebar)
             {
-                Console.ReadKey();
+                Console.WriteLine("\nTo save the current game state to a file press 'Y'");
+                Console.WriteLine("Press any other key to cancel saving and continue with the game");
+                _saveKey = Console.ReadKey(true);
+
+                if (_saveKey.Key == ConsoleKey.Y)
+                {
+                    _file.SaveToFile(_renderReturnValues.Item1, _renderReturnValues.Item2, _renderReturnValues.Item3, _renderReturnValues.Item4);
+                    Console.WriteLine("\nThe current game state has been successfully saved! Press any key to continue");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+                else
+                {
+                    Console.Clear();
+                }
             }
         }
 
@@ -157,18 +174,19 @@
         public void Run()
         {
             Render.InitialRender(_length, _width, _gameField);
+            _file = new File();
 
             do
             {
                 while (Console.KeyAvailable == false)
                 {
                     Console.SetCursorPosition(0, 0);
-                    Render.RuntimeRender(_delay);
+                    _renderReturnValues = Render.RuntimeRender(_delay);
                     Thread.Sleep(_delay);
                 }
                 _cki = Console.ReadKey(true);
-                _delay = ChangeDelay(_delay, _cki);
                 Pause(_cki);
+                _delay = ChangeDelay(_delay, _cki);               
             } while (_cki.Key != ConsoleKey.Escape);
 
             Console.WriteLine("\nPress 'R' to restart");
