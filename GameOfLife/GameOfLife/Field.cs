@@ -10,6 +10,7 @@
         private int _coordinateY;
         private bool _wrongInput = false;
         private bool _stop = false;
+        private ConsoleKeyInfo _seedingChoice;
 
         public Field(int length, int width)
         {
@@ -61,8 +62,6 @@
         /// <returns>Returns an array of a seeded gamefield.</returns>
         public string[,] SeedField()
         {
-            string seedingChoice;
-
             while (true)
             {
                 if (_wrongInput)
@@ -75,20 +74,19 @@
                 Console.WriteLine("\n1. Seed the field manually");
                 Console.WriteLine("2. Seed the field automatically and randomly");
                 Console.WriteLine("3. Choose cell patterns from the library");
-                Console.Write("\nChoice: ");
-                seedingChoice = Console.ReadLine();
+                _seedingChoice = Console.ReadKey(true);
 
-                switch (seedingChoice)
+                switch (_seedingChoice.Key)
                 {
-                    case "1":
+                    case ConsoleKey.D1:
                         ManualSeeding();
                         return _fieldArray;
 
-                    case "2":
+                    case ConsoleKey.D2:
                         RandomSeeding();
                         return _fieldArray;
 
-                    case "3":
+                    case ConsoleKey.D3:
                         Console.Clear();
                         LibrarySeeding();
                         return _fieldArray;

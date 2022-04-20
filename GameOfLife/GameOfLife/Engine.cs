@@ -8,6 +8,7 @@
         private string[,] _gameField;
         private ConsoleKeyInfo _cki;
         private ConsoleKeyInfo _saveKey;
+        private ConsoleKeyInfo _fieldSizeChoice;
         private bool _wrongInput = false;
         private File _file;
         private Tuple<string[,], int, int, int> _renderReturnValues;
@@ -17,7 +18,6 @@
         /// </summary>
         public void Start()
         {
-            string fieldSizeChoice;
             Console.WriteLine("Welcome to the Game of Life!");
 
             while (true)
@@ -34,32 +34,31 @@
                 Console.WriteLine("3. 10x10");
                 Console.WriteLine("4. 20x20");
                 Console.WriteLine("5. Custom");
-                Console.Write("\nChoice: ");
-                fieldSizeChoice = Console.ReadLine();
+                _fieldSizeChoice = Console.ReadKey(true);
 
-                switch (fieldSizeChoice)
+                switch (_fieldSizeChoice.Key)
                 {
-                    case "1":
+                    case ConsoleKey.D1:
                         _length = 3;
                         _width = 3;
                         break;
 
-                    case "2":
+                    case ConsoleKey.D2:
                         _length = 5;
                         _width = 5;
                         break;
 
-                    case "3":
+                    case ConsoleKey.D3:
                         _length = 10;
                         _width = 10;
                         break;
 
-                    case "4":
+                    case ConsoleKey.D4:
                         _length = 20;
                         _width = 20;
                         break;
 
-                    case "5":
+                    case ConsoleKey.D5:
                         while (true)
                         {
                             if (_wrongInput)
@@ -93,7 +92,9 @@
                         _width = 10;
                         break;
                 }
-                if (fieldSizeChoice == "1" || fieldSizeChoice == "2" || fieldSizeChoice == "3" || fieldSizeChoice == "4" || fieldSizeChoice == "5")
+                if (_fieldSizeChoice.Key == ConsoleKey.D1 || _fieldSizeChoice.Key == ConsoleKey.D2 ||
+                    _fieldSizeChoice.Key == ConsoleKey.D3 || _fieldSizeChoice.Key == ConsoleKey.D4 ||
+                    _fieldSizeChoice.Key == ConsoleKey.D1)
                 {
                     break;
                 }
@@ -151,6 +152,7 @@
             if (keyPressed.Key == ConsoleKey.Spacebar)
             {
                 Console.WriteLine("\nTo save the current game state to a file press 'Y'");
+                Console.WriteLine("To restart the game press 'R'");
                 Console.WriteLine("Press any other key to cancel saving and continue with the game");
                 _saveKey = Console.ReadKey(true);
 
@@ -160,6 +162,10 @@
                     Console.WriteLine("\nThe current game state has been successfully saved! Press any key to continue");
                     Console.ReadKey();
                     Console.Clear();
+                }
+                else if (_saveKey.Key == ConsoleKey.R)
+                {
+                    Restart();
                 }
                 else
                 {
