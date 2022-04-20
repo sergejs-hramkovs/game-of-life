@@ -2,12 +2,12 @@
 {
     public class Engine
     {
-        int length;
-        int width;
-        int delay = 1000;
-        string[,] gameField;
-        ConsoleKeyInfo cki;
-        bool wrongInput = false;
+        private int length;
+        private int width;
+        private int delay = 1000;
+        private string[,] gameField;
+        private ConsoleKeyInfo cki;
+        private bool wrongInput = false;
 
         /// <summary>
         /// Initiate field size choice.
@@ -107,7 +107,7 @@
         /// <param name="timeDelay">Time delay in miliseconds between each generation.</param>
         /// <param name="keyPressed">Parameters which stores Left and Right Arrow key presses.</param>
         /// <returns>Returns changed time delay.</returns>
-        public int ChangeDelay(int timeDelay, ConsoleKeyInfo keyPressed)
+        private int ChangeDelay(int timeDelay, ConsoleKeyInfo keyPressed)
         {
             switch (keyPressed.Key)
             {
@@ -140,7 +140,7 @@
         /// Method to pause the game by pressing the Spacebar.
         /// </summary>
         /// <param name="keyPressed">Parameter which stores Spacebar key press.</param>
-        public void Pause(ConsoleKeyInfo keyPressed)
+        private void Pause(ConsoleKeyInfo keyPressed)
         {
             if (keyPressed.Key == ConsoleKey.Spacebar)
             {

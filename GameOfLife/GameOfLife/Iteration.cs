@@ -19,7 +19,7 @@
         /// Determines if an alive cell dies before the next generation.
         /// </summary>
         /// <param name="field">An array of a gamefield.</param>
-        public void CheckAlive(string[,] field)
+        private void CheckAlive(string[,] field)
         {
             int neigboursCountOfAlive = 0;
             bool wrappedX = false;
@@ -79,7 +79,7 @@
         /// Determines if a dead cell is reborn before the next generation.
         /// </summary>
         /// <param name="field">An array of a gamefield.</param>
-        public void CheckDead(string[,] field)
+        private void CheckDead(string[,] field)
         {
             int neigboursCountOfDead = 0;
             bool wrappedX = false;

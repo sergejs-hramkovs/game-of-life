@@ -104,7 +104,7 @@
         /// Cell seeding coordinates are entered manually by the user.
         /// </summary>
         /// <returns>Returns an array of manually seeded gamefield.</returns>
-        public string[,] ManualSeeding()
+        private string[,] ManualSeeding()
         {
             while (true)
             {
@@ -155,7 +155,7 @@
         /// Cell amount and coordinates are generated automatically and randomly.
         /// </summary>
         /// <returns>Returns an array of randomly seeded gamefield.</returns>
-        public string[,] RandomSeeding()
+        private string[,] RandomSeeding()
         {
             Random random = new Random();
             int aliveCellCount = random.Next(1, _fieldWidth * _fieldLength);
@@ -178,7 +178,7 @@
         /// Method to choose a cell pattern from the premade library.
         /// </summary>
         /// <returns>Returns an array of a gamefield seeded with objects from the library.</returns>
-        public string[,] LibrarySeeding()
+        private string[,] LibrarySeeding()
         {
             string inputPattern;
             Library library = new Library(fieldArray);
@@ -261,7 +261,7 @@
         /// Method to process user input coordinates.
         /// </summary>
         /// <returns>Returns "stop = true" if the process of entering coordinates was stopped. Returns false if there is wrong input.</returns>
-        public bool EnterCoordinates()
+        private bool EnterCoordinates()
         {
             Console.WriteLine("\nTo stop seeding enter 'stop'");
             Console.Write("\nEnter X coordinate: ");
