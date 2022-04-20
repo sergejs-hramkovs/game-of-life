@@ -45,9 +45,9 @@
         {
             Console.WriteLine();
 
-            for (int j = 0; j < field.GetLength(0); j++)
+            for (int i = 0; i < field.GetLength(0); i++)
             {
-                for (int i = 0; i < field.GetLength(1); i++)
+                for (int j = 0; j < field.GetLength(1); j++)
                 {
                     Console.Write(" " + field[i, j]);
                 }

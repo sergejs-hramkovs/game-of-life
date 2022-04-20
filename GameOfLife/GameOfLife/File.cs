@@ -21,7 +21,7 @@ namespace GameOfLife
             {
                 for (int x = 0; x < _gameField.GetLength(0); x++)
                 {
-                    _stringField[y] = _stringField[y] + _gameField[x, y] + " ";
+                    _stringField[x] = _stringField[x] + _gameField[x, y] + " ";
                 }
             }
             return _stringField;

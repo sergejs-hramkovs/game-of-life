@@ -67,7 +67,7 @@
                                 Console.WriteLine("Wrong Input!");
                                 _wrongInput = false;
                             }
-                            Console.Write("\nEnter the height of the field: ");
+                            Console.Write("\nEnter the length of the field: ");
                             if (int.TryParse(Console.ReadLine(), out _length) && _length > 0)
                             {
                                 Console.Write("\nEnter the width of the field: ");
@@ -87,6 +87,10 @@
                         }
                         break;
 
+                    case ConsoleKey.Escape:
+                        Environment.Exit(0);
+                        break;
+
                     default:
                         _length = 10;
                         _width = 10;
@@ -94,7 +98,7 @@
                 }
                 if (_fieldSizeChoice.Key == ConsoleKey.D1 || _fieldSizeChoice.Key == ConsoleKey.D2 ||
                     _fieldSizeChoice.Key == ConsoleKey.D3 || _fieldSizeChoice.Key == ConsoleKey.D4 ||
-                    _fieldSizeChoice.Key == ConsoleKey.D1)
+                    _fieldSizeChoice.Key == ConsoleKey.D5)
                 {
                     break;
                 }
@@ -151,12 +155,12 @@
         {
             if (keyPressed.Key == ConsoleKey.Spacebar)
             {
-                Console.WriteLine("\nTo save the current game state to a file press 'Y'");
+                Console.WriteLine("\nTo save the current game state to a file press 'S'");
                 Console.WriteLine("To restart the game press 'R'");
                 Console.WriteLine("Press any other key to cancel saving and continue with the game");
                 _saveKey = Console.ReadKey(true);
 
-                if (_saveKey.Key == ConsoleKey.Y)
+                if (_saveKey.Key == ConsoleKey.S)
                 {
                     _file.SaveToFile(_renderReturnValues.Item1, _renderReturnValues.Item2, _renderReturnValues.Item3, _renderReturnValues.Item4);
                     Console.WriteLine("\nThe current game state has been successfully saved! Press any key to continue");
@@ -196,6 +200,7 @@
             } while (_cki.Key != ConsoleKey.Escape);
 
             Console.WriteLine("\nPress 'R' to restart");
+            Console.WriteLine("\nPress 'Esc' to exit");
             _cki = Console.ReadKey(true);
             if (_cki.Key == ConsoleKey.R)
             {
