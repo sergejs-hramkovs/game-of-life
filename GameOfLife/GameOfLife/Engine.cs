@@ -201,14 +201,13 @@
                 Render.PauseRender();
                 _saveKey = Console.ReadKey(true);
 
-                if (_saveKey.Key == ConsoleKey.S && !_gliderGunMode)
+                if (_saveKey.Key == ConsoleKey.S)
                 {
                     _file.SaveToFile(_renderReturnValues.Item1, _renderReturnValues.Item2, _renderReturnValues.Item3, _renderReturnValues.Item4);
                     Console.WriteLine("\n### The current game state has been successfully saved! Press any key to continue ###");
                     Console.ReadKey();
                     Console.Clear();
-                }
-               
+                }             
                 else if (_saveKey.Key == ConsoleKey.Escape)
                 {
                     Environment.Exit(0);
@@ -216,12 +215,6 @@
                 else if (_saveKey.Key == ConsoleKey.R)
                 {
                     Restart();
-                }
-                else if (_gliderGunMode)
-                {
-                    Console.WriteLine("\n### Saving in the Glider Gun Mode is not supported. Press any key to continue ###");
-                    Console.ReadKey();
-                    Console.Clear();
                 }
                 else
                 {
