@@ -213,8 +213,8 @@
                 _delay = ChangeDelay(_delay, _cki);
             } while (_cki.Key != ConsoleKey.Escape);
 
-            Console.WriteLine("\nPress 'R' to restart");
-            Console.WriteLine("\nPress 'Esc' to exit");
+            Console.WriteLine("\n# Press 'R' to restart");
+            Console.WriteLine("# Press 'Esc' to exit");
             _cki = Console.ReadKey(true);
             if (_cki.Key == ConsoleKey.R)
             {
@@ -229,6 +229,7 @@
         /// <summary>
         /// Method to count the current number of alive cells on the field.
         /// </summary>
+        /// <param name="gameField">An array of the game field cells.</param>
         /// <returns>Returns the number of alive cells currently in the gamefield array.</returns>
         public int CountAlive(string[,] gameField)
         {
@@ -250,6 +251,7 @@
         /// <summary>
         /// Method to count the current number of dead cells on the field.
         /// </summary>
+        /// <param name="gameField">An array of the game field cells.</param>
         /// <returns>Returns the number of dead cells currently in the gamefield array.</returns>
         public int CountDead(string[,] gameField)
         {

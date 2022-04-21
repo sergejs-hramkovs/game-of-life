@@ -49,7 +49,7 @@
             {
                 for (int j = 0; j < field.GetLength(1); j++)
                 {
-                    Console.Write(" " + field[i, j]);
+                    Console.Write(" " + field[j, i]);
                 }
 
                 Console.WriteLine();
@@ -178,7 +178,7 @@
         /// <returns>Returns an array of a gamefield seeded with objects from the library.</returns>
         private string[,] LibrarySeeding()
         {
-            string inputPattern;
+            ConsoleKeyInfo libraryChoice;
             Library library = new Library(_fieldArray);
 
             while (true)
@@ -194,31 +194,30 @@
                     Console.WriteLine("\nWrong Input!");
                     _wrongInput = false;
                 }
-                Console.WriteLine("\n# To stop seeding enter 'stop'");
+                Console.WriteLine("\n# To stop seeding press 'Esc'");
                 Console.WriteLine("\n1. Spawn a glider");
                 Console.WriteLine("2. Spawn a light-weight spaceship");
                 Console.WriteLine("3. Spawn a middle-weight spaceship");
                 Console.WriteLine("4. Spawn a heavy-weight spaceship");
-                Console.Write("\nChoice: ");
-                inputPattern = Console.ReadLine();
+                libraryChoice = Console.ReadKey(true);
 
-                switch (inputPattern)
+                switch (libraryChoice.Key)
                 {
-                    case "stop":
+                    case ConsoleKey.Escape:
                         Console.WriteLine("\nThe seeding has been stopped!");
                         return _fieldArray;
 
-                    case "1":
+                    case ConsoleKey.D1:
                         if (!EnterCoordinates())
                         {
                             _wrongInput = true;
                             continue;
                         }
-                        library.SeedGlider(_coordinateX, _coordinateY);
+                        _fieldArray = library.SeedGlider(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
-                    case "2":
+                    case ConsoleKey.D2:
                         if (!EnterCoordinates())
                         {
                             _wrongInput = true;
@@ -228,7 +227,7 @@
                         Console.Clear();
                         break;
 
-                    case "3":
+                    case ConsoleKey.D3:
                         if (!EnterCoordinates())
                         {
                             _wrongInput = true;
@@ -238,7 +237,7 @@
                         Console.Clear();
                         break;
 
-                    case "4":
+                    case ConsoleKey.D4:
                         if (!EnterCoordinates())
                         {
                             _wrongInput = true;
@@ -261,7 +260,7 @@
         /// <returns>Returns "stop = true" if the process of entering coordinates was stopped. Returns false if there is wrong input.</returns>
         private bool EnterCoordinates()
         {
-            Console.WriteLine("\nTo stop seeding enter 'stop'");
+            Console.WriteLine("\n# To stop seeding enter 'stop'");
             Console.Write("\nEnter X coordinate: ");
             _inputCoordinate = Console.ReadLine();
             if (_inputCoordinate == "stop")

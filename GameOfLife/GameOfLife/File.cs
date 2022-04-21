@@ -16,7 +16,6 @@ namespace GameOfLife
         private string[] _stringField;
         private List<string> _stringList = new List<string>();
 
-
         /// <summary>
         /// Method which converts 2-dimensional array to a 1-dimensional in order to minimize the number of 'write' operations to a file.
         /// </summary>
@@ -30,12 +29,17 @@ namespace GameOfLife
             {
                 for (int x = 0; x < _gameField.GetLength(0); x++)
                 {
-                    _stringField[x] = _stringField[x] + _gameField[x, y] + " ";
+                    _stringField[x] = _stringField[x] + _gameField[y, x] + " ";
                 }
             }
             return _stringField;
         }
 
+        /// <summary>
+        /// Method that takes the list of the game field cells and converts it to an array of the game field.
+        /// </summary>
+        /// <param name="inputList">List of the game field cells.</param>
+        /// <returns>Returns an array of the game field.</returns>
         private string[,] ListToField(List<string> inputList)
         {
             int x = 0;
