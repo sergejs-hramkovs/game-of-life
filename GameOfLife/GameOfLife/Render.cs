@@ -43,11 +43,14 @@
         /// <param name="delay">Delay between generations in miliseconds</param>
         /// <param name="gliderGunMode">Parameter to enable the Glider Gun mode with dead borders rules.</param>
         /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
-        public static Tuple<string[,], int, int, int> RuntimeRender(int delay, bool gliderGunMode)
+        public static Tuple<string[,], int, int, int> RuntimeRender(int delay, bool gliderGunMode, bool resetGeneration)
         {
             aliveCells = engine.CountAlive(gameField);
             deadCells = engine.CountDead(gameField);
-            
+            if (resetGeneration)
+            {
+                generation = 1;
+            }         
             Console.WriteLine("# Press ESC to stop");
             Console.WriteLine("# Press Spacebar to pause");
             Console.WriteLine("# Change the delay using left and right arrows");

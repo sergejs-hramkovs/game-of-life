@@ -12,6 +12,7 @@
         private bool _wrongInput = false;
         private bool _loaded = false;
         private bool _gliderGunMode = false;
+        private bool _resetGeneration = false;
         private File _file;
         private Tuple<string[,], int, int, int> _renderReturnValues;
 
@@ -207,7 +208,6 @@
                 }
                 else if (_saveKey.Key == ConsoleKey.R)
                 {
-                    _gliderGunMode = false;
                     Restart();
                 }
                 else
@@ -231,7 +231,7 @@
                 while (Console.KeyAvailable == false)
                 {
                     Console.SetCursorPosition(0, 0);
-                    _renderReturnValues = Render.RuntimeRender(_delay, _gliderGunMode);
+                    _renderReturnValues = Render.RuntimeRender(_delay, _gliderGunMode, _resetGeneration);
                     Thread.Sleep(_delay);
                 }
                 _cki = Console.ReadKey(true);
@@ -243,7 +243,6 @@
             _cki = Console.ReadKey(true);
             if (_cki.Key == ConsoleKey.R)
             {
-                _gliderGunMode = false;
                 Restart();
             }
             else if (_cki.Key == ConsoleKey.Escape)
@@ -301,6 +300,8 @@
         /// </summary>
         private void Restart()
         {
+            _gliderGunMode = false;
+            _resetGeneration = true;
             _delay = 1000;
             Console.Clear();
             Start();
