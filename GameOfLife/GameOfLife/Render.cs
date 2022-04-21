@@ -18,20 +18,20 @@
         /// <param name="width">Vertical dimension of a gamefield.</param>
         /// <param name="inputField">An array of a gamefield.</param>
         /// <param name="loaded">Boolean parameter that represents whether the field was loaded from the file.</param>
-        public static void InitialRender(int length, int width, string[,] inputField, bool loaded)
+        public static void InitialRender(int length, int width, string[,] inputField, bool loaded, bool gliderGunMode)
         {
             gameField = inputField;
             field = new Field(length, width);
             iteration = new Iteration();
             engine = new Engine();
-            
+
             // This place needs to be had a look at.
             if (!loaded)
             {
                 gameField = field.CreateField();
                 Console.Clear();
                 field.DrawField(gameField);
-                gameField = field.SeedField();
+                gameField = field.SeedField(gliderGunMode);
             }
             Console.Clear();
             Console.CursorVisible = false;
@@ -50,7 +50,7 @@
             if (resetGeneration)
             {
                 generation = 1;
-            }         
+            }
             Console.WriteLine("# Press ESC to stop");
             Console.WriteLine("# Press Spacebar to pause");
             Console.WriteLine("# Change the delay using left and right arrows");
@@ -103,6 +103,7 @@
         public static void FieldSizeMenuRender()
         {
             Console.Clear();
+            Console.WriteLine("Welcome to the Game of Life!");
             Console.WriteLine("\nChoose the field size:");
             Console.WriteLine("1. 3x3");
             Console.WriteLine("2. 5x5");
@@ -122,7 +123,7 @@
             Console.Clear();
             Console.WriteLine("The Glider Gun Mode");
             Console.WriteLine("\n1. 40x30 (The best size for a glider gun)");
-            Console.WriteLine("Press 'G' to turn off the Glider Gun Mode");
+            Console.WriteLine("\n# Press 'G' to turn off the Glider Gun Mode");
         }
 
         /// <summary>

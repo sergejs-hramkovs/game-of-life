@@ -21,8 +21,6 @@
         /// </summary>
         public void Start()
         {
-            Console.WriteLine("Welcome to the Game of Life!");
-
             while (true)
             {
                 if (_wrongInput)
@@ -195,10 +193,16 @@
                 Render.PauseRender();
                 _saveKey = Console.ReadKey(true);
 
-                if (_saveKey.Key == ConsoleKey.S)
+                if (_saveKey.Key == ConsoleKey.S && !_gliderGunMode)
                 {
                     _file.SaveToFile(_renderReturnValues.Item1, _renderReturnValues.Item2, _renderReturnValues.Item3, _renderReturnValues.Item4);
                     Console.WriteLine("\n### The current game state has been successfully saved! Press any key to continue ###");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+                else if (_gliderGunMode)
+                {
+                    Console.WriteLine("\n### Saving in the Glider Gun Mode is not supported. Press any key to continue ###");
                     Console.ReadKey();
                     Console.Clear();
                 }
@@ -222,7 +226,7 @@
         /// </summary>
         public void Run()
         {
-            Render.InitialRender(_length, _width, _gameField, _loaded);
+            Render.InitialRender(_length, _width, _gameField, _loaded, _gliderGunMode);
             _loaded = false;
             _file = new File();
 

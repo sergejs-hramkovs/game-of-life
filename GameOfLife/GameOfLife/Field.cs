@@ -60,7 +60,7 @@
         /// Method to choose how to seed the field - manually or automatically.
         /// </summary>
         /// <returns>Returns an array of a seeded gamefield.</returns>
-        public string[,] SeedField()
+        public string[,] SeedField(bool gliderGunMode)
         {
             while (true)
             {
@@ -71,8 +71,17 @@
                     Console.WriteLine("\nWrong Input!");
                     _wrongInput = false;
                 }
-                Render.SeedFieldMenuRender();
-                _seedingChoice = Console.ReadKey(true);
+                if (gliderGunMode)
+                {
+                    Console.Clear();
+                    LibrarySeeding(gliderGunMode);
+                    return _fieldArray;
+                }
+                else
+                {
+                    Render.SeedFieldMenuRender();
+                    _seedingChoice = Console.ReadKey(true);
+                }
 
                 switch (_seedingChoice.Key)
                 {
@@ -86,7 +95,7 @@
 
                     case ConsoleKey.D3:
                         Console.Clear();
-                        LibrarySeeding();
+                        LibrarySeeding(gliderGunMode);
                         return _fieldArray;
 
                     default:
@@ -137,7 +146,7 @@
                     {
                         _fieldArray[_coordinateX, _coordinateY] = ".";
                     }
-                }             
+                }
                 else
                 {
                     _stop = false;
@@ -174,13 +183,20 @@
         /// Method to choose a cell pattern from the premade library.
         /// </summary>
         /// <returns>Returns an array of a gamefield seeded with objects from the library.</returns>
-        private string[,] LibrarySeeding()
+        private string[,] LibrarySeeding(bool gliderGunMode)
         {
             ConsoleKeyInfo libraryChoice;
             Library library = new Library(_fieldArray);
 
             while (true)
             {
+                if (gliderGunMode)
+                {
+                    library.SeedGliderGun(1, 1);
+                    Console.Clear();
+                    return _fieldArray;
+                }
+
                 if (!_wrongInput)
                 {
                     DrawField(_fieldArray);
@@ -206,7 +222,7 @@
                             _wrongInput = true;
                             continue;
                         }
-                        _fieldArray = library.SeedGlider(_coordinateX, _coordinateY);
+                        library.SeedGlider(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
@@ -237,16 +253,6 @@
                             continue;
                         }
                         library.SeedHeavyWeight(_coordinateX, _coordinateY);
-                        Console.Clear();
-                        break;
-
-                    case ConsoleKey.D5:
-                        if (!EnterCoordinates())
-                        {
-                            _wrongInput = true;
-                            continue;
-                        }
-                        library.SeedGliderGun(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
