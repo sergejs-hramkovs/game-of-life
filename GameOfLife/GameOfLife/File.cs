@@ -10,11 +10,12 @@ namespace GameOfLife
     {
         private string _filePath = @"C:\Users\sergejs.hramkovs\OneDrive - Accenture\Documents\field.txt";
         private string _line;
-        private StreamWriter _writer;
-        private StreamReader _reader;
         private string[,] _gameField;
         private string[] _stringField;
+        private StreamWriter _writer;
+        private StreamReader _reader;
         private List<string> _stringList = new List<string>();
+        public int generation;
 
         /// <summary>
         /// Method which converts 2-dimensional array to a 1-dimensional in order to minimize the number of 'write' operations to a file.
@@ -44,7 +45,19 @@ namespace GameOfLife
         {
             int x = 0;
             int y = 0;
+            string generationString = "";
+
             _gameField = new string[inputList[4].Length / 2, inputList.Count - 4];
+
+            foreach (char character in inputList[0])
+            {
+                if (int.TryParse(character.ToString(), out int number))
+                {
+                    generationString += number.ToString();
+                }
+            }
+            generation = int.Parse(generationString);
+
             for (int i = 4; i < inputList.Count; i++)
             {
                 foreach (char character in inputList[i])

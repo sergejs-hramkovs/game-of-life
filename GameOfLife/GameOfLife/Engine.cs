@@ -5,6 +5,7 @@
         private int _length;
         private int _width;
         private int _delay = 1000;
+        private int _generation;
         private string[,] _gameField;
         private ConsoleKeyInfo _cki;
         private ConsoleKeyInfo _saveKey;
@@ -95,6 +96,7 @@
                         case ConsoleKey.L:
                             _file = new File();
                             _gameField = _file.LoadFromFile();
+                            _generation = _file.generation;
                             _loaded = true;
                             break;
 
@@ -237,7 +239,7 @@
                 while (Console.KeyAvailable == false)
                 {
                     Console.SetCursorPosition(0, 0);
-                    _renderReturnValues = Render.RuntimeRender(_delay, _gliderGunMode, _resetGeneration);
+                    _renderReturnValues = Render.RuntimeRender(_delay, _gliderGunMode, _resetGeneration, _loaded, _generation);
                     if (_resetGeneration)
                     {
                         _resetGeneration = false;
