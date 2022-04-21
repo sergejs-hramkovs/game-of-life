@@ -1,6 +1,6 @@
 ﻿namespace GameOfLife
 {
-    public class Iteration
+    public class RulesApplier
     {
         private List<(int x, int y)> _cellsToDie = new List<(int x, int y)>();
         private List<(int x, int y)> _cellsToBeBorn = new List<(int x, int y)>();

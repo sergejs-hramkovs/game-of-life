@@ -7,7 +7,7 @@
         static int aliveCells;
         static int deadCells;
         static Field field;
-        static Iteration iteration;
+        static RulesApplier rulesApplier;
         static Engine engine;
         static Tuple<string[,], int, int, int> returnValues;
 
@@ -40,7 +40,7 @@
         {
             gameField = inputField;
             field = new Field(length, width);
-            iteration = new Iteration();
+            rulesApplier = new RulesApplier();
             engine = new Engine();
 
             // This place needs to be had a look at.
@@ -80,13 +80,13 @@
             Console.WriteLine($"Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   ");
             if (gliderGunMode)
             {
-                iteration.CheckCellsDeadBorder(gameField);
+                rulesApplier.CheckCellsDeadBorder(gameField);
             }
             else
             {
-                iteration.CheckCells(gameField);
+                rulesApplier.CheckCells(gameField);
             }
-            gameField = iteration.FieldRefresh(gameField);
+            gameField = rulesApplier.FieldRefresh(gameField);
             RenderField(gameField);
             returnValues = new Tuple<string[,], int, int, int>(gameField, aliveCells, deadCells, generation);
             generation++;
