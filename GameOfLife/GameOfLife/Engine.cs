@@ -30,100 +30,129 @@
                     Console.WriteLine("Wrong Input!");
                     _wrongInput = false;
                 }
-                Console.WriteLine("\nChoose the field size:");
-                Console.WriteLine("1. 3x3");
-                Console.WriteLine("2. 5x5");
-                Console.WriteLine("3. 10x10");
-                Console.WriteLine("4. 20x20");
-                Console.WriteLine("5. Custom");
-                Console.WriteLine("\n# To load the field from the file press 'L'");
-                Console.WriteLine("# To load Glider Gun Mode press 'G'");
-                Console.WriteLine("# Press 'F1' to read the rules and the description of the game");
-                _fieldSizeChoice = Console.ReadKey(true);
-
-                switch (_fieldSizeChoice.Key)
+                if (!_gliderGunMode)
                 {
-                    case ConsoleKey.D1:
-                        _length = 3;
-                        _width = 3;
-                        break;
+                    Console.Clear();
+                    Console.WriteLine("\nChoose the field size:");
+                    Console.WriteLine("1. 3x3");
+                    Console.WriteLine("2. 5x5");
+                    Console.WriteLine("3. 10x10");
+                    Console.WriteLine("4. 20x20");
+                    Console.WriteLine("5. Custom");
+                    Console.WriteLine("\n# To load the field from the file press 'L'");
+                    Console.WriteLine("# To load Glider Gun Mode press 'G'");
+                    Console.WriteLine("# Press 'F1' to read the rules and the description of the game");
+                    _fieldSizeChoice = Console.ReadKey(true);
 
-                    case ConsoleKey.D2:
-                        _length = 5;
-                        _width = 5;
-                        break;
+                    switch (_fieldSizeChoice.Key)
+                    {
+                        case ConsoleKey.D1:
+                            _length = 3;
+                            _width = 3;
+                            break;
 
-                    case ConsoleKey.D3:
-                        _length = 10;
-                        _width = 10;
-                        break;
+                        case ConsoleKey.D2:
+                            _length = 5;
+                            _width = 5;
+                            break;
 
-                    case ConsoleKey.D4:
-                        _length = 20;
-                        _width = 20;
-                        break;
+                        case ConsoleKey.D3:
+                            _length = 10;
+                            _width = 10;
+                            break;
 
-                    case ConsoleKey.D5:
-                        while (true)
-                        {
-                            if (_wrongInput)
+                        case ConsoleKey.D4:
+                            _length = 20;
+                            _width = 20;
+                            break;
+
+                        case ConsoleKey.D5:
+                            while (true)
                             {
-                                Console.Clear();
-                                Console.WriteLine("Wrong Input!");
-                                _wrongInput = false;
-                            }
-                            Console.Write("\nEnter the length of the field: ");
-                            if (int.TryParse(Console.ReadLine(), out _length) && _length > 0)
-                            {
-                                Console.Write("\nEnter the width of the field: ");
-                                if (int.TryParse(Console.ReadLine(), out _width) && _width > 0)
+                                if (_wrongInput)
                                 {
-                                    break;
+                                    Console.Clear();
+                                    Console.WriteLine("Wrong Input!");
+                                    _wrongInput = false;
+                                }
+                                Console.Write("\nEnter the length of the field: ");
+                                if (int.TryParse(Console.ReadLine(), out _length) && _length > 0)
+                                {
+                                    Console.Write("\nEnter the width of the field: ");
+                                    if (int.TryParse(Console.ReadLine(), out _width) && _width > 0)
+                                    {
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        _wrongInput = true;
+                                    }
                                 }
                                 else
                                 {
                                     _wrongInput = true;
                                 }
                             }
-                            else
-                            {
-                                _wrongInput = true;
-                            }
-                        }
-                        break;
+                            break;
 
-                    case ConsoleKey.L:
-                        _file = new File();
-                        _gameField = _file.LoadFromFile();
-                        _loaded = true;
-                        break;
+                        case ConsoleKey.L:
+                            _file = new File();
+                            _gameField = _file.LoadFromFile();
+                            _loaded = true;
+                            break;
 
-                    case ConsoleKey.G:
-                        _gliderGunMode = true;
-                        break;
+                        case ConsoleKey.G:
+                            _gliderGunMode = true;
+                            break;
 
-                    case ConsoleKey.F1:
-                        Rules.PrintRules();
-                        break;
+                        case ConsoleKey.F1:
+                            Rules.PrintRules();
+                            break;
 
-                    case ConsoleKey.Escape:
-                        Environment.Exit(0);
-                        break;
+                        case ConsoleKey.Escape:
+                            Environment.Exit(0);
+                            break;
 
-                    default:
-                        _length = 10;
-                        _width = 10;
+                        default:
+                            _length = 10;
+                            _width = 10;
+                            break;
+                    }
+                    if (_fieldSizeChoice.Key == ConsoleKey.D1 || _fieldSizeChoice.Key == ConsoleKey.D2 ||
+                        _fieldSizeChoice.Key == ConsoleKey.D3 || _fieldSizeChoice.Key == ConsoleKey.D4 ||
+                        _fieldSizeChoice.Key == ConsoleKey.D5 || _fieldSizeChoice.Key == ConsoleKey.L)
+                    {
                         break;
-                }
-                if (_fieldSizeChoice.Key == ConsoleKey.D1 || _fieldSizeChoice.Key == ConsoleKey.D2 ||
-                    _fieldSizeChoice.Key == ConsoleKey.D3 || _fieldSizeChoice.Key == ConsoleKey.D4 ||
-                    _fieldSizeChoice.Key == ConsoleKey.D5 || _fieldSizeChoice.Key == ConsoleKey.L)
-                {
-                    break;
+                    }
+                    else
+                    {
+                        if (_fieldSizeChoice.Key != ConsoleKey.G)
+                        {
+                            _wrongInput = true;
+                        }          
+                    }
                 }
                 else
                 {
-                    _wrongInput = true;
+                    Console.Clear();
+                    Console.WriteLine("The Glider Gun Mode");
+                    Console.WriteLine("\n1. 40x30 (The best size for a glider gun)");
+                    Console.WriteLine("Press 'G' to turn off the Glider Gun Mode");
+                    _fieldSizeChoice = Console.ReadKey(true);
+                    if (_fieldSizeChoice.Key == ConsoleKey.D1)
+                    {
+                        _length = 40;
+                        _width = 30;
+                        break;
+                    }
+                    else if (_fieldSizeChoice.Key == ConsoleKey.G)
+                    {
+                        _gliderGunMode = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Wrong Input!");
+                    }
                 }
             }
         }
@@ -230,6 +259,7 @@
             _cki = Console.ReadKey(true);
             if (_cki.Key == ConsoleKey.R)
             {
+                _gliderGunMode = false;
                 Restart();
             }
             else if (_cki.Key == ConsoleKey.Escape)
