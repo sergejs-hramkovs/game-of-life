@@ -24,12 +24,12 @@ namespace GameOfLife
         private string[] FieldToString(string[,] gameField)
         {
             _gameField = gameField;
-            _stringField = new string[_gameField.GetLength(0)];
-            for (int y = 0; y < _gameField.GetLength(1); y++)
+            _stringField = new string[_gameField.GetLength(1)];
+            for (int x = 0; x < _gameField.GetLength(0); x++)
             {
-                for (int x = 0; x < _gameField.GetLength(0); x++)
+                for (int y = 0; y < _gameField.GetLength(1); y++)
                 {
-                    _stringField[x] = _stringField[x] + _gameField[y, x] + " ";
+                    _stringField[y] = _stringField[y] + _gameField[x, y] + " ";
                 }
             }
             return _stringField;
@@ -44,7 +44,7 @@ namespace GameOfLife
         {
             int x = 0;
             int y = 0;
-            _gameField = new string[inputList.Count - 4, inputList[4].Length / 2];
+            _gameField = new string[inputList[4].Length / 2, inputList.Count - 4];
             for (int i = 4; i < inputList.Count; i++)
             {
                 foreach (char character in inputList[i])
@@ -53,7 +53,7 @@ namespace GameOfLife
                     {
                         if (character == 'X' || character == '.')
                         {
-                            _gameField[y, x] = character.ToString();
+                            _gameField[x, y] = character.ToString();
                             if (x == inputList[4].Length / 2 - 1)
                             {
                                 x = 0;
