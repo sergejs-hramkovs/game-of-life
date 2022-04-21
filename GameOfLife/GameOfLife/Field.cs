@@ -45,9 +45,9 @@
         {
             Console.WriteLine();
 
-            for (int i = 0; i < field.GetLength(0); i++)
+            for (int i = 0; i < field.GetLength(1); i++)
             {
-                for (int j = 0; j < field.GetLength(1); j++)
+                for (int j = 0; j < field.GetLength(0); j++)
                 {
                     Console.Write(" " + field[j, i]);
                 }
@@ -199,6 +199,7 @@
                 Console.WriteLine("2. Spawn a light-weight spaceship");
                 Console.WriteLine("3. Spawn a middle-weight spaceship");
                 Console.WriteLine("4. Spawn a heavy-weight spaceship");
+                Console.WriteLine("5. Spawn a glider gun");
                 libraryChoice = Console.ReadKey(true);
 
                 switch (libraryChoice.Key)
@@ -244,6 +245,16 @@
                             continue;
                         }
                         library.SeedHeavyWeight(_coordinateX, _coordinateY);
+                        Console.Clear();
+                        break;
+
+                    case ConsoleKey.D5:
+                        if (!EnterCoordinates())
+                        {
+                            _wrongInput = true;
+                            continue;
+                        }
+                        library.SeedGliderGun(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 

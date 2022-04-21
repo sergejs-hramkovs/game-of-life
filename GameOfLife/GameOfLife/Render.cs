@@ -9,6 +9,7 @@
         static Field field;
         static Iteration iteration;
         static Engine engine;
+        static Tuple<string[,], int, int, int> returnValues;
 
         /// <summary>
         /// Method for initial rendering of the game field.
@@ -24,7 +25,7 @@
             iteration = new Iteration();
             engine = new Engine();
             
-            // This place needs to be had a look.
+            // This place needs to be had a look at.
             if (!loaded)
             {
                 gameField = field.CreateField();
@@ -57,8 +58,9 @@
             iteration.CheckCells(gameField);
             gameField = iteration.FieldRefresh(gameField);
             field.DrawField(gameField);
+            returnValues = new Tuple<string[,], int, int, int>(gameField, aliveCells, deadCells, generation);
             generation++;
-            return new Tuple<string[,], int, int, int>(gameField, aliveCells, deadCells, generation - 1);
+            return returnValues;
         }
     }
 }

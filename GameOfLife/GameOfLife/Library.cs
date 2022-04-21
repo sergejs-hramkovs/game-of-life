@@ -237,5 +237,130 @@ namespace GameOfLife
             }
             return _fieldArray;
         }
+
+        public string[,] SeedGliderGun(int locationX, int locationY)
+        {
+            for (int i = locationX; i < locationX + 37; i++)
+            {
+                for (int j = locationY; j < locationY + 10; j++)
+                {
+                    switch (i - locationX)
+                    {
+                        case 1:
+                            if (j - locationY == 5 || j - locationY == 6)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 2:
+                            if (j - locationY == 5 || j - locationY == 6)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 11:
+                            if (j - locationY == 5 || j - locationY == 6 || j - locationY == 7)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 12:
+                            if (j - locationY == 4 || j - locationY == 8)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 13:
+                            if (j - locationY == 3 || j - locationY == 9)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 14:
+                            if (j - locationY == 3 || j - locationY == 9)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 15:
+                            if (j - locationY == 6)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 16:
+                            if (j - locationY == 4 || j - locationY == 8)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 17:
+                            if (j - locationY == 5 || j - locationY == 6 || j - locationY == 7)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 18:
+                            if (j - locationY == 6)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 21:
+                            if (j - locationY == 3 || j - locationY == 4 || j - locationY == 5)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 22:
+                            if (j - locationY == 3 || j - locationY == 4 || j - locationY == 5)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 23:
+                            if (j - locationY == 2 || j - locationY == 6)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 25:
+                            if (j - locationY == 1 || j - locationY == 2 || j - locationY == 6 || j - locationY == 7)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 35:
+                            if (j - locationY == 3 || j - locationY == 4)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+
+                        case 36:
+                            if (j - locationY == 3 || j - locationY == 4)
+                            {
+                                _fieldArray[i % _fieldArray.GetLength(0), j % _fieldArray.GetLength(1)] = "X";
+                            }
+                            break;
+                    }
+                }
+            }
+            return _fieldArray;
+        }
     }
 }
