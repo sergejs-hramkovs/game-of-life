@@ -36,6 +36,7 @@
                 Console.WriteLine("4. 20x20");
                 Console.WriteLine("5. Custom");
                 Console.WriteLine("\n# To load the field from the file press 'L'");
+                Console.WriteLine("# Press 'F1' to read the rules and the description of the game");
                 _fieldSizeChoice = Console.ReadKey(true);
 
                 switch (_fieldSizeChoice.Key)
@@ -93,6 +94,10 @@
                         _file = new File();
                         _gameField = _file.LoadFromFile();
                         _loaded = true;
+                        break;
+
+                    case ConsoleKey.F1:
+                        Rules.PrintRules();
                         break;
 
                     case ConsoleKey.Escape:
