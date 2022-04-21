@@ -109,7 +109,8 @@
             Console.WriteLine("2. 5x5");
             Console.WriteLine("3. 10x10");
             Console.WriteLine("4. 20x20");
-            Console.WriteLine("5. Custom");
+            Console.WriteLine("5. 75x40");
+            Console.WriteLine("6. Custom");
             Console.WriteLine("\n# To load the field from the file press 'L'");
             Console.WriteLine("# To load Glider Gun Mode press 'G'");
             Console.WriteLine("# Press 'F1' to read the rules and the description of the game");

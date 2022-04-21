@@ -21,6 +21,8 @@
         /// </summary>
         public void Start()
         {
+            Console.SetWindowSize(170, 55);
+
             while (true)
             {
                 if (_wrongInput)
@@ -57,6 +59,11 @@
                             break;
 
                         case ConsoleKey.D5:
+                            _length = 75;
+                            _width = 40;
+                            break;
+
+                        case ConsoleKey.D6:
                             while (true)
                             {
                                 if (_wrongInput)
@@ -110,7 +117,8 @@
                     }
                     if (_fieldSizeChoice.Key == ConsoleKey.D1 || _fieldSizeChoice.Key == ConsoleKey.D2 ||
                         _fieldSizeChoice.Key == ConsoleKey.D3 || _fieldSizeChoice.Key == ConsoleKey.D4 ||
-                        _fieldSizeChoice.Key == ConsoleKey.D5 || _fieldSizeChoice.Key == ConsoleKey.L)
+                        _fieldSizeChoice.Key == ConsoleKey.D5 || _fieldSizeChoice.Key == ConsoleKey.D6 ||
+                        _fieldSizeChoice.Key == ConsoleKey.L)
                     {
                         break;
                     }
@@ -200,12 +208,7 @@
                     Console.ReadKey();
                     Console.Clear();
                 }
-                else if (_gliderGunMode)
-                {
-                    Console.WriteLine("\n### Saving in the Glider Gun Mode is not supported. Press any key to continue ###");
-                    Console.ReadKey();
-                    Console.Clear();
-                }
+               
                 else if (_saveKey.Key == ConsoleKey.Escape)
                 {
                     Environment.Exit(0);
@@ -213,6 +216,12 @@
                 else if (_saveKey.Key == ConsoleKey.R)
                 {
                     Restart();
+                }
+                else if (_gliderGunMode)
+                {
+                    Console.WriteLine("\n### Saving in the Glider Gun Mode is not supported. Press any key to continue ###");
+                    Console.ReadKey();
+                    Console.Clear();
                 }
                 else
                 {
@@ -236,6 +245,10 @@
                 {
                     Console.SetCursorPosition(0, 0);
                     _renderReturnValues = Render.RuntimeRender(_delay, _gliderGunMode, _resetGeneration);
+                    if (_resetGeneration)
+                    {
+                        _resetGeneration = false;
+                    }
                     Thread.Sleep(_delay);
                 }
                 _cki = Console.ReadKey(true);
