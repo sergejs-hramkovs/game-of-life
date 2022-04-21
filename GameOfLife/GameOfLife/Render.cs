@@ -18,6 +18,7 @@
         /// <param name="width">Vertical dimension of a gamefield.</param>
         /// <param name="inputField">An array of a gamefield.</param>
         /// <param name="loaded">Boolean parameter that represents whether the field was loaded from the file.</param>
+        /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
         public static void InitialRender(int length, int width, string[,] inputField, bool loaded, bool gliderGunMode)
         {
             gameField = inputField;
@@ -42,6 +43,7 @@
         /// </summary>
         /// <param name="delay">Delay between generations in miliseconds</param>
         /// <param name="gliderGunMode">Parameter to enable the Glider Gun mode with dead borders rules.</param>
+        /// <param name="resetGeneration">Parameter to rest the number of generation after restart.</param>
         /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
         public static Tuple<string[,], int, int, int> RuntimeRender(int delay, bool gliderGunMode, bool resetGeneration)
         {
@@ -94,7 +96,6 @@
             Console.WriteLine("2. Spawn a light-weight spaceship");
             Console.WriteLine("3. Spawn a middle-weight spaceship");
             Console.WriteLine("4. Spawn a heavy-weight spaceship");
-            Console.WriteLine("5. Spawn a glider gun");
         }
 
         /// <summary>

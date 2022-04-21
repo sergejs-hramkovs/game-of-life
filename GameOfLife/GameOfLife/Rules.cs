@@ -8,6 +8,9 @@ namespace GameOfLife
 {
     public static class Rules
     {
+        /// <summary>
+        /// Method to print the rules and the description of the game.
+        /// </summary>
         public static void PrintRules()
         {
             Console.Clear();

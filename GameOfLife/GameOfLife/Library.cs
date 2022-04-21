@@ -238,6 +238,12 @@ namespace GameOfLife
             return _fieldArray;
         }
 
+        /// <summary>
+        /// Method to spawn a glider gun.
+        /// </summary>
+        /// <param name="locationX">Horizontal location of the upper left corner of a glider gun.</param>
+        /// <param name="locationY">Vertical location of the upper left corner of a glider gun.</param>
+        /// <returns>Returns an array with gamefield elements with a glider gun seeded in it.</returns>
         public string[,] SeedGliderGun(int locationX, int locationY)
         {
             for (int i = locationX; i < locationX + 37; i++)

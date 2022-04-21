@@ -59,6 +59,7 @@
         /// <summary>
         /// Method to choose how to seed the field - manually or automatically.
         /// </summary>
+        /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
         /// <returns>Returns an array of a seeded gamefield.</returns>
         public string[,] SeedField(bool gliderGunMode)
         {
@@ -181,7 +182,8 @@
 
         /// <summary>
         /// Method to choose a cell pattern from the premade library.
-        /// </summary>
+        /// </summary
+        /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
         /// <returns>Returns an array of a gamefield seeded with objects from the library.</returns>
         private string[,] LibrarySeeding(bool gliderGunMode)
         {
