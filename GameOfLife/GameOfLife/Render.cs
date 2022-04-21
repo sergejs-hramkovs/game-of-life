@@ -12,6 +12,23 @@
         static Tuple<string[,], int, int, int> returnValues;
 
         /// <summary>
+        /// Method that draws the field.
+        /// </summary>
+        /// <param name="field">An array of a gamefield.</param>
+        public static void RenderField(string[,] field)
+        {
+            Console.WriteLine();
+            for (int i = 0; i < field.GetLength(1); i++)
+            {
+                for (int j = 0; j < field.GetLength(0); j++)
+                {
+                    Console.Write(" " + field[j, i]);
+                }
+                Console.WriteLine();
+            }
+        }
+
+        /// <summary>
         /// Method for initial rendering of the game field.
         /// </summary>
         /// <param name="length">Horizontal dimension of a gamefield.</param>
@@ -31,7 +48,7 @@
             {
                 gameField = field.CreateField();
                 Console.Clear();
-                field.DrawField(gameField);
+                RenderField(gameField);
                 gameField = field.SeedField(gliderGunMode);
             }
             Console.Clear();
@@ -70,7 +87,7 @@
                 iteration.CheckCells(gameField);
             }
             gameField = iteration.FieldRefresh(gameField);
-            field.DrawField(gameField);
+            RenderField(gameField);
             returnValues = new Tuple<string[,], int, int, int>(gameField, aliveCells, deadCells, generation);
             generation++;
             return returnValues;

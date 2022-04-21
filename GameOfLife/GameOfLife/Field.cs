@@ -35,26 +35,7 @@
             }
 
             return _fieldArray;
-        }
-
-        /// <summary>
-        /// Method that draws the field.
-        /// </summary>
-        /// <param name="field">An array of a gamefield.</param>
-        public void DrawField(string[,] field)
-        {
-            Console.WriteLine();
-
-            for (int i = 0; i < field.GetLength(1); i++)
-            {
-                for (int j = 0; j < field.GetLength(0); j++)
-                {
-                    Console.Write(" " + field[j, i]);
-                }
-
-                Console.WriteLine();
-            }
-        }
+        }     
 
         /// <summary>
         /// Method to choose how to seed the field - manually or automatically.
@@ -68,7 +49,7 @@
                 if (_wrongInput)
                 {
                     Console.Clear();
-                    DrawField(_fieldArray);
+                    Render.RenderField(_fieldArray);
                     Console.WriteLine("\nWrong Input!");
                     _wrongInput = false;
                 }
@@ -117,11 +98,11 @@
                 Console.Clear();
                 if (!_wrongInput)
                 {
-                    DrawField(_fieldArray);
+                    Render.RenderField(_fieldArray);
                 }
                 else if (_wrongInput)
                 {
-                    DrawField(_fieldArray);
+                    Render.RenderField(_fieldArray);
                     Console.WriteLine("\nWrong Input!");
                     _wrongInput = false;
                 }
@@ -201,12 +182,12 @@
 
                 if (!_wrongInput)
                 {
-                    DrawField(_fieldArray);
+                    Render.RenderField(_fieldArray);
                 }
                 if (_wrongInput)
                 {
                     Console.Clear();
-                    DrawField(_fieldArray);
+                    Render.RenderField(_fieldArray);
                     Console.WriteLine("\nWrong Input!");
                     _wrongInput = false;
                 }
