@@ -70,5 +70,76 @@
             generation++;
             return returnValues;
         }
+
+        /// <summary>
+        /// Method for rendering the field seeding menu.
+        /// </summary>
+        public static void SeedFieldMenuRender()
+        {
+            Console.WriteLine("\n1. Seed the field manually");
+            Console.WriteLine("2. Seed the field automatically and randomly");
+            Console.WriteLine("3. Choose cell patterns from the library");
+        }
+
+        /// <summary>
+        /// Method for rendering the library selection menu.
+        /// </summary>
+        public static void LibraryMenuRender()
+        {
+            Console.WriteLine("\n# To stop seeding press 'Esc'");
+            Console.WriteLine("\n1. Spawn a glider");
+            Console.WriteLine("2. Spawn a light-weight spaceship");
+            Console.WriteLine("3. Spawn a middle-weight spaceship");
+            Console.WriteLine("4. Spawn a heavy-weight spaceship");
+            Console.WriteLine("5. Spawn a glider gun");
+        }
+
+        /// <summary>
+        /// Method for rendering field size and mode choosing menu.
+        /// </summary>
+        public static void FieldSizeMenuRender()
+        {
+            Console.Clear();
+            Console.WriteLine("\nChoose the field size:");
+            Console.WriteLine("1. 3x3");
+            Console.WriteLine("2. 5x5");
+            Console.WriteLine("3. 10x10");
+            Console.WriteLine("4. 20x20");
+            Console.WriteLine("5. Custom");
+            Console.WriteLine("\n# To load the field from the file press 'L'");
+            Console.WriteLine("# To load Glider Gun Mode press 'G'");
+            Console.WriteLine("# Press 'F1' to read the rules and the description of the game");
+        }
+
+        /// <summary>
+        /// Method for rendering the glider gun menu.
+        /// </summary>
+        public static void GliderGunMenuRender()
+        {
+            Console.Clear();
+            Console.WriteLine("The Glider Gun Mode");
+            Console.WriteLine("\n1. 40x30 (The best size for a glider gun)");
+            Console.WriteLine("Press 'G' to turn off the Glider Gun Mode");
+        }
+
+        /// <summary>
+        /// Method for rendering the pause menu.
+        /// </summary>
+        public static void PauseRender()
+        {
+            Console.WriteLine("\n# To save the current game state to a file press 'S'");
+            Console.WriteLine("# To restart the game press 'R'");
+            Console.WriteLine("# Press any other key to cancel saving and continue with the game");
+            Console.WriteLine("# Press 'Esc' to exit");
+        }
+
+        /// <summary>
+        /// Method for rendering the exit menu.
+        /// </summary>
+        public static void ExitRender()
+        {
+            Console.WriteLine("\n# Press 'R' to restart");
+            Console.WriteLine("# Press 'Esc' to exit");
+        }
     }
 }

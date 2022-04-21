@@ -71,9 +71,7 @@
                     Console.WriteLine("\nWrong Input!");
                     _wrongInput = false;
                 }
-                Console.WriteLine("\n1. Seed the field manually");
-                Console.WriteLine("2. Seed the field automatically and randomly");
-                Console.WriteLine("3. Choose cell patterns from the library");
+                Render.SeedFieldMenuRender();
                 _seedingChoice = Console.ReadKey(true);
 
                 switch (_seedingChoice.Key)
@@ -194,18 +192,12 @@
                     Console.WriteLine("\nWrong Input!");
                     _wrongInput = false;
                 }
-                Console.WriteLine("\n# To stop seeding press 'Esc'");
-                Console.WriteLine("\n1. Spawn a glider");
-                Console.WriteLine("2. Spawn a light-weight spaceship");
-                Console.WriteLine("3. Spawn a middle-weight spaceship");
-                Console.WriteLine("4. Spawn a heavy-weight spaceship");
-                Console.WriteLine("5. Spawn a glider gun");
+                Render.LibraryMenuRender();
                 libraryChoice = Console.ReadKey(true);
 
                 switch (libraryChoice.Key)
                 {
                     case ConsoleKey.Escape:
-                        Console.WriteLine("\nThe seeding has been stopped!");
                         return _fieldArray;
 
                     case ConsoleKey.D1:

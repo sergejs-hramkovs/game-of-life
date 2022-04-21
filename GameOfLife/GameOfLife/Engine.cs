@@ -32,16 +32,7 @@
                 }
                 if (!_gliderGunMode)
                 {
-                    Console.Clear();
-                    Console.WriteLine("\nChoose the field size:");
-                    Console.WriteLine("1. 3x3");
-                    Console.WriteLine("2. 5x5");
-                    Console.WriteLine("3. 10x10");
-                    Console.WriteLine("4. 20x20");
-                    Console.WriteLine("5. Custom");
-                    Console.WriteLine("\n# To load the field from the file press 'L'");
-                    Console.WriteLine("# To load Glider Gun Mode press 'G'");
-                    Console.WriteLine("# Press 'F1' to read the rules and the description of the game");
+                    Render.FieldSizeMenuRender();
                     _fieldSizeChoice = Console.ReadKey(true);
 
                     switch (_fieldSizeChoice.Key)
@@ -134,10 +125,7 @@
                 }
                 else
                 {
-                    Console.Clear();
-                    Console.WriteLine("The Glider Gun Mode");
-                    Console.WriteLine("\n1. 40x30 (The best size for a glider gun)");
-                    Console.WriteLine("Press 'G' to turn off the Glider Gun Mode");
+                    Render.GliderGunMenuRender();
                     _fieldSizeChoice = Console.ReadKey(true);
                     if (_fieldSizeChoice.Key == ConsoleKey.D1)
                     {
@@ -203,10 +191,7 @@
         {
             if (keyPressed.Key == ConsoleKey.Spacebar)
             {
-                Console.WriteLine("\n# To save the current game state to a file press 'S'");
-                Console.WriteLine("# To restart the game press 'R'");
-                Console.WriteLine("# Press any other key to cancel saving and continue with the game");
-                Console.WriteLine("# Press 'Esc' to exit");
+                Render.PauseRender();
                 _saveKey = Console.ReadKey(true);
 
                 if (_saveKey.Key == ConsoleKey.S)
@@ -254,8 +239,7 @@
                 _delay = ChangeDelay(_delay, _cki);
             } while (_cki.Key != ConsoleKey.Escape);
 
-            Console.WriteLine("\n# Press 'R' to restart");
-            Console.WriteLine("# Press 'Esc' to exit");
+            Render.ExitRender();
             _cki = Console.ReadKey(true);
             if (_cki.Key == ConsoleKey.R)
             {
