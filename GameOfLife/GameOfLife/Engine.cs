@@ -11,6 +11,7 @@
         private ConsoleKeyInfo _fieldSizeChoice;
         private bool _wrongInput = false;
         private bool _loaded = false;
+        private bool _gliderGunMode = false;
         private File _file;
         private Tuple<string[,], int, int, int> _renderReturnValues;
 
@@ -36,6 +37,7 @@
                 Console.WriteLine("4. 20x20");
                 Console.WriteLine("5. Custom");
                 Console.WriteLine("\n# To load the field from the file press 'L'");
+                Console.WriteLine("# To load Glider Gun Mode press 'G'");
                 Console.WriteLine("# Press 'F1' to read the rules and the description of the game");
                 _fieldSizeChoice = Console.ReadKey(true);
 
@@ -94,6 +96,10 @@
                         _file = new File();
                         _gameField = _file.LoadFromFile();
                         _loaded = true;
+                        break;
+
+                    case ConsoleKey.G:
+                        _gliderGunMode = true;
                         break;
 
                     case ConsoleKey.F1:
@@ -187,6 +193,7 @@
                 }
                 else if (_saveKey.Key == ConsoleKey.R)
                 {
+                    _gliderGunMode = false;
                     Restart();
                 }
                 else
@@ -210,7 +217,7 @@
                 while (Console.KeyAvailable == false)
                 {
                     Console.SetCursorPosition(0, 0);
-                    _renderReturnValues = Render.RuntimeRender(_delay);
+                    _renderReturnValues = Render.RuntimeRender(_delay, _gliderGunMode);
                     Thread.Sleep(_delay);
                 }
                 _cki = Console.ReadKey(true);

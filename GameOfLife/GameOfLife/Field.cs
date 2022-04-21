@@ -24,11 +24,11 @@
         /// <returns>Returns an array of a gamefield seeded with dead cells(.) .</returns>
         public string[,] CreateField()
         {
-            _fieldArray = new string[_fieldWidth, _fieldLength];
+            _fieldArray = new string[_fieldLength, _fieldWidth];
 
-            for (int j = 0; j < _fieldLength; j++)
+            for (int i = 0; i < _fieldLength; i++)
             {
-                for (int i = 0; i < _fieldWidth; i++)
+                for (int j = 0; j < _fieldWidth; j++)
                 {
                     _fieldArray[i, j] = ".";
                 }

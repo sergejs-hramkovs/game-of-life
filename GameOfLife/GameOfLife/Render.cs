@@ -41,8 +41,9 @@
         /// Method for rendering the gamefield between the generations.
         /// </summary>
         /// <param name="delay">Delay between generations in miliseconds</param>
+        /// <param name="gliderGunMode">Parameter to enable the Glider Gun mode with dead borders rules.</param>
         /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
-        public static Tuple<string[,], int, int, int> RuntimeRender(int delay)
+        public static Tuple<string[,], int, int, int> RuntimeRender(int delay, bool gliderGunMode)
         {
             aliveCells = engine.CountAlive(gameField);
             deadCells = engine.CountDead(gameField);
@@ -55,7 +56,14 @@
             Console.WriteLine($"Dead cells: {deadCells}   ");
             Console.WriteLine($"Current delay between generations: {delay / 1000.0} seconds  ");
             Console.WriteLine($"Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   ");
-            iteration.CheckCells(gameField);
+            if (gliderGunMode)
+            {
+                iteration.CheckCellsDeadBorder(gameField);
+            }
+            else
+            {
+                iteration.CheckCells(gameField);
+            }
             gameField = iteration.FieldRefresh(gameField);
             field.DrawField(gameField);
             returnValues = new Tuple<string[,], int, int, int>(gameField, aliveCells, deadCells, generation);
