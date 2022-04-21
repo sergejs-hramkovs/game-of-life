@@ -25,7 +25,7 @@ namespace GameOfLife
         private string[] FieldToString(string[,] gameField)
         {
             _gameField = gameField;
-            _stringField = new string[_gameField.GetLength(1)];
+            _stringField = new string[_gameField.GetLength(0)];
             for (int y = 0; y < _gameField.GetLength(1); y++)
             {
                 for (int x = 0; x < _gameField.GetLength(0); x++)
@@ -40,25 +40,25 @@ namespace GameOfLife
         {
             int x = 0;
             int y = 0;
-            _gameField = new string[inputList[4].Length / 2, inputList.Count - 4];
+            _gameField = new string[inputList.Count - 4, inputList[4].Length / 2];
             for (int i = 4; i < inputList.Count; i++)
             {
                 foreach (char character in inputList[i])
                 {
-                    if ((y < inputList.Count - 4) && (x < inputList[4].Length / 2))
+                    if ((x < inputList[4].Length / 2) && (y < inputList.Count - 4))
                     {
                         if (character == 'X' || character == '.')
                         {
-                            _gameField[x, y] = character.ToString();
-                        }
-                        if (x == inputList[4].Length / 2 - 1)
-                        {
-                            x = 0;
-                            y++;
-                        }
-                        else
-                        {
-                            x++;
+                            _gameField[y, x] = character.ToString();
+                            if (x == inputList[4].Length / 2 - 1)
+                            {
+                                x = 0;
+                                y++;
+                            }
+                            else
+                            {
+                                x++;
+                            }
                         }
                     }
                 }
@@ -88,6 +88,10 @@ namespace GameOfLife
             _writer.Close();
         }
 
+        /// <summary>
+        /// Method to load the saved field from the file.
+        /// </summary>
+        /// <returns>Returns call to ListToField method, which returns an array of the gamefield.</returns>
         public string[,] LoadFromFile()
         {
             _reader = new StreamReader(_filePath);
@@ -95,6 +99,7 @@ namespace GameOfLife
             {
                 _stringList.Add(_line);
             }
+            _reader.Close();
             return ListToField(_stringList);
         }
     }

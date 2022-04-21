@@ -35,7 +35,7 @@
                 Console.WriteLine("3. 10x10");
                 Console.WriteLine("4. 20x20");
                 Console.WriteLine("5. Custom");
-                Console.WriteLine("\nTo load the field from the file press 'L'");
+                Console.WriteLine("\n# To load the field from the file press 'L'");
                 _fieldSizeChoice = Console.ReadKey(true);
 
                 switch (_fieldSizeChoice.Key)
@@ -163,17 +163,22 @@
         {
             if (keyPressed.Key == ConsoleKey.Spacebar)
             {
-                Console.WriteLine("\nTo save the current game state to a file press 'S'");
-                Console.WriteLine("To restart the game press 'R'");
-                Console.WriteLine("Press any other key to cancel saving and continue with the game");
+                Console.WriteLine("\n# To save the current game state to a file press 'S'");
+                Console.WriteLine("# To restart the game press 'R'");
+                Console.WriteLine("# Press any other key to cancel saving and continue with the game");
+                Console.WriteLine("# Press 'Esc' to exit");
                 _saveKey = Console.ReadKey(true);
 
                 if (_saveKey.Key == ConsoleKey.S)
                 {
                     _file.SaveToFile(_renderReturnValues.Item1, _renderReturnValues.Item2, _renderReturnValues.Item3, _renderReturnValues.Item4);
-                    Console.WriteLine("\nThe current game state has been successfully saved! Press any key to continue");
+                    Console.WriteLine("\n### The current game state has been successfully saved! Press any key to continue ###");
                     Console.ReadKey();
                     Console.Clear();
+                }
+                else if (_saveKey.Key == ConsoleKey.Escape)
+                {
+                    Environment.Exit(0);
                 }
                 else if (_saveKey.Key == ConsoleKey.R)
                 {
@@ -205,7 +210,7 @@
                 }
                 _cki = Console.ReadKey(true);
                 Pause(_cki);
-                _delay = ChangeDelay(_delay, _cki);               
+                _delay = ChangeDelay(_delay, _cki);
             } while (_cki.Key != ConsoleKey.Escape);
 
             Console.WriteLine("\nPress 'R' to restart");
@@ -214,6 +219,10 @@
             if (_cki.Key == ConsoleKey.R)
             {
                 Restart();
+            }
+            else if (_cki.Key == ConsoleKey.Escape)
+            {
+                Environment.Exit(0);
             }
         }
 

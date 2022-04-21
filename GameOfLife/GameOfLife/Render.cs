@@ -22,14 +22,17 @@
             field = new Field(length, width);
             iteration = new Iteration();
             engine = new Engine();
+            
+            // This place needs to be had a look.
             if (!loaded)
             {
                 gameField = field.CreateField();
             }
             Console.Clear();
-            field.DrawField(gameField);
+            
             if (!loaded)
             {
+                field.DrawField(gameField);
                 gameField = field.SeedField();
             }
             Console.Clear();
@@ -43,7 +46,7 @@
         {
             aliveCells = engine.CountAlive(gameField);
             deadCells = engine.CountDead(gameField);
-
+            
             Console.WriteLine("Press ESC to stop");
             Console.WriteLine("Press Spacebar to pause");
             Console.WriteLine("Change the delay using left and right arrows");
@@ -52,9 +55,9 @@
             Console.WriteLine($"Dead cells: {deadCells}   ");
             Console.WriteLine($"Current delay between generations: {delay / 1000.0} seconds  ");
             Console.WriteLine($"Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   ");
+            field.DrawField(gameField);
             iteration.CheckCells(gameField);
             gameField = iteration.FieldRefresh(gameField);
-            field.DrawField(gameField);
             generation++;
             return new Tuple<string[,], int, int, int>(gameField, aliveCells, deadCells, generation - 1);
         }
