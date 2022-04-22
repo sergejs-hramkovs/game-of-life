@@ -1,5 +1,5 @@
 ﻿using GameOfLife.Interfaces;
-using static GameOfLife.Phrases;
+using static GameOfLife.StringConstants;
 
 namespace GameOfLife
 {

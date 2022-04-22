@@ -1,5 +1,5 @@
 ﻿using GameOfLife.Interfaces;
-using static GameOfLife.Phrases;
+using static GameOfLife.StringConstants;
 
 namespace GameOfLife
 {
@@ -50,7 +50,6 @@ namespace GameOfLife
             _gameField = inputField;
             _field = field;
 
-            // This place needs to be had a look at.
             if (!loaded)
             {
                 _gameField = _field.CreateField();
@@ -58,7 +57,7 @@ namespace GameOfLife
                 RenderField(_gameField);
                 _gameField = _field.SeedField(gliderGunMode);
             }
-            Console.Clear();          
+            Console.Clear();
         }
 
         /// <summary>
@@ -71,7 +70,7 @@ namespace GameOfLife
         public Tuple<string[,], int, int, int> RuntimeRender(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration, int generationFromFile)
         {
             _aliveCells = _engine.CountAliveCells(_gameField);
-            _deadCells = _engine.CountDeadCells(_gameField);
+            _deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - _aliveCells;
             if (resetGeneration)
             {
                 _generation = 1;
@@ -166,7 +165,7 @@ namespace GameOfLife
         /// <summary>
         /// Method for rendering the pause menu.
         /// </summary>
-        public void PauseRender()
+        public void PauseMenuRender()
         {
             Console.WriteLine("\n# To save the current game state to a file press 'S'");
             Console.WriteLine("# To restart the game press 'R'");
@@ -177,7 +176,7 @@ namespace GameOfLife
         /// <summary>
         /// Method for rendering the exit menu.
         /// </summary>
-        public void ExitRender()
+        public void ExitMenuRender()
         {
             Console.WriteLine("\n# Press 'R' to restart");
             Console.WriteLine("# Press 'Esc' to exit");

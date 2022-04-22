@@ -13,7 +13,5 @@ namespace GameOfLife.Interfaces
         void RunGame(IField field);
 
         int CountAliveCells(string[,] gameField);
-
-        int CountDeadCells(string[,] gameField);
     }
 }

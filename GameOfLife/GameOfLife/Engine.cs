@@ -1,5 +1,5 @@
 ﻿using GameOfLife.Interfaces;
-using static GameOfLife.Phrases;
+using static GameOfLife.StringConstants;
 
 namespace GameOfLife
 {
@@ -44,7 +44,7 @@ namespace GameOfLife
                     _wrongInput = false;
                     _fieldSizeChoice = Console.ReadKey(true);
                     CheckInputMainMenu(_fieldSizeChoice);
-                    
+
                     if (_correctKeyPressed)
                     {
                         _correctKeyPressed = false;
@@ -117,7 +117,7 @@ namespace GameOfLife
         {
             if (keyPressed.Key == ConsoleKey.Spacebar)
             {
-                _render.PauseRender();
+                _render.PauseMenuRender();
                 _saveKey = Console.ReadKey(true);
 
                 switch (_saveKey.Key)
@@ -171,7 +171,7 @@ namespace GameOfLife
                 _delay = ChangeDelay(_delay, _cki);
             } while (_cki.Key != ConsoleKey.Escape);
 
-            _render.ExitRender();
+            _render.ExitMenuRender();
             _cki = Console.ReadKey(true);
             if (_cki.Key == ConsoleKey.R)
             {
@@ -203,28 +203,6 @@ namespace GameOfLife
                 }
             }
             return aliveCellCount;
-        }
-
-        /// <summary>
-        /// Method to count the current number of dead cells on the field.
-        /// </summary>
-        /// <param name="gameField">An array of the game field cells.</param>
-        /// <returns>Returns the number of dead cells currently in the gamefield array.</returns>
-        public int CountDeadCells(string[,] gameField)
-        {
-            int deadCellCount = 0;
-
-            for (int i = 0; i < gameField.GetLength(0); i++)
-            {
-                for (int j = 0; j < gameField.GetLength(1); j++)
-                {
-                    if (gameField[i, j] == DeadCellSymbol)
-                    {
-                        deadCellCount++;
-                    }
-                }
-            }
-            return deadCellCount;
         }
 
         /// <summary>

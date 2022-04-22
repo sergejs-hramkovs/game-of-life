@@ -22,8 +22,8 @@ namespace GameOfLife.Interfaces
 
         void GliderGunMenuRender();
 
-        void PauseRender();
+        void PauseMenuRender();
 
-        void ExitRender();
+        void ExitMenuRender();
     }
 }
