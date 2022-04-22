@@ -42,7 +42,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
         /// <returns>Returns an array of a seeded gamefield.</returns>
-        public string[,] SeedField(bool gliderGunMode)
+        public string[,] PopulateField(bool gliderGunMode)
         {
             while (true)
             {

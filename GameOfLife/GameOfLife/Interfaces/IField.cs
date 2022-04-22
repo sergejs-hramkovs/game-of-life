@@ -10,6 +10,6 @@ namespace GameOfLife.Interfaces
     {
         string[,] CreateField(int fieldLength, int fieldWidth);
 
-        string[,] SeedField(bool gliderGunMode);
+        string[,] PopulateField(bool gliderGunMode);
     }
 }

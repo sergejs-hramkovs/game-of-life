@@ -40,14 +40,12 @@ namespace GameOfLife
         /// <summary>
         /// Method for initial rendering of the game field.
         /// </summary>
-        /// <param name="length">Horizontal dimension of a gamefield.</param>
-        /// <param name="width">Vertical dimension of a gamefield.</param>
         /// <param name="inputField">An array of a gamefield.</param>
         /// <param name="loaded">Boolean parameter that represents whether the field was loaded from the file.</param>
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
         public void InitialRender(IField field, string[,] inputField, bool loaded, bool gliderGunMode)
         {
-            _gameField = inputField; // ?
+            _gameField = inputField;
             _field = field;
 
             if (!loaded)
@@ -55,7 +53,7 @@ namespace GameOfLife
                 _gameField = _field.CreateField(inputField.GetLength(0), inputField.GetLength(1));
                 Console.Clear();
                 RenderField(_gameField);
-                _gameField = _field.SeedField(gliderGunMode);
+                _gameField = _field.PopulateField(gliderGunMode);
             }
             Console.Clear();
         }
