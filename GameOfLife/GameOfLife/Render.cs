@@ -62,7 +62,7 @@
         /// <param name="gliderGunMode">Parameter to enable the Glider Gun mode with dead borders rules.</param>
         /// <param name="resetGeneration">Parameter to rest the number of generation after restart.</param>
         /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
-        public static Tuple<string[,], int, int, int> RuntimeRender(int delay, bool gliderGunMode, bool resetGeneration, bool loaded, int generationFromFile)
+        public static Tuple<string[,], int, int, int> RuntimeRender(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration, int generationFromFile)
         {
             aliveCells = engine.CountAlive(gameField);
             deadCells = engine.CountDead(gameField);
@@ -70,9 +70,10 @@
             {
                 generation = 1;
             }
-            if (loaded)
+            if (readGeneration)
             {
                 generation = generationFromFile;
+                readGeneration = false;
             }
             Console.WriteLine("# Press ESC to stop");
             Console.WriteLine("# Press Spacebar to pause");

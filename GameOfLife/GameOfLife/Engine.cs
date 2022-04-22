@@ -12,6 +12,7 @@
         private ConsoleKeyInfo _fieldSizeChoice;
         private bool _wrongInput = false;
         private bool _loaded = false;
+        private bool _readGeneration = false;
         private bool _gliderGunMode = false;
         private bool _resetGeneration = false;
         private File _file;
@@ -98,6 +99,7 @@
                             _gameField = _file.LoadFromFile();
                             _generation = _file.generation;
                             _loaded = true;
+                            _readGeneration = true;
                             break;
 
                         case ConsoleKey.G:
@@ -239,7 +241,8 @@
                 while (Console.KeyAvailable == false)
                 {
                     Console.SetCursorPosition(0, 0);
-                    _renderReturnValues = Render.RuntimeRender(_delay, _gliderGunMode, _resetGeneration, _loaded, _generation);
+                    _renderReturnValues = Render.RuntimeRender(_delay, _gliderGunMode, _resetGeneration, _readGeneration, _generation);
+                    _readGeneration = false;
                     if (_resetGeneration)
                     {
                         _resetGeneration = false;
