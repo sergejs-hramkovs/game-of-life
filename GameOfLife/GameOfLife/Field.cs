@@ -13,6 +13,8 @@ namespace GameOfLife
         private bool _wrongInput = false;
         private bool _stop = false;
         private ConsoleKeyInfo _seedingChoice;
+        private IRender _render;
+        private ILibrary _library;
 
         public Field(int length, int width)
         {
@@ -27,6 +29,7 @@ namespace GameOfLife
         public string[,] CreateField()
         {
             _fieldArray = new string[_fieldLength, _fieldWidth];
+            _render = new Render();
 
             for (int i = 0; i < _fieldLength; i++)
             {
@@ -51,7 +54,7 @@ namespace GameOfLife
                 if (_wrongInput)
                 {
                     Console.Clear();
-                    Render.RenderField(_fieldArray);
+                    _render.RenderField(_fieldArray);
                     Console.WriteLine("\nWrong Input!");
                     _wrongInput = false;
                 }
@@ -63,7 +66,7 @@ namespace GameOfLife
                 }
                 else
                 {
-                    Render.SeedFieldMenuRender();
+                    _render.SeedFieldMenuRender();
                     _seedingChoice = Console.ReadKey(true);
                 }
 
@@ -100,11 +103,11 @@ namespace GameOfLife
                 Console.Clear();
                 if (!_wrongInput)
                 {
-                    Render.RenderField(_fieldArray);
+                    _render.RenderField(_fieldArray);
                 }
                 else if (_wrongInput)
                 {
-                    Render.RenderField(_fieldArray);
+                    _render.RenderField(_fieldArray);
                     Console.WriteLine("\nWrong Input!");
                     _wrongInput = false;
                 }
@@ -171,29 +174,29 @@ namespace GameOfLife
         private string[,] LibrarySeeding(bool gliderGunMode)
         {
             ConsoleKeyInfo libraryChoice;
-            Library library = new Library(_fieldArray);
+            _library = new Library(_fieldArray);
 
             while (true)
             {
                 if (gliderGunMode)
                 {
-                    library.SeedGliderGun(1, 1);
+                    _library.SeedGliderGun(1, 1);
                     Console.Clear();
                     return _fieldArray;
                 }
 
                 if (!_wrongInput)
                 {
-                    Render.RenderField(_fieldArray);
+                    _render.RenderField(_fieldArray);
                 }
                 if (_wrongInput)
                 {
                     Console.Clear();
-                    Render.RenderField(_fieldArray);
+                    _render.RenderField(_fieldArray);
                     Console.WriteLine("\nWrong Input!");
                     _wrongInput = false;
                 }
-                Render.LibraryMenuRender();
+                _render.LibraryMenuRender();
                 libraryChoice = Console.ReadKey(true);
 
                 switch (libraryChoice.Key)
@@ -207,7 +210,7 @@ namespace GameOfLife
                             _wrongInput = true;
                             continue;
                         }
-                        library.SeedGlider(_coordinateX, _coordinateY);
+                        _library.SeedGlider(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
@@ -217,7 +220,7 @@ namespace GameOfLife
                             _wrongInput = true;
                             continue;
                         }
-                        library.SeedLightWeight(_coordinateX, _coordinateY);
+                        _library.SeedLightWeight(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
@@ -227,7 +230,7 @@ namespace GameOfLife
                             _wrongInput = true;
                             continue;
                         }
-                        library.SeedMiddleWeight(_coordinateX, _coordinateY);
+                        _library.SeedMiddleWeight(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
@@ -237,7 +240,7 @@ namespace GameOfLife
                             _wrongInput = true;
                             continue;
                         }
-                        library.SeedHeavyWeight(_coordinateX, _coordinateY);
+                        _library.SeedHeavyWeight(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 

@@ -27,6 +27,7 @@ namespace GameOfLife
         public void Start()
         {
             Console.SetWindowSize(170, 55);
+            _render = new Render();
 
             while (true)
             {
