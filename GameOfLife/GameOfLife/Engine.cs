@@ -42,87 +42,8 @@ namespace GameOfLife
                     _render.FieldSizeMenuRender(_wrongInput);
                     _wrongInput = false;
                     _fieldSizeChoice = Console.ReadKey(true);
-
-                    switch (_fieldSizeChoice.Key)
-                    {
-                        case ConsoleKey.D1:
-                            _length = 3;
-                            _width = 3;
-                            break;
-
-                        case ConsoleKey.D2:
-                            _length = 5;
-                            _width = 5;
-                            break;
-
-                        case ConsoleKey.D3:
-                            _length = 10;
-                            _width = 10;
-                            break;
-
-                        case ConsoleKey.D4:
-                            _length = 20;
-                            _width = 20;
-                            break;
-
-                        case ConsoleKey.D5:
-                            _length = 75;
-                            _width = 40;
-                            break;
-
-                        case ConsoleKey.D6:
-                            while (true)
-                            {
-                                if (_wrongInput)
-                                {
-                                    Console.Clear();
-                                    Console.WriteLine(WrongInputPhrase);
-                                    _wrongInput = false;
-                                }
-                                Console.Write(EnterLengthPhrase);
-                                if (int.TryParse(Console.ReadLine(), out _length) && _length > 0)
-                                {
-                                    Console.Write(EnterWidthPhrase);
-                                    if (int.TryParse(Console.ReadLine(), out _width) && _width > 0)
-                                    {
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        _wrongInput = true;
-                                    }
-                                }
-                                else
-                                {
-                                    _wrongInput = true;
-                                }
-                            }
-                            break;
-
-                        case ConsoleKey.L:                 
-                            _gameField = _file.LoadFromFile();
-                            _generation = _file.Generation;
-                            _loaded = true;
-                            _readGeneration = true;
-                            break;
-
-                        case ConsoleKey.G:
-                            _gliderGunMode = true;
-                            break;
-
-                        case ConsoleKey.F1:
-                            Rules.PrintRules();
-                            break;
-
-                        case ConsoleKey.Escape:
-                            Environment.Exit(0);
-                            break;
-
-                        default:
-                            _length = 10;
-                            _width = 10;
-                            break;
-                    }
+                    CheckInputMainMenu(_fieldSizeChoice);
+                    
                     if (_fieldSizeChoice.Key == ConsoleKey.D1 || _fieldSizeChoice.Key == ConsoleKey.D2 ||
                         _fieldSizeChoice.Key == ConsoleKey.D3 || _fieldSizeChoice.Key == ConsoleKey.D4 ||
                         _fieldSizeChoice.Key == ConsoleKey.D5 || _fieldSizeChoice.Key == ConsoleKey.D6 ||
@@ -142,20 +63,10 @@ namespace GameOfLife
                 {
                     _render.GliderGunMenuRender();
                     _fieldSizeChoice = Console.ReadKey(true);
+                    CheckInputGliderGunMenu(_fieldSizeChoice);
                     if (_fieldSizeChoice.Key == ConsoleKey.D1)
                     {
-                        _length = 40;
-                        _width = 30;
                         break;
-                    }
-                    else if (_fieldSizeChoice.Key == ConsoleKey.G)
-                    {
-                        Console.Clear();
-                        _gliderGunMode = false;
-                    }
-                    else
-                    {
-                        Console.WriteLine(WrongInputPhrase);
                     }
                 }
             }
@@ -327,6 +238,118 @@ namespace GameOfLife
             Start(_render, _file);
             _field = new Field(_length, _width);
             Run(_field);
+        }
+
+        /// <summary>
+        /// Method to check user input in the main menu.
+        /// </summary>
+        /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
+        private void CheckInputMainMenu(ConsoleKeyInfo keyPressed)
+        {
+            switch (keyPressed.Key)
+            {
+                case ConsoleKey.D1:
+                    _length = 3;
+                    _width = 3;
+                    break;
+
+                case ConsoleKey.D2:
+                    _length = 5;
+                    _width = 5;
+                    break;
+
+                case ConsoleKey.D3:
+                    _length = 10;
+                    _width = 10;
+                    break;
+
+                case ConsoleKey.D4:
+                    _length = 20;
+                    _width = 20;
+                    break;
+
+                case ConsoleKey.D5:
+                    _length = 75;
+                    _width = 40;
+                    break;
+
+                case ConsoleKey.D6:
+                    while (true)
+                    {
+                        if (_wrongInput)
+                        {
+                            Console.Clear();
+                            Console.WriteLine(WrongInputPhrase);
+                            _wrongInput = false;
+                        }
+                        Console.Write(EnterLengthPhrase);
+                        if (int.TryParse(Console.ReadLine(), out _length) && _length > 0)
+                        {
+                            Console.Write(EnterWidthPhrase);
+                            if (int.TryParse(Console.ReadLine(), out _width) && _width > 0)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                _wrongInput = true;
+                            }
+                        }
+                        else
+                        {
+                            _wrongInput = true;
+                        }
+                    }
+                    break;
+
+                case ConsoleKey.L:
+                    _gameField = _file.LoadFromFile();
+                    _generation = _file.Generation;
+                    _loaded = true;
+                    _readGeneration = true;
+                    break;
+
+                case ConsoleKey.G:
+                    _gliderGunMode = true;
+                    break;
+
+                case ConsoleKey.F1:
+                    Rules.PrintRules();
+                    break;
+
+                case ConsoleKey.Escape:
+                    Environment.Exit(0);
+                    break;
+
+                default:
+                    _length = 10;
+                    _width = 10;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Method to check user input in the glider gun menu,
+        /// </summary>
+        /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
+        private void CheckInputGliderGunMenu(ConsoleKeyInfo keyPressed)
+        {
+            switch (keyPressed.Key)
+            {
+                case ConsoleKey.D1:
+                    _length = 40;
+                    _width = 30;
+                    break;
+
+                case ConsoleKey.G:
+                    Console.Clear();
+                    _gliderGunMode = false;
+                    break;
+
+                default:
+                    Console.WriteLine(WrongInputPhrase);
+                    break;
+            }
         }
     }
 }
