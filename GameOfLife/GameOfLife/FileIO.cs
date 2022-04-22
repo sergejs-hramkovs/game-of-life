@@ -2,7 +2,7 @@
 
 namespace GameOfLife
 {
-    public class File : IFile
+    public class FileIO : IFileIO
     {
         private string _filePath = @"C:\Users\sergejs.hramkovs\OneDrive - Accenture\Documents\field.txt";
         private string _line;

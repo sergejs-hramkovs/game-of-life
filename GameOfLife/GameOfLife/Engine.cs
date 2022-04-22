@@ -6,6 +6,9 @@ namespace GameOfLife
     {
         private int _length;
         private int _width;
+        public int Length { get => _length; }
+
+        public int Width { get => _width; }
         private int _delay = 1000;
         private int _generation;
         private string[,] _gameField;
@@ -17,18 +20,19 @@ namespace GameOfLife
         private bool _readGeneration = false;
         private bool _gliderGunMode = false;
         private bool _resetGeneration = false;
-        private IFile _file;
+        private IFileIO _file;
         private IRender _render;
         private IRulesApplier _rulesApplier;
+        private IField _field;
         private Tuple<string[,], int, int, int> _renderReturnValues;
 
         /// <summary>
         /// Initiate field size choice.
         /// </summary>
-        public void Start()
+        public void Start(IRender render, IFileIO file)
         {
             Console.SetWindowSize(170, 55);
-            _render = new Render(this, _rulesApplier = new RulesApplier());
+            _render = render;
 
             while (true)
             {
@@ -100,7 +104,7 @@ namespace GameOfLife
                             break;
 
                         case ConsoleKey.L:
-                            _file = new File();
+                            _file = file;
                             _gameField = _file.LoadFromFile();
                             _generation = _file.Generation;
                             _loaded = true;
@@ -136,7 +140,7 @@ namespace GameOfLife
                         if (_fieldSizeChoice.Key != ConsoleKey.G)
                         {
                             _wrongInput = true;
-                        }          
+                        }
                     }
                 }
                 else
@@ -216,7 +220,7 @@ namespace GameOfLife
                     Console.WriteLine("\n### The current game state has been successfully saved! Press any key to continue ###");
                     Console.ReadKey();
                     Console.Clear();
-                }             
+                }
                 else if (_saveKey.Key == ConsoleKey.Escape)
                 {
                     Environment.Exit(0);
@@ -235,11 +239,11 @@ namespace GameOfLife
         /// <summary>
         /// Main process of the game.
         /// </summary>
-        public void Run()
+        public void Run(IField field)
         {
-            _render.InitialRender(new Field(_length, _width), _gameField, _loaded, _gliderGunMode);
+            _field = field;
+            _render.InitialRender(_field, _gameField, _loaded, _gliderGunMode);
             _loaded = false;
-            _file = new File();
 
             do
             {
@@ -324,8 +328,8 @@ namespace GameOfLife
             _resetGeneration = true;
             _delay = 1000;
             Console.Clear();
-            Start();
-            Run();
+            Start(_render, _file);
+            Run(_field);
         }
     }
 }

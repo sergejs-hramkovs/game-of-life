@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameOfLife.Interfaces
 {
-    public interface IFile
+    public interface IFileIO
     {
         int Generation { get; }
 
