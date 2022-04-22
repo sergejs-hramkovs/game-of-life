@@ -47,12 +47,12 @@ namespace GameOfLife
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
         public void InitialRender(IField field, string[,] inputField, bool loaded, bool gliderGunMode)
         {
-            _gameField = inputField;
+            _gameField = inputField; // ?
             _field = field;
 
             if (!loaded)
             {
-                _gameField = _field.CreateField();
+                _gameField = _field.CreateField(inputField.GetLength(0), inputField.GetLength(1));
                 Console.Clear();
                 RenderField(_gameField);
                 _gameField = _field.SeedField(gliderGunMode);

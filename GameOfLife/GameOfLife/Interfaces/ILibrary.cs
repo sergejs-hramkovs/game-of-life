@@ -8,14 +8,14 @@ namespace GameOfLife.Interfaces
 {
     public interface ILibrary
     {
-        string[,] SeedGlider(int locationX, int locationY);
+        string[,] SpawnGlider(int locationX, int locationY);
 
-        string[,] SeedLightWeight(int locationX, int locationY);
+        string[,] SpawnLightWeight(int locationX, int locationY);
 
-        string[,] SeedMiddleWeight(int locationX, int locationY);
+        string[,] SpawnMiddleWeight(int locationX, int locationY);
 
-        string[,] SeedHeavyWeight(int locationX, int locationY);
+        string[,] SpawnHeavyWeight(int locationX, int locationY);
 
-        string[,] SeedGliderGun(int locationX, int locationY);
+        string[,] SpawnGliderGun(int locationX, int locationY);
     }
 }

@@ -8,9 +8,9 @@ namespace GameOfLife.Interfaces
 {
     public interface IEngine
     {
-        void StartGame(IRender render, IFileIO file);
+        void StartGame(IRender render, IFileIO file, IField field);
 
-        void RunGame(IField field);
+        void RunGame();
 
         int CountAliveCells(string[,] gameField);
     }

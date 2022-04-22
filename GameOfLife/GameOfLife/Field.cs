@@ -5,8 +5,6 @@ namespace GameOfLife
 {
     public class Field : IField
     {
-        private int _fieldLength { get; set; }
-        private int _fieldWidth { get; set; }
         private string[,] _fieldArray;
         private string _inputCoordinate;
         private int _coordinateX;
@@ -19,31 +17,25 @@ namespace GameOfLife
         private IEngine _engine;
         private IRulesApplier _rulesApplier;
 
-        public Field(int length, int width)
-        {
-            _fieldLength = length;
-            _fieldWidth = width;
-        }
-
         /// <summary>
         /// Initial creation of an empty gaming field.
         /// </summary>
         /// <returns>Returns an array of a gamefield seeded with dead cells(.) .</returns>
-        public string[,] CreateField()
+        public string[,] CreateField(int fieldLength, int fieldWidth)
         {
-            _fieldArray = new string[_fieldLength, _fieldWidth];
+            _fieldArray = new string[fieldLength, fieldWidth];
             _render = new Render(_engine = new Engine(), _rulesApplier = new RulesApplier());
 
-            for (int i = 0; i < _fieldLength; i++)
+            for (int i = 0; i < fieldLength; i++)
             {
-                for (int j = 0; j < _fieldWidth; j++)
+                for (int j = 0; j < fieldWidth; j++)
                 {
                     _fieldArray[i, j] = DeadCellSymbol;
                 }
             }
 
             return _fieldArray;
-        }     
+        }
 
         /// <summary>
         /// Method to choose how to seed the field - manually or automatically.
@@ -80,7 +72,7 @@ namespace GameOfLife
                         return _fieldArray;
 
                     case ConsoleKey.D2:
-                        RandomSeeding();
+                        RandomSeeding(_fieldArray.GetLength(0), _fieldArray.GetLength(1));
                         return _fieldArray;
 
                     case ConsoleKey.D3:
@@ -150,10 +142,10 @@ namespace GameOfLife
         /// Cell amount and coordinates are generated automatically and randomly.
         /// </summary>
         /// <returns>Returns an array of randomly seeded gamefield.</returns>
-        private string[,] RandomSeeding()
+        private string[,] RandomSeeding(int fieldLength, int fieldWidth)
         {
             Random random = new Random();
-            int aliveCellCount = random.Next(1, _fieldWidth * _fieldLength);
+            int aliveCellCount = random.Next(1, fieldWidth * fieldLength);
             int randomX, randomY;
 
             for (int i = 1; i <= aliveCellCount; i++)
@@ -183,7 +175,7 @@ namespace GameOfLife
             {
                 if (gliderGunMode)
                 {
-                    _library.SeedGliderGun(1, 1);
+                    _library.SpawnGliderGun(1, 1);
                     Console.Clear();
                     return _fieldArray;
                 }
@@ -213,7 +205,7 @@ namespace GameOfLife
                             _wrongInput = true;
                             continue;
                         }
-                        _library.SeedGlider(_coordinateX, _coordinateY);
+                        _library.SpawnGlider(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
@@ -223,7 +215,7 @@ namespace GameOfLife
                             _wrongInput = true;
                             continue;
                         }
-                        _library.SeedLightWeight(_coordinateX, _coordinateY);
+                        _library.SpawnLightWeight(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
@@ -233,7 +225,7 @@ namespace GameOfLife
                             _wrongInput = true;
                             continue;
                         }
-                        _library.SeedMiddleWeight(_coordinateX, _coordinateY);
+                        _library.SpawnMiddleWeight(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
@@ -243,7 +235,7 @@ namespace GameOfLife
                             _wrongInput = true;
                             continue;
                         }
-                        _library.SeedHeavyWeight(_coordinateX, _coordinateY);
+                        _library.SpawnHeavyWeight(_coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 

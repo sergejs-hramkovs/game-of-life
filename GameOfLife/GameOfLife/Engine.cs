@@ -7,8 +7,6 @@ namespace GameOfLife
     {
         private int _length;
         private int _width;
-        public int Length { get => _length; }
-        public int Width { get => _width; }
         private int _delay = 1000;
         private int _generation;
         private string[,] _gameField;
@@ -29,12 +27,14 @@ namespace GameOfLife
         /// <summary>
         /// Initiate field size choice.
         /// </summary>
-        public void StartGame(IRender render, IFileIO file)
+        public void StartGame(IRender render, IFileIO file, IField field)
         {
-            Console.CursorVisible = false;
-            Console.SetWindowSize(170, 55);
             _render = render;
             _file = file;
+            _field = field;
+
+            Console.CursorVisible = false;
+            Console.SetWindowSize(170, 55);
 
             while (true)
             {
@@ -147,9 +147,12 @@ namespace GameOfLife
         /// <summary>
         /// Main process of the game.
         /// </summary>
-        public void RunGame(IField field)
+        public void RunGame()
         {
-            _field = field;
+            if (!_loaded)
+            {
+                _gameField = _field.CreateField(_length, _width);
+            }
             _render.InitialRender(_field, _gameField, _loaded, _gliderGunMode);
             _loaded = false;
 
@@ -214,9 +217,9 @@ namespace GameOfLife
             _resetGeneration = true;
             _delay = 1000;
             Console.Clear();
-            StartGame(_render, _file);
-            _field = new Field(_length, _width);
-            RunGame(_field);
+            _field = new Field();
+            StartGame(_render, _file, _field);
+            RunGame();
         }
 
         /// <summary>

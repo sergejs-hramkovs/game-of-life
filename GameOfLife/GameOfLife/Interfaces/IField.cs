@@ -8,7 +8,7 @@ namespace GameOfLife.Interfaces
 {
     public interface IField
     {
-        string[,] CreateField();
+        string[,] CreateField(int fieldLength, int fieldWidth);
 
         string[,] SeedField(bool gliderGunMode);
     }
