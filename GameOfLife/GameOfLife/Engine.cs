@@ -21,6 +21,7 @@ namespace GameOfLife
         private bool _readGeneration = false;
         private bool _gliderGunMode = false;
         private bool _resetGeneration = false;
+        private bool _correctKeyPressed = false;
         private IFileIO _file;
         private IRender _render;
         private IField _field;
@@ -45,11 +46,9 @@ namespace GameOfLife
                     _fieldSizeChoice = Console.ReadKey(true);
                     CheckInputMainMenu(_fieldSizeChoice);
                     
-                    if (_fieldSizeChoice.Key == ConsoleKey.D1 || _fieldSizeChoice.Key == ConsoleKey.D2 ||
-                        _fieldSizeChoice.Key == ConsoleKey.D3 || _fieldSizeChoice.Key == ConsoleKey.D4 ||
-                        _fieldSizeChoice.Key == ConsoleKey.D5 || _fieldSizeChoice.Key == ConsoleKey.D6 ||
-                        _fieldSizeChoice.Key == ConsoleKey.L)
+                    if (_correctKeyPressed)
                     {
+                        _correctKeyPressed = false;
                         break;
                     }
                     else
@@ -252,30 +251,36 @@ namespace GameOfLife
                 case ConsoleKey.D1:
                     _length = 3;
                     _width = 3;
+                    _correctKeyPressed = true;
                     break;
 
                 case ConsoleKey.D2:
                     _length = 5;
                     _width = 5;
+                    _correctKeyPressed = true;
                     break;
 
                 case ConsoleKey.D3:
                     _length = 10;
                     _width = 10;
+                    _correctKeyPressed = true;
                     break;
 
                 case ConsoleKey.D4:
                     _length = 20;
                     _width = 20;
+                    _correctKeyPressed = true;
                     break;
 
                 case ConsoleKey.D5:
                     _length = 75;
                     _width = 40;
+                    _correctKeyPressed = true;
                     break;
 
                 case ConsoleKey.D6:
                     EnterFieldDimensions(_wrongInput);
+                    _correctKeyPressed = true;
                     break;
 
                 case ConsoleKey.L:
@@ -283,6 +288,7 @@ namespace GameOfLife
                     _generation = _file.Generation;
                     _loaded = true;
                     _readGeneration = true;
+                    _correctKeyPressed = true;
                     break;
 
                 case ConsoleKey.G:
