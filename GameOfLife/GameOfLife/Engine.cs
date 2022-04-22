@@ -19,6 +19,7 @@ namespace GameOfLife
         private bool _resetGeneration = false;
         private IFile _file;
         private IRender _render;
+        private IRulesApplier _rulesApplier;
         private Tuple<string[,], int, int, int> _renderReturnValues;
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace GameOfLife
         public void Start()
         {
             Console.SetWindowSize(170, 55);
-            _render = new Render();
+            _render = new Render(this, _rulesApplier = new RulesApplier());
 
             while (true)
             {
@@ -236,7 +237,7 @@ namespace GameOfLife
         /// </summary>
         public void Run()
         {
-            _render.InitialRender(_length, _width, _gameField, _loaded, _gliderGunMode);
+            _render.InitialRender(new Field(_length, _width), _gameField, _loaded, _gliderGunMode);
             _loaded = false;
             _file = new File();
 

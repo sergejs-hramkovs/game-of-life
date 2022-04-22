@@ -15,6 +15,8 @@ namespace GameOfLife
         private ConsoleKeyInfo _seedingChoice;
         private IRender _render;
         private ILibrary _library;
+        private IEngine _engine;
+        private IRulesApplier _rulesApplier;
 
         public Field(int length, int width)
         {
@@ -29,7 +31,7 @@ namespace GameOfLife
         public string[,] CreateField()
         {
             _fieldArray = new string[_fieldLength, _fieldWidth];
-            _render = new Render();
+            _render = new Render(_engine = new Engine(), _rulesApplier = new RulesApplier());
 
             for (int i = 0; i < _fieldLength; i++)
             {

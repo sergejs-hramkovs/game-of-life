@@ -10,7 +10,7 @@ namespace GameOfLife.Interfaces
     {
         void RenderField(string[,] field);
 
-        void InitialRender(int length, int width, string[,] inputField, bool loaded, bool gliderGunMode);
+        void InitialRender(IField field, string[,] inputField, bool loaded, bool gliderGunMode);
 
         Tuple<string[,], int, int, int> RuntimeRender(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration, int generationFromFile);
 

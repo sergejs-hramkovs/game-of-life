@@ -13,6 +13,12 @@ namespace GameOfLife
         private IEngine _engine;
         private Tuple<string[,], int, int, int> _returnValues;
 
+        public Render(IEngine engine, IRulesApplier rulesApplier)
+        {
+            _engine = engine;
+            _rulesApplier = rulesApplier;
+        }
+
         /// <summary>
         /// Method that draws the field.
         /// </summary>
@@ -38,12 +44,10 @@ namespace GameOfLife
         /// <param name="inputField">An array of a gamefield.</param>
         /// <param name="loaded">Boolean parameter that represents whether the field was loaded from the file.</param>
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
-        public void InitialRender(int length, int width, string[,] inputField, bool loaded, bool gliderGunMode)
+        public void InitialRender(IField field, string[,] inputField, bool loaded, bool gliderGunMode)
         {
             _gameField = inputField;
-            _field = new Field(length, width);
-            _rulesApplier = new RulesApplier();
-            _engine = new Engine();
+            _field = field;
 
             // This place needs to be had a look at.
             if (!loaded)
