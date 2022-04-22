@@ -14,8 +14,8 @@ namespace GameOfLife
         /// <param name="field">An array of a gamefield.</param>
         public void CheckCells(string[,] field)
         {
-            CheckAlive(field);
-            CheckDead(field);
+            CheckAliveCells(field);
+            CheckDeadCells(field);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace GameOfLife
         /// Determines if an alive cell dies before the next generation.
         /// </summary>
         /// <param name="field">An array of a gamefield.</param>
-        private void CheckAlive(string[,] field)
+        private void CheckAliveCells(string[,] field)
         {
             int neigboursCountOfAlive = 0;
             bool wrappedX = false;
@@ -92,7 +92,7 @@ namespace GameOfLife
         /// Determines if a dead cell is reborn before the next generation.
         /// </summary>
         /// <param name="field">An array of a gamefield.</param>
-        private void CheckDead(string[,] field)
+        private void CheckDeadCells(string[,] field)
         {
             int neigboursCountOfDead = 0;
             bool wrappedX = false;
