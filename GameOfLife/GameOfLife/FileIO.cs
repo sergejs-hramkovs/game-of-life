@@ -77,6 +77,7 @@ namespace GameOfLife
                     }
                 }
             }
+            _stringList.Clear();
             return _gameField;
         }
 

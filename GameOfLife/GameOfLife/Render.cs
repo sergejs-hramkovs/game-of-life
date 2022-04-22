@@ -97,8 +97,8 @@ namespace GameOfLife
             {
                 _rulesApplier.CheckCells(_gameField);
             }
-            _gameField = _rulesApplier.FieldRefresh(_gameField);
             RenderField(_gameField);
+            _gameField = _rulesApplier.FieldRefresh(_gameField); 
             _returnValues = new Tuple<string[,], int, int, int>(_gameField, _aliveCells, _deadCells, _generation);
             _generation++;
             return _returnValues;
@@ -129,10 +129,17 @@ namespace GameOfLife
         /// <summary>
         /// Method for rendering field size and mode choosing menu.
         /// </summary>
-        public void FieldSizeMenuRender()
+        public void FieldSizeMenuRender(bool wrongInput)
         {
             Console.Clear();
-            Console.WriteLine("Welcome to the Game of Life!");
+            if (wrongInput)
+            {
+                Console.WriteLine("Wrong Input!");
+            }
+            else
+            {
+                Console.WriteLine("Welcome to the Game of Life!");
+            }
             Console.WriteLine("\nChoose the field size:");
             Console.WriteLine("1. 3x3");
             Console.WriteLine("2. 5x5");

@@ -267,14 +267,12 @@ namespace GameOfLife
                                     wrappedY = false;
                                 }
                             }
-
                             if (wrappedX)
                             {
                                 neighbourX = i - 1;
                                 wrappedX = false;
                             }
                         }
-
                         if (neigboursCountOfDead == 3 && i != field.GetLength(0) - 1 && j != field.GetLength(1) - 1)
                         {
                             _cellsToBeBorn.Add((i, j));
