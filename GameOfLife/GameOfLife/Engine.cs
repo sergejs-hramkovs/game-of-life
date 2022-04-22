@@ -1,4 +1,5 @@
 ﻿using GameOfLife.Interfaces;
+using static GameOfLife.Phrases;
 
 namespace GameOfLife
 {
@@ -75,13 +76,13 @@ namespace GameOfLife
                                 if (_wrongInput)
                                 {
                                     Console.Clear();
-                                    Console.WriteLine("Wrong Input!");
+                                    Console.WriteLine(WrongInputPhrase);
                                     _wrongInput = false;
                                 }
-                                Console.Write("\nEnter the length of the field: ");
+                                Console.Write(EnterLengthPhrase);
                                 if (int.TryParse(Console.ReadLine(), out _length) && _length > 0)
                                 {
-                                    Console.Write("\nEnter the width of the field: ");
+                                    Console.Write(EnterWidthPhrase);
                                     if (int.TryParse(Console.ReadLine(), out _width) && _width > 0)
                                     {
                                         break;
@@ -154,7 +155,7 @@ namespace GameOfLife
                     }
                     else
                     {
-                        Console.WriteLine("Wrong Input!");
+                        Console.WriteLine(WrongInputPhrase);
                     }
                 }
             }
@@ -212,7 +213,7 @@ namespace GameOfLife
                 if (_saveKey.Key == ConsoleKey.S)
                 {
                     _file.SaveToFile(_renderReturnValues.Item1, _renderReturnValues.Item2, _renderReturnValues.Item3, _renderReturnValues.Item4);
-                    Console.WriteLine("\n### The current game state has been successfully saved! Press any key to continue ###");
+                    Console.WriteLine(SuccessfullySavedPhrase);
                     Console.ReadKey();
                     Console.Clear();
                 }
@@ -283,7 +284,7 @@ namespace GameOfLife
             {
                 for (int j = 0; j < gameField.GetLength(1); j++)
                 {
-                    if (gameField[i, j] == "X")
+                    if (gameField[i, j] == AliveCellSymbol)
                     {
                         aliveCellCount++;
                     }
@@ -305,7 +306,7 @@ namespace GameOfLife
             {
                 for (int j = 0; j < gameField.GetLength(1); j++)
                 {
-                    if (gameField[i, j] == ".")
+                    if (gameField[i, j] == DeadCellSymbol)
                     {
                         deadCellCount++;
                     }

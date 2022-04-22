@@ -1,4 +1,5 @@
 ﻿using GameOfLife.Interfaces;
+using static GameOfLife.Phrases;
 
 namespace GameOfLife
 {
@@ -37,7 +38,7 @@ namespace GameOfLife
             {
                 for (int j = 0; j < _fieldWidth; j++)
                 {
-                    _fieldArray[i, j] = ".";
+                    _fieldArray[i, j] = DeadCellSymbol;
                 }
             }
 
@@ -57,7 +58,7 @@ namespace GameOfLife
                 {
                     Console.Clear();
                     _render.RenderField(_fieldArray);
-                    Console.WriteLine("\nWrong Input!");
+                    Console.WriteLine("\n" + WrongInputPhrase);
                     _wrongInput = false;
                 }
                 if (gliderGunMode)
@@ -110,7 +111,7 @@ namespace GameOfLife
                 else if (_wrongInput)
                 {
                     _render.RenderField(_fieldArray);
-                    Console.WriteLine("\nWrong Input!");
+                    Console.WriteLine("\n" + WrongInputPhrase);
                     _wrongInput = false;
                 }
 
@@ -127,13 +128,13 @@ namespace GameOfLife
                 // Without this "if" there is a problem with the displaying of the last cell.
                 if (!_stop)
                 {
-                    if (_fieldArray[_coordinateX, _coordinateY] == ".")
+                    if (_fieldArray[_coordinateX, _coordinateY] == DeadCellSymbol)
                     {
-                        _fieldArray[_coordinateX, _coordinateY] = "X";
+                        _fieldArray[_coordinateX, _coordinateY] = AliveCellSymbol;
                     }
                     else
                     {
-                        _fieldArray[_coordinateX, _coordinateY] = ".";
+                        _fieldArray[_coordinateX, _coordinateY] = DeadCellSymbol;
                     }
                 }
                 else
@@ -160,9 +161,9 @@ namespace GameOfLife
                 randomX = random.Next(0, _fieldArray.GetLength(0) - 1);
                 randomY = random.Next(0, _fieldArray.GetLength(1) - 1);
 
-                if (_fieldArray[randomX, randomY] != "X")
+                if (_fieldArray[randomX, randomY] != AliveCellSymbol)
                 {
-                    _fieldArray[randomX, randomY] = "X";
+                    _fieldArray[randomX, randomY] = AliveCellSymbol;
                 }
             }
             return _fieldArray;
@@ -195,7 +196,7 @@ namespace GameOfLife
                 {
                     Console.Clear();
                     _render.RenderField(_fieldArray);
-                    Console.WriteLine("\nWrong Input!");
+                    Console.WriteLine("\n" + WrongInputPhrase);
                     _wrongInput = false;
                 }
                 _render.LibraryMenuRender();
@@ -259,19 +260,19 @@ namespace GameOfLife
         /// <returns>Returns "stop = true" if the process of entering coordinates was stopped. Returns false if there is wrong input.</returns>
         private bool EnterCoordinates()
         {
-            Console.WriteLine("\n# To stop seeding enter 'stop'");
-            Console.Write("\nEnter X coordinate: ");
+            Console.WriteLine(StopSeedingPhrase);
+            Console.Write(EnterXPhrase);
             _inputCoordinate = Console.ReadLine();
-            if (_inputCoordinate == "stop")
+            if (_inputCoordinate == StopWord)
             {
                 return _stop = true;
             }
             else if (int.TryParse(_inputCoordinate, out var resultX) && resultX >= 0 && resultX < _fieldArray.GetLength(0))
             {
                 _coordinateX = resultX;
-                Console.Write("\nEnter Y coordinate: ");
+                Console.Write(EnterYPhrase);
                 _inputCoordinate = Console.ReadLine();
-                if (_inputCoordinate == "stop")
+                if (_inputCoordinate == StopWord)
                 {
                     return _stop = true;
                 }

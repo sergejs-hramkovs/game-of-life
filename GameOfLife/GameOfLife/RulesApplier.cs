@@ -1,4 +1,5 @@
 ﻿using GameOfLife.Interfaces;
+using static GameOfLife.Phrases;
 
 namespace GameOfLife
 {
@@ -41,7 +42,7 @@ namespace GameOfLife
             {
                 for (int j = 0; j < field.GetLength(1); j++)
                 {
-                    if (field[i, j] == "X")
+                    if (field[i, j] == AliveCellSymbol)
                     {
                         for (int neighbourX = i - 1; neighbourX <= i + 1; neighbourX++)
                         {
@@ -57,7 +58,7 @@ namespace GameOfLife
                                     neighbourY = field.GetLength(1) - 1;
                                     wrappedY = true;
                                 }
-                                if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == "X")
+                                if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == AliveCellSymbol)
                                 {
                                     neigboursCountOfAlive++;
                                 }
@@ -101,7 +102,7 @@ namespace GameOfLife
             {
                 for (int j = 0; j < field.GetLength(1); j++)
                 {
-                    if (field[i, j] == ".")
+                    if (field[i, j] == DeadCellSymbol)
                     {
                         for (int neighbourX = i - 1; neighbourX <= i + 1; neighbourX++)
                         {
@@ -117,7 +118,7 @@ namespace GameOfLife
                                     neighbourY = field.GetLength(1) - 1;
                                     wrappedY = true;
                                 }
-                                if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == "X")
+                                if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == AliveCellSymbol)
                                 {
                                     neigboursCountOfDead++;
                                 }
@@ -154,11 +155,11 @@ namespace GameOfLife
         {
             foreach ((int x, int y) cell in _cellsToDie)
             {
-                field[cell.x, cell.y] = ".";
+                field[cell.x, cell.y] = DeadCellSymbol;
             }
             foreach ((int x, int y) cell in _cellsToBeBorn)
             {
-                field[cell.x, cell.y] = "X";
+                field[cell.x, cell.y] = AliveCellSymbol;
             }
             _cellsToBeBorn.Clear();
             _cellsToDie.Clear();
@@ -180,7 +181,7 @@ namespace GameOfLife
                 {
                     for (int j = 0; j < field.GetLength(1); j++)
                     {
-                        if (field[i, j] == "X")
+                        if (field[i, j] == AliveCellSymbol)
                         {
                             for (int neighbourX = i - 1; neighbourX <= i + 1; neighbourX++)
                             {
@@ -196,7 +197,7 @@ namespace GameOfLife
                                         neighbourY = field.GetLength(1) - 1;
                                         wrappedY = true;
                                     }
-                                    if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == "X")
+                                    if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == AliveCellSymbol)
                                     {
                                         neigboursCountOfAlive++;
                                     }
@@ -241,7 +242,7 @@ namespace GameOfLife
             {
                 for (int j = 0; j < field.GetLength(1); j++)
                 {
-                    if (field[i, j] == ".")
+                    if (field[i, j] == DeadCellSymbol)
                     {
                         for (int neighbourX = i - 1; neighbourX <= i + 1; neighbourX++)
                         {
@@ -257,7 +258,7 @@ namespace GameOfLife
                                     neighbourY = field.GetLength(1) - 1;
                                     wrappedY = true;
                                 }
-                                if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == "X")
+                                if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == AliveCellSymbol)
                                 {
                                     neigboursCountOfDead++;
                                 }

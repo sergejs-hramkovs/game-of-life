@@ -1,4 +1,5 @@
 ﻿using GameOfLife.Interfaces;
+using static GameOfLife.Phrases;
 
 namespace GameOfLife
 {
@@ -134,7 +135,7 @@ namespace GameOfLife
             Console.Clear();
             if (wrongInput)
             {
-                Console.WriteLine("Wrong Input!");
+                Console.WriteLine(WrongInputPhrase);
             }
             else
             {
