@@ -58,8 +58,7 @@ namespace GameOfLife
                 RenderField(_gameField);
                 _gameField = _field.SeedField(gliderGunMode);
             }
-            Console.Clear();
-            Console.CursorVisible = false;
+            Console.Clear();          
         }
 
         /// <summary>

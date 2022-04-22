@@ -31,6 +31,7 @@ namespace GameOfLife
         /// </summary>
         public void Start(IRender render, IFileIO file)
         {
+            Console.CursorVisible = false;
             Console.SetWindowSize(170, 55);
             _render = render;
             _file = file;
@@ -274,32 +275,7 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.D6:
-                    while (true)
-                    {
-                        if (_wrongInput)
-                        {
-                            Console.Clear();
-                            Console.WriteLine(WrongInputPhrase);
-                            _wrongInput = false;
-                        }
-                        Console.Write(EnterLengthPhrase);
-                        if (int.TryParse(Console.ReadLine(), out _length) && _length > 0)
-                        {
-                            Console.Write(EnterWidthPhrase);
-                            if (int.TryParse(Console.ReadLine(), out _width) && _width > 0)
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                _wrongInput = true;
-                            }
-                        }
-                        else
-                        {
-                            _wrongInput = true;
-                        }
-                    }
+                    EnterFieldDimensions(_wrongInput);
                     break;
 
                 case ConsoleKey.L:
@@ -349,6 +325,39 @@ namespace GameOfLife
                 default:
                     Console.WriteLine(WrongInputPhrase);
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Method to process user input field dimensions.
+        /// </summary>
+        /// <param name="wrongInput">Parameter that represent if there had been wrong input.</param>
+        private void EnterFieldDimensions(bool wrongInput)
+        {
+            while (true)
+            {
+                if (wrongInput)
+                {
+                    Console.Clear();
+                    Console.WriteLine(WrongInputPhrase);
+                }
+                Console.Write(EnterLengthPhrase);
+                if (int.TryParse(Console.ReadLine(), out _length) && _length > 0)
+                {
+                    Console.Write(EnterWidthPhrase);
+                    if (int.TryParse(Console.ReadLine(), out _width) && _width > 0)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        wrongInput = true;
+                    }
+                }
+                else
+                {
+                    wrongInput = true;
+                }
             }
         }
     }
