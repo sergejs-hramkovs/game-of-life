@@ -8,7 +8,6 @@ namespace GameOfLife
         private int _length;
         private int _width;
         public int Length { get => _length; }
-
         public int Width { get => _width; }
         private int _delay = 1000;
         private int _generation;
@@ -121,24 +120,26 @@ namespace GameOfLife
                 _render.PauseRender();
                 _saveKey = Console.ReadKey(true);
 
-                if (_saveKey.Key == ConsoleKey.S)
+                switch (_saveKey.Key)
                 {
-                    _file.SaveToFile(_renderReturnValues.Item1, _renderReturnValues.Item2, _renderReturnValues.Item3, _renderReturnValues.Item4);
-                    Console.WriteLine(SuccessfullySavedPhrase);
-                    Console.ReadKey();
-                    Console.Clear();
-                }
-                else if (_saveKey.Key == ConsoleKey.Escape)
-                {
-                    Environment.Exit(0);
-                }
-                else if (_saveKey.Key == ConsoleKey.R)
-                {
-                    Restart();
-                }
-                else
-                {
-                    Console.Clear();
+                    case ConsoleKey.S:
+                        _file.SaveToFile(_renderReturnValues.Item1, _renderReturnValues.Item2, _renderReturnValues.Item3, _renderReturnValues.Item4);
+                        Console.WriteLine(SuccessfullySavedPhrase);
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+
+                    case ConsoleKey.Escape:
+                        Environment.Exit(0);
+                        break;
+
+                    case ConsoleKey.R:
+                        Restart();
+                        break;
+
+                    default:
+                        Console.Clear();
+                        break;
                 }
             }
         }
