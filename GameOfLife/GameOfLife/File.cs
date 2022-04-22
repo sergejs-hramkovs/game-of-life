@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameOfLife.Interfaces;
 
 namespace GameOfLife
 {
-    public class File
+    public class File : IFile
     {
         private string _filePath = @"C:\Users\sergejs.hramkovs\OneDrive - Accenture\Documents\field.txt";
         private string _line;
@@ -15,7 +11,8 @@ namespace GameOfLife
         private StreamWriter _writer;
         private StreamReader _reader;
         private List<string> _stringList = new List<string>();
-        public int generation;
+
+        public int Generation { get; set; }
 
         /// <summary>
         /// Method which converts 2-dimensional array to a 1-dimensional in order to minimize the number of 'write' operations to a file.
@@ -56,7 +53,7 @@ namespace GameOfLife
                     generationString += number.ToString();
                 }
             }
-            generation = int.Parse(generationString);
+            Generation = int.Parse(generationString);
 
             for (int i = 4; i < inputList.Count; i++)
             {

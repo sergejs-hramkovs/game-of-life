@@ -1,6 +1,8 @@
-﻿namespace GameOfLife
+﻿using GameOfLife.Interfaces;
+
+namespace GameOfLife
 {
-    public class Field
+    public class Field : IField
     {
         private int _fieldLength { get; set; }
         private int _fieldWidth { get; set; }

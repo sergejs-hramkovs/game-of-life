@@ -1,6 +1,8 @@
-﻿namespace GameOfLife
+﻿using GameOfLife.Interfaces;
+
+namespace GameOfLife
 {
-    public class RulesApplier
+    public class RulesApplier : IRulesApplier
     {
         private List<(int x, int y)> _cellsToDie = new List<(int x, int y)>();
         private List<(int x, int y)> _cellsToBeBorn = new List<(int x, int y)>();

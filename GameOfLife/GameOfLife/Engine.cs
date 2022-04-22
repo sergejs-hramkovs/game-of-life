@@ -1,6 +1,8 @@
-﻿namespace GameOfLife
+﻿using GameOfLife.Interfaces;
+
+namespace GameOfLife
 {
-    public class Engine
+    public class Engine : IEngine
     {
         private int _length;
         private int _width;
@@ -15,7 +17,8 @@
         private bool _readGeneration = false;
         private bool _gliderGunMode = false;
         private bool _resetGeneration = false;
-        private File _file;
+        private IFile _file;
+        private IRender _render;
         private Tuple<string[,], int, int, int> _renderReturnValues;
 
         /// <summary>
@@ -35,7 +38,7 @@
                 }
                 if (!_gliderGunMode)
                 {
-                    Render.FieldSizeMenuRender();
+                    _render.FieldSizeMenuRender();
                     _fieldSizeChoice = Console.ReadKey(true);
 
                     switch (_fieldSizeChoice.Key)
@@ -97,7 +100,7 @@
                         case ConsoleKey.L:
                             _file = new File();
                             _gameField = _file.LoadFromFile();
-                            _generation = _file.generation;
+                            _generation = _file.Generation;
                             _loaded = true;
                             _readGeneration = true;
                             break;
@@ -136,7 +139,7 @@
                 }
                 else
                 {
-                    Render.GliderGunMenuRender();
+                    _render.GliderGunMenuRender();
                     _fieldSizeChoice = Console.ReadKey(true);
                     if (_fieldSizeChoice.Key == ConsoleKey.D1)
                     {
@@ -202,7 +205,7 @@
         {
             if (keyPressed.Key == ConsoleKey.Spacebar)
             {
-                Render.PauseRender();
+                _render.PauseRender();
                 _saveKey = Console.ReadKey(true);
 
                 if (_saveKey.Key == ConsoleKey.S)
@@ -232,7 +235,7 @@
         /// </summary>
         public void Run()
         {
-            Render.InitialRender(_length, _width, _gameField, _loaded, _gliderGunMode);
+            _render.InitialRender(_length, _width, _gameField, _loaded, _gliderGunMode);
             _loaded = false;
             _file = new File();
 
@@ -241,7 +244,7 @@
                 while (Console.KeyAvailable == false)
                 {
                     Console.SetCursorPosition(0, 0);
-                    _renderReturnValues = Render.RuntimeRender(_delay, _gliderGunMode, _resetGeneration, _readGeneration, _generation);
+                    _renderReturnValues = _render.RuntimeRender(_delay, _gliderGunMode, _resetGeneration, _readGeneration, _generation);
                     _readGeneration = false;
                     if (_resetGeneration)
                     {
@@ -254,7 +257,7 @@
                 _delay = ChangeDelay(_delay, _cki);
             } while (_cki.Key != ConsoleKey.Escape);
 
-            Render.ExitRender();
+            _render.ExitRender();
             _cki = Console.ReadKey(true);
             if (_cki.Key == ConsoleKey.R)
             {

@@ -1,21 +1,23 @@
-﻿namespace GameOfLife
+﻿using GameOfLife.Interfaces;
+
+namespace GameOfLife
 {
-    public static class Render
+    public class Render : IRender
     {
-        static string[,] gameField;
-        static int generation = 1;
-        static int aliveCells;
-        static int deadCells;
-        static Field field;
-        static RulesApplier rulesApplier;
-        static Engine engine;
-        static Tuple<string[,], int, int, int> returnValues;
+        private string[,] _gameField;
+        private int _generation = 1;
+        private int _aliveCells;
+        private int _deadCells;
+        private IField _field;
+        private IRulesApplier _rulesApplier;
+        private IEngine _engine;
+        private Tuple<string[,], int, int, int> _returnValues;
 
         /// <summary>
         /// Method that draws the field.
         /// </summary>
         /// <param name="field">An array of a gamefield.</param>
-        public static void RenderField(string[,] field)
+        public void RenderField(string[,] field)
         {
             Console.WriteLine();
             for (int i = 0; i < field.GetLength(1); i++)
@@ -36,20 +38,20 @@
         /// <param name="inputField">An array of a gamefield.</param>
         /// <param name="loaded">Boolean parameter that represents whether the field was loaded from the file.</param>
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
-        public static void InitialRender(int length, int width, string[,] inputField, bool loaded, bool gliderGunMode)
+        public void InitialRender(int length, int width, string[,] inputField, bool loaded, bool gliderGunMode)
         {
-            gameField = inputField;
-            field = new Field(length, width);
-            rulesApplier = new RulesApplier();
-            engine = new Engine();
+            _gameField = inputField;
+            _field = new Field(length, width);
+            _rulesApplier = new RulesApplier();
+            _engine = new Engine();
 
             // This place needs to be had a look at.
             if (!loaded)
             {
-                gameField = field.CreateField();
+                _gameField = _field.CreateField();
                 Console.Clear();
-                RenderField(gameField);
-                gameField = field.SeedField(gliderGunMode);
+                RenderField(_gameField);
+                _gameField = _field.SeedField(gliderGunMode);
             }
             Console.Clear();
             Console.CursorVisible = false;
@@ -62,46 +64,46 @@
         /// <param name="gliderGunMode">Parameter to enable the Glider Gun mode with dead borders rules.</param>
         /// <param name="resetGeneration">Parameter to rest the number of generation after restart.</param>
         /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
-        public static Tuple<string[,], int, int, int> RuntimeRender(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration, int generationFromFile)
+        public Tuple<string[,], int, int, int> RuntimeRender(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration, int generationFromFile)
         {
-            aliveCells = engine.CountAlive(gameField);
-            deadCells = engine.CountDead(gameField);
+            _aliveCells = _engine.CountAlive(_gameField);
+            _deadCells = _engine.CountDead(_gameField);
             if (resetGeneration)
             {
-                generation = 1;
+                _generation = 1;
             }
             if (readGeneration)
             {
-                generation = generationFromFile;
+                _generation = generationFromFile;
                 readGeneration = false;
             }
             Console.WriteLine("# Press ESC to stop");
             Console.WriteLine("# Press Spacebar to pause");
             Console.WriteLine("# Change the delay using left and right arrows");
-            Console.WriteLine($"\nGeneration: {generation}");
-            Console.WriteLine($"Alive cells: {aliveCells}({(int)Math.Round(aliveCells / (double)(deadCells + aliveCells) * 100.0)}%)   ");
-            Console.WriteLine($"Dead cells: {deadCells}   ");
+            Console.WriteLine($"\nGeneration: {_generation}");
+            Console.WriteLine($"Alive cells: {_aliveCells}({(int)Math.Round(_aliveCells / (double)(_deadCells + _aliveCells) * 100.0)}%)   ");
+            Console.WriteLine($"Dead cells: {_deadCells}   ");
             Console.WriteLine($"Current delay between generations: {delay / 1000.0} seconds  ");
             Console.WriteLine($"Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   ");
             if (gliderGunMode)
             {
-                rulesApplier.CheckCellsDeadBorder(gameField);
+                _rulesApplier.CheckCellsDeadBorder(_gameField);
             }
             else
             {
-                rulesApplier.CheckCells(gameField);
+                _rulesApplier.CheckCells(_gameField);
             }
-            gameField = rulesApplier.FieldRefresh(gameField);
-            RenderField(gameField);
-            returnValues = new Tuple<string[,], int, int, int>(gameField, aliveCells, deadCells, generation);
-            generation++;
-            return returnValues;
+            _gameField = _rulesApplier.FieldRefresh(_gameField);
+            RenderField(_gameField);
+            _returnValues = new Tuple<string[,], int, int, int>(_gameField, _aliveCells, _deadCells, _generation);
+            _generation++;
+            return _returnValues;
         }
 
         /// <summary>
         /// Method for rendering the field seeding menu.
         /// </summary>
-        public static void SeedFieldMenuRender()
+        public void SeedFieldMenuRender()
         {
             Console.WriteLine("\n1. Seed the field manually");
             Console.WriteLine("2. Seed the field automatically and randomly");
@@ -111,7 +113,7 @@
         /// <summary>
         /// Method for rendering the library selection menu.
         /// </summary>
-        public static void LibraryMenuRender()
+        public void LibraryMenuRender()
         {
             Console.WriteLine("\n# To stop seeding press 'Esc'");
             Console.WriteLine("\n1. Spawn a glider");
@@ -123,7 +125,7 @@
         /// <summary>
         /// Method for rendering field size and mode choosing menu.
         /// </summary>
-        public static void FieldSizeMenuRender()
+        public void FieldSizeMenuRender()
         {
             Console.Clear();
             Console.WriteLine("Welcome to the Game of Life!");
@@ -142,7 +144,7 @@
         /// <summary>
         /// Method for rendering the glider gun menu.
         /// </summary>
-        public static void GliderGunMenuRender()
+        public void GliderGunMenuRender()
         {
             Console.Clear();
             Console.WriteLine("The Glider Gun Mode");
@@ -153,7 +155,7 @@
         /// <summary>
         /// Method for rendering the pause menu.
         /// </summary>
-        public static void PauseRender()
+        public void PauseRender()
         {
             Console.WriteLine("\n# To save the current game state to a file press 'S'");
             Console.WriteLine("# To restart the game press 'R'");
@@ -164,7 +166,7 @@
         /// <summary>
         /// Method for rendering the exit menu.
         /// </summary>
-        public static void ExitRender()
+        public void ExitRender()
         {
             Console.WriteLine("\n# Press 'R' to restart");
             Console.WriteLine("# Press 'Esc' to exit");
