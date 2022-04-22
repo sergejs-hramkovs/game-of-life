@@ -5,8 +5,8 @@ RulesApplier applier = new RulesApplier();
 Render render = new Render(engine, applier);
 FileIO file = new FileIO();
 
-engine.Start(render, file);
+engine.StartGame(render, file);
 
 Field field = new Field(engine.Length, engine.Width);
 
-engine.Run(field);
+engine.RunGame(field);

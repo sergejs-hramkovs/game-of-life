@@ -29,7 +29,7 @@ namespace GameOfLife
         /// <summary>
         /// Initiate field size choice.
         /// </summary>
-        public void Start(IRender render, IFileIO file)
+        public void StartGame(IRender render, IFileIO file)
         {
             Console.CursorVisible = false;
             Console.SetWindowSize(170, 55);
@@ -113,7 +113,7 @@ namespace GameOfLife
         /// Method to pause the game by pressing the Spacebar.
         /// </summary>
         /// <param name="keyPressed">Parameter which stores Spacebar key press.</param>
-        private void Pause(ConsoleKeyInfo keyPressed)
+        private void PauseGame(ConsoleKeyInfo keyPressed)
         {
             if (keyPressed.Key == ConsoleKey.Spacebar)
             {
@@ -134,7 +134,7 @@ namespace GameOfLife
                         break;
 
                     case ConsoleKey.R:
-                        Restart();
+                        RestartGame();
                         break;
 
                     default:
@@ -147,7 +147,7 @@ namespace GameOfLife
         /// <summary>
         /// Main process of the game.
         /// </summary>
-        public void Run(IField field)
+        public void RunGame(IField field)
         {
             _field = field;
             _render.InitialRender(_field, _gameField, _loaded, _gliderGunMode);
@@ -167,7 +167,7 @@ namespace GameOfLife
                     Thread.Sleep(_delay);
                 }
                 _cki = Console.ReadKey(true);
-                Pause(_cki);
+                PauseGame(_cki);
                 _delay = ChangeDelay(_delay, _cki);
             } while (_cki.Key != ConsoleKey.Escape);
 
@@ -175,7 +175,7 @@ namespace GameOfLife
             _cki = Console.ReadKey(true);
             if (_cki.Key == ConsoleKey.R)
             {
-                Restart();
+                RestartGame();
             }
             else if (_cki.Key == ConsoleKey.Escape)
             {
@@ -188,7 +188,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An array of the game field cells.</param>
         /// <returns>Returns the number of alive cells currently in the gamefield array.</returns>
-        public int CountAlive(string[,] gameField)
+        public int CountAliveCells(string[,] gameField)
         {
             int aliveCellCount = 0;
 
@@ -210,7 +210,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An array of the game field cells.</param>
         /// <returns>Returns the number of dead cells currently in the gamefield array.</returns>
-        public int CountDead(string[,] gameField)
+        public int CountDeadCells(string[,] gameField)
         {
             int deadCellCount = 0;
 
@@ -230,15 +230,15 @@ namespace GameOfLife
         /// <summary>
         /// Method to restart the game without rerunning the application.
         /// </summary>
-        private void Restart()
+        private void RestartGame()
         {
             _gliderGunMode = false;
             _resetGeneration = true;
             _delay = 1000;
             Console.Clear();
-            Start(_render, _file);
+            StartGame(_render, _file);
             _field = new Field(_length, _width);
-            Run(_field);
+            RunGame(_field);
         }
 
         /// <summary>

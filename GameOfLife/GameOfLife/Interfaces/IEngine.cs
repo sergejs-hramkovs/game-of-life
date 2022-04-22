@@ -8,12 +8,12 @@ namespace GameOfLife.Interfaces
 {
     public interface IEngine
     {
-        void Start(IRender render, IFileIO file);
+        void StartGame(IRender render, IFileIO file);
 
-        void Run(IField field);
+        void RunGame(IField field);
 
-        int CountAlive(string[,] gameField);
+        int CountAliveCells(string[,] gameField);
 
-        int CountDead(string[,] gameField);
+        int CountDeadCells(string[,] gameField);
     }
 }

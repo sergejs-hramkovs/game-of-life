@@ -70,8 +70,8 @@ namespace GameOfLife
         /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
         public Tuple<string[,], int, int, int> RuntimeRender(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration, int generationFromFile)
         {
-            _aliveCells = _engine.CountAlive(_gameField);
-            _deadCells = _engine.CountDead(_gameField);
+            _aliveCells = _engine.CountAliveCells(_gameField);
+            _deadCells = _engine.CountDeadCells(_gameField);
             if (resetGeneration)
             {
                 _generation = 1;
