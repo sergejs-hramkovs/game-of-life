@@ -22,16 +22,18 @@ namespace GameOfLife
         private IFileIO _file;
         private IRender _render;
         private IField _field;
+        private ILibrary _library;
         private Tuple<string[,], int, int, int> _renderReturnValues;
 
         /// <summary>
         /// Initiate field size choice.
         /// </summary>
-        public void StartGame(IRender render, IFileIO file, IField field)
+        public void StartGame(IRender render, IFileIO file, IField field, ILibrary library)
         {
             _render = render;
             _file = file;
             _field = field;
+            _library = library;
 
             Console.CursorVisible = false;
             Console.SetWindowSize(170, 55);
@@ -151,7 +153,7 @@ namespace GameOfLife
         {
             if (!_loaded)
             {
-                _gameField = _field.CreateField(_length, _width);
+                _gameField = _field.CreateField(_library, _length, _width);
             }
             _render.InitialRender(_field, _gameField, _loaded, _gliderGunMode);
             _loaded = false;
@@ -218,7 +220,7 @@ namespace GameOfLife
             _delay = 1000;
             Console.Clear();
             _field = new Field();
-            StartGame(_render, _file, _field);
+            StartGame(_render, _file, _field, _library);
             RunGame();
         }
 

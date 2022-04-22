@@ -8,7 +8,7 @@ namespace GameOfLife.Interfaces
 {
     public interface IEngine
     {
-        void StartGame(IRender render, IFileIO file, IField field);
+        void StartGame(IRender render, IFileIO file, IField field, ILibrary library);
 
         void RunGame();
 

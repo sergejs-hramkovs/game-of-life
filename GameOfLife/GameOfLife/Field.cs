@@ -21,10 +21,11 @@ namespace GameOfLife
         /// Initial creation of an empty gaming field.
         /// </summary>
         /// <returns>Returns an array of a gamefield seeded with dead cells(.) .</returns>
-        public string[,] CreateField(int fieldLength, int fieldWidth)
+        public string[,] CreateField(ILibrary library, int fieldLength, int fieldWidth)
         {
+            _library = library;
             _fieldArray = new string[fieldLength, fieldWidth];
-            _render = new Render(_engine = new Engine(), _rulesApplier = new RulesApplier());
+            _render = new Render(_engine = new Engine(), _rulesApplier = new RulesApplier(), library);
 
             for (int i = 0; i < fieldLength; i++)
             {
@@ -169,13 +170,12 @@ namespace GameOfLife
         private string[,] LibrarySeeding(bool gliderGunMode)
         {
             ConsoleKeyInfo libraryChoice;
-            _library = new Library(_fieldArray);
 
             while (true)
             {
                 if (gliderGunMode)
                 {
-                    _library.SpawnGliderGun(1, 1);
+                    _library.SpawnGliderGun(_fieldArray, 1, 1);
                     Console.Clear();
                     return _fieldArray;
                 }
@@ -205,7 +205,7 @@ namespace GameOfLife
                             _wrongInput = true;
                             continue;
                         }
-                        _library.SpawnGlider(_coordinateX, _coordinateY);
+                        _library.SpawnGlider(_fieldArray, _coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
@@ -215,7 +215,7 @@ namespace GameOfLife
                             _wrongInput = true;
                             continue;
                         }
-                        _library.SpawnLightWeight(_coordinateX, _coordinateY);
+                        _library.SpawnLightWeight(_fieldArray, _coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
@@ -225,7 +225,7 @@ namespace GameOfLife
                             _wrongInput = true;
                             continue;
                         }
-                        _library.SpawnMiddleWeight(_coordinateX, _coordinateY);
+                        _library.SpawnMiddleWeight(_fieldArray, _coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 
@@ -235,7 +235,7 @@ namespace GameOfLife
                             _wrongInput = true;
                             continue;
                         }
-                        _library.SpawnHeavyWeight(_coordinateX, _coordinateY);
+                        _library.SpawnHeavyWeight(_fieldArray, _coordinateX, _coordinateY);
                         Console.Clear();
                         break;
 

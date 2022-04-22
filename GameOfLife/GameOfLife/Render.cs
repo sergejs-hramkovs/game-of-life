@@ -12,12 +12,14 @@ namespace GameOfLife
         private IField _field;
         private IRulesApplier _rulesApplier;
         private IEngine _engine;
+        private ILibrary _library;
         private Tuple<string[,], int, int, int> _returnValues;
 
-        public Render(IEngine engine, IRulesApplier rulesApplier)
+        public Render(IEngine engine, IRulesApplier rulesApplier, ILibrary library)
         {
             _engine = engine;
             _rulesApplier = rulesApplier;
+            _library = library;
         }
 
         /// <summary>
@@ -50,7 +52,7 @@ namespace GameOfLife
 
             if (!loaded)
             {
-                _gameField = _field.CreateField(inputField.GetLength(0), inputField.GetLength(1));
+                _gameField = _field.CreateField(_library, inputField.GetLength(0), inputField.GetLength(1));
                 Console.Clear();
                 RenderField(_gameField);
                 _gameField = _field.PopulateField(gliderGunMode);
