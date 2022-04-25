@@ -200,43 +200,19 @@ namespace GameOfLife
                         return _fieldArray;
 
                     case ConsoleKey.D1:
-                        if (!EnterCoordinates())
-                        {
-                            _wrongInput = true;
-                            continue;
-                        }
-                        _library.SpawnGlider(_fieldArray, _coordinateX, _coordinateY);
-                        Console.Clear();
+                        CallSpawningMethod(_library.SpawnGlider);
                         break;
 
                     case ConsoleKey.D2:
-                        if (!EnterCoordinates())
-                        {
-                            _wrongInput = true;
-                            continue;
-                        }
-                        _library.SpawnLightWeight(_fieldArray, _coordinateX, _coordinateY);
-                        Console.Clear();
+                        CallSpawningMethod(_library.SpawnLightWeight);
                         break;
 
                     case ConsoleKey.D3:
-                        if (!EnterCoordinates())
-                        {
-                            _wrongInput = true;
-                            continue;
-                        }
-                        _library.SpawnMiddleWeight(_fieldArray, _coordinateX, _coordinateY);
-                        Console.Clear();
+                        CallSpawningMethod(_library.SpawnMiddleWeight);
                         break;
 
                     case ConsoleKey.D4:
-                        if (!EnterCoordinates())
-                        {
-                            _wrongInput = true;
-                            continue;
-                        }
-                        _library.SpawnHeavyWeight(_fieldArray, _coordinateX, _coordinateY);
-                        Console.Clear();
+                        CallSpawningMethod(_library.SpawnHeavyWeight);
                         break;
 
                     default:
@@ -282,6 +258,23 @@ namespace GameOfLife
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Method to call one of the methods for spawning an object from the library, depending on the pressed key.
+        /// </summary>
+        /// <param name="SpawnLibraryObject">Parameter that represents the method for spawning an object from the library that will be called.</param>
+        private void CallSpawningMethod(Func<string[,], int, int, string[,]> SpawnLibraryObject)
+        {
+            if (!EnterCoordinates())
+            {
+                _wrongInput = true;
+            }
+            else
+            {
+                SpawnLibraryObject(_fieldArray, _coordinateX, _coordinateY);
+            }
+            Console.Clear();
         }
     }
 }
