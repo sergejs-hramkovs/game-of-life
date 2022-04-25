@@ -159,6 +159,10 @@ namespace GameOfLife
                 {
                     _fieldArray[randomX, randomY] = AliveCellSymbol;
                 }
+                else
+                {
+                    i--;
+                }
             }
             return _fieldArray;
         }
