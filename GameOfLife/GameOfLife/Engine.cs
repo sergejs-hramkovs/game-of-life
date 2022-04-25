@@ -161,7 +161,6 @@ namespace GameOfLife
                 _gameField = _field.CreateField(_library, _engine, _rulesApplier, _render, _length, _width);
             }
             _render.InitialRender(_field, _engine, _rulesApplier, _library, _gameField, _loaded, _gliderGunMode);
-            _loaded = false;
 
             do
             {

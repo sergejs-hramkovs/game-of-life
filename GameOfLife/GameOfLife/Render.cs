@@ -85,9 +85,9 @@ namespace GameOfLife
             Console.WriteLine($"Dead cells: {_deadCells}   ");
             Console.WriteLine($"Current delay between generations: {delay / 1000.0} seconds  ");
             Console.WriteLine($"Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   ");
-            _rulesApplier.DetermineCellsDestiny(_gameField, gliderGunMode);
             RenderField(_gameField);
-            _gameField = _rulesApplier.FieldRefresh(_gameField); 
+            _rulesApplier.DetermineCellsDestiny(_gameField, gliderGunMode);
+            _gameField = _rulesApplier.FieldRefresh(_gameField);
             _returnValues = new Tuple<string[,], int, int, int>(_gameField, _aliveCells, _deadCells, _generation);
             _generation++;
             return _returnValues;

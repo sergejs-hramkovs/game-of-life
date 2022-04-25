@@ -146,9 +146,10 @@ namespace GameOfLife
         /// <returns>Returns an array of randomly seeded gamefield.</returns>
         private string[,] RandomSeeding(int fieldLength, int fieldWidth)
         {
-            Random random = new Random();
+            Random random = new();
             int aliveCellCount = random.Next(1, fieldWidth * fieldLength);
             int randomX, randomY;
+            int stuck = 0;
 
             for (int i = 1; i <= aliveCellCount; i++)
             {
@@ -161,7 +162,7 @@ namespace GameOfLife
                 }
                 else
                 {
-                    i--;
+                    random = new();
                 }
             }
             return _fieldArray;
