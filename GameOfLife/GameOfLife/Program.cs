@@ -1,11 +1,11 @@
 ﻿using GameOfLife;
 
-Engine engine = new Engine();
-RulesApplier applier = new RulesApplier();
-Library library = new Library();
-Render render = new Render(engine, applier, library);
-FileIO file = new FileIO();
-Field field = new Field();
+Engine engine = new();
+RulesApplier applier = new();
+Library library = new();
+Render render = new();
+FileIO file = new();
+Field field = new();
 
-engine.StartGame(render, file, field, library);
+engine.StartGame(render, file, field, library, applier, engine);
 engine.RunGame();

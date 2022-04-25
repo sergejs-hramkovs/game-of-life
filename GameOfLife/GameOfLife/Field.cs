@@ -21,11 +21,13 @@ namespace GameOfLife
         /// Initial creation of an empty gaming field.
         /// </summary>
         /// <returns>Returns an array of a gamefield seeded with dead cells(.) .</returns>
-        public string[,] CreateField(ILibrary library, int fieldLength, int fieldWidth)
+        public string[,] CreateField(ILibrary library, IEngine engine, IRulesApplier rulesApplier, IRender render, int fieldLength, int fieldWidth)
         {
             _library = library;
             _fieldArray = new string[fieldLength, fieldWidth];
-            _render = new Render(_engine = new Engine(), _rulesApplier = new RulesApplier(), library);
+            _engine = engine;
+            _rulesApplier = rulesApplier;
+            _render = render;
 
             for (int i = 0; i < fieldLength; i++)
             {

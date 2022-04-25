@@ -15,13 +15,6 @@ namespace GameOfLife
         private ILibrary _library;
         private Tuple<string[,], int, int, int> _returnValues;
 
-        public Render(IEngine engine, IRulesApplier rulesApplier, ILibrary library)
-        {
-            _engine = engine;
-            _rulesApplier = rulesApplier;
-            _library = library;
-        }
-
         /// <summary>
         /// Method that draws the field.
         /// </summary>
@@ -45,14 +38,18 @@ namespace GameOfLife
         /// <param name="inputField">An array of a gamefield.</param>
         /// <param name="loaded">Boolean parameter that represents whether the field was loaded from the file.</param>
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
-        public void InitialRender(IField field, string[,] inputField, bool loaded, bool gliderGunMode)
+        public void InitialRender(IField field, IEngine engine, IRulesApplier rulesApplier, ILibrary library,
+            string[,] inputField, bool loaded, bool gliderGunMode)
         {
             _gameField = inputField;
             _field = field;
+            _engine = engine;
+            _rulesApplier = rulesApplier;
+            _library = library;
 
             if (!loaded)
             {
-                _gameField = _field.CreateField(_library, inputField.GetLength(0), inputField.GetLength(1));
+                _gameField = _field.CreateField(_library, _engine, _rulesApplier, this, inputField.GetLength(0), inputField.GetLength(1));
                 Console.Clear();
                 RenderField(_gameField);
                 _gameField = _field.PopulateField(gliderGunMode);
@@ -88,9 +85,7 @@ namespace GameOfLife
             Console.WriteLine($"Dead cells: {_deadCells}   ");
             Console.WriteLine($"Current delay between generations: {delay / 1000.0} seconds  ");
             Console.WriteLine($"Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   ");
-
             _rulesApplier.DetermineCellsDestiny(_gameField, gliderGunMode);
-
             RenderField(_gameField);
             _gameField = _rulesApplier.FieldRefresh(_gameField); 
             _returnValues = new Tuple<string[,], int, int, int>(_gameField, _aliveCells, _deadCells, _generation);
