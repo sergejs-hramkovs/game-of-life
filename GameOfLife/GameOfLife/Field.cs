@@ -118,7 +118,6 @@ namespace GameOfLife
                     _wrongInput = false;
                 }
 
-                // Without this "if" there is a problem with the displaying of the last cell.
                 if (!_stop)
                 {
                     if (_fieldArray[_coordinateX, _coordinateY] == DeadCellSymbol)
@@ -233,7 +232,7 @@ namespace GameOfLife
             _inputCoordinate = Console.ReadLine();
             if (_inputCoordinate == StopWord)
             {
-                return _stop = true;
+                _stop = true;
             }
             else if (int.TryParse(_inputCoordinate, out var resultX) && resultX >= 0 && resultX < _fieldArray.GetLength(0))
             {
@@ -242,7 +241,7 @@ namespace GameOfLife
                 _inputCoordinate = Console.ReadLine();
                 if (_inputCoordinate == StopWord)
                 {
-                    return _stop = true;
+                    _stop = true;
                 }
                 else if (int.TryParse(_inputCoordinate, out var resultY) && resultY >= 0 && resultY < _fieldArray.GetLength(1))
                 {
@@ -266,13 +265,17 @@ namespace GameOfLife
         /// <param name="SpawnLibraryObject">Parameter that represents the method for spawning an object from the library that will be called.</param>
         private void CallSpawningMethod(Func<string[,], int, int, string[,]> SpawnLibraryObject)
         {
-            if (!EnterCoordinates())
+            if (EnterCoordinates() && !_stop)
             {
-                _wrongInput = true;
+                SpawnLibraryObject(_fieldArray, _coordinateX, _coordinateY);
+            }
+            else if (_stop)
+            {
+                _stop = false;
             }
             else
             {
-                SpawnLibraryObject(_fieldArray, _coordinateX, _coordinateY);
+                _wrongInput = true;
             }
             Console.Clear();
         }

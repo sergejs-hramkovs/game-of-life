@@ -1,4 +1,5 @@
 ﻿using GameOfLife.Interfaces;
+using static GameOfLife.StringConstants;
 
 namespace GameOfLife
 {
@@ -21,21 +22,21 @@ namespace GameOfLife
                         case 0:
                             if (j - locationY == 2)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 1:
                             if (j - locationY == 0 || j - locationY == 2)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 2:
                             if (j - locationY == 1 || j - locationY == 2)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
                     }
@@ -61,35 +62,35 @@ namespace GameOfLife
                         case 0:
                             if (j - locationY == 0 || j - locationY == 2)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 1:
                             if (j - locationY == 3)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 2:
                             if (j - locationY == 3)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 3:
                             if (j - locationY == 0 || j - locationY == 3)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 4:
                             if (j - locationY == 1 || j - locationY == 2 || j - locationY == 3)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
                     }
@@ -115,42 +116,42 @@ namespace GameOfLife
                         case 0:
                             if (j - locationY == 1 || j - locationY == 3)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 1:
                             if (j - locationY == 0)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 2:
                             if (j - locationY == 0 || j - locationY == 4)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 3:
                             if (j - locationY == 0)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 4:
                             if (j - locationY == 0 || j - locationY == 3)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 5:
                             if (j - locationY == 0 || j - locationY == 1 || j - locationY == 2)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
                     }
@@ -176,49 +177,49 @@ namespace GameOfLife
                         case 0:
                             if (j - locationY == 1 || j - locationY == 3)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 1:
                             if (j - locationY == 0)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 2:
                             if (j - locationY == 0 || j - locationY == 4)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 3:
                             if (j - locationY == 0 || j - locationY == 4)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 4:
                             if (j - locationY == 0)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 5:
                             if (j - locationY == 0 || j - locationY == 3)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 6:
                             if (j - locationY == 0 || j - locationY == 1 || j - locationY == 2)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
                     }
@@ -244,112 +245,112 @@ namespace GameOfLife
                         case 1:
                             if (j - locationY == 5 || j - locationY == 6)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 2:
                             if (j - locationY == 5 || j - locationY == 6)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 11:
                             if (j - locationY == 5 || j - locationY == 6 || j - locationY == 7)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 12:
                             if (j - locationY == 4 || j - locationY == 8)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 13:
                             if (j - locationY == 3 || j - locationY == 9)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 14:
                             if (j - locationY == 3 || j - locationY == 9)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 15:
                             if (j - locationY == 6)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 16:
                             if (j - locationY == 4 || j - locationY == 8)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 17:
                             if (j - locationY == 5 || j - locationY == 6 || j - locationY == 7)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 18:
                             if (j - locationY == 6)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 21:
                             if (j - locationY == 3 || j - locationY == 4 || j - locationY == 5)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 22:
                             if (j - locationY == 3 || j - locationY == 4 || j - locationY == 5)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 23:
                             if (j - locationY == 2 || j - locationY == 6)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 25:
                             if (j - locationY == 1 || j - locationY == 2 || j - locationY == 6 || j - locationY == 7)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 35:
                             if (j - locationY == 3 || j - locationY == 4)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
 
                         case 36:
                             if (j - locationY == 3 || j - locationY == 4)
                             {
-                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = "X";
+                                fieldArray[i % fieldArray.GetLength(0), j % fieldArray.GetLength(1)] = AliveCellSymbol;
                             }
                             break;
                     }
