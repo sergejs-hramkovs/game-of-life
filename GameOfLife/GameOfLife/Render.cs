@@ -128,10 +128,14 @@ namespace GameOfLife
         /// <summary>
         /// Method for rendering field size and mode choosing menu.
         /// </summary>
-        public void FieldSizeMenuRender(bool wrongInput)
+        public void FieldSizeMenuRender(bool wrongInput, bool fileReadingError)
         {
             Console.Clear();
-            if (wrongInput)
+            if (fileReadingError)
+            {
+                Console.WriteLine(FileNotFoundPhrase);
+            }
+            else if (wrongInput)
             {
                 Console.WriteLine(WrongInputPhrase);
             }

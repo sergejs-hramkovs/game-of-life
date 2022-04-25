@@ -18,7 +18,7 @@ namespace GameOfLife.Interfaces
 
         void LibraryMenuRender();
 
-        void FieldSizeMenuRender(bool wrongIput);
+        void FieldSizeMenuRender(bool wrongIput, bool fileReadingError);
 
         void GliderGunMenuRender();
 

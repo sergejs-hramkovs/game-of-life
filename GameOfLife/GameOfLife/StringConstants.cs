@@ -27,5 +27,7 @@ namespace GameOfLife
         public const string EnterYPhrase = "\nEnter Y coordinate: ";
 
         public const string StopWord = "stop";
+
+        public const string FileNotFoundPhrase = "The file is missing!";
     }
 }

@@ -11,8 +11,18 @@ namespace GameOfLife
         private StreamWriter _writer;
         private StreamReader _reader;
         private List<string> _stringList = new List<string>();
-
-        public int Generation { get; set; }
+        private bool _fileReadingError = false;
+        public bool FileReadingError
+        {
+            get => _fileReadingError;
+            set => _fileReadingError = value;
+        }
+        private int _generation;
+        public int Generation
+        {
+            get => _generation;
+            set => _generation = value;
+        }
 
         /// <summary>
         /// Method which converts 2-dimensional array to a 1-dimensional in order to minimize the number of 'write' operations to a file.
@@ -109,12 +119,20 @@ namespace GameOfLife
         /// <returns>Returns call to ListToField method, which returns an array of the gamefield.</returns>
         public string[,] LoadGameFieldFromFile()
         {
-            _reader = new StreamReader(_filePath);
-            while ((_line = _reader.ReadLine()) != null)
+            try
             {
-                _stringList.Add(_line);
+                _reader = new StreamReader(_filePath);
+                while ((_line = _reader.ReadLine()) != null)
+                {
+                    _stringList.Add(_line);
+                }
+                _reader.Close();
             }
-            _reader.Close();
+            catch
+            {
+                FileReadingError = true;
+                return null;
+            }
             return ConvertListOfStringsIntoGameFieldArray(_stringList);
         }
     }

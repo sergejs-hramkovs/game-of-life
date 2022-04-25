@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GameOfLife.Interfaces
+﻿namespace GameOfLife.Interfaces
 {
     public interface IFileIO
     {
-        int Generation { get; }
+        int Generation { get; set; }
+
+        bool FileReadingError { get; set; }
 
         void SaveGameFieldToFile(string[,] currentGameState, int aliveCount, int deadCount, int generation);
 

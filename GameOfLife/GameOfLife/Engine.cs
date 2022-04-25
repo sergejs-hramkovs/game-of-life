@@ -42,8 +42,9 @@ namespace GameOfLife
             {
                 if (!_gliderGunMode)
                 {
-                    _render.FieldSizeMenuRender(_wrongInput);
+                    _render.FieldSizeMenuRender(_wrongInput, _file.FileReadingError);
                     _wrongInput = false;
+                    _file.FileReadingError = false;
                     _fieldSizeChoice = Console.ReadKey(true);
                     CheckInputMainMenu(_fieldSizeChoice);
 
@@ -269,10 +270,13 @@ namespace GameOfLife
 
                 case ConsoleKey.L:
                     _gameField = _file.LoadGameFieldFromFile();
-                    _generation = _file.Generation;
-                    _loaded = true;
-                    _readGeneration = true;
-                    _correctKeyPressed = true;
+                    if (!_file.FileReadingError)
+                    {
+                        _generation = _file.Generation;
+                        _loaded = true;
+                        _readGeneration = true;
+                        _correctKeyPressed = true;
+                    }
                     break;
 
                 case ConsoleKey.G:
