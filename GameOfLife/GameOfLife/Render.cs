@@ -90,7 +90,7 @@ namespace GameOfLife
             Console.WriteLine($"Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   ");
             if (gliderGunMode)
             {
-                _rulesApplier.CheckCellsDeadBorder(_gameField);
+                _rulesApplier.CheckCellsNoWrappingAroundField(_gameField);
             }
             else
             {

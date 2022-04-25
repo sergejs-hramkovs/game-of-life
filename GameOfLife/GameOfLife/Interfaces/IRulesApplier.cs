@@ -10,7 +10,7 @@ namespace GameOfLife.Interfaces
     {
         void CheckCells(string[,] field);
 
-        void CheckCellsDeadBorder(string[,] field);
+        void CheckCellsNoWrappingAroundField(string[,] field);
 
         string[,] FieldRefresh(string[,] field);
     }

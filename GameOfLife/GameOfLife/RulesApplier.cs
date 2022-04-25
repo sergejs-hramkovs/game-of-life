@@ -22,10 +22,10 @@ namespace GameOfLife
         /// Applies checks for alive and dead cells according to the rules, with dead borders.
         /// </summary>
         /// <param name="field">An array of a gamefield.</param>
-        public void CheckCellsDeadBorder(string[,] field)
+        public void CheckCellsNoWrappingAroundField(string[,] field)
         {
-            CheckAliveDeadBorder(field);
-            CheckDeadDeadBorder(field);
+            CheckAliveCellsNoWrappingAroundField(field);
+            CheckDeadCellsNoWrappingAroundField(field);
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace GameOfLife
         /// Modification of CheckAlive method with the addition of dead borders.
         /// </summary>
         /// <param name="field">An array of a gamefield.</param>
-        private void CheckAliveDeadBorder(string[,] field)
+        private void CheckAliveCellsNoWrappingAroundField(string[,] field)
         {
             {
                 int neigboursCountOfAlive = 0;
@@ -232,7 +232,7 @@ namespace GameOfLife
         /// Modification of CheckDead method with the addition of dead borders.
         /// </summary>
         /// <param name="field">An array of a gamefield.</param>
-        private void CheckDeadDeadBorder(string[,] field)
+        private void CheckDeadCellsNoWrappingAroundField(string[,] field)
         {
             int neigboursCountOfDead = 0;
             bool wrappedX = false;
