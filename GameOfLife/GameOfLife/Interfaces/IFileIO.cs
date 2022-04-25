@@ -10,8 +10,8 @@ namespace GameOfLife.Interfaces
     {
         int Generation { get; }
 
-        void SaveToFile(string[,] currentGameState, int aliveCount, int deadCount, int generation);
+        void SaveGameFieldToFile(string[,] currentGameState, int aliveCount, int deadCount, int generation);
 
-        string[,] LoadFromFile();
+        string[,] LoadGameFieldFromFile();
     }
 }

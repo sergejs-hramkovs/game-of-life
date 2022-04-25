@@ -19,7 +19,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An array containing game field cells.</param>
         /// <returns>Returns new 1-dimensional array.</returns>
-        private string[] GameFieldToArrayOfStrings(string[,] gameField)
+        private string[] UniteRowsOfFieldCellIntoStrings(string[,] gameField)
         {
             _gameField = gameField;
             _stringField = new string[_gameField.GetLength(1)];
@@ -38,7 +38,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="inputList">List of the game field cells.</param>
         /// <returns>Returns an array of the game field.</returns>
-        private string[,] ListOfStringsToGameField(List<string> inputList)
+        private string[,] ConvertListOfStringsIntoGameFieldArray(List<string> inputList)
         {
             int x = 0;
             int y = 0;
@@ -88,10 +88,10 @@ namespace GameOfLife
         /// <param name="aliveCount">Number of alive cells on the field.</param>
         /// <param name="deadCount">Number of dead cells on the field.</param>
         /// <param name="generation">Current generation number.</param>
-        public void SaveToFile(string[,] currentGameState, int aliveCount, int deadCount, int generation)
+        public void SaveGameFieldToFile(string[,] currentGameState, int aliveCount, int deadCount, int generation)
         {
             _writer = new StreamWriter(_filePath);
-            GameFieldToArrayOfStrings(currentGameState);
+            UniteRowsOfFieldCellIntoStrings(currentGameState);
             _writer.WriteLine($"Generation: {generation}");
             _writer.WriteLine($"Alive cells: {aliveCount}({(int)Math.Round(aliveCount / (double)(deadCount + aliveCount) * 100.0)}%)");
             _writer.WriteLine($"Dead cells: {deadCount}");
@@ -107,7 +107,7 @@ namespace GameOfLife
         /// Method to load the saved field from the file.
         /// </summary>
         /// <returns>Returns call to ListToField method, which returns an array of the gamefield.</returns>
-        public string[,] LoadFromFile()
+        public string[,] LoadGameFieldFromFile()
         {
             _reader = new StreamReader(_filePath);
             while ((_line = _reader.ReadLine()) != null)
@@ -115,7 +115,7 @@ namespace GameOfLife
                 _stringList.Add(_line);
             }
             _reader.Close();
-            return ListOfStringsToGameField(_stringList);
+            return ConvertListOfStringsIntoGameFieldArray(_stringList);
         }
     }
 }

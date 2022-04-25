@@ -125,7 +125,7 @@ namespace GameOfLife
                 switch (_saveKey.Key)
                 {
                     case ConsoleKey.S:
-                        _file.SaveToFile(_renderReturnValues.Item1, _renderReturnValues.Item2, _renderReturnValues.Item3, _renderReturnValues.Item4);
+                        _file.SaveGameFieldToFile(_renderReturnValues.Item1, _renderReturnValues.Item2, _renderReturnValues.Item3, _renderReturnValues.Item4);
                         Console.WriteLine(SuccessfullySavedPhrase);
                         Console.ReadKey();
                         Console.Clear();
@@ -268,7 +268,7 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.L:
-                    _gameField = _file.LoadFromFile();
+                    _gameField = _file.LoadGameFieldFromFile();
                     _generation = _file.Generation;
                     _loaded = true;
                     _readGeneration = true;
