@@ -8,9 +8,7 @@ namespace GameOfLife.Interfaces
 {
     public interface IRulesApplier
     {
-        void CheckCells(string[,] field);
-
-        void CheckCellsNoWrappingAroundField(string[,] field);
+        void DetermineCellsDestiny(string[,] field, bool disableWrappingAroundField);
 
         string[,] FieldRefresh(string[,] field);
     }

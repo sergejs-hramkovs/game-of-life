@@ -9,34 +9,13 @@ namespace GameOfLife
         private List<(int x, int y)> _cellsToBeBorn = new List<(int x, int y)>();
 
         /// <summary>
-        /// Applies checks for alive and dead cells according to the rules.
+        /// Method to determine which cells die and which are reborn, judging by the number of alive neighbours.
         /// </summary>
-        /// <param name="field">An array of a gamefield.</param>
-        public void CheckCells(string[,] field)
+        /// <param name="field">An array of the gamefield cells.</param>
+        /// <param name="disableWrappingAroundField">Parameter if field's wrapping around is enabled.</param>
+        public void DetermineCellsDestiny(string[,] field, bool disableWrappingAroundField)
         {
-            CheckAliveCells(field);
-            CheckDeadCells(field);
-        }
-
-        /// <summary>
-        /// Applies checks for alive and dead cells according to the rules, with dead borders.
-        /// </summary>
-        /// <param name="field">An array of a gamefield.</param>
-        public void CheckCellsNoWrappingAroundField(string[,] field)
-        {
-            CheckAliveCellsNoWrappingAroundField(field);
-            CheckDeadCellsNoWrappingAroundField(field);
-        }
-
-        /// <summary>
-        /// Determines if an alive cell dies before the next generation.
-        /// </summary>
-        /// <param name="field">An array of a gamefield.</param>
-        private void CheckAliveCells(string[,] field)
-        {
-            int neigboursCountOfAlive = 0;
-            bool wrappedX = false;
-            bool wrappedY = false;
+            int neighboursCount;
 
             for (int i = 0; i < field.GetLength(0); i++)
             {
@@ -44,106 +23,99 @@ namespace GameOfLife
                 {
                     if (field[i, j] == AliveCellSymbol)
                     {
-                        for (int neighbourX = i - 1; neighbourX <= i + 1; neighbourX++)
+                        neighboursCount = CountNeighbourCells(field, i, j, false);
+
+                        switch (disableWrappingAroundField)
                         {
-                            for (int neighbourY = j - 1; neighbourY <= j + 1; neighbourY++)
-                            {
-                                if (neighbourX == -1)
+                            case false:
+                                if (neighboursCount < 2 || neighboursCount > 3)
                                 {
-                                    neighbourX = field.GetLength(0) - 1;
-                                    wrappedX = true;
+                                    _cellsToDie.Add((i, j));
                                 }
-                                if (neighbourY == -1)
+                                break;
+
+                            case true:
+                                if (neighboursCount < 2 || neighboursCount > 3 || i == field.GetLength(0) - 1 || j == field.GetLength(1) - 1)
                                 {
-                                    neighbourY = field.GetLength(1) - 1;
-                                    wrappedY = true;
+                                    _cellsToDie.Add((i, j));
                                 }
-                                if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == AliveCellSymbol)
-                                {
-                                    neigboursCountOfAlive++;
-                                }
-                                if (neighbourX == i && neighbourY == j && neigboursCountOfAlive > 0)
-                                {
-                                    neigboursCountOfAlive--;
-                                }
-                                if (wrappedY)
-                                {
-                                    neighbourY = j - 1;
-                                    wrappedY = false;
-                                }
-                            }
-                            if (wrappedX)
-                            {
-                                neighbourX = i - 1;
-                                wrappedX = false;
-                            }
+                                break;
                         }
-                        if (neigboursCountOfAlive < 2 || neigboursCountOfAlive > 3)
+                    }
+                    else
+                    {
+                        neighboursCount = CountNeighbourCells(field, i, j, true);
+
+                        switch (disableWrappingAroundField)
                         {
-                            _cellsToDie.Add((i, j));
+                            case false:
+                                if (neighboursCount == 3)
+                                {
+                                    _cellsToBeBorn.Add((i, j));
+                                }
+                                break;
+
+                            case true:
+                                if (neighboursCount == 3 && i != field.GetLength(0) - 1 && j != field.GetLength(1) - 1)
+                                {
+                                    _cellsToBeBorn.Add((i, j));
+                                }
+                                break;
                         }
-                        neigboursCountOfAlive = 0;
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Determines if a dead cell is reborn before the next generation.
+        /// Method to count each cell's alive and dead neighbours to later determine which will die and which will be reborn.
         /// </summary>
-        /// <param name="field">An array of a gamefield.</param>
-        private void CheckDeadCells(string[,] field)
+        /// <param name="field">An array of the gamefield cells.</param>
+        /// <param name="x">Horizontal coordinate of a cell which neighbours are being counted.</param>
+        /// <param name="y">Vertical coordinate of a cell which neighbours are being counted</param>
+        /// <param name="checkDeadCell">Parameter which shows whether the cell, which neighbours are being counted, is alive or dead.</param>
+        /// <returns>Returns the number of cell's neighbours.</returns>
+        private int CountNeighbourCells(string[,] field, int x, int y, bool checkDeadCell)
         {
-            int neigboursCountOfDead = 0;
             bool wrappedX = false;
             bool wrappedY = false;
+            int neighboursCount = 0;
 
-            for (int i = 0; i < field.GetLength(0); i++)
+            for (int neighbourX = x - 1; neighbourX <= x + 1; neighbourX++)
             {
-                for (int j = 0; j < field.GetLength(1); j++)
+                for (int neighbourY = y - 1; neighbourY <= y + 1; neighbourY++)
                 {
-                    if (field[i, j] == DeadCellSymbol)
+                    if (neighbourX == -1)
                     {
-                        for (int neighbourX = i - 1; neighbourX <= i + 1; neighbourX++)
-                        {
-                            for (int neighbourY = j - 1; neighbourY <= j + 1; neighbourY++)
-                            {
-                                if (neighbourX == -1)
-                                {
-                                    neighbourX = field.GetLength(0) - 1;
-                                    wrappedX = true;
-                                }
-                                if (neighbourY == -1)
-                                {
-                                    neighbourY = field.GetLength(1) - 1;
-                                    wrappedY = true;
-                                }
-                                if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == AliveCellSymbol)
-                                {
-                                    neigboursCountOfDead++;
-                                }
-                                if (wrappedY)
-                                {
-                                    neighbourY = j - 1;
-                                    wrappedY = false;
-                                }
-                            }
-
-                            if (wrappedX)
-                            {
-                                neighbourX = i - 1;
-                                wrappedX = false;
-                            }
-                        }
-
-                        if (neigboursCountOfDead == 3)
-                        {
-                            _cellsToBeBorn.Add((i, j));
-                        }
-                        neigboursCountOfDead = 0;
+                        neighbourX = field.GetLength(0) - 1;
+                        wrappedX = true;
+                    }
+                    if (neighbourY == -1)
+                    {
+                        neighbourY = field.GetLength(1) - 1;
+                        wrappedY = true;
+                    }
+                    if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == AliveCellSymbol)
+                    {
+                        neighboursCount++;
+                    }
+                    if (!checkDeadCell && (neighbourX == x && neighbourY == y && neighboursCount > 0))
+                    {
+                        neighboursCount--;
+                    }
+                    if (wrappedY)
+                    {
+                        neighbourY = y - 1;
+                        wrappedY = false;
                     }
                 }
+                if (wrappedX)
+                {
+                    neighbourX = x - 1;
+                    wrappedX = false;
+                }
             }
+            return neighboursCount;
         }
 
         /// <summary>
@@ -164,124 +136,6 @@ namespace GameOfLife
             _cellsToBeBorn.Clear();
             _cellsToDie.Clear();
             return field;
-        }
-
-        /// <summary>
-        /// Modification of CheckAlive method with the addition of dead borders.
-        /// </summary>
-        /// <param name="field">An array of a gamefield.</param>
-        private void CheckAliveCellsNoWrappingAroundField(string[,] field)
-        {
-            {
-                int neigboursCountOfAlive = 0;
-                bool wrappedX = false;
-                bool wrappedY = false;
-
-                for (int i = 0; i < field.GetLength(0); i++)
-                {
-                    for (int j = 0; j < field.GetLength(1); j++)
-                    {
-                        if (field[i, j] == AliveCellSymbol)
-                        {
-                            for (int neighbourX = i - 1; neighbourX <= i + 1; neighbourX++)
-                            {
-                                for (int neighbourY = j - 1; neighbourY <= j + 1; neighbourY++)
-                                {
-                                    if (neighbourX == -1)
-                                    {
-                                        neighbourX = field.GetLength(0) - 1;
-                                        wrappedX = true;
-                                    }
-                                    if (neighbourY == -1)
-                                    {
-                                        neighbourY = field.GetLength(1) - 1;
-                                        wrappedY = true;
-                                    }
-                                    if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == AliveCellSymbol)
-                                    {
-                                        neigboursCountOfAlive++;
-                                    }
-                                    if (neighbourX == i && neighbourY == j && neigboursCountOfAlive > 0)
-                                    {
-                                        neigboursCountOfAlive--;
-                                    }
-                                    if (wrappedY)
-                                    {
-                                        neighbourY = j - 1;
-                                        wrappedY = false;
-                                    }
-                                }
-                                if (wrappedX)
-                                {
-                                    neighbourX = i - 1;
-                                    wrappedX = false;
-                                }
-                            }
-                            if (neigboursCountOfAlive < 2 || neigboursCountOfAlive > 3 || i == field.GetLength(0) - 1 || j == field.GetLength(1) - 1)
-                            {
-                                _cellsToDie.Add((i, j));
-                            }
-                            neigboursCountOfAlive = 0;
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Modification of CheckDead method with the addition of dead borders.
-        /// </summary>
-        /// <param name="field">An array of a gamefield.</param>
-        private void CheckDeadCellsNoWrappingAroundField(string[,] field)
-        {
-            int neigboursCountOfDead = 0;
-            bool wrappedX = false;
-            bool wrappedY = false;
-
-            for (int i = 0; i < field.GetLength(0); i++)
-            {
-                for (int j = 0; j < field.GetLength(1); j++)
-                {
-                    if (field[i, j] == DeadCellSymbol)
-                    {
-                        for (int neighbourX = i - 1; neighbourX <= i + 1; neighbourX++)
-                        {
-                            for (int neighbourY = j - 1; neighbourY <= j + 1; neighbourY++)
-                            {
-                                if (neighbourX == -1)
-                                {
-                                    neighbourX = field.GetLength(0) - 1;
-                                    wrappedX = true;
-                                }
-                                if (neighbourY == -1)
-                                {
-                                    neighbourY = field.GetLength(1) - 1;
-                                    wrappedY = true;
-                                }
-                                if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == AliveCellSymbol)
-                                {
-                                    neigboursCountOfDead++;
-                                }
-                                if (wrappedY)
-                                {
-                                    neighbourY = j - 1;
-                                    wrappedY = false;
-                                }
-                            }
-                            if (wrappedX)
-                            {
-                                neighbourX = i - 1;
-                                wrappedX = false;
-                            }
-                        }
-                        if (neigboursCountOfDead == 3 && i != field.GetLength(0) - 1 && j != field.GetLength(1) - 1)
-                        {
-                            _cellsToBeBorn.Add((i, j));
-                        }
-                        neigboursCountOfDead = 0;
-                    }
-                }
-            }
         }
     }
 }
