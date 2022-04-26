@@ -7,6 +7,7 @@ namespace GameOfLife
     {
         private string[,] _gameField;
         private int _generation = 1;
+        private int _generationsAfterLoading = 1;
         private int _aliveCells;
         private int _deadCells;
         private IField _field;
@@ -66,8 +67,7 @@ namespace GameOfLife
         /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
         public Tuple<string[,], int, int, int> RuntimeRender(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration, int generationFromFile)
         {
-            _aliveCells = _engine.CountAliveCells(_gameField);
-            _deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - _aliveCells;
+
             if (resetGeneration)
             {
                 _generation = 1;
@@ -75,21 +75,27 @@ namespace GameOfLife
             if (readGeneration)
             {
                 _generation = generationFromFile;
+                _generationsAfterLoading = 0;
+                _aliveCells = 1;
+                _deadCells = 1;
                 readGeneration = false;
             }
-            Console.WriteLine("# Press ESC to stop");
-            Console.WriteLine("# Press Spacebar to pause");
-            Console.WriteLine("# Change the delay using left and right arrows");
-            Console.WriteLine($"\nGeneration: {_generation}");
-            Console.WriteLine($"Alive cells: {_aliveCells}({(int)Math.Round(_aliveCells / (double)(_deadCells + _aliveCells) * 100.0)}%)   ");
-            Console.WriteLine($"Dead cells: {_deadCells}   ");
-            Console.WriteLine($"Current delay between generations: {delay / 1000.0} seconds  ");
-            Console.WriteLine($"Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   ");
-            RenderField(_gameField);
-            _rulesApplier.DetermineCellsDestiny(_gameField, gliderGunMode);
-            _gameField = _rulesApplier.FieldRefresh(_gameField);
-            _returnValues = new Tuple<string[,], int, int, int>(_gameField, _aliveCells, _deadCells, _generation);
+            if (_generationsAfterLoading >= 1)
+            {
+                _rulesApplier.DetermineCellsDestiny(_gameField, gliderGunMode);
+                _gameField = _rulesApplier.FieldRefresh(_gameField);
+                _aliveCells = _engine.CountAliveCells(_gameField);
+                _deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - _aliveCells;
+            }
+            RuntimeUIRender(delay);
+
             _generation++;
+            _returnValues = new Tuple<string[,], int, int, int>(_gameField, _aliveCells, _deadCells, _generation);
+            RenderField(_gameField);
+            if (_generationsAfterLoading == 0)
+            {
+                _generationsAfterLoading++;
+            }
             return _returnValues;
         }
 
@@ -174,6 +180,26 @@ namespace GameOfLife
         {
             Console.WriteLine("\n# Press 'R' to restart");
             Console.WriteLine("# Press 'Esc' to exit");
+        }
+
+        public void RuntimeUIRender(int delay)
+        {
+            Console.WriteLine("# Press ESC to stop");
+            Console.WriteLine("# Press Spacebar to pause");
+            Console.WriteLine("# Change the delay using left and right arrows");
+            Console.WriteLine($"\nGeneration: {_generation}");
+            if (_aliveCells == 1 && _deadCells == 1)
+            {
+                Console.WriteLine($"Alive cells: ---");
+                Console.WriteLine($"Dead cells: ---");
+            }
+            else
+            {
+                Console.WriteLine($"Alive cells: {_aliveCells}({(int)Math.Round(_aliveCells / (double)(_deadCells + _aliveCells) * 100.0)}%)   ");
+                Console.WriteLine($"Dead cells: {_deadCells}   ");
+            }
+            Console.WriteLine($"Current delay between generations: {delay / 1000.0} seconds  ");
+            Console.WriteLine($"Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   ");
         }
     }
 }
