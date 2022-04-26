@@ -45,7 +45,7 @@ namespace GameOfLife
             {
                 if (!_gliderGunMode)
                 {
-                    _render.FieldSizeMenuRender(_wrongInput, _file.FileReadingError);
+                    _render.MainMenuRender(_wrongInput, _file.FileReadingError);
                     _wrongInput = false;
                     _file.FileReadingError = false;
                     fieldSizeChoice = Console.ReadKey(true);
@@ -74,6 +74,66 @@ namespace GameOfLife
                         break;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Main process of the game.
+        /// </summary>
+        public void RunGame()
+        {
+            ConsoleKeyInfo cki;
+
+            if (!_loaded)
+            {
+                FirstRenderCalculations();
+            }
+            else
+            {
+                Console.Clear();
+            }
+            _loaded = false; // To reset the fact of previous loading to avoid disruption of the game after restart.
+
+            do
+            {
+                while (Console.KeyAvailable == false)
+                {
+                    Console.SetCursorPosition(0, 0);
+                    _returnValues = RuntimeCalculations(_delay, _gliderGunMode, _resetGeneration, _readGeneration);
+                    if (_gameOver)
+                    {
+                        break;
+                    }
+                    _readGeneration = false;
+                    if (_resetGeneration)
+                    {
+                        _resetGeneration = false;
+                    }
+                    Thread.Sleep(_delay);
+                }
+                if (!_gameOver)
+                {
+                    cki = Console.ReadKey(true);
+                    PauseGame(cki);
+                    _delay = ChangeDelay(_delay, cki);
+                }
+                else
+                {
+                    _gameOver = false;
+                    break;
+                }
+            } while (cki.Key != ConsoleKey.Escape);
+
+            _render.ExitMenuRender();
+            cki = Console.ReadKey(true);
+
+            if (cki.Key == ConsoleKey.R)
+            {
+                RestartGame();
+            }
+            else if (cki.Key == ConsoleKey.Escape)
+            {
+                Environment.Exit(0);
             }
         }
 
@@ -151,64 +211,7 @@ namespace GameOfLife
                 }
             }
         }
-
-        /// <summary>
-        /// Main process of the game.
-        /// </summary>
-        public void RunGame()
-        {
-            ConsoleKeyInfo cki;
-
-            if (!_loaded)
-            {
-                _gameField = _field.CreateField(_library, _engine, _rulesApplier, _render, _length, _width);
-            }
-            InitialCalculations(_gameField, _loaded, _gliderGunMode);
-            _loaded = false;
-
-            do
-            {
-                while (Console.KeyAvailable == false)
-                {
-                    Console.SetCursorPosition(0, 0);
-                    _returnValues = RuntimeCalculations(_delay, _gliderGunMode, _resetGeneration, _readGeneration);
-                    if (_gameOver)
-                    {
-                        break;
-                    }
-                    _readGeneration = false;
-                    if (_resetGeneration)
-                    {
-                        _resetGeneration = false;
-                    }
-                    Thread.Sleep(_delay);
-                }
-                if (!_gameOver)
-                {
-                    cki = Console.ReadKey(true);
-                    PauseGame(cki);
-                    _delay = ChangeDelay(_delay, cki);
-                }
-                else
-                {
-                    _gameOver = false;
-                    break;
-                }
-            } while (cki.Key != ConsoleKey.Escape);
-
-            _render.ExitMenuRender();
-            cki = Console.ReadKey(true);
-
-            if (cki.Key == ConsoleKey.R)
-            {
-                RestartGame();
-            }
-            else if (cki.Key == ConsoleKey.Escape)
-            {
-                Environment.Exit(0);
-            }
-        }
-
+        
         /// <summary>
         /// Method to count the current number of alive cells on the field.
         /// </summary>
@@ -376,22 +379,18 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method for creating, rendering and populating the field upon starting the game.
+        /// Method for calling necessary methods for the first rendering.
         /// </summary>
-        /// <param name="inputField">An array of a gamefield.</param>
-        /// <param name="loaded">Boolean parameter that represents whether the field was loaded from the file.</param>
-        /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
-        private void InitialCalculations(string[,] inputField, bool loaded, bool gliderGunMode)
+        private void FirstRenderCalculations()
         {
-            _gameField = inputField;
-
-            if (!loaded)
-            {
-                _gameField = _field.CreateField(_library, _engine, _rulesApplier, _render, inputField.GetLength(0), inputField.GetLength(1));
-                Console.Clear();
-                _render.RenderField(_gameField);
-                _gameField = _field.PopulateField(gliderGunMode);
-            }
+            _gameField = _field.CreateField(_library, _engine, _rulesApplier, _render, _length, _width);           
+            Console.Clear();
+            _render.RenderField(_gameField);
+            _gameField = _field.PopulateField(_gliderGunMode);
+            Console.Clear();
+            _render.BlankUIRender();
+            _render.RenderField(_gameField);
+            Thread.Sleep(2000);
             Console.Clear();
         }
 
@@ -404,7 +403,7 @@ namespace GameOfLife
         /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
         private Tuple<string[,], int, int, int> RuntimeCalculations(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration)
         {
-            int generationsAfterLoading = 1;
+            int generationsAfterLoading = 1; // Parameter for loading from file.
             int aliveCells = 0;
             int deadCells = 0;
 
@@ -422,13 +421,13 @@ namespace GameOfLife
             {
                 _rulesApplier.DetermineCellsDestiny(_gameField, gliderGunMode);
                 _gameField = _rulesApplier.FieldRefresh(_gameField);
-                aliveCells = _engine.CountAliveCells(_gameField);
+                aliveCells = CountAliveCells(_gameField);
                 deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - aliveCells;
             }
             if (generationsAfterLoading == 0)
             {
                 generationsAfterLoading++;
-                aliveCells = _engine.CountAliveCells(_gameField);
+                aliveCells = CountAliveCells(_gameField);
                 deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - aliveCells;
             }
             if (aliveCells == 0)
@@ -442,7 +441,14 @@ namespace GameOfLife
             }
             _returnValues = new Tuple<string[,], int, int, int>(_gameField, aliveCells, deadCells, _generation);
             _generation++;
-            _render.RenderField(_gameField);
+            if (_gameOver)
+            {
+                _render.RenderField(_gameField, true);
+            }
+            else
+            {
+                _render.RenderField(_gameField);
+            }
             return _returnValues;
         }
     }

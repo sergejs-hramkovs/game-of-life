@@ -9,14 +9,22 @@ namespace GameOfLife
         /// Method that draws the field.
         /// </summary>
         /// <param name="field">An array of a gamefield.</param>
-        public void RenderField(string[,] field)
+        public void RenderField(string[,] field, bool dead = false)
         {
             Console.WriteLine();
             for (int i = 0; i < field.GetLength(1); i++)
             {
                 for (int j = 0; j < field.GetLength(0); j++)
                 {
-                    Console.Write(" " + field[j, i]);
+                    if (!dead)
+                    {
+                        Console.Write(" " + field[j, i]);
+                    }
+                    else
+                    {
+                        Console.Write(" +");
+                    }
+                    
                 }
                 Console.WriteLine();
             }
@@ -47,7 +55,7 @@ namespace GameOfLife
         /// <summary>
         /// Method for rendering field size and mode choosing menu.
         /// </summary>
-        public void FieldSizeMenuRender(bool wrongInput, bool fileReadingError)
+        public void MainMenuRender(bool wrongInput, bool fileReadingError)
         {
             Console.Clear();
             if (fileReadingError)
@@ -126,6 +134,15 @@ namespace GameOfLife
         }
 
         /// <summary>
+        /// Method for rendering blank UI for 0 generation.
+        /// </summary>
+        public void BlankUIRender()
+        {
+            Console.WriteLine("Loading...");
+            Console.WriteLine("\n\n\n\n\n\n\nGeneration: 0");
+        }
+
+        /// <summary>
         /// Method to print the rules and the description of the game.
         /// </summary>
         public void PrintRules()
@@ -160,8 +177,8 @@ namespace GameOfLife
         public void GameOverRender(int generation)
         {
             Console.Clear();
-            Console.WriteLine("### THE WHOLE FIELD IS DEAD! ###");
-            Console.WriteLine($"\nGeneration: {generation}");
+            Console.WriteLine("\n\n\n\n\n\n### THE WHOLE FIELD IS DEAD! ###");
+            Console.WriteLine($"\nGenerations survived: {generation - 1}");
         }
     }
 }

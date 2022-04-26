@@ -8,7 +8,7 @@ namespace GameOfLife.Interfaces
 {
     public interface IRender
     {
-        void RenderField(string[,] field);
+        void RenderField(string[,] field, bool dead = false);
 
         void RuntimeUIRender(int aliveCells, int deadCells, int generation, int delay);
 
@@ -16,7 +16,7 @@ namespace GameOfLife.Interfaces
 
         void LibraryMenuRender();
 
-        void FieldSizeMenuRender(bool wrongIput, bool fileReadingError);
+        void MainMenuRender(bool wrongIput, bool fileReadingError);
 
         void GliderGunMenuRender();
 
@@ -27,5 +27,7 @@ namespace GameOfLife.Interfaces
         void PrintRules();
 
         void GameOverRender(int generation);
+
+        void BlankUIRender();
     }
 }

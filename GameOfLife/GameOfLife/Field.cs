@@ -149,8 +149,8 @@ namespace GameOfLife
 
             for (int i = 1; i <= aliveCellCount; i++)
             {
-                randomX = random.Next(0, _fieldArray.GetLength(0) - 1);
-                randomY = random.Next(0, _fieldArray.GetLength(1) - 1);
+                randomX = random.Next(0, _fieldArray.GetLength(0));
+                randomY = random.Next(0, _fieldArray.GetLength(1));
 
                 if (_fieldArray[randomX, randomY] != AliveCellSymbol)
                 {
