@@ -156,5 +156,12 @@ namespace GameOfLife
             Console.WriteLine("\n# Press any key to go back");
             Console.ReadKey();
         }
+
+        public void GameOverRender(int generation)
+        {
+            Console.Clear();
+            Console.WriteLine("### THE WHOLE FIELD IS DEAD! ###");
+            Console.WriteLine($"\nGeneration: {generation}");
+        }
     }
 }

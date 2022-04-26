@@ -146,7 +146,6 @@ namespace GameOfLife
             Random random = new();
             int aliveCellCount = random.Next(1, fieldWidth * fieldLength);
             int randomX, randomY;
-            int stuck = 0;
 
             for (int i = 1; i <= aliveCellCount; i++)
             {

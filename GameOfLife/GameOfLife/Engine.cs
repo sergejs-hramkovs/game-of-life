@@ -15,6 +15,7 @@ namespace GameOfLife
         private bool _gliderGunMode = false;
         private bool _resetGeneration = false;
         private bool _correctKeyPressed = false;
+        private bool _gameOver = false;
         private int _generation = 1;
         private IFileIO _file;
         private IRender _render;
@@ -171,6 +172,10 @@ namespace GameOfLife
                 {
                     Console.SetCursorPosition(0, 0);
                     _returnValues = RuntimeCalculations(_delay, _gliderGunMode, _resetGeneration, _readGeneration);
+                    if (_gameOver)
+                    {
+                        break;
+                    }
                     _readGeneration = false;
                     if (_resetGeneration)
                     {
@@ -178,9 +183,17 @@ namespace GameOfLife
                     }
                     Thread.Sleep(_delay);
                 }
-                cki = Console.ReadKey(true);
-                PauseGame(cki);
-                _delay = ChangeDelay(_delay, cki);
+                if (!_gameOver)
+                {
+                    cki = Console.ReadKey(true);
+                    PauseGame(cki);
+                    _delay = ChangeDelay(_delay, cki);
+                }
+                else
+                {
+                    _gameOver = false;
+                    break;
+                }
             } while (cki.Key != ConsoleKey.Escape);
 
             _render.ExitMenuRender();
@@ -418,7 +431,15 @@ namespace GameOfLife
                 aliveCells = _engine.CountAliveCells(_gameField);
                 deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - aliveCells;
             }
-            _render.RuntimeUIRender(aliveCells, deadCells, _generation, delay);
+            if (aliveCells == 0)
+            {
+                _render.GameOverRender(_generation);
+                _gameOver = true;
+            }
+            else
+            {
+                _render.RuntimeUIRender(aliveCells, deadCells, _generation, delay);
+            }
             _returnValues = new Tuple<string[,], int, int, int>(_gameField, aliveCells, deadCells, _generation);
             _generation++;
             _render.RenderField(_gameField);

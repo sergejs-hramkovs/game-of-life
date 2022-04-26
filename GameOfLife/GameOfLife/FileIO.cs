@@ -26,7 +26,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An array containing game field cells.</param>
         /// <returns>Returns new 1-dimensional array.</returns>
-        private string[] UniteRowsOfFieldCellIntoStrings(string[,] gameField)
+        private string[] ConvertGameFieldToArrayOfRows(string[,] gameField)
         {
             _gameField = gameField;
             _stringField = new string[_gameField.GetLength(1)];
@@ -46,7 +46,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="inputList">List of the game field cells.</param>
         /// <returns>Returns an array of the game field.</returns>
-        private string[,] ConvertListOfStringsIntoGameFieldArray(List<string> inputList)
+        private string[,] ConvertListOfRowsToGameField(List<string> inputList)
         {
             int x = 0;
             int y = 0;
@@ -98,7 +98,7 @@ namespace GameOfLife
         public void SaveGameFieldToFile(string[,] currentGameState, int aliveCount, int deadCount, int generation)
         {
             StreamWriter writer = new StreamWriter(_filePath);
-            UniteRowsOfFieldCellIntoStrings(currentGameState);
+            ConvertGameFieldToArrayOfRows(currentGameState);
             writer.WriteLine($"Generation: {generation}");
             writer.WriteLine($"Alive cells: {aliveCount}({(int)Math.Round(aliveCount / (double)(deadCount + aliveCount) * 100.0)}%)");
             writer.WriteLine($"Dead cells: {deadCount}");
@@ -133,7 +133,7 @@ namespace GameOfLife
                 FileReadingError = true;
                 return null;
             }
-            return ConvertListOfStringsIntoGameFieldArray(_stringList);
+            return ConvertListOfRowsToGameField(_stringList);
         }
     }
 }
