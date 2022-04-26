@@ -138,6 +138,80 @@ namespace GameOfLife
         }
 
         /// <summary>
+        /// Method for calling necessary methods for the first rendering.
+        /// </summary>
+        private void FirstRenderCalculations()
+        {
+            _gameField = _field.CreateField(_library, _engine, _rulesApplier, _render, _length, _width);
+            Console.Clear();
+            _render.RenderField(_gameField);
+            _gameField = _field.PopulateField(_gliderGunMode);
+            Console.Clear();
+            _render.BlankUIRender();
+            _render.RenderField(_gameField);
+            Thread.Sleep(2000);
+            Console.Clear();
+        }
+
+        /// <summary>
+        /// Method for calling methods that take care of all the necessary calculations during the runtime.
+        /// </summary>
+        /// <param name="delay">Delay between generations in miliseconds</param>
+        /// <param name="gliderGunMode">Parameter to enable the Glider Gun mode with dead borders rules.</param>
+        /// <param name="resetGeneration">Parameter to rest the number of generation after restart.</param>
+        /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
+        private Tuple<string[,], int, int, int> RuntimeCalculations(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration)
+        {
+            int generationsAfterLoading = 1; // Parameter for proper loading from file.
+            int aliveCells = 0;
+            int deadCells = 0;
+
+            if (resetGeneration)
+            {
+                _generation = 1;
+            }
+            if (readGeneration)
+            {
+                _generation = _file.Generation;
+                generationsAfterLoading = 0;
+                readGeneration = false;
+            }
+            if (generationsAfterLoading >= 1)
+            {
+                _rulesApplier.DetermineCellsDestiny(_gameField, gliderGunMode);
+                _gameField = _rulesApplier.FieldRefresh(_gameField);
+                aliveCells = CountAliveCells(_gameField);
+                deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - aliveCells;
+            }
+            if (generationsAfterLoading == 0)
+            {
+                generationsAfterLoading++;
+                aliveCells = CountAliveCells(_gameField);
+                deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - aliveCells;
+            }
+            if (aliveCells == 0)
+            {
+                _render.GameOverRender(_generation);
+                _gameOver = true;
+            }
+            else
+            {
+                _render.RuntimeUIRender(aliveCells, deadCells, _generation, delay);
+            }
+            _returnValues = new Tuple<string[,], int, int, int>(_gameField, aliveCells, deadCells, _generation);
+            _generation++;
+            if (_gameOver)
+            {
+                _render.RenderField(_gameField, true);
+            }
+            else
+            {
+                _render.RenderField(_gameField);
+            }
+            return _returnValues;
+        }
+
+        /// <summary>
         /// Method to change the time delay if LeftArrow or RightArrow keys are pressed.
         /// </summary>
         /// <param name="timeDelay">Time delay in miliseconds between each generation.</param>
@@ -376,80 +450,6 @@ namespace GameOfLife
                     wrongInput = true;
                 }
             }
-        }
-
-        /// <summary>
-        /// Method for calling necessary methods for the first rendering.
-        /// </summary>
-        private void FirstRenderCalculations()
-        {
-            _gameField = _field.CreateField(_library, _engine, _rulesApplier, _render, _length, _width);           
-            Console.Clear();
-            _render.RenderField(_gameField);
-            _gameField = _field.PopulateField(_gliderGunMode);
-            Console.Clear();
-            _render.BlankUIRender();
-            _render.RenderField(_gameField);
-            Thread.Sleep(2000);
-            Console.Clear();
-        }
-
-        /// <summary>
-        /// Method for calling methods that take care of all the necessary calculations during the runtime.
-        /// </summary>
-        /// <param name="delay">Delay between generations in miliseconds</param>
-        /// <param name="gliderGunMode">Parameter to enable the Glider Gun mode with dead borders rules.</param>
-        /// <param name="resetGeneration">Parameter to rest the number of generation after restart.</param>
-        /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
-        private Tuple<string[,], int, int, int> RuntimeCalculations(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration)
-        {
-            int generationsAfterLoading = 1; // Parameter for loading from file.
-            int aliveCells = 0;
-            int deadCells = 0;
-
-            if (resetGeneration)
-            {
-                _generation = 1;
-            }
-            if (readGeneration)
-            {
-                _generation = _file.Generation;
-                generationsAfterLoading = 0;
-                readGeneration = false;
-            }
-            if (generationsAfterLoading >= 1)
-            {
-                _rulesApplier.DetermineCellsDestiny(_gameField, gliderGunMode);
-                _gameField = _rulesApplier.FieldRefresh(_gameField);
-                aliveCells = CountAliveCells(_gameField);
-                deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - aliveCells;
-            }
-            if (generationsAfterLoading == 0)
-            {
-                generationsAfterLoading++;
-                aliveCells = CountAliveCells(_gameField);
-                deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - aliveCells;
-            }
-            if (aliveCells == 0)
-            {
-                _render.GameOverRender(_generation);
-                _gameOver = true;
-            }
-            else
-            {
-                _render.RuntimeUIRender(aliveCells, deadCells, _generation, delay);
-            }
-            _returnValues = new Tuple<string[,], int, int, int>(_gameField, aliveCells, deadCells, _generation);
-            _generation++;
-            if (_gameOver)
-            {
-                _render.RenderField(_gameField, true);
-            }
-            else
-            {
-                _render.RenderField(_gameField);
-            }
-            return _returnValues;
         }
     }
 }

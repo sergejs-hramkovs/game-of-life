@@ -24,7 +24,7 @@ namespace GameOfLife
                     {
                         Console.Write(" +");
                     }
-                    
+
                 }
                 Console.WriteLine();
             }
@@ -80,7 +80,7 @@ namespace GameOfLife
             Console.WriteLine("6. Custom");
             Console.WriteLine("\n# To load the field from the file press 'L'");
             Console.WriteLine("# To load Glider Gun Mode press 'G'");
-            Console.WriteLine("# Press 'F1' to read the rules and the description of the game");
+            Console.WriteLine("\n# Press 'F1' to read the rules and the description of the game");
         }
 
         /// <summary>
@@ -174,10 +174,18 @@ namespace GameOfLife
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Method for rendering the UI when all the cells on the field are dead.
+        /// </summary>
+        /// <param name="generation"></param>
         public void GameOverRender(int generation)
         {
             Console.Clear();
-            Console.WriteLine("\n\n\n\n\n\n### THE WHOLE FIELD IS DEAD! ###");
+            for (int i = 0; i < 5; i++)
+            {
+                Console.WriteLine("--------------------------------");
+            }
+            Console.WriteLine("\n### THE WHOLE FIELD IS DEAD! ###");
             Console.WriteLine($"\nGenerations survived: {generation - 1}");
         }
     }
