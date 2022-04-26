@@ -10,9 +10,7 @@ namespace GameOfLife.Interfaces
     {
         void RenderField(string[,] field);
 
-        void InitialRender(IField field, IEngine engine, IRulesApplier rulesApplier, ILibrary library, string[,] inputField, bool loaded, bool gliderGunMode);
-
-        Tuple<string[,], int, int, int> RuntimeRender(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration, int generationFromFile);
+        void RuntimeUIRender(int aliveCells, int deadCells, int generation, int delay);
 
         void SeedFieldMenuRender();
 

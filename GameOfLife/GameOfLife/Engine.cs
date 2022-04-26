@@ -8,7 +8,6 @@ namespace GameOfLife
         private int _length;
         private int _width;
         private int _delay = 1000;
-        private int _generation;
         private string[,] _gameField;
         private ConsoleKeyInfo _cki;
         private ConsoleKeyInfo _saveKey;
@@ -19,13 +18,17 @@ namespace GameOfLife
         private bool _gliderGunMode = false;
         private bool _resetGeneration = false;
         private bool _correctKeyPressed = false;
+        private int _generation = 1; // was 0 previously
+        private int _generationsAfterLoading = 1;
+        private int _aliveCells;
+        private int _deadCells;
         private IFileIO _file;
         private IRender _render;
         private IField _field;
         private ILibrary _library;
         private IRulesApplier _rulesApplier;
         private IEngine _engine;
-        private Tuple<string[,], int, int, int> _renderReturnValues;
+        private Tuple<string[,], int, int, int> _returnValues;
 
         /// <summary>
         /// Initiate field size choice.
@@ -130,7 +133,7 @@ namespace GameOfLife
                 switch (_saveKey.Key)
                 {
                     case ConsoleKey.S:
-                        _file.SaveGameFieldToFile(_renderReturnValues.Item1, _renderReturnValues.Item2, _renderReturnValues.Item3, _renderReturnValues.Item4);
+                        _file.SaveGameFieldToFile(_returnValues.Item1, _returnValues.Item2, _returnValues.Item3, _returnValues.Item4);
                         Console.WriteLine(SuccessfullySavedPhrase);
                         Console.ReadKey();
                         Console.Clear();
@@ -160,7 +163,7 @@ namespace GameOfLife
             {
                 _gameField = _field.CreateField(_library, _engine, _rulesApplier, _render, _length, _width);
             }
-            _render.InitialRender(_field, _engine, _rulesApplier, _library, _gameField, _loaded, _gliderGunMode);
+            InitialCalculations(_gameField, _loaded, _gliderGunMode);
             _loaded = false;
 
             do
@@ -168,7 +171,7 @@ namespace GameOfLife
                 while (Console.KeyAvailable == false)
                 {
                     Console.SetCursorPosition(0, 0);
-                    _renderReturnValues = _render.RuntimeRender(_delay, _gliderGunMode, _resetGeneration, _readGeneration, _generation);
+                    _returnValues = RuntimeCalculations(_delay, _gliderGunMode, _resetGeneration, _readGeneration);
                     _readGeneration = false;
                     if (_resetGeneration)
                     {
@@ -357,6 +360,67 @@ namespace GameOfLife
                     wrongInput = true;
                 }
             }
+        }
+
+        /// <summary>
+        /// Method for creating, rendering and populating the field upon starting the game.
+        /// </summary>
+        /// <param name="inputField">An array of a gamefield.</param>
+        /// <param name="loaded">Boolean parameter that represents whether the field was loaded from the file.</param>
+        /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
+        private void InitialCalculations(string[,] inputField, bool loaded, bool gliderGunMode)
+        {
+            _gameField = inputField;
+
+            if (!loaded)
+            {
+                _gameField = _field.CreateField(_library, _engine, _rulesApplier, _render, inputField.GetLength(0), inputField.GetLength(1));
+                Console.Clear();
+                _render.RenderField(_gameField);
+                _gameField = _field.PopulateField(gliderGunMode);
+            }
+            Console.Clear();
+        }
+
+        /// <summary>
+        /// Method for calling methods that take care of all the necessary calculations during the runtime.
+        /// </summary>
+        /// <param name="delay">Delay between generations in miliseconds</param>
+        /// <param name="gliderGunMode">Parameter to enable the Glider Gun mode with dead borders rules.</param>
+        /// <param name="resetGeneration">Parameter to rest the number of generation after restart.</param>
+        /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
+        private Tuple<string[,], int, int, int> RuntimeCalculations(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration)
+        {
+            if (resetGeneration)
+            {
+                _generation = 1;
+            }
+            if (readGeneration)
+            {
+                _generation = _file.Generation;
+                _generationsAfterLoading = 0;
+                _aliveCells = 1;
+                _deadCells = 1;
+                readGeneration = false;
+            }
+            if (_generationsAfterLoading >= 1)
+            {
+                _rulesApplier.DetermineCellsDestiny(_gameField, gliderGunMode);
+                _gameField = _rulesApplier.FieldRefresh(_gameField);
+                _aliveCells = _engine.CountAliveCells(_gameField);
+                _deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - _aliveCells;
+            }
+            if (_generationsAfterLoading == 0)
+            {
+                _generationsAfterLoading++;
+                _aliveCells = _engine.CountAliveCells(_gameField);
+                _deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - _aliveCells;
+            }
+            _render.RuntimeUIRender(_aliveCells, _deadCells, _generation, delay);
+            _returnValues = new Tuple<string[,], int, int, int>(_gameField, _aliveCells, _deadCells, _generation);
+            _generation++;
+            _render.RenderField(_gameField);    
+            return _returnValues;
         }
     }
 }
