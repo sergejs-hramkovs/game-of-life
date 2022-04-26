@@ -23,5 +23,7 @@ namespace GameOfLife.Interfaces
         void PauseMenuRender();
 
         void ExitMenuRender();
+
+        void PrintRules();
     }
 }

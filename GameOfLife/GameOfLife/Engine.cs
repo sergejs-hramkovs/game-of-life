@@ -291,7 +291,7 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.F1:
-                    Rules.PrintRules();
+                    _render.PrintRules();
                     break;
 
                 case ConsoleKey.Escape:
