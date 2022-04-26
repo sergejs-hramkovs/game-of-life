@@ -7,6 +7,7 @@ namespace GameOfLife
     {
         private List<(int x, int y)> _cellsToDie = new List<(int x, int y)>();
         private List<(int x, int y)> _cellsToBeBorn = new List<(int x, int y)>();
+        private int neighboursCount;
 
         /// <summary>
         /// Method to determine which cells die and which are reborn, judging by the number of alive neighbours.
@@ -15,8 +16,6 @@ namespace GameOfLife
         /// <param name="disableWrappingAroundField">Parameter if field's wrapping around is enabled.</param>
         public void DetermineCellsDestiny(string[,] field, bool disableWrappingAroundField)
         {
-            int neighboursCount;
-
             for (int i = 0; i < field.GetLength(0); i++)
             {
                 for (int j = 0; j < field.GetLength(1); j++)
@@ -24,7 +23,6 @@ namespace GameOfLife
                     if (field[i, j] == AliveCellSymbol)
                     {
                         neighboursCount = CountNeighbourCells(field, i, j, false);
-
                         switch (disableWrappingAroundField)
                         {
                             case false:
@@ -45,7 +43,6 @@ namespace GameOfLife
                     else
                     {
                         neighboursCount = CountNeighbourCells(field, i, j, true);
-
                         switch (disableWrappingAroundField)
                         {
                             case false:
@@ -79,7 +76,7 @@ namespace GameOfLife
         {
             bool wrappedX = false;
             bool wrappedY = false;
-            int neighboursCount = 0;
+            neighboursCount = 0;
 
             for (int neighbourX = x - 1; neighbourX <= x + 1; neighbourX++)
             {

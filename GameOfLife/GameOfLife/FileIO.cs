@@ -5,19 +5,16 @@ namespace GameOfLife
     public class FileIO : IFileIO
     {
         private string _filePath = @"C:\Users\sergejs.hramkovs\OneDrive - Accenture\Documents\field.txt";
-        private string _line;
         private string[,] _gameField;
         private string[] _stringField;
-        private StreamWriter _writer;
-        private StreamReader _reader;
         private List<string> _stringList = new List<string>();
         private bool _fileReadingError = false;
+        private int _generation;
         public bool FileReadingError
         {
             get => _fileReadingError;
             set => _fileReadingError = value;
         }
-        private int _generation;
         public int Generation
         {
             get => _generation;
@@ -33,6 +30,7 @@ namespace GameOfLife
         {
             _gameField = gameField;
             _stringField = new string[_gameField.GetLength(1)];
+
             for (int x = 0; x < _gameField.GetLength(0); x++)
             {
                 for (int y = 0; y < _gameField.GetLength(1); y++)
@@ -53,7 +51,6 @@ namespace GameOfLife
             int x = 0;
             int y = 0;
             string generationString = "";
-
             _gameField = new string[inputList[4].Length / 2, inputList.Count - 4];
 
             foreach (char character in inputList[0])
@@ -100,17 +97,18 @@ namespace GameOfLife
         /// <param name="generation">Current generation number.</param>
         public void SaveGameFieldToFile(string[,] currentGameState, int aliveCount, int deadCount, int generation)
         {
-            _writer = new StreamWriter(_filePath);
+            StreamWriter writer = new StreamWriter(_filePath);
             UniteRowsOfFieldCellIntoStrings(currentGameState);
-            _writer.WriteLine($"Generation: {generation}");
-            _writer.WriteLine($"Alive cells: {aliveCount}({(int)Math.Round(aliveCount / (double)(deadCount + aliveCount) * 100.0)}%)");
-            _writer.WriteLine($"Dead cells: {deadCount}");
-            _writer.WriteLine();
+            writer.WriteLine($"Generation: {generation}");
+            writer.WriteLine($"Alive cells: {aliveCount}({(int)Math.Round(aliveCount / (double)(deadCount + aliveCount) * 100.0)}%)");
+            writer.WriteLine($"Dead cells: {deadCount}");
+            writer.WriteLine();
+
             foreach (string line in _stringField)
             {
-                _writer.WriteLine(line);
+                writer.WriteLine(line);
             }
-            _writer.Close();
+            writer.Close();
         }
 
         /// <summary>
@@ -119,14 +117,16 @@ namespace GameOfLife
         /// <returns>Returns call to ListToField method, which returns an array of the gamefield.</returns>
         public string[,] LoadGameFieldFromFile()
         {
+            string line;
+
             try
             {
-                _reader = new StreamReader(_filePath);
-                while ((_line = _reader.ReadLine()) != null)
+                StreamReader reader = new StreamReader(_filePath);
+                while ((line = reader.ReadLine()) != null)
                 {
-                    _stringList.Add(_line);
+                    _stringList.Add(line);
                 }
-                _reader.Close();
+                reader.Close();
             }
             catch
             {

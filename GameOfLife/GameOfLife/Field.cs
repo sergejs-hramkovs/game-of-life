@@ -6,12 +6,10 @@ namespace GameOfLife
     public class Field : IField
     {
         private string[,] _fieldArray;
-        private string _inputCoordinate;
         private int _coordinateX;
         private int _coordinateY;
         private bool _wrongInput = false;
         private bool _stop = false;
-        private ConsoleKeyInfo _seedingChoice;
         private IRender _render;
         private ILibrary _library;
         private IEngine _engine;
@@ -36,7 +34,6 @@ namespace GameOfLife
                     _fieldArray[i, j] = DeadCellSymbol;
                 }
             }
-
             return _fieldArray;
         }
 
@@ -47,6 +44,8 @@ namespace GameOfLife
         /// <returns>Returns an array of a seeded gamefield.</returns>
         public string[,] PopulateField(bool gliderGunMode)
         {
+            ConsoleKeyInfo seedingChoice;
+
             while (true)
             {
                 if (_wrongInput)
@@ -65,10 +64,10 @@ namespace GameOfLife
                 else
                 {
                     _render.SeedFieldMenuRender();
-                    _seedingChoice = Console.ReadKey(true);
+                    seedingChoice = Console.ReadKey(true);
                 }
 
-                switch (_seedingChoice.Key)
+                switch (seedingChoice.Key)
                 {
                     case ConsoleKey.D1:
                         ManualSeeding();
@@ -109,7 +108,6 @@ namespace GameOfLife
                     Console.WriteLine("\n" + WrongInputPhrase);
                     _wrongInput = false;
                 }
-
                 if (!EnterCoordinates())
                 {
                     _wrongInput = true;
@@ -119,7 +117,6 @@ namespace GameOfLife
                 {
                     _wrongInput = false;
                 }
-
                 if (!_stop)
                 {
                     if (_fieldArray[_coordinateX, _coordinateY] == DeadCellSymbol)
@@ -234,23 +231,27 @@ namespace GameOfLife
         /// <returns>Returns "stop = true" if the process of entering coordinates was stopped. Returns false if there is wrong input.</returns>
         private bool EnterCoordinates()
         {
+            string inputCoordinate;
+
             Console.WriteLine(StopSeedingPhrase);
             Console.Write(EnterXPhrase);
-            _inputCoordinate = Console.ReadLine();
-            if (_inputCoordinate == StopWord)
+            inputCoordinate = Console.ReadLine();
+
+            if (inputCoordinate == StopWord)
             {
                 _stop = true;
             }
-            else if (int.TryParse(_inputCoordinate, out var resultX) && resultX >= 0 && resultX < _fieldArray.GetLength(0))
+            else if (int.TryParse(inputCoordinate, out var resultX) && resultX >= 0 && resultX < _fieldArray.GetLength(0))
             {
                 _coordinateX = resultX;
                 Console.Write(EnterYPhrase);
-                _inputCoordinate = Console.ReadLine();
-                if (_inputCoordinate == StopWord)
+                inputCoordinate = Console.ReadLine();
+
+                if (inputCoordinate == StopWord)
                 {
                     _stop = true;
                 }
-                else if (int.TryParse(_inputCoordinate, out var resultY) && resultY >= 0 && resultY < _fieldArray.GetLength(1))
+                else if (int.TryParse(inputCoordinate, out var resultY) && resultY >= 0 && resultY < _fieldArray.GetLength(1))
                 {
                     _coordinateY = resultY;
                 }

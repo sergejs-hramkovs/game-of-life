@@ -53,6 +53,7 @@ namespace GameOfLife
             if (fileReadingError)
             {
                 Console.WriteLine(FileNotFoundPhrase);
+                Thread.Sleep(1000);
             }
             else if (wrongInput)
             {
