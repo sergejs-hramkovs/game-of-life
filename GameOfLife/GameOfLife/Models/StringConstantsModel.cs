@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameOfLife
 {
-    public static class StringConstants
+    public static class StringConstantsModel
     {
         public const string WrongInputPhrase = "Wrong Input!";
 

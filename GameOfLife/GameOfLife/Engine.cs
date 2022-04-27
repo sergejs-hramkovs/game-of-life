@@ -1,13 +1,12 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
-using static GameOfLife.StringConstants;
+using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
     public class Engine : IEngine
     {
         private int _delay = 1000;
-        private int _generation = 1;
         private int _gliderGunType = 0;
         private bool _wrongInput = false;
         private bool _loaded = false;
@@ -34,11 +33,6 @@ namespace GameOfLife
         {
             get => _wrongInput;
             set => _wrongInput = value;
-        }
-        public int Generation
-        {
-            get => _generation;
-            set => _generation = value;
         }
         public bool Loaded
         {
@@ -207,11 +201,11 @@ namespace GameOfLife
 
             if (resetGeneration)
             {
-                _generation = 1;
+                _gameField.Generation = 1;
             }
             if (readGeneration)
             {
-                _generation = _file.Generation;
+                _gameField.Generation = _file.Generation;
                 generationsAfterLoading = 0;
                 readGeneration = false;
             }
@@ -230,15 +224,15 @@ namespace GameOfLife
             }
             if (aliveCells == 0)
             {
-                _render.GameOverRender(_generation);
+                _render.GameOverRender(_gameField.Generation);
                 _gameOver = true;
             }
             else
             {
-                _render.RuntimeUIRender(aliveCells, deadCells, _generation, delay);
+                _render.RuntimeUIRender(aliveCells, deadCells, _gameField.Generation, delay);
             }
-            _returnValues = new Tuple<int, int, int>(aliveCells, deadCells, _generation);
-            _generation++;
+            _returnValues = new Tuple<int, int, int>(aliveCells, deadCells, _gameField.Generation);
+            _gameField.Generation++;
             if (_gameOver)
             {
                 _render.RenderField(_gameField, true);

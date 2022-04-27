@@ -1,4 +1,4 @@
-﻿using static GameOfLife.StringConstants;
+﻿using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife.Models
 {
@@ -9,6 +9,7 @@ namespace GameOfLife.Models
         private int _length;
         private int _width;
         private int _area;
+        private int _generation;
         public string[,] GameField
         {
             get => _gameField;
@@ -26,6 +27,11 @@ namespace GameOfLife.Models
         {
             get => _area;
         }
+        public int Generation
+        {
+            get => _generation;
+            set => _generation = value;
+        }
 
         public GameFieldModel(int length, int width)
         {
@@ -33,6 +39,7 @@ namespace GameOfLife.Models
             _length = _gameField.GetLength(0);
             _width = _gameField.GetLength(1);
             _area = Length * Width;
+            _generation = 1;
 
             for (int i = 0; i < Length; i++)
             {

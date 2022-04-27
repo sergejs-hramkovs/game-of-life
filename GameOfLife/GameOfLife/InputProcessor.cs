@@ -1,6 +1,6 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
-using static GameOfLife.StringConstants;
+using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
@@ -57,7 +57,7 @@ namespace GameOfLife
                     _gameField = _file.LoadGameFieldFromFile();
                     if (!_file.FileReadingError)
                     {
-                        _engine.Generation = _file.Generation;
+                        _gameField.Generation = _file.Generation;
                         _engine.Loaded = true;
                         _engine.ReadGeneration = true;
                         _engine.CorrectKeyPressed = true;

@@ -12,8 +12,6 @@ namespace GameOfLife.Interfaces
 
         bool WrongInput { get; set; }
 
-        int Generation { get; set; }
-
         bool Loaded { get; set; }
 
         bool ReadGeneration { get; set; }

@@ -1,6 +1,6 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
-using static GameOfLife.StringConstants;
+using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
