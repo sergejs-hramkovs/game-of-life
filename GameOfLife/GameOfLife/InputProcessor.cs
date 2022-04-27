@@ -8,12 +8,16 @@ namespace GameOfLife
         private IEngine _engine;
         private IFileIO _file;
         private IRender _render;
+        private IField _field;
+        private ILibrary _library;
 
-        public InputProcessor(IEngine engine, IFileIO file, IRender render)
+        public InputProcessor(IEngine engine, IFileIO file, IRender render, IField field, ILibrary library)
         {
             _engine = engine;
             _file = file;
             _render = render;
+            _field = field;
+            _library = library;
         }
         /// <summary>
         /// Method to check user input in the main menu.
@@ -151,6 +155,110 @@ namespace GameOfLife
                 {
                     wrongInput = true;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Method to process user input coordinates.
+        /// </summary>
+        /// <returns>Returns "stop = true" if the process of entering coordinates was stopped. Returns false if there is wrong input.</returns>
+        public bool EnterCoordinates()
+        {
+            string inputCoordinate;
+
+            Console.WriteLine(StopSeedingPhrase);
+            Console.Write(EnterXPhrase);
+            inputCoordinate = Console.ReadLine();
+
+            if (inputCoordinate == StopWord)
+            {
+                _field.Stop = true;
+            }
+            else if (int.TryParse(inputCoordinate, out var resultX) && resultX >= 0 && resultX < _field.FieldArray.GetLength(0))
+            {
+                _field.CoordinateX = resultX;
+                Console.Write(EnterYPhrase);
+                inputCoordinate = Console.ReadLine();
+
+                if (inputCoordinate == StopWord)
+                {
+                    _field.Stop = true;
+                }
+                else if (int.TryParse(inputCoordinate, out var resultY) && resultY >= 0 && resultY < _field.FieldArray.GetLength(1))
+                {
+                    _field.CoordinateY = resultY;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Method to check user input in the populate the field menu.
+        /// </summary>
+        /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
+        /// <returns>Returns 'true' if the correct key is pressed, otherwise 'false'</returns>
+        public bool CheckInputPopulateFieldMenu(ConsoleKeyInfo keyPressed)
+        {
+            switch (keyPressed.Key)
+            {
+                case ConsoleKey.D1:
+                    _field.ManualSeeding();
+                    return true;
+
+                case ConsoleKey.D2:
+                    _field.RandomSeeding(_field.FieldArray.GetLength(0), _field.FieldArray.GetLength(1));
+                    return true;
+
+                case ConsoleKey.D3:
+                    Console.Clear();
+                    _field.LibrarySeeding(_engine.GliderGunMode, _engine.GliderGunType);
+                    return true;
+
+                default:
+                    _engine.WrongInput = true;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Method to check user input in the library menu.
+        /// </summary>
+        /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
+        /// <returns>Returns 'true' if the 'Escape' key is pressed, otherwise 'false'</returns>
+        public bool CheckInputLibraryMenu(ConsoleKeyInfo keyPressed)
+        {
+            switch (keyPressed.Key)
+            {
+                case ConsoleKey.Escape:
+                    return true;
+
+                case ConsoleKey.D1:
+                    _field.CallSpawningMethod(_library.SpawnGlider);
+                    return false;
+
+                case ConsoleKey.D2:
+                    _field.CallSpawningMethod(_library.SpawnLightWeight);
+                    return false;
+
+                case ConsoleKey.D3:
+                    _field.CallSpawningMethod(_library.SpawnMiddleWeight);
+                    return false;
+
+                case ConsoleKey.D4:
+                    _field.CallSpawningMethod(_library.SpawnHeavyWeight);
+                    return false;
+
+                default:
+                    _engine.WrongInput = true;
+                    return false;
             }
         }
     }

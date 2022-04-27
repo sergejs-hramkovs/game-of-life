@@ -14,18 +14,41 @@ namespace GameOfLife
         private ILibrary _library;
         private IEngine _engine;
         private IRulesApplier _rulesApplier;
+        private IInputProcessor _inputProcessor;
+        public string[,] FieldArray
+        {
+            get => _fieldArray;
+            set => _fieldArray = value;
+        }
+        public int CoordinateX
+        {
+            get => _coordinateX;
+            set => _coordinateX = value;
+        }
+        public int CoordinateY
+        {
+            get => _coordinateY;
+            set => _coordinateY = value;
+        }
+        public bool Stop
+        {
+            get => _stop;
+            set => _stop = value;
+        }
 
         /// <summary>
         /// Initial creation of an empty gaming field.
         /// </summary>
         /// <returns>Returns an array of a gamefield seeded with dead cells(.) .</returns>
-        public string[,] CreateField(ILibrary library, IEngine engine, IRulesApplier rulesApplier, IRender render, int fieldLength, int fieldWidth)
+        public string[,] CreateField(ILibrary library, IEngine engine, IRulesApplier rulesApplier, IRender render, IInputProcessor processor,
+            int fieldLength, int fieldWidth)
         {
             _library = library;
             _fieldArray = new string[fieldLength, fieldWidth];
             _engine = engine;
             _rulesApplier = rulesApplier;
             _render = render;
+            _inputProcessor = processor;
 
             for (int i = 0; i < fieldLength; i++)
             {
@@ -66,25 +89,9 @@ namespace GameOfLife
                     _render.SeedFieldMenuRender();
                     seedingChoice = Console.ReadKey(true);
                 }
-
-                switch (seedingChoice.Key)
+                if (_inputProcessor.CheckInputPopulateFieldMenu(seedingChoice))
                 {
-                    case ConsoleKey.D1:
-                        ManualSeeding();
-                        return _fieldArray;
-
-                    case ConsoleKey.D2:
-                        RandomSeeding(_fieldArray.GetLength(0), _fieldArray.GetLength(1));
-                        return _fieldArray;
-
-                    case ConsoleKey.D3:
-                        Console.Clear();
-                        LibrarySeeding(gliderGunMode, gliderGunType);
-                        return _fieldArray;
-
-                    default:
-                        _wrongInput = true;
-                        break;
+                    return _fieldArray;
                 }
             }
         }
@@ -93,7 +100,7 @@ namespace GameOfLife
         /// Cell seeding coordinates are entered manually by the user.
         /// </summary>
         /// <returns>Returns an array of manually seeded gamefield.</returns>
-        private string[,] ManualSeeding()
+        public string[,] ManualSeeding()
         {
             while (true)
             {
@@ -108,7 +115,7 @@ namespace GameOfLife
                     Console.WriteLine("\n" + WrongInputPhrase);
                     _wrongInput = false;
                 }
-                if (!EnterCoordinates())
+                if (!_inputProcessor.EnterCoordinates())
                 {
                     _wrongInput = true;
                     continue;
@@ -141,7 +148,7 @@ namespace GameOfLife
         /// Cell amount and coordinates are generated automatically and randomly.
         /// </summary>
         /// <returns>Returns an array of randomly seeded gamefield.</returns>
-        private string[,] RandomSeeding(int fieldLength, int fieldWidth)
+        public string[,] RandomSeeding(int fieldLength, int fieldWidth)
         {
             Random random = new();
             int aliveCellCount = random.Next(1, fieldWidth * fieldLength);
@@ -169,7 +176,7 @@ namespace GameOfLife
         /// </summary
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
         /// <returns>Returns an array of a gamefield seeded with objects from the library.</returns>
-        private string[,] LibrarySeeding(bool gliderGunMode, int gliderGunType)
+        public string[,] LibrarySeeding(bool gliderGunMode, int gliderGunType)
         {
             ConsoleKeyInfo libraryChoice;
 
@@ -208,83 +215,20 @@ namespace GameOfLife
                 _render.LibraryMenuRender();
                 libraryChoice = Console.ReadKey(true);
 
-                switch (libraryChoice.Key)
+                if (_inputProcessor.CheckInputLibraryMenu(libraryChoice))
                 {
-                    case ConsoleKey.Escape:
-                        return _fieldArray;
-
-                    case ConsoleKey.D1:
-                        CallSpawningMethod(_library.SpawnGlider);
-                        break;
-
-                    case ConsoleKey.D2:
-                        CallSpawningMethod(_library.SpawnLightWeight);
-                        break;
-
-                    case ConsoleKey.D3:
-                        CallSpawningMethod(_library.SpawnMiddleWeight);
-                        break;
-
-                    case ConsoleKey.D4:
-                        CallSpawningMethod(_library.SpawnHeavyWeight);
-                        break;
-
-                    default:
-                        _wrongInput = true;
-                        break;
+                    return _fieldArray;
                 }
             }
-        }
-
-        /// <summary>
-        /// Method to process user input coordinates.
-        /// </summary>
-        /// <returns>Returns "stop = true" if the process of entering coordinates was stopped. Returns false if there is wrong input.</returns>
-        private bool EnterCoordinates()
-        {
-            string inputCoordinate;
-
-            Console.WriteLine(StopSeedingPhrase);
-            Console.Write(EnterXPhrase);
-            inputCoordinate = Console.ReadLine();
-
-            if (inputCoordinate == StopWord)
-            {
-                _stop = true;
-            }
-            else if (int.TryParse(inputCoordinate, out var resultX) && resultX >= 0 && resultX < _fieldArray.GetLength(0))
-            {
-                _coordinateX = resultX;
-                Console.Write(EnterYPhrase);
-                inputCoordinate = Console.ReadLine();
-
-                if (inputCoordinate == StopWord)
-                {
-                    _stop = true;
-                }
-                else if (int.TryParse(inputCoordinate, out var resultY) && resultY >= 0 && resultY < _fieldArray.GetLength(1))
-                {
-                    _coordinateY = resultY;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-            return true;
         }
 
         /// <summary>
         /// Method to call one of the methods for spawning an object from the library, depending on the pressed key.
         /// </summary>
         /// <param name="SpawnLibraryObject">Parameter that represents the method for spawning an object from the library that will be called.</param>
-        private void CallSpawningMethod(Func<string[,], int, int, string[,]> SpawnLibraryObject)
+        public void CallSpawningMethod(Func<string[,], int, int, string[,]> SpawnLibraryObject)
         {
-            if (EnterCoordinates() && !_stop)
+            if (_inputProcessor.EnterCoordinates() && !_stop)
             {
                 SpawnLibraryObject(_fieldArray, _coordinateX, _coordinateY);
             }
@@ -297,45 +241,6 @@ namespace GameOfLife
                 _wrongInput = true;
             }
             Console.Clear();
-        }
-
-        private void ChooseGliderGun()
-        {
-            ConsoleKeyInfo gliderGunChoice;
-
-            while (true)
-            {
-                if (_wrongInput)
-                {
-                    Console.Clear();
-                    _render.RenderField(_fieldArray);
-                    Console.WriteLine("\n" + WrongInputPhrase);
-                    _wrongInput = false;
-                }
-                gliderGunChoice = Console.ReadKey(true);
-
-                switch (gliderGunChoice.Key)
-                {
-                    case ConsoleKey.Escape:
-                        break;
-
-                    case ConsoleKey.D1:
-                        _library.SpawnGosperGliderGun(_fieldArray, 1, 1);
-                        break;
-
-                    case ConsoleKey.D2:
-                        _library.SpawnSimkinGliderGun(_fieldArray, 0, 5);
-                        break;
-
-                    default:
-                        _wrongInput = true;
-                        break;
-                }
-                if (!_wrongInput)
-                {
-                    break;
-                }
-            }
         }
     }
 }

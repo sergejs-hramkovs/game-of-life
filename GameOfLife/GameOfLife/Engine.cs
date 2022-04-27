@@ -196,7 +196,7 @@ namespace GameOfLife
         /// </summary>
         private void FirstRenderCalculations()
         {
-            _gameField = _field.CreateField(_library, _engine, _rulesApplier, _render, _length, _width);
+            _gameField = _field.CreateField(_library, _engine, _rulesApplier, _render, _inputProcessor, _length, _width);
             Console.Clear();
             _render.RenderField(_gameField);
             _gameField = _field.PopulateField(_gliderGunMode, _gliderGunType);
@@ -266,44 +266,6 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to change the time delay if LeftArrow or RightArrow keys are pressed.
-        /// </summary>
-        /// <param name="timeDelay">Time delay in miliseconds between each generation.</param>
-        /// <param name="keyPressed">Parameters which stores Left and Right Arrow key presses.</param>
-        /// <returns>Returns changed time delay.</returns>
-        private int ChangeDelay(int timeDelay, ConsoleKeyInfo keyPressed)
-        {
-            switch (keyPressed.Key)
-            {
-                case ConsoleKey.LeftArrow:
-                    if (timeDelay <= 100 && timeDelay > 10)
-                    {
-                        timeDelay -= 10;
-                    }
-                    else if (timeDelay > 100)
-                    {
-                        timeDelay -= 100;
-                    }
-                    break;
-
-                case ConsoleKey.RightArrow:
-                    if (timeDelay < 2000)
-                    {
-                        if (timeDelay < 100)
-                        {
-                            timeDelay += 10;
-                        }
-                        else
-                        {
-                            timeDelay += 100;
-                        }
-                    }
-                    break;
-            }
-            return timeDelay;
-        }
-
-        /// <summary>
         /// Method to pause the game by pressing the Spacebar.
         /// </summary>
         /// <param name="keyPressed">Parameter which stores Spacebar key press.</param>
@@ -339,7 +301,20 @@ namespace GameOfLife
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Method to restart the game without rerunning the application.
+        /// </summary>
+        private void RestartGame()
+        {
+            _gliderGunMode = false;
+            _resetGeneration = true;
+            _delay = 1000;
+            Console.Clear();
+            StartGame(_render, _file, _field, _library, _rulesApplier, _engine, _inputProcessor);
+            RunGame();
+        }
+
         /// <summary>
         /// Method to count the current number of alive cells on the field.
         /// </summary>
@@ -363,17 +338,41 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to restart the game without rerunning the application.
+        /// Method to change the time delay if LeftArrow or RightArrow keys are pressed.
         /// </summary>
-        private void RestartGame()
+        /// <param name="timeDelay">Time delay in miliseconds between each generation.</param>
+        /// <param name="keyPressed">Parameters which stores Left and Right Arrow key presses.</param>
+        /// <returns>Returns changed time delay.</returns>
+        private int ChangeDelay(int timeDelay, ConsoleKeyInfo keyPressed)
         {
-            _gliderGunMode = false;
-            _resetGeneration = true;
-            _delay = 1000;
-            Console.Clear();
-            _field = new Field();
-            StartGame(_render, _file, _field, _library, _rulesApplier, _engine, _inputProcessor);
-            RunGame();
+            switch (keyPressed.Key)
+            {
+                case ConsoleKey.LeftArrow:
+                    if (timeDelay <= 100 && timeDelay > 10)
+                    {
+                        timeDelay -= 10;
+                    }
+                    else if (timeDelay > 100)
+                    {
+                        timeDelay -= 100;
+                    }
+                    break;
+
+                case ConsoleKey.RightArrow:
+                    if (timeDelay < 2000)
+                    {
+                        if (timeDelay < 100)
+                        {
+                            timeDelay += 10;
+                        }
+                        else
+                        {
+                            timeDelay += 100;
+                        }
+                    }
+                    break;
+            }
+            return timeDelay;
         }
     }
 }

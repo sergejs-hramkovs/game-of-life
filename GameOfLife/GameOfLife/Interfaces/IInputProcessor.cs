@@ -13,5 +13,11 @@ namespace GameOfLife.Interfaces
         void CheckInputGliderGunMenu(ConsoleKeyInfo keyPressed);
 
         void EnterFieldDimensions(bool wrongInput);
+
+        bool EnterCoordinates();
+
+        bool CheckInputPopulateFieldMenu(ConsoleKeyInfo keyPressed);
+
+        bool CheckInputLibraryMenu(ConsoleKeyInfo keyPressed);
     }
 }
