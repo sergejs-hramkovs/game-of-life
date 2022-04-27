@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameOfLife.Models;
 
 namespace GameOfLife.Interfaces
 {
     public interface IRulesApplier
     {
-        void DetermineCellsDestiny(string[,] field, bool disableWrappingAroundField);
+        void DetermineCellsDestiny(GameFieldModel gameField, bool disableWrappingAroundField);
 
-        string[,] FieldRefresh(string[,] field);
+        void FieldRefresh(GameFieldModel gameField);
     }
 }

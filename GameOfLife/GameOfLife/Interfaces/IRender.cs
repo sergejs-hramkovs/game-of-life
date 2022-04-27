@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameOfLife.Models;
 
 namespace GameOfLife.Interfaces
 {
     public interface IRender
     {
-        void RenderField(string[,] field, bool dead = false);
+        void RenderField(GameFieldModel gameField, bool dead = false);
 
         void RuntimeUIRender(int aliveCells, int deadCells, int generation, int delay);
 

@@ -1,4 +1,5 @@
 ﻿using GameOfLife.Interfaces;
+using GameOfLife.Models;
 using static GameOfLife.StringConstants;
 
 namespace GameOfLife
@@ -14,15 +15,15 @@ namespace GameOfLife
         /// </summary>
         /// <param name="field">An array of the gamefield cells.</param>
         /// <param name="disableWrappingAroundField">Parameter if field's wrapping around is enabled.</param>
-        public void DetermineCellsDestiny(string[,] field, bool disableWrappingAroundField)
+        public void DetermineCellsDestiny(GameFieldModel gameField, bool disableWrappingAroundField)
         {
-            for (int i = 0; i < field.GetLength(0); i++)
+            for (int i = 0; i < gameField.Length; i++)
             {
-                for (int j = 0; j < field.GetLength(1); j++)
+                for (int j = 0; j < gameField.Width; j++)
                 {
-                    if (field[i, j] == AliveCellSymbol)
+                    if (gameField.GameField[i, j] == AliveCellSymbol)
                     {
-                        neighboursCount = CountNeighbourCells(field, i, j, false);
+                        neighboursCount = CountNeighbourCells(gameField, i, j, false);
                         switch (disableWrappingAroundField)
                         {
                             case false:
@@ -33,7 +34,7 @@ namespace GameOfLife
                                 break;
 
                             case true:
-                                if (neighboursCount < 2 || neighboursCount > 3 || i == field.GetLength(0) - 1 || j == field.GetLength(1) - 1)
+                                if (neighboursCount < 2 || neighboursCount > 3 || i == gameField.Length - 1 || j == gameField.Width - 1)
                                 {
                                     _cellsToDie.Add((i, j));
                                 }
@@ -42,7 +43,7 @@ namespace GameOfLife
                     }
                     else
                     {
-                        neighboursCount = CountNeighbourCells(field, i, j, true);
+                        neighboursCount = CountNeighbourCells(gameField, i, j, true);
                         switch (disableWrappingAroundField)
                         {
                             case false:
@@ -53,7 +54,7 @@ namespace GameOfLife
                                 break;
 
                             case true:
-                                if (neighboursCount == 3 && i != field.GetLength(0) - 1 && j != field.GetLength(1) - 1)
+                                if (neighboursCount == 3 && i != gameField.Length - 1 && j != gameField.Width - 1)
                                 {
                                     _cellsToBeBorn.Add((i, j));
                                 }
@@ -72,7 +73,7 @@ namespace GameOfLife
         /// <param name="y">Vertical coordinate of a cell which neighbours are being counted</param>
         /// <param name="checkDeadCell">Parameter which shows whether the cell, which neighbours are being counted, is alive or dead.</param>
         /// <returns>Returns the number of cell's neighbours.</returns>
-        private int CountNeighbourCells(string[,] field, int x, int y, bool checkDeadCell)
+        private int CountNeighbourCells(GameFieldModel gameField, int x, int y, bool checkDeadCell)
         {
             bool wrappedX = false;
             bool wrappedY = false;
@@ -84,15 +85,15 @@ namespace GameOfLife
                 {
                     if (neighbourX == -1)
                     {
-                        neighbourX = field.GetLength(0) - 1;
+                        neighbourX = gameField.Length - 1;
                         wrappedX = true;
                     }
                     if (neighbourY == -1)
                     {
-                        neighbourY = field.GetLength(1) - 1;
+                        neighbourY = gameField.Width - 1;
                         wrappedY = true;
                     }
-                    if (field[neighbourX % field.GetLength(0), neighbourY % field.GetLength(1)] == AliveCellSymbol)
+                    if (gameField.GameField[neighbourX % gameField.Length, neighbourY % gameField.Width] == AliveCellSymbol)
                     {
                         neighboursCount++;
                     }
@@ -120,19 +121,18 @@ namespace GameOfLife
         /// </summary>
         /// <param name="field">An array of a gamefield.</param>
         /// <returns>Returns an array of a gamefield after applying the rules of the game.</returns>
-        public string[,] FieldRefresh(string[,] field)
+        public void FieldRefresh(GameFieldModel gameField)
         {
             foreach ((int x, int y) cell in _cellsToDie)
             {
-                field[cell.x, cell.y] = DeadCellSymbol;
+                gameField.GameField[cell.x, cell.y] = DeadCellSymbol;
             }
             foreach ((int x, int y) cell in _cellsToBeBorn)
             {
-                field[cell.x, cell.y] = AliveCellSymbol;
+                gameField.GameField[cell.x, cell.y] = AliveCellSymbol;
             }
             _cellsToBeBorn.Clear();
             _cellsToDie.Clear();
-            return field;
         }
     }
 }

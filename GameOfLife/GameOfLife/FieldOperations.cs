@@ -1,11 +1,11 @@
 ﻿using GameOfLife.Interfaces;
+using GameOfLife.Models;
 using static GameOfLife.StringConstants;
 
 namespace GameOfLife
 {
-    public class Field : IField
+    public class FieldOperations : IFieldOperations
     {
-        private string[,] _fieldArray;
         private int _coordinateX;
         private int _coordinateY;
         private bool _wrongInput = false;
@@ -15,11 +15,6 @@ namespace GameOfLife
         private IEngine _engine;
         private IRulesApplier _rulesApplier;
         private IInputProcessor _inputProcessor;
-        public string[,] FieldArray
-        {
-            get => _fieldArray;
-            set => _fieldArray = value;
-        }
         public int CoordinateX
         {
             get => _coordinateX;
@@ -36,30 +31,13 @@ namespace GameOfLife
             set => _stop = value;
         }
 
-        /// <summary>
-        /// Initial creation of an empty gaming field.
-        /// </summary
-        /// <param name="fieldLength">The horizontal dimension of the field.</param>
-        /// <param name="fieldWidth">The vertical dimenstion of the field.</param>
-        /// <returns>Returns an array of a gamefield seeded with dead cells(.) .</returns>
-        public string[,] CreateField(ILibrary library, IEngine engine, IRulesApplier rulesApplier, IRender render, IInputProcessor processor,
-            int fieldLength, int fieldWidth)
+        public FieldOperations(ILibrary library, IEngine engine, IRulesApplier rulesApplier, IRender render, IInputProcessor processor)
         {
             _library = library;
-            _fieldArray = new string[fieldLength, fieldWidth];
             _engine = engine;
             _rulesApplier = rulesApplier;
             _render = render;
             _inputProcessor = processor;
-
-            for (int i = 0; i < fieldLength; i++)
-            {
-                for (int j = 0; j < fieldWidth; j++)
-                {
-                    _fieldArray[i, j] = DeadCellSymbol;
-                }
-            }
-            return _fieldArray;
         }
 
         /// <summary>
@@ -68,7 +46,7 @@ namespace GameOfLife
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
         /// <param name="gliderGunType">Parameter that represents the chosen type of the glider gun.</param>
         /// <returns>Returns an array of a seeded gamefield.</returns>
-        public string[,] PopulateField(bool gliderGunMode, int gliderGunType)
+        public GameFieldModel PopulateField(GameFieldModel gameField, bool gliderGunMode, int gliderGunType)
         {
             ConsoleKeyInfo seedingChoice;
 
@@ -77,15 +55,15 @@ namespace GameOfLife
                 if (_wrongInput)
                 {
                     Console.Clear();
-                    _render.RenderField(_fieldArray);
+                    _render.RenderField(gameField);
                     Console.WriteLine("\n" + WrongInputPhrase);
                     _wrongInput = false;
                 }
                 if (gliderGunMode)
                 {
                     Console.Clear();
-                    LibrarySeeding(gliderGunMode, gliderGunType);
-                    return _fieldArray;
+                    LibrarySeeding(gameField, gliderGunMode, gliderGunType);
+                    return gameField;
                 }
                 else
                 {
@@ -94,7 +72,7 @@ namespace GameOfLife
                 }
                 if (_inputProcessor.CheckInputPopulateFieldMenu(seedingChoice))
                 {
-                    return _fieldArray;
+                    return gameField;
                 }
             }
         }
@@ -103,18 +81,18 @@ namespace GameOfLife
         /// Cell seeding coordinates are entered manually by the user.
         /// </summary>
         /// <returns>Returns an array of manually seeded gamefield.</returns>
-        public string[,] ManualSeeding()
+        public GameFieldModel ManualSeeding(GameFieldModel gameField)
         {
             while (true)
             {
                 Console.Clear();
                 if (!_wrongInput)
                 {
-                    _render.RenderField(_fieldArray);
+                    _render.RenderField(gameField);
                 }
                 else if (_wrongInput)
                 {
-                    _render.RenderField(_fieldArray);
+                    _render.RenderField(gameField);
                     Console.WriteLine("\n" + WrongInputPhrase);
                     _wrongInput = false;
                 }
@@ -129,13 +107,13 @@ namespace GameOfLife
                 }
                 if (!_stop)
                 {
-                    if (_fieldArray[_coordinateX, _coordinateY] == DeadCellSymbol)
+                    if (gameField.GameField[_coordinateX, _coordinateY] == DeadCellSymbol)
                     {
-                        _fieldArray[_coordinateX, _coordinateY] = AliveCellSymbol;
+                        gameField.GameField[_coordinateX, _coordinateY] = AliveCellSymbol;
                     }
                     else
                     {
-                        _fieldArray[_coordinateX, _coordinateY] = DeadCellSymbol;
+                        gameField.GameField[_coordinateX, _coordinateY] = DeadCellSymbol;
                     }
                 }
                 else
@@ -144,7 +122,7 @@ namespace GameOfLife
                     break;
                 }
             }
-            return _fieldArray;
+            return gameField;
         }
 
         /// <summary>
@@ -153,27 +131,27 @@ namespace GameOfLife
         /// <param name="fieldLength">The horizontal dimension of the field.</param>
         /// <param name="fieldWidth">The vertical dimension of the field.</param>
         /// <returns>Returns an array of randomly seeded gamefield.</returns>
-        public string[,] RandomSeeding(int fieldLength, int fieldWidth)
+        public GameFieldModel RandomSeeding(GameFieldModel gameField)
         {
             Random random = new();
-            int aliveCellCount = random.Next(1, fieldWidth * fieldLength);
+            int aliveCellCount = random.Next(1, gameField.Length * gameField.Width);
             int randomX, randomY;
 
             for (int i = 1; i <= aliveCellCount; i++)
             {
-                randomX = random.Next(0, _fieldArray.GetLength(0));
-                randomY = random.Next(0, _fieldArray.GetLength(1));
+                randomX = random.Next(0, gameField.Length);
+                randomY = random.Next(0, gameField.Width);
 
-                if (_fieldArray[randomX, randomY] != AliveCellSymbol)
+                if (gameField.GameField[randomX, randomY] != AliveCellSymbol)
                 {
-                    _fieldArray[randomX, randomY] = AliveCellSymbol;
+                    gameField.GameField[randomX, randomY] = AliveCellSymbol;
                 }
                 else
                 {
                     random = new();
                 }
             }
-            return _fieldArray;
+            return gameField;
         }
 
         /// <summary>
@@ -182,7 +160,7 @@ namespace GameOfLife
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
         /// <param name="gliderGunType">Parameter that represents the chosen type of the glider gun.</param>
         /// <returns>Returns an array of a gamefield seeded with objects from the library.</returns>
-        public string[,] LibrarySeeding(bool gliderGunMode, int gliderGunType)
+        public GameFieldModel LibrarySeeding(GameFieldModel gameField, bool gliderGunMode, int gliderGunType)
         {
             ConsoleKeyInfo libraryChoice;
 
@@ -193,28 +171,25 @@ namespace GameOfLife
                     switch (gliderGunType)
                     {
                         case 1:
-                            _library.SpawnGosperGliderGun(_fieldArray, 1, 1);
+                            gameField = _library.SpawnGosperGliderGun(gameField, 1, 1);
                             break;
 
                         case 2:
-                            _library.SpawnSimkinGliderGun(_fieldArray, 0, 16);
-                            break;
-
-                        default:
+                            _library.SpawnSimkinGliderGun(gameField, 0, 16);
                             break;
                     }
                     Console.Clear();
-                    return _fieldArray;
+                    return gameField;
                 }
 
                 if (!_wrongInput)
                 {
-                    _render.RenderField(_fieldArray);
+                    _render.RenderField(gameField);
                 }
                 if (_wrongInput)
                 {
                     Console.Clear();
-                    _render.RenderField(_fieldArray);
+                    _render.RenderField(gameField);
                     Console.WriteLine("\n" + WrongInputPhrase);
                     _wrongInput = false;
                 }
@@ -223,7 +198,7 @@ namespace GameOfLife
 
                 if (_inputProcessor.CheckInputLibraryMenu(libraryChoice))
                 {
-                    return _fieldArray;
+                    return gameField;
                 }
             }
         }
@@ -232,11 +207,11 @@ namespace GameOfLife
         /// Method to call one of the methods for spawning an object from the library, depending on the pressed key.
         /// </summary>
         /// <param name="SpawnLibraryObject">Parameter that represents the method for spawning an object from the library that will be called.</param>
-        public void CallSpawningMethod(Func<string[,], int, int, string[,]> SpawnLibraryObject)
+        public void CallSpawningMethod(GameFieldModel gameField, Func<GameFieldModel, int, int, GameFieldModel> SpawnLibraryObject)
         {
             if (_inputProcessor.EnterCoordinates() && !_stop)
             {
-                SpawnLibraryObject(_fieldArray, _coordinateX, _coordinateY);
+                SpawnLibraryObject(gameField, _coordinateX, _coordinateY);
             }
             else if (_stop)
             {

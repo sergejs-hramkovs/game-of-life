@@ -1,11 +1,11 @@
 ﻿using GameOfLife.Interfaces;
+using GameOfLife.Models;
 
 namespace GameOfLife
 {
     public class FileIO : IFileIO
     {
         private string _filePath = @"C:\Users\sergejs.hramkovs\OneDrive - Accenture\Documents\field.txt";
-        private string[,] _gameField;
         private string[] _stringField;
         private List<string> _stringList = new List<string>();
         private bool _fileReadingError = false;
@@ -26,16 +26,15 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An array containing game field cells.</param>
         /// <returns>Returns new 1-dimensional array.</returns>
-        private string[] ConvertGameFieldToArrayOfRows(string[,] gameField)
+        private string[] ConvertGameFieldToArrayOfRows(GameFieldModel gameField)
         {
-            _gameField = gameField;
-            _stringField = new string[_gameField.GetLength(1)];
+            _stringField = new string[gameField.Width];
 
-            for (int x = 0; x < _gameField.GetLength(0); x++)
+            for (int x = 0; x < gameField.Length; x++)
             {
-                for (int y = 0; y < _gameField.GetLength(1); y++)
+                for (int y = 0; y < gameField.Width; y++)
                 {
-                    _stringField[y] = _stringField[y] + _gameField[x, y] + " ";
+                    _stringField[y] = _stringField[y] + gameField.GameField[x, y] + " ";
                 }
             }
             return _stringField;
@@ -46,12 +45,12 @@ namespace GameOfLife
         /// </summary>
         /// <param name="inputList">List of the game field cells.</param>
         /// <returns>Returns an array of the game field.</returns>
-        private string[,] ConvertListOfRowsToGameField(List<string> inputList)
+        private GameFieldModel ConvertListOfRowsToGameField(List<string> inputList)
         {
             int x = 0;
             int y = 0;
             string generationString = "";
-            _gameField = new string[inputList[4].Length / 2, inputList.Count - 4];
+            GameFieldModel gameField = new(inputList[4].Length / 2, inputList.Count - 4);
 
             foreach (char character in inputList[0])
             {
@@ -70,7 +69,7 @@ namespace GameOfLife
                     {
                         if (character == 'X' || character == '.')
                         {
-                            _gameField[x, y] = character.ToString();
+                            gameField.GameField[x, y] = character.ToString();
                             if (x == inputList[4].Length / 2 - 1)
                             {
                                 x = 0;
@@ -85,7 +84,7 @@ namespace GameOfLife
                 }
             }
             _stringList.Clear();
-            return _gameField;
+            return gameField;
         }
 
         /// <summary>
@@ -95,10 +94,10 @@ namespace GameOfLife
         /// <param name="aliveCount">Number of alive cells on the field.</param>
         /// <param name="deadCount">Number of dead cells on the field.</param>
         /// <param name="generation">Current generation number.</param>
-        public void SaveGameFieldToFile(string[,] currentGameState, int aliveCount, int deadCount, int generation)
+        public void SaveGameFieldToFile(GameFieldModel gameField, int aliveCount, int deadCount, int generation)
         {
             StreamWriter writer = new StreamWriter(_filePath);
-            ConvertGameFieldToArrayOfRows(currentGameState);
+            ConvertGameFieldToArrayOfRows(gameField);
             writer.WriteLine($"Generation: {generation}");
             writer.WriteLine($"Alive cells: {aliveCount}({(int)Math.Round(aliveCount / (double)(deadCount + aliveCount) * 100.0)}%)");
             writer.WriteLine($"Dead cells: {deadCount}");
@@ -115,7 +114,7 @@ namespace GameOfLife
         /// Method to load the saved field from the file.
         /// </summary>
         /// <returns>Returns call to ListToField method, which returns an array of the gamefield.</returns>
-        public string[,] LoadGameFieldFromFile()
+        public GameFieldModel LoadGameFieldFromFile()
         {
             string line;
 
@@ -131,7 +130,6 @@ namespace GameOfLife
             catch
             {
                 FileReadingError = true;
-                return null;
             }
             return ConvertListOfRowsToGameField(_stringList);
         }

@@ -8,15 +8,9 @@ namespace GameOfLife.Interfaces
 {
     public interface IEngine
     {
-        int Length { get; set; }
-
-        int Width { get; set; }
-
         bool CorrectKeyPressed { get; set; }
 
         bool WrongInput { get; set; }
-
-        string[,] GameField { get; set; }
 
         int Generation { get; set; }
 
@@ -28,11 +22,11 @@ namespace GameOfLife.Interfaces
 
         int GliderGunType { get; set; }
 
-        void StartGame(IRender render, IFileIO file, IField field, ILibrary library, IRulesApplier rulesApplier,
+        void StartGame(IRender render, IFileIO file, IFieldOperations field, ILibrary library, IRulesApplier rulesApplier,
             IEngine engine, IInputProcessor inputProcessor);
 
         void RunGame();
 
-        int CountAliveCells(string[,] gameField);
+        int CountAliveCells();
     }
 }

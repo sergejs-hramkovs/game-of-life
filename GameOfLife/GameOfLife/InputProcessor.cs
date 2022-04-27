@@ -1,69 +1,60 @@
 ﻿using GameOfLife.Interfaces;
+using GameOfLife.Models;
 using static GameOfLife.StringConstants;
 
 namespace GameOfLife
 {
     public class InputProcessor : IInputProcessor
     {
+        private GameFieldModel _gameField;
         private IEngine _engine;
         private IFileIO _file;
         private IRender _render;
-        private IField _field;
+        private IFieldOperations _fieldOperations;
         private ILibrary _library;
 
-        public InputProcessor(IEngine engine, IFileIO file, IRender render, IField field, ILibrary library)
+        public void Injection(IEngine engine, IFileIO file, IRender render, IFieldOperations operations, ILibrary library)
         {
             _engine = engine;
             _file = file;
             _render = render;
-            _field = field;
+            _fieldOperations = operations;
             _library = library;
         }
         /// <summary>
         /// Method to check user input in the main menu.
         /// </summary>
         /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
-        public void CheckInputMainMenu(ConsoleKeyInfo keyPressed)
+        public GameFieldModel CheckInputMainMenu(ConsoleKeyInfo keyPressed)
         {
             switch (keyPressed.Key)
             {
                 case ConsoleKey.D1:
-                    _engine.Length = 3;
-                    _engine.Width = 3;
                     _engine.CorrectKeyPressed = true;
-                    break;
+                    return _gameField = new(3, 3);
 
                 case ConsoleKey.D2:
-                    _engine.Length = 5;
-                    _engine.Width = 5;
                     _engine.CorrectKeyPressed = true;
-                    break;
+                    return _gameField = new(5, 5);
 
                 case ConsoleKey.D3:
-                    _engine.Length = 10;
-                    _engine.Width = 10;
                     _engine.CorrectKeyPressed = true;
-                    break;
+                    return _gameField = new(10, 10);
 
                 case ConsoleKey.D4:
-                    _engine.Length = 20;
-                    _engine.Width = 20;
                     _engine.CorrectKeyPressed = true;
-                    break;
+                    return _gameField = new(20, 20);
 
                 case ConsoleKey.D5:
-                    _engine.Length = 75;
-                    _engine.Width = 40;
                     _engine.CorrectKeyPressed = true;
-                    break;
+                    return _gameField = new(75, 40);
 
                 case ConsoleKey.D6:
-                    EnterFieldDimensions(_engine.WrongInput);
                     _engine.CorrectKeyPressed = true;
-                    break;
+                    return EnterFieldDimensions(_engine.WrongInput);
 
                 case ConsoleKey.L:
-                    _engine.GameField = _file.LoadGameFieldFromFile();
+                    _gameField = _file.LoadGameFieldFromFile();
                     if (!_file.FileReadingError)
                     {
                         _engine.Generation = _file.Generation;
@@ -71,24 +62,22 @@ namespace GameOfLife
                         _engine.ReadGeneration = true;
                         _engine.CorrectKeyPressed = true;
                     }
-                    break;
+                    return _gameField;
 
                 case ConsoleKey.G:
                     _engine.GliderGunMode = true;
-                    break;
+                    return null;
 
                 case ConsoleKey.F1:
                     _render.PrintRules();
-                    break;
+                    return null;
 
                 case ConsoleKey.Escape:
                     Environment.Exit(0);
-                    break;
+                    return null;
 
                 default:
-                    _engine.Length = 10;
-                    _engine.Width = 10;
-                    break;
+                    return null;
             }
         }
 
@@ -96,30 +85,27 @@ namespace GameOfLife
         /// Method to check user input in the glider gun menu,
         /// </summary>
         /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
-        public void CheckInputGliderGunMenu(ConsoleKeyInfo keyPressed)
+        public GameFieldModel CheckInputGliderGunMenu(ConsoleKeyInfo keyPressed)
         {
             switch (keyPressed.Key)
             {
                 case ConsoleKey.D1:
                     _engine.GliderGunType = 1;
-                    _engine.Length = 40;
-                    _engine.Width = 30;
-                    break;
+                    return _gameField = new(40, 30);
+                    
 
                 case ConsoleKey.D2:
                     _engine.GliderGunType = 2;
-                    _engine.Length = 37;
-                    _engine.Width = 40;
-                    break;
+                    return _gameField = new(37, 40);
 
                 case ConsoleKey.G:
                     Console.Clear();
                     _engine.GliderGunMode = false;
-                    break;
+                    return null;
 
                 default:
                     Console.WriteLine(WrongInputPhrase);
-                    break;
+                    return null;
             }
         }
 
@@ -127,7 +113,7 @@ namespace GameOfLife
         /// Method to process user input field dimensions.
         /// </summary>
         /// <param name="wrongInput">Parameter that represent if there was wrong input.</param>
-        public void EnterFieldDimensions(bool wrongInput)
+        public GameFieldModel EnterFieldDimensions(bool wrongInput)
         {
             while (true)
             {
@@ -139,12 +125,10 @@ namespace GameOfLife
                 Console.Write(EnterLengthPhrase);
                 if (int.TryParse(Console.ReadLine(), out int length) && length > 0)
                 {
-                    _engine.Length = length;
                     Console.Write(EnterWidthPhrase);
                     if (int.TryParse(Console.ReadLine(), out int width) && width > 0)
                     {
-                        _engine.Width = width;
-                        break;
+                        return _gameField = new(length, width);
                     }
                     else
                     {
@@ -172,21 +156,21 @@ namespace GameOfLife
 
             if (inputCoordinate == StopWord)
             {
-                _field.Stop = true;
+                _fieldOperations.Stop = true;
             }
-            else if (int.TryParse(inputCoordinate, out var resultX) && resultX >= 0 && resultX < _field.FieldArray.GetLength(0))
+            else if (int.TryParse(inputCoordinate, out var resultX) && resultX >= 0 && resultX < _gameField.Length)
             {
-                _field.CoordinateX = resultX;
+                _fieldOperations.CoordinateX = resultX;
                 Console.Write(EnterYPhrase);
                 inputCoordinate = Console.ReadLine();
 
                 if (inputCoordinate == StopWord)
                 {
-                    _field.Stop = true;
+                    _fieldOperations.Stop = true;
                 }
-                else if (int.TryParse(inputCoordinate, out var resultY) && resultY >= 0 && resultY < _field.FieldArray.GetLength(1))
+                else if (int.TryParse(inputCoordinate, out var resultY) && resultY >= 0 && resultY < _gameField.Width)
                 {
-                    _field.CoordinateY = resultY;
+                    _fieldOperations.CoordinateY = resultY;
                 }
                 else
                 {
@@ -210,16 +194,16 @@ namespace GameOfLife
             switch (keyPressed.Key)
             {
                 case ConsoleKey.D1:
-                    _field.ManualSeeding();
+                    _fieldOperations.ManualSeeding(_gameField);
                     return true;
 
                 case ConsoleKey.D2:
-                    _field.RandomSeeding(_field.FieldArray.GetLength(0), _field.FieldArray.GetLength(1));
+                    _fieldOperations.RandomSeeding(_gameField);
                     return true;
 
                 case ConsoleKey.D3:
                     Console.Clear();
-                    _field.LibrarySeeding(_engine.GliderGunMode, _engine.GliderGunType);
+                    _fieldOperations.LibrarySeeding(_gameField, _engine.GliderGunMode, _engine.GliderGunType);
                     return true;
 
                 default:
@@ -241,19 +225,19 @@ namespace GameOfLife
                     return true;
 
                 case ConsoleKey.D1:
-                    _field.CallSpawningMethod(_library.SpawnGlider);
+                    _fieldOperations.CallSpawningMethod(_gameField, _library.SpawnGlider);
                     return false;
 
                 case ConsoleKey.D2:
-                    _field.CallSpawningMethod(_library.SpawnLightWeight);
+                    _fieldOperations.CallSpawningMethod(_gameField, _library.SpawnLightWeight);
                     return false;
 
                 case ConsoleKey.D3:
-                    _field.CallSpawningMethod(_library.SpawnMiddleWeight);
+                    _fieldOperations.CallSpawningMethod(_gameField, _library.SpawnMiddleWeight);
                     return false;
 
                 case ConsoleKey.D4:
-                    _field.CallSpawningMethod(_library.SpawnHeavyWeight);
+                    _fieldOperations.CallSpawningMethod(_gameField, _library.SpawnHeavyWeight);
                     return false;
 
                 default:

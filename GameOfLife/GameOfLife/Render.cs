@@ -1,4 +1,5 @@
 ﻿using GameOfLife.Interfaces;
+using GameOfLife.Models;
 using static GameOfLife.StringConstants;
 
 namespace GameOfLife
@@ -10,25 +11,25 @@ namespace GameOfLife
         /// </summary>
         /// <param name="field">An array of a gamefield.</param>
         /// <param name="dead">Parameter to render the field with '+' when the whoel field is dead.</param>
-        public void RenderField(string[,] field, bool dead = false)
+        public void RenderField(GameFieldModel gameField, bool dead = false)
         {
             Console.WriteLine();
             if (!dead)
             {
-                for (int i = 0; i < field.GetLength(1); i++)
+                for (int i = 0; i < gameField.Width; i++)
                 {
-                    for (int j = 0; j < field.GetLength(0); j++)
+                    for (int j = 0; j < gameField.Length; j++)
                     {
-                        Console.Write(" " + field[j, i]);
+                        Console.Write(" " + gameField.GameField[j, i]);
                     }
                     Console.WriteLine();
                 }
             }
             else
             {
-                for (int i = 0; i < field.GetLength(1); i++)
+                for (int i = 0; i < gameField.Width; i++)
                 {
-                    for (int j = 0; j < field.GetLength(0); j++)
+                    for (int j = 0; j < gameField.Length; j++)
                     {
                         Console.Write(" " + GameOverCellSymbol);
                     }

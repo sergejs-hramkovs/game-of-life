@@ -1,13 +1,11 @@
 ﻿using GameOfLife.Interfaces;
+using GameOfLife.Models;
 using static GameOfLife.StringConstants;
 
 namespace GameOfLife
 {
     public class Engine : IEngine
     {
-        private string[,] _gameField;
-        private int _length;
-        private int _width;
         private int _delay = 1000;
         private int _generation = 1;
         private int _gliderGunType = 0;
@@ -18,24 +16,15 @@ namespace GameOfLife
         private bool _resetGeneration = false;
         private bool _correctKeyPressed = false;
         private bool _gameOver = false;
+        private GameFieldModel _gameField;
         private IFileIO _file;
         private IRender _render;
-        private IField _field;
+        private IFieldOperations _fieldOperations;
         private ILibrary _library;
         private IRulesApplier _rulesApplier;
         private IEngine _engine;
         private IInputProcessor _inputProcessor;
-        private Tuple<string[,], int, int, int> _returnValues;
-        public int Length
-        {
-            get => _length;
-            set => _length = value;
-        }
-        public int Width
-        {
-            get => _width;
-            set => _width = value;
-        }
+        private Tuple<int, int, int> _returnValues;
         public bool CorrectKeyPressed
         {
             get => _correctKeyPressed;
@@ -45,11 +34,6 @@ namespace GameOfLife
         {
             get => _wrongInput;
             set => _wrongInput = value;
-        }
-        public string[,] GameField
-        {
-            get => _gameField;
-            set => _gameField = value;
         }
         public int Generation
         {
@@ -80,17 +64,18 @@ namespace GameOfLife
         /// <summary>
         /// Initiate field size choice.
         /// </summary>
-        public void StartGame(IRender render, IFileIO file, IField field, ILibrary library, IRulesApplier rulesApplier,
+        public void StartGame(IRender render, IFileIO file, IFieldOperations operations, ILibrary library, IRulesApplier rulesApplier,
             IEngine engine, IInputProcessor inputProcessor)
         {
             ConsoleKeyInfo fieldSizeChoice;
             _render = render;
             _file = file;
-            _field = field;
+            _fieldOperations = operations;
             _library = library;
             _rulesApplier = rulesApplier;
             _engine = engine;
             _inputProcessor = inputProcessor;
+            inputProcessor.Injection(_engine, _file, _render, _fieldOperations, _library);
 
             Console.CursorVisible = false;
             Console.SetWindowSize(170, 55);
@@ -103,7 +88,7 @@ namespace GameOfLife
                     _wrongInput = false;
                     _file.FileReadingError = false;
                     fieldSizeChoice = Console.ReadKey(true);
-                    _inputProcessor.CheckInputMainMenu(fieldSizeChoice);
+                    _gameField = _inputProcessor.CheckInputMainMenu(fieldSizeChoice);
 
                     if (_correctKeyPressed)
                     {
@@ -122,7 +107,7 @@ namespace GameOfLife
                 {
                     _render.GliderGunModeRender();
                     fieldSizeChoice = Console.ReadKey(true);
-                    _inputProcessor.CheckInputGliderGunMenu(fieldSizeChoice);
+                    _gameField = _inputProcessor.CheckInputGliderGunMenu(fieldSizeChoice);
                     if (fieldSizeChoice.Key == ConsoleKey.D1 || fieldSizeChoice.Key == ConsoleKey.D2)
                     {
                         break;
@@ -196,10 +181,9 @@ namespace GameOfLife
         /// </summary>
         private void FirstRenderCalculations()
         {
-            _gameField = _field.CreateField(_library, _engine, _rulesApplier, _render, _inputProcessor, _length, _width);
             Console.Clear();
             _render.RenderField(_gameField);
-            _gameField = _field.PopulateField(_gliderGunMode, _gliderGunType);
+            _fieldOperations.PopulateField(_gameField, _gliderGunMode, _gliderGunType);
             Console.Clear();
             _render.BlankUIRender();
             _render.RenderField(_gameField);
@@ -215,7 +199,7 @@ namespace GameOfLife
         /// <param name="resetGeneration">Parameter to reset the number of generation after restart.</param>
         /// <param name="readGeneration">Parameter that represents if the generation was read from the file.</param>
         /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
-        private Tuple<string[,], int, int, int> RuntimeCalculations(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration)
+        private Tuple<int, int, int> RuntimeCalculations(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration)
         {
             int generationsAfterLoading = 1; // Parameter for proper loading from file.
             int aliveCells = 0;
@@ -234,15 +218,15 @@ namespace GameOfLife
             if (generationsAfterLoading >= 1)
             {
                 _rulesApplier.DetermineCellsDestiny(_gameField, gliderGunMode);
-                _gameField = _rulesApplier.FieldRefresh(_gameField);
-                aliveCells = CountAliveCells(_gameField);
-                deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - aliveCells;
+                _rulesApplier.FieldRefresh(_gameField);
+                aliveCells = CountAliveCells();
+                deadCells = _gameField.Area - aliveCells;
             }
             if (generationsAfterLoading == 0)
             {
                 generationsAfterLoading++;
-                aliveCells = CountAliveCells(_gameField);
-                deadCells = _gameField.GetLength(0) * _gameField.GetLength(1) - aliveCells;
+                aliveCells = CountAliveCells();
+                deadCells = _gameField.Area - aliveCells;
             }
             if (aliveCells == 0)
             {
@@ -253,7 +237,7 @@ namespace GameOfLife
             {
                 _render.RuntimeUIRender(aliveCells, deadCells, _generation, delay);
             }
-            _returnValues = new Tuple<string[,], int, int, int>(_gameField, aliveCells, deadCells, _generation);
+            _returnValues = new Tuple<int, int, int>(aliveCells, deadCells, _generation);
             _generation++;
             if (_gameOver)
             {
@@ -282,7 +266,7 @@ namespace GameOfLife
                 switch (saveKey.Key)
                 {
                     case ConsoleKey.S:
-                        _file.SaveGameFieldToFile(_returnValues.Item1, _returnValues.Item2, _returnValues.Item3, _returnValues.Item4);
+                        _file.SaveGameFieldToFile(_gameField, _returnValues.Item1, _returnValues.Item2, _returnValues.Item3);
                         Console.WriteLine(SuccessfullySavedPhrase);
                         Console.ReadKey();
                         Console.Clear();
@@ -312,7 +296,7 @@ namespace GameOfLife
             _resetGeneration = true;
             _delay = 1000;
             Console.Clear();
-            StartGame(_render, _file, _field, _library, _rulesApplier, _engine, _inputProcessor);
+            StartGame(_render, _file, _fieldOperations, _library, _rulesApplier, _engine, _inputProcessor);
             RunGame();
         }
 
@@ -321,15 +305,15 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An array of the game field cells.</param>
         /// <returns>Returns the number of alive cells currently in the gamefield array.</returns>
-        public int CountAliveCells(string[,] gameField)
+        public int CountAliveCells()
         {
             int aliveCellCount = 0;
 
-            for (int i = 0; i < gameField.GetLength(0); i++)
+            for (int i = 0; i < _gameField.Length; i++)
             {
-                for (int j = 0; j < gameField.GetLength(1); j++)
+                for (int j = 0; j < _gameField.Width; j++)
                 {
-                    if (gameField[i, j] == AliveCellSymbol)
+                    if (_gameField.GameField[i, j] == AliveCellSymbol)
                     {
                         aliveCellCount++;
                     }

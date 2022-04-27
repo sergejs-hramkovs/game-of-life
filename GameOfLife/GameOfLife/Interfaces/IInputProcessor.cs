@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameOfLife.Models;
 
 namespace GameOfLife.Interfaces
 {
     public interface IInputProcessor
     {
-        void CheckInputMainMenu(ConsoleKeyInfo keyPressed);
+        void Injection(IEngine engine, IFileIO file, IRender render, IFieldOperations operations, ILibrary library);
 
-        void CheckInputGliderGunMenu(ConsoleKeyInfo keyPressed);
+        GameFieldModel CheckInputMainMenu(ConsoleKeyInfo keyPressed);
 
-        void EnterFieldDimensions(bool wrongInput);
+        GameFieldModel CheckInputGliderGunMenu(ConsoleKeyInfo keyPressed);
+
+        GameFieldModel EnterFieldDimensions(bool wrongInput);
 
         bool EnterCoordinates();
 

@@ -1,4 +1,6 @@
-﻿namespace GameOfLife.Interfaces
+﻿using GameOfLife.Models;
+
+namespace GameOfLife.Interfaces
 {
     public interface IFileIO
     {
@@ -6,8 +8,8 @@
 
         bool FileReadingError { get; set; }
 
-        void SaveGameFieldToFile(string[,] currentGameState, int aliveCount, int deadCount, int generation);
+        void SaveGameFieldToFile(GameFieldModel gameField, int aliveCount, int deadCount, int generation);
 
-        string[,] LoadGameFieldFromFile();
+        GameFieldModel LoadGameFieldFromFile();
     }
 }

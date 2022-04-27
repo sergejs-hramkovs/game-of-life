@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameOfLife.Models;
 
 namespace GameOfLife.Interfaces
 {
     public interface ILibrary
     {
-        string[,] SpawnGlider(string[,] fieldArray, int locationX, int locationY);
+        GameFieldModel SpawnGlider(GameFieldModel gameField, int locationX, int locationY);
 
-        string[,] SpawnLightWeight(string[,] fieldArray, int locationX, int locationY);
+        GameFieldModel SpawnLightWeight(GameFieldModel gameField, int locationX, int locationY);
 
-        string[,] SpawnMiddleWeight(string[,] fieldArray, int locationX, int locationY);
+        GameFieldModel SpawnMiddleWeight(GameFieldModel gameField, int locationX, int locationY);
 
-        string[,] SpawnHeavyWeight(string[,] fieldArray, int locationX, int locationY);
+        GameFieldModel SpawnHeavyWeight(GameFieldModel gameField, int locationX, int locationY);
 
-        string[,] SpawnGosperGliderGun(string[,] fieldArray, int locationX, int locationY);
+        GameFieldModel SpawnGosperGliderGun(GameFieldModel gameField, int locationX, int locationY);
 
-        string[,] SpawnSimkinGliderGun(string[,] fieldArray, int locationX, int locationY);
+        GameFieldModel SpawnSimkinGliderGun(GameFieldModel gameField, int locationX, int locationY);
     }
 }
