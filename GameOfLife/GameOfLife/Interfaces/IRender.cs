@@ -18,7 +18,7 @@ namespace GameOfLife.Interfaces
 
         void MainMenuRender(bool wrongIput, bool fileReadingError);
 
-        void GliderGunMenuRender();
+        void GliderGunModeRender();
 
         void PauseMenuRender();
 

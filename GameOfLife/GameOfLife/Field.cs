@@ -42,7 +42,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
         /// <returns>Returns an array of a seeded gamefield.</returns>
-        public string[,] PopulateField(bool gliderGunMode)
+        public string[,] PopulateField(bool gliderGunMode, int gliderGunType)
         {
             ConsoleKeyInfo seedingChoice;
 
@@ -58,7 +58,7 @@ namespace GameOfLife
                 if (gliderGunMode)
                 {
                     Console.Clear();
-                    LibrarySeeding(gliderGunMode);
+                    LibrarySeeding(gliderGunMode, gliderGunType);
                     return _fieldArray;
                 }
                 else
@@ -79,7 +79,7 @@ namespace GameOfLife
 
                     case ConsoleKey.D3:
                         Console.Clear();
-                        LibrarySeeding(gliderGunMode);
+                        LibrarySeeding(gliderGunMode, gliderGunType);
                         return _fieldArray;
 
                     default:
@@ -169,7 +169,7 @@ namespace GameOfLife
         /// </summary
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
         /// <returns>Returns an array of a gamefield seeded with objects from the library.</returns>
-        private string[,] LibrarySeeding(bool gliderGunMode)
+        private string[,] LibrarySeeding(bool gliderGunMode, int gliderGunType)
         {
             ConsoleKeyInfo libraryChoice;
 
@@ -177,7 +177,19 @@ namespace GameOfLife
             {
                 if (gliderGunMode)
                 {
-                    _library.SpawnGliderGun(_fieldArray, 1, 1);
+                    switch (gliderGunType)
+                    {
+                        case 1:
+                            _library.SpawnGosperGliderGun(_fieldArray, 1, 1);
+                            break;
+
+                        case 2:
+                            _library.SpawnSimkinGliderGun(_fieldArray, 0, 16);
+                            break;
+
+                        default:
+                            break;
+                    }
                     Console.Clear();
                     return _fieldArray;
                 }
@@ -285,6 +297,45 @@ namespace GameOfLife
                 _wrongInput = true;
             }
             Console.Clear();
+        }
+
+        private void ChooseGliderGun()
+        {
+            ConsoleKeyInfo gliderGunChoice;
+
+            while (true)
+            {
+                if (_wrongInput)
+                {
+                    Console.Clear();
+                    _render.RenderField(_fieldArray);
+                    Console.WriteLine("\n" + WrongInputPhrase);
+                    _wrongInput = false;
+                }
+                gliderGunChoice = Console.ReadKey(true);
+
+                switch (gliderGunChoice.Key)
+                {
+                    case ConsoleKey.Escape:
+                        break;
+
+                    case ConsoleKey.D1:
+                        _library.SpawnGosperGliderGun(_fieldArray, 1, 1);
+                        break;
+
+                    case ConsoleKey.D2:
+                        _library.SpawnSimkinGliderGun(_fieldArray, 0, 5);
+                        break;
+
+                    default:
+                        _wrongInput = true;
+                        break;
+                }
+                if (!_wrongInput)
+                {
+                    break;
+                }
+            }
         }
     }
 }

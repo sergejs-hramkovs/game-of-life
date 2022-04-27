@@ -10,6 +10,6 @@ namespace GameOfLife.Interfaces
     {
         string[,] CreateField(ILibrary library, IEngine engine, IRulesApplier rulesApplier, IRender render, int fieldLength, int fieldWidth);
 
-        string[,] PopulateField(bool gliderGunMode);
+        string[,] PopulateField(bool gliderGunMode, int gliderGunType);
     }
 }

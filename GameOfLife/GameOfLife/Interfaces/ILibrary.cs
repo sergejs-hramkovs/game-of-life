@@ -16,6 +16,8 @@ namespace GameOfLife.Interfaces
 
         string[,] SpawnHeavyWeight(string[,] fieldArray, int locationX, int locationY);
 
-        string[,] SpawnGliderGun(string[,] fieldArray, int locationX, int locationY);
+        string[,] SpawnGosperGliderGun(string[,] fieldArray, int locationX, int locationY);
+
+        string[,] SpawnSimkinGliderGun(string[,] fieldArray, int locationX, int locationY);
     }
 }

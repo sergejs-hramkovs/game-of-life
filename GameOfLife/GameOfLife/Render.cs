@@ -9,6 +9,7 @@ namespace GameOfLife
         /// Method that draws the field.
         /// </summary>
         /// <param name="field">An array of a gamefield.</param>
+        /// <param name="dead">Parameter to render the field with '+' when the whoel field is dead.</param>
         public void RenderField(string[,] field, bool dead = false)
         {
             Console.WriteLine();
@@ -84,13 +85,15 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method for rendering the glider gun menu.
+        /// Method for rendering the glider gun mode menu.
         /// </summary>
-        public void GliderGunMenuRender()
+        public void GliderGunModeRender()
         {
             Console.Clear();
             Console.WriteLine("The Glider Gun Mode");
-            Console.WriteLine("\n1. 40x30 (The best size for a glider gun)");
+            Console.WriteLine("\nChoose the type of the glider gun:");
+            Console.WriteLine("\n1. Gosper's glider gun");
+            Console.WriteLine("2. Simkin's glider gun.");
             Console.WriteLine("\n# Press 'G' to turn off the Glider Gun Mode");
         }
 

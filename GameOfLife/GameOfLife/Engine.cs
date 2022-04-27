@@ -5,10 +5,12 @@ namespace GameOfLife
 {
     public class Engine : IEngine
     {
+        private string[,] _gameField;
         private int _length;
         private int _width;
         private int _delay = 1000;
-        private string[,] _gameField;
+        private int _generation = 1;
+        private int _gliderGunType = 0;
         private bool _wrongInput = false;
         private bool _loaded = false;
         private bool _readGeneration = false;
@@ -16,19 +18,70 @@ namespace GameOfLife
         private bool _resetGeneration = false;
         private bool _correctKeyPressed = false;
         private bool _gameOver = false;
-        private int _generation = 1;
         private IFileIO _file;
         private IRender _render;
         private IField _field;
         private ILibrary _library;
         private IRulesApplier _rulesApplier;
         private IEngine _engine;
+        private IInputProcessor _inputProcessor;
         private Tuple<string[,], int, int, int> _returnValues;
+        public int Length
+        {
+            get => _length;
+            set => _length = value;
+        }
+        public int Width
+        {
+            get => _width;
+            set => _width = value;
+        }
+        public bool CorrectKeyPressed
+        {
+            get => _correctKeyPressed;
+            set => _correctKeyPressed = value;
+        }
+        public bool WrongInput
+        {
+            get => _wrongInput;
+            set => _wrongInput = value;
+        }
+        public string[,] GameField
+        {
+            get => _gameField;
+            set => _gameField = value;
+        }
+        public int Generation
+        {
+            get => _generation;
+            set => _generation = value;
+        }
+        public bool Loaded
+        {
+            get => _loaded;
+            set => _loaded = value;
+        }
+        public bool ReadGeneration
+        {
+            get => _readGeneration;
+            set => _readGeneration = value;
+        }
+        public bool GliderGunMode
+        {
+            get => _gliderGunMode;
+            set => _gliderGunMode = value;
+        }
+        public int GliderGunType
+        {
+            get => _gliderGunType;
+            set => _gliderGunType = value;
+        }
 
         /// <summary>
         /// Initiate field size choice.
         /// </summary>
-        public void StartGame(IRender render, IFileIO file, IField field, ILibrary library, IRulesApplier rulesApplier, IEngine engine)
+        public void StartGame(IRender render, IFileIO file, IField field, ILibrary library, IRulesApplier rulesApplier,
+            IEngine engine, IInputProcessor inputProcessor)
         {
             ConsoleKeyInfo fieldSizeChoice;
             _render = render;
@@ -37,6 +90,7 @@ namespace GameOfLife
             _library = library;
             _rulesApplier = rulesApplier;
             _engine = engine;
+            _inputProcessor = inputProcessor;
 
             Console.CursorVisible = false;
             Console.SetWindowSize(170, 55);
@@ -49,7 +103,7 @@ namespace GameOfLife
                     _wrongInput = false;
                     _file.FileReadingError = false;
                     fieldSizeChoice = Console.ReadKey(true);
-                    CheckInputMainMenu(fieldSizeChoice);
+                    _inputProcessor.CheckInputMainMenu(fieldSizeChoice);
 
                     if (_correctKeyPressed)
                     {
@@ -66,10 +120,10 @@ namespace GameOfLife
                 }
                 else
                 {
-                    _render.GliderGunMenuRender();
+                    _render.GliderGunModeRender();
                     fieldSizeChoice = Console.ReadKey(true);
-                    CheckInputGliderGunMenu(fieldSizeChoice);
-                    if (fieldSizeChoice.Key == ConsoleKey.D1)
+                    _inputProcessor.CheckInputGliderGunMenu(fieldSizeChoice);
+                    if (fieldSizeChoice.Key == ConsoleKey.D1 || fieldSizeChoice.Key == ConsoleKey.D2)
                     {
                         break;
                     }
@@ -145,7 +199,7 @@ namespace GameOfLife
             _gameField = _field.CreateField(_library, _engine, _rulesApplier, _render, _length, _width);
             Console.Clear();
             _render.RenderField(_gameField);
-            _gameField = _field.PopulateField(_gliderGunMode);
+            _gameField = _field.PopulateField(_gliderGunMode, _gliderGunType);
             Console.Clear();
             _render.BlankUIRender();
             _render.RenderField(_gameField);
@@ -318,138 +372,8 @@ namespace GameOfLife
             _delay = 1000;
             Console.Clear();
             _field = new Field();
-            StartGame(_render, _file, _field, _library, _rulesApplier, _engine);
+            StartGame(_render, _file, _field, _library, _rulesApplier, _engine, _inputProcessor);
             RunGame();
-        }
-
-        /// <summary>
-        /// Method to check user input in the main menu.
-        /// </summary>
-        /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
-        private void CheckInputMainMenu(ConsoleKeyInfo keyPressed)
-        {
-            switch (keyPressed.Key)
-            {
-                case ConsoleKey.D1:
-                    _length = 3;
-                    _width = 3;
-                    _correctKeyPressed = true;
-                    break;
-
-                case ConsoleKey.D2:
-                    _length = 5;
-                    _width = 5;
-                    _correctKeyPressed = true;
-                    break;
-
-                case ConsoleKey.D3:
-                    _length = 10;
-                    _width = 10;
-                    _correctKeyPressed = true;
-                    break;
-
-                case ConsoleKey.D4:
-                    _length = 20;
-                    _width = 20;
-                    _correctKeyPressed = true;
-                    break;
-
-                case ConsoleKey.D5:
-                    _length = 75;
-                    _width = 40;
-                    _correctKeyPressed = true;
-                    break;
-
-                case ConsoleKey.D6:
-                    EnterFieldDimensions(_wrongInput);
-                    _correctKeyPressed = true;
-                    break;
-
-                case ConsoleKey.L:
-                    _gameField = _file.LoadGameFieldFromFile();
-                    if (!_file.FileReadingError)
-                    {
-                        _generation = _file.Generation;
-                        _loaded = true;
-                        _readGeneration = true;
-                        _correctKeyPressed = true;
-                    }
-                    break;
-
-                case ConsoleKey.G:
-                    _gliderGunMode = true;
-                    break;
-
-                case ConsoleKey.F1:
-                    _render.PrintRules();
-                    break;
-
-                case ConsoleKey.Escape:
-                    Environment.Exit(0);
-                    break;
-
-                default:
-                    _length = 10;
-                    _width = 10;
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Method to check user input in the glider gun menu,
-        /// </summary>
-        /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
-        private void CheckInputGliderGunMenu(ConsoleKeyInfo keyPressed)
-        {
-            switch (keyPressed.Key)
-            {
-                case ConsoleKey.D1:
-                    _length = 40;
-                    _width = 30;
-                    break;
-
-                case ConsoleKey.G:
-                    Console.Clear();
-                    _gliderGunMode = false;
-                    break;
-
-                default:
-                    Console.WriteLine(WrongInputPhrase);
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Method to process user input field dimensions.
-        /// </summary>
-        /// <param name="wrongInput">Parameter that represent if there had been wrong input.</param>
-        private void EnterFieldDimensions(bool wrongInput)
-        {
-            while (true)
-            {
-                if (wrongInput)
-                {
-                    Console.Clear();
-                    Console.WriteLine(WrongInputPhrase);
-                }
-                Console.Write(EnterLengthPhrase);
-                if (int.TryParse(Console.ReadLine(), out _length) && _length > 0)
-                {
-                    Console.Write(EnterWidthPhrase);
-                    if (int.TryParse(Console.ReadLine(), out _width) && _width > 0)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        wrongInput = true;
-                    }
-                }
-                else
-                {
-                    wrongInput = true;
-                }
-            }
         }
     }
 }
