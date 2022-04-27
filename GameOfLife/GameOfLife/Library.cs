@@ -8,6 +8,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn a glider pattern.
         /// </summary>
+        /// <param name="fieldArray">The array of the game field cells.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a glider.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a glider.</param>
         /// <returns>Returns an array with gamefield elements with a glider seeded in it.</returns>
@@ -48,6 +49,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn a light-weight spaceship pattern.
         /// </summary>
+        /// <param name="fieldArray">The array of the game field cells.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a light-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a light-weight spaceship.</param>
         /// <returns>Returns an array with gamefield elements with a light-weight spaceship seeded in it.</returns>
@@ -102,6 +104,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn a middle-weight spaceship pattern.
         /// </summary>
+        /// <param name="fieldArray">The array of the game field cells.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a middle-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a middle-weight spaceship.</param>
         /// <returns>Returns an array with gamefield elements with a middle-weight spaceship seeded in it.</returns>
@@ -163,6 +166,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn a heavy-weight spaceship pattern.
         /// </summary>
+        /// <param name="fieldArray">The array of the game field cells.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a heavy-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a heavy-weight spaceship.</param>
         /// <returns>Returns an array with gamefield elements with a heavy-weight spaceship seeded in it.</returns>
@@ -231,9 +235,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn Gosper's glider gun.
         /// </summary>
-        /// <param name="locationX">Horizontal location of the upper left corner of a glider gun.</param>
-        /// <param name="locationY">Vertical location of the upper left corner of a glider gun.</param>
-        /// <returns>Returns an array with gamefield elements with a glider gun seeded in it.</returns>
+        /// <param name="fieldArray">The array of the game field cells.</param>
+        /// <param name="locationX">Horizontal location of the upper left corner of the Gosper's glider gun.</param>
+        /// <param name="locationY">Vertical location of the upper left corner of Gosper's glider gun.</param>
+        /// <returns>Returns an array with gamefield elements with the Gosper's glider gun seeded in it.</returns>
         public string[,] SpawnGosperGliderGun(string[,] fieldArray, int locationX, int locationY)
         {
             for (int i = locationX; i < locationX + 37; i++)
@@ -362,10 +367,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn Simkin's glider gun.
         /// </summary>
-        /// <param name="fieldArray"></param>
-        /// <param name="locationX"></param>
-        /// <param name="locationY"></param>
-        /// <returns></returns>
+        /// <param name="fieldArray">The array of the game field cells.</param>
+        /// <param name="locationX">Horizontal location of the upper left corner of the Simkin's glider gun.</param>
+        /// <param name="locationY">Vertical location of the upper left corner of the Simkin's glider gun.</param>
+        /// <returns>Returns an array with gamefield elements with the Simkin's glider gun seeded in it.</returns>
         public string[,] SpawnSimkinGliderGun(string[,] fieldArray, int locationX, int locationY)
         {
             for (int i = locationX; i < locationX + 36; i++)

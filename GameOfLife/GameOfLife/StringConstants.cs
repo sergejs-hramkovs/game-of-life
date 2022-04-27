@@ -20,6 +20,8 @@ namespace GameOfLife
 
         public const string DeadCellSymbol = ".";
 
+        public const string GameOverCellSymbol = "+";
+
         public const string StopSeedingPhrase = "\n# To stop seeding enter 'stop'";
 
         public const string EnterXPhrase = "\nEnter X coordinate: ";

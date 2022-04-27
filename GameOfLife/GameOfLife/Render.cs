@@ -13,21 +13,27 @@ namespace GameOfLife
         public void RenderField(string[,] field, bool dead = false)
         {
             Console.WriteLine();
-            for (int i = 0; i < field.GetLength(1); i++)
+            if (!dead)
             {
-                for (int j = 0; j < field.GetLength(0); j++)
+                for (int i = 0; i < field.GetLength(1); i++)
                 {
-                    if (!dead)
+                    for (int j = 0; j < field.GetLength(0); j++)
                     {
                         Console.Write(" " + field[j, i]);
                     }
-                    else
-                    {
-                        Console.Write(" +");
-                    }
-
+                    Console.WriteLine();
                 }
-                Console.WriteLine();
+            }
+            else
+            {
+                for (int i = 0; i < field.GetLength(1); i++)
+                {
+                    for (int j = 0; j < field.GetLength(0); j++)
+                    {
+                        Console.Write(" " + GameOverCellSymbol);
+                    }
+                    Console.WriteLine();
+                }
             }
         }
 
@@ -36,6 +42,7 @@ namespace GameOfLife
         /// </summary>
         public void SeedFieldMenuRender()
         {
+            Console.WriteLine("\n### Choose the field seeding type ###");
             Console.WriteLine("\n1. Seed the field manually");
             Console.WriteLine("2. Seed the field automatically and randomly");
             Console.WriteLine("3. Choose cell patterns from the library");
@@ -46,16 +53,19 @@ namespace GameOfLife
         /// </summary>
         public void LibraryMenuRender()
         {
-            Console.WriteLine("\n# To stop seeding press 'Esc'");
+            Console.WriteLine("### Choose an object from the library ###");
             Console.WriteLine("\n1. Spawn a glider");
             Console.WriteLine("2. Spawn a light-weight spaceship");
             Console.WriteLine("3. Spawn a middle-weight spaceship");
             Console.WriteLine("4. Spawn a heavy-weight spaceship");
+            Console.WriteLine("\n# To stop seeding press 'Esc'");
         }
 
         /// <summary>
         /// Method for rendering field size and mode choosing menu.
         /// </summary>
+        /// <param name="wrongInput">Parameter that represents if there was an attempt of wrong input.</param>
+        /// <param name="fileReadingError">Parameter that represents if there was an error during loading from the file.</param>
         public void MainMenuRender(bool wrongInput, bool fileReadingError)
         {
             Console.Clear();
@@ -70,7 +80,7 @@ namespace GameOfLife
             }
             else
             {
-                Console.WriteLine("Welcome to the Game of Life!");
+                Console.WriteLine("### Welcome to the Game of Life! ###");
             }
             Console.WriteLine("\nChoose the field size:");
             Console.WriteLine("1. 3x3");
@@ -90,7 +100,7 @@ namespace GameOfLife
         public void GliderGunModeRender()
         {
             Console.Clear();
-            Console.WriteLine("The Glider Gun Mode");
+            Console.WriteLine("### The Glider Gun Mode ###");
             Console.WriteLine("\nChoose the type of the glider gun:");
             Console.WriteLine("\n1. Gosper's glider gun");
             Console.WriteLine("2. Simkin's glider gun.");
@@ -180,7 +190,7 @@ namespace GameOfLife
         /// <summary>
         /// Method for rendering the UI when all the cells on the field are dead.
         /// </summary>
-        /// <param name="generation"></param>
+        /// <param name="generation">Parameter that represents the generation number.</param>
         public void GameOverRender(int generation)
         {
             Console.Clear();

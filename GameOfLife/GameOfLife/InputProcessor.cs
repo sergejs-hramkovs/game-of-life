@@ -126,7 +126,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to process user input field dimensions.
         /// </summary>
-        /// <param name="wrongInput">Parameter that represent if there had been wrong input.</param>
+        /// <param name="wrongInput">Parameter that represent if there was wrong input.</param>
         public void EnterFieldDimensions(bool wrongInput)
         {
             while (true)

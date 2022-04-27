@@ -212,7 +212,8 @@ namespace GameOfLife
         /// </summary>
         /// <param name="delay">Delay between generations in miliseconds</param>
         /// <param name="gliderGunMode">Parameter to enable the Glider Gun mode with dead borders rules.</param>
-        /// <param name="resetGeneration">Parameter to rest the number of generation after restart.</param>
+        /// <param name="resetGeneration">Parameter to reset the number of generation after restart.</param>
+        /// <param name="readGeneration">Parameter that represents if the generation was read from the file.</param>
         /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
         private Tuple<string[,], int, int, int> RuntimeCalculations(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration)
         {

@@ -38,7 +38,9 @@ namespace GameOfLife
 
         /// <summary>
         /// Initial creation of an empty gaming field.
-        /// </summary>
+        /// </summary
+        /// <param name="fieldLength">The horizontal dimension of the field.</param>
+        /// <param name="fieldWidth">The vertical dimenstion of the field.</param>
         /// <returns>Returns an array of a gamefield seeded with dead cells(.) .</returns>
         public string[,] CreateField(ILibrary library, IEngine engine, IRulesApplier rulesApplier, IRender render, IInputProcessor processor,
             int fieldLength, int fieldWidth)
@@ -64,6 +66,7 @@ namespace GameOfLife
         /// Method to choose how to seed the field - manually or automatically.
         /// </summary>
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
+        /// <param name="gliderGunType">Parameter that represents the chosen type of the glider gun.</param>
         /// <returns>Returns an array of a seeded gamefield.</returns>
         public string[,] PopulateField(bool gliderGunMode, int gliderGunType)
         {
@@ -147,6 +150,8 @@ namespace GameOfLife
         /// <summary>
         /// Cell amount and coordinates are generated automatically and randomly.
         /// </summary>
+        /// <param name="fieldLength">The horizontal dimension of the field.</param>
+        /// <param name="fieldWidth">The vertical dimension of the field.</param>
         /// <returns>Returns an array of randomly seeded gamefield.</returns>
         public string[,] RandomSeeding(int fieldLength, int fieldWidth)
         {
@@ -175,6 +180,7 @@ namespace GameOfLife
         /// Method to choose a cell pattern from the premade library.
         /// </summary
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
+        /// <param name="gliderGunType">Parameter that represents the chosen type of the glider gun.</param>
         /// <returns>Returns an array of a gamefield seeded with objects from the library.</returns>
         public string[,] LibrarySeeding(bool gliderGunMode, int gliderGunType)
         {
