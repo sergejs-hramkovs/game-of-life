@@ -5,7 +5,7 @@ namespace GameOfLife
 {
     public class FileIO : IFileIO
     {
-        private string _filePath = @"C:\Users\sergejs.hramkovs\OneDrive - Accenture\Documents\field.txt";
+        private string _filePath = @"C:\GameOfLife_SavedGames\field.txt";
         private string[] _stringField;
         private List<string> _stringList = new List<string>();
         private bool _fileReadingError = false;
@@ -13,6 +13,15 @@ namespace GameOfLife
         {
             get => _fileReadingError;
             set => _fileReadingError = value;
+        }
+
+        private void EnsureDirectoryExists(string filePath)
+        {
+            FileInfo fileInfo = new(filePath);
+            if (!fileInfo.Directory.Exists)
+            {
+                Directory.CreateDirectory(fileInfo.DirectoryName);
+            }
         }
 
         /// <summary>
@@ -90,6 +99,7 @@ namespace GameOfLife
         /// <param name="generation">Current generation number.</param>
         public void SaveGameFieldToFile(GameFieldModel gameField, int aliveCount, int deadCount, int generation)
         {
+            EnsureDirectoryExists(_filePath);
             StreamWriter writer = new StreamWriter(_filePath);
             ConvertGameFieldToArrayOfRows(gameField);
             writer.WriteLine($"Generation: {generation}");
