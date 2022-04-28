@@ -5,6 +5,9 @@ namespace GameOfLife
 {
     public class FileIO : IFileIO
     {
+        private IRender _render;
+        private IInputController _inputController;
+        private IEngine _engine;
         private int _numberOfFiles;
         private string _filePath = @"C:\GameOfLife_SavedGames\";
         private string[] _stringField;
@@ -28,6 +31,13 @@ namespace GameOfLife
         public int NumberOfFiles
         {
             get => _numberOfFiles;
+        }
+
+        public void Injection(IRender render, IInputController inputController, IEngine engine)
+        {
+            _render = render;
+            _inputController = inputController;
+            _engine = engine;
         }
 
         /// <summary>
@@ -163,6 +173,36 @@ namespace GameOfLife
         {
             DirectoryInfo directoryInfo = new(_filePath);
             _numberOfFiles = directoryInfo.GetFiles().Length;
+        }
+
+        /// <summary>
+        /// Method to call file loading methods.
+        /// </summary>
+        public void InitiateLoadingFromFile()
+        {
+            int fileNumber;
+
+            CountFiles();
+            if (NumberOfFiles == 1)
+            {
+                fileNumber = 1;
+            }
+            else
+            {
+                do
+                {
+                    _render.ChooseFileToLoadMenuRender(NumberOfFiles, FilePath, _inputController.WrongInput);
+                    fileNumber = _inputController.CheckInputSavedGameMenu(NumberOfFiles);
+                    Console.CursorVisible = false;
+                } while (_inputController.WrongInput);
+            }
+            _inputController.GameField = LoadGameFieldFromFile(fileNumber);
+            if (!FileReadingError)
+            {
+                FileLoaded = true;
+                _engine.ReadGeneration = true;
+                _inputController.CorrectKeyPressed = true;
+            }
         }
     }
 }

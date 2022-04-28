@@ -5,7 +5,7 @@ RulesApplier applier = new();
 Library library = new();
 Render render = new();
 FileIO file = new();
-InputProcessor processor = new();
+InputController processor = new();
 FieldOperations field = new(library, render, processor);
 
 engine.StartGame(render, file, field, library, applier, engine, processor);

@@ -18,7 +18,7 @@ namespace GameOfLife
         private ILibrary _library;
         private IRulesApplier _rulesApplier;
         private IEngine _engine;
-        private IInputProcessor _inputProcessor;
+        private IInputController _inputController;
         public bool ReadGeneration
         {
             get => _readGeneration;
@@ -34,12 +34,17 @@ namespace GameOfLife
             get => _gliderGunType;
             set => _gliderGunType = value;
         }
+        public int Delay
+        {
+            get => _delay;
+            set => _delay = value;
+        }
 
         /// <summary>
         /// Initiate field size choice.
         /// </summary>
         public void StartGame(IRender render, IFileIO file, IFieldOperations operations, ILibrary library, IRulesApplier rulesApplier,
-            IEngine engine, IInputProcessor inputProcessor)
+            IEngine engine, IInputController inputController)
         {
             ConsoleKeyInfo fieldSizeChoice;
             _render = render;
@@ -48,8 +53,9 @@ namespace GameOfLife
             _library = library;
             _rulesApplier = rulesApplier;
             _engine = engine;
-            _inputProcessor = inputProcessor;
-            inputProcessor.Injection(_engine, _file, _render, _fieldOperations, _library);
+            _inputController = inputController;
+            _inputController.Injection(_engine, _file, _render, _fieldOperations, _library);
+            _file.Injection(_render, _inputController, this);
 
             Console.CursorVisible = false;
             Console.SetWindowSize(170, 55);
@@ -58,30 +64,30 @@ namespace GameOfLife
             {
                 if (!GliderGunMode)
                 {
-                    _render.MainMenuRender(_inputProcessor.WrongInput, _file.FileReadingError);
-                    _inputProcessor.WrongInput = false;
+                    _render.MainMenuRender(_inputController.WrongInput, _file.FileReadingError);
+                    _inputController.WrongInput = false;
                     _file.FileReadingError = false;
                     fieldSizeChoice = Console.ReadKey(true);
-                    _gameField = _inputProcessor.CheckInputMainMenu(fieldSizeChoice);
+                    _gameField = _inputController.CheckInputMainMenu(fieldSizeChoice);
 
-                    if (_inputProcessor.CorrectKeyPressed)
+                    if (_inputController.CorrectKeyPressed)
                     {
-                        _inputProcessor.CorrectKeyPressed = false;
+                        _inputController.CorrectKeyPressed = false;
                         break;
                     }
                     else
                     {
                         if (fieldSizeChoice.Key != ConsoleKey.G && fieldSizeChoice.Key != ConsoleKey.F1)
                         {
-                            _inputProcessor.WrongInput = true;
+                            _inputController.WrongInput = true;
                         }
                     }
                 }
                 else
                 {
-                    _render.GliderGunModeRender(_inputProcessor.WrongInput);
+                    _render.GliderGunModeRender(_inputController.WrongInput);
                     fieldSizeChoice = Console.ReadKey(true);
-                    _gameField = _inputProcessor.CheckInputGliderGunMenu(fieldSizeChoice);
+                    _gameField = _inputController.CheckInputGliderGunMenu(fieldSizeChoice);
                     if (fieldSizeChoice.Key == ConsoleKey.D1 || fieldSizeChoice.Key == ConsoleKey.D2)
                     {
                         break;
@@ -118,13 +124,13 @@ namespace GameOfLife
                         break;
                     }
                     ReadGeneration = false;
-                    Thread.Sleep(_delay);
+                    Thread.Sleep(Delay);
                 }
                 if (!_gameOver)
                 {
                     runTimeKeyPress = Console.ReadKey(true);
                     PauseGame(runTimeKeyPress);
-                    ChangeDelay(runTimeKeyPress);
+                    _inputController.ChangeDelay(runTimeKeyPress);
                 }
                 else
                 {
@@ -164,9 +170,6 @@ namespace GameOfLife
         /// <summary>
         /// Method for calling methods that take care of all the necessary calculations during the runtime.
         /// </summary>
-        /// <param name="delay">Delay between generations in miliseconds</param>
-        /// <param name="gliderGunMode">Parameter to enable the Glider Gun mode with dead borders rules.</param>
-        /// <param name="readGeneration">Parameter that represents if the generation was read from the file.</param>
         private void RuntimeCalculations()
         {
             int generationsAfterLoading = 1; // Parameter for proper loading from file.
@@ -194,7 +197,7 @@ namespace GameOfLife
             }
             else
             {
-                _render.RuntimeUIRender(_gameField, _delay);
+                _render.RuntimeUIRender(_gameField, Delay);
             }
             _gameField.Generation++;
             if (_gameOver)
@@ -250,9 +253,9 @@ namespace GameOfLife
         private void RestartGame()
         {
             GliderGunMode = false;
-            _delay = 1000;
+            Delay = 1000;
             Console.Clear();
-            StartGame(_render, _file, _fieldOperations, _library, _rulesApplier, _engine, _inputProcessor);
+            StartGame(_render, _file, _fieldOperations, _library, _rulesApplier, _engine, _inputController);
             RunGame();
         }
 
@@ -272,41 +275,6 @@ namespace GameOfLife
                         _gameField.AliveCellsNumber++;
                     }
                 }
-            }
-        }
-
-        /// <summary>
-        /// Method to change the time delay if LeftArrow or RightArrow keys are pressed.
-        /// </summary>
-        /// <param name="keyPressed">Parameters which stores Left and Right Arrow key presses.</param>
-        private void ChangeDelay(ConsoleKeyInfo keyPressed)
-        {
-            switch (keyPressed.Key)
-            {
-                case ConsoleKey.LeftArrow:
-                    if (_delay <= 100 && _delay > 10)
-                    {
-                        _delay -= 10;
-                    }
-                    else if (_delay > 100)
-                    {
-                        _delay -= 100;
-                    }
-                    break;
-
-                case ConsoleKey.RightArrow:
-                    if (_delay < 2000)
-                    {
-                        if (_delay < 100)
-                        {
-                            _delay += 10;
-                        }
-                        else
-                        {
-                            _delay += 100;
-                        }
-                    }
-                    break;
             }
         }
     }

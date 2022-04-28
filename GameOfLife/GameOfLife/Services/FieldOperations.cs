@@ -11,7 +11,7 @@ namespace GameOfLife
         private bool _stop = false;
         private IRender _render;
         private ILibrary _library;
-        private IInputProcessor _inputProcessor;
+        private IInputController _inputProcessor;
         public int CoordinateX
         {
             get => _coordinateX;
@@ -28,7 +28,7 @@ namespace GameOfLife
             set => _stop = value;
         }
 
-        public FieldOperations(ILibrary library, IRender render, IInputProcessor processor)
+        public FieldOperations(ILibrary library, IRender render, IInputController processor)
         {
             _library = library;
             _render = render;

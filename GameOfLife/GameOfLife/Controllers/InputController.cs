@@ -4,7 +4,7 @@ using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
-    public class InputProcessor : IInputProcessor
+    public class InputController : IInputController
     {
         private GameFieldModel _gameField;
         private IEngine _engine;
@@ -23,6 +23,11 @@ namespace GameOfLife
         {
             get => _correctKeyPressed;
             set => _correctKeyPressed = value;
+        }
+        public GameFieldModel GameField
+        {
+            get => _gameField;
+            set => _gameField = value;
         }
 
         public void Injection(IEngine engine, IFileIO file, IRender render, IFieldOperations operations, ILibrary library)
@@ -68,7 +73,7 @@ namespace GameOfLife
                     return EnterFieldDimensions(WrongInput);
 
                 case ConsoleKey.L:
-                    LoadingFromFileProcessor();
+                    _file.InitiateLoadingFromFile();
                     return _gameField;
 
                 case ConsoleKey.G:
@@ -266,7 +271,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="numberOfFiles">The number of saved game files currently in the folder.</param>
         /// <returns>Returns the number of saved game file to load.</returns>
-        private int CheckInputSavedGameMenu(int numberOfFiles)
+        public int CheckInputSavedGameMenu(int numberOfFiles)
         {
             string userInput;
             int chosenFile = -1;
@@ -285,32 +290,37 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to call file loading methods.
+        /// Method to change the time delay if LeftArrow or RightArrow keys are pressed.
         /// </summary>
-        private void LoadingFromFileProcessor()
+        /// <param name="keyPressed">Parameters which stores Left and Right Arrow key presses.</param>
+        public void ChangeDelay(ConsoleKeyInfo keyPressed)
         {
-            int fileNumber;
+            switch (keyPressed.Key)
+            {
+                case ConsoleKey.LeftArrow:
+                    if (_engine.Delay <= 100 && _engine.Delay > 10)
+                    {
+                        _engine.Delay -= 10;
+                    }
+                    else if (_engine.Delay > 100)
+                    {
+                        _engine.Delay -= 100;
+                    }
+                    break;
 
-            _file.CountFiles();
-            if (_file.NumberOfFiles == 1)
-            {
-                fileNumber = 1;
-            }
-            else
-            {
-                do
-                {
-                    _render.ChooseFileToLoadMenuRender(_file.NumberOfFiles, _file.FilePath, WrongInput);
-                    fileNumber = CheckInputSavedGameMenu(_file.NumberOfFiles);
-                    Console.CursorVisible = false;
-                } while (WrongInput);
-            }
-            _gameField = _file.LoadGameFieldFromFile(fileNumber);
-            if (!_file.FileReadingError)
-            {
-                _file.FileLoaded = true;
-                _engine.ReadGeneration = true;
-                CorrectKeyPressed = true;
+                case ConsoleKey.RightArrow:
+                    if (_engine.Delay < 2000)
+                    {
+                        if (_engine.Delay < 100)
+                        {
+                            _engine.Delay += 10;
+                        }
+                        else
+                        {
+                            _engine.Delay += 100;
+                        }
+                    }
+                    break;
             }
         }
     }

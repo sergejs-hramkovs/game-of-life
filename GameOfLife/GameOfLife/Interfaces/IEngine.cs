@@ -14,8 +14,10 @@ namespace GameOfLife.Interfaces
 
         int GliderGunType { get; set; }
 
+        int Delay { get; set; }
+
         void StartGame(IRender render, IFileIO file, IFieldOperations field, ILibrary library, IRulesApplier rulesApplier,
-            IEngine engine, IInputProcessor inputProcessor);
+            IEngine engine, IInputController inputProcessor);
 
         void RunGame();
 

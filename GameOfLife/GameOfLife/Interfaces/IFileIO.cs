@@ -12,10 +12,14 @@ namespace GameOfLife.Interfaces
 
         int NumberOfFiles { get; }
 
+        void Injection(IRender render, IInputController inputController, IEngine engine);
+
         void SaveGameFieldToFile(GameFieldModel gameField);
 
         GameFieldModel LoadGameFieldFromFile(int fileNumber);
 
         void CountFiles();
+
+        void InitiateLoadingFromFile();
     }
 }
