@@ -6,8 +6,7 @@ Library library = new();
 Render render = new();
 FileIO file = new();
 InputProcessor processor = new();
-FieldOperations field = new(library, engine, applier, render, processor);
-
+FieldOperations field = new(library, render, processor);
 
 engine.StartGame(render, file, field, library, applier, engine, processor);
 engine.RunGame();

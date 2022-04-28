@@ -9,16 +9,10 @@ namespace GameOfLife
         private string[] _stringField;
         private List<string> _stringList = new List<string>();
         private bool _fileReadingError = false;
-        private int _generation;
         public bool FileReadingError
         {
             get => _fileReadingError;
             set => _fileReadingError = value;
-        }
-        public int Generation
-        {
-            get => _generation;
-            set => _generation = value;
         }
 
         /// <summary>
@@ -59,7 +53,7 @@ namespace GameOfLife
                     generationString += number.ToString();
                 }
             }
-            Generation = int.Parse(generationString);
+            gameField.Generation = int.Parse(generationString);
 
             for (int i = 4; i < inputList.Count; i++)
             {

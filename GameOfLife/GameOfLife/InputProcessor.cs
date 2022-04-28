@@ -12,6 +12,12 @@ namespace GameOfLife
         private IRender _render;
         private IFieldOperations _fieldOperations;
         private ILibrary _library;
+        private bool _wrongInput = false;
+        public bool WrongInput
+        {
+            get => _wrongInput;
+            set => _wrongInput = value;
+        }
 
         public void Injection(IEngine engine, IFileIO file, IRender render, IFieldOperations operations, ILibrary library)
         {
@@ -21,6 +27,7 @@ namespace GameOfLife
             _fieldOperations = operations;
             _library = library;
         }
+
         /// <summary>
         /// Method to check user input in the main menu.
         /// </summary>
@@ -51,13 +58,12 @@ namespace GameOfLife
 
                 case ConsoleKey.D6:
                     _engine.CorrectKeyPressed = true;
-                    return EnterFieldDimensions(_engine.WrongInput);
+                    return EnterFieldDimensions(WrongInput);
 
                 case ConsoleKey.L:
                     _gameField = _file.LoadGameFieldFromFile();
                     if (!_file.FileReadingError)
                     {
-                        _gameField.Generation = _file.Generation;
                         _engine.Loaded = true;
                         _engine.ReadGeneration = true;
                         _engine.CorrectKeyPressed = true;
@@ -207,7 +213,7 @@ namespace GameOfLife
                     return true;
 
                 default:
-                    _engine.WrongInput = true;
+                    WrongInput = true;
                     return false;
             }
         }
@@ -241,7 +247,7 @@ namespace GameOfLife
                     return false;
 
                 default:
-                    _engine.WrongInput = true;
+                    WrongInput = true;
                     return false;
             }
         }

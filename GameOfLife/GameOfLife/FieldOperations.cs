@@ -12,8 +12,6 @@ namespace GameOfLife
         private bool _stop = false;
         private IRender _render;
         private ILibrary _library;
-        private IEngine _engine;
-        private IRulesApplier _rulesApplier;
         private IInputProcessor _inputProcessor;
         public int CoordinateX
         {
@@ -31,11 +29,9 @@ namespace GameOfLife
             set => _stop = value;
         }
 
-        public FieldOperations(ILibrary library, IEngine engine, IRulesApplier rulesApplier, IRender render, IInputProcessor processor)
+        public FieldOperations(ILibrary library, IRender render, IInputProcessor processor)
         {
             _library = library;
-            _engine = engine;
-            _rulesApplier = rulesApplier;
             _render = render;
             _inputProcessor = processor;
         }

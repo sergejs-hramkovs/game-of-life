@@ -8,11 +8,9 @@ namespace GameOfLife
     {
         private int _delay = 1000;
         private int _gliderGunType = 0;
-        private bool _wrongInput = false;
         private bool _loaded = false;
         private bool _readGeneration = false;
         private bool _gliderGunMode = false;
-        private bool _resetGeneration = false;
         private bool _correctKeyPressed = false;
         private bool _gameOver = false;
         private GameFieldModel _gameField;
@@ -28,11 +26,6 @@ namespace GameOfLife
         {
             get => _correctKeyPressed;
             set => _correctKeyPressed = value;
-        }
-        public bool WrongInput
-        {
-            get => _wrongInput;
-            set => _wrongInput = value;
         }
         public bool Loaded
         {
@@ -78,8 +71,8 @@ namespace GameOfLife
             {
                 if (!_gliderGunMode)
                 {
-                    _render.MainMenuRender(_wrongInput, _file.FileReadingError);
-                    _wrongInput = false;
+                    _render.MainMenuRender(inputProcessor.WrongInput, _file.FileReadingError);
+                    inputProcessor.WrongInput = false;
                     _file.FileReadingError = false;
                     fieldSizeChoice = Console.ReadKey(true);
                     _gameField = _inputProcessor.CheckInputMainMenu(fieldSizeChoice);
@@ -93,7 +86,7 @@ namespace GameOfLife
                     {
                         if (fieldSizeChoice.Key != ConsoleKey.G && fieldSizeChoice.Key != ConsoleKey.F1)
                         {
-                            _wrongInput = true;
+                            inputProcessor.WrongInput = true;
                         }
                     }
                 }
@@ -132,16 +125,12 @@ namespace GameOfLife
                 while (Console.KeyAvailable == false)
                 {
                     Console.SetCursorPosition(0, 0);
-                    _returnValues = RuntimeCalculations(_delay, _gliderGunMode, _resetGeneration, _readGeneration);
+                    _returnValues = RuntimeCalculations(_delay, _gliderGunMode, _readGeneration);
                     if (_gameOver)
                     {
                         break;
                     }
                     _readGeneration = false;
-                    if (_resetGeneration)
-                    {
-                        _resetGeneration = false;
-                    }
                     Thread.Sleep(_delay);
                 }
                 if (!_gameOver)
@@ -190,22 +179,16 @@ namespace GameOfLife
         /// </summary>
         /// <param name="delay">Delay between generations in miliseconds</param>
         /// <param name="gliderGunMode">Parameter to enable the Glider Gun mode with dead borders rules.</param>
-        /// <param name="resetGeneration">Parameter to reset the number of generation after restart.</param>
         /// <param name="readGeneration">Parameter that represents if the generation was read from the file.</param>
         /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
-        private Tuple<int, int, int> RuntimeCalculations(int delay, bool gliderGunMode, bool resetGeneration, bool readGeneration)
+        private Tuple<int, int, int> RuntimeCalculations(int delay, bool gliderGunMode, bool readGeneration)
         {
             int generationsAfterLoading = 1; // Parameter for proper loading from file.
             int aliveCells = 0;
             int deadCells = 0;
 
-            if (resetGeneration)
-            {
-                _gameField.Generation = 1;
-            }
             if (readGeneration)
             {
-                _gameField.Generation = _file.Generation;
                 generationsAfterLoading = 0;
                 readGeneration = false;
             }
@@ -287,7 +270,6 @@ namespace GameOfLife
         private void RestartGame()
         {
             _gliderGunMode = false;
-            _resetGeneration = true;
             _delay = 1000;
             Console.Clear();
             StartGame(_render, _file, _fieldOperations, _library, _rulesApplier, _engine, _inputProcessor);

@@ -10,8 +10,6 @@ namespace GameOfLife.Interfaces
     {
         bool CorrectKeyPressed { get; set; }
 
-        bool WrongInput { get; set; }
-
         bool Loaded { get; set; }
 
         bool ReadGeneration { get; set; }
