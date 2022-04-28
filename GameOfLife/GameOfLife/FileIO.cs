@@ -5,7 +5,8 @@ namespace GameOfLife
 {
     public class FileIO : IFileIO
     {
-        private string _filePath = @"C:\GameOfLife_SavedGames\field.txt";
+        private int _numberOfFiles;
+        private string _filePath = @"C:\GameOfLife_SavedGames\";
         private string[] _stringField;
         private List<string> _stringList = new List<string>();
         private bool _fileReadingError = false;
@@ -14,7 +15,15 @@ namespace GameOfLife
             get => _fileReadingError;
             set => _fileReadingError = value;
         }
+        public string FilePath
+        {
+            get => _filePath;
+        }
 
+        /// <summary>
+        /// Method to check if the directory exists. If it doesn't, the method creates one.
+        /// </summary>
+        /// <param name="filePath">The location of the folder.</param>
         private void EnsureDirectoryExists(string filePath)
         {
             FileInfo fileInfo = new(filePath);
@@ -100,7 +109,8 @@ namespace GameOfLife
         public void SaveGameFieldToFile(GameFieldModel gameField, int aliveCount, int deadCount, int generation)
         {
             EnsureDirectoryExists(_filePath);
-            StreamWriter writer = new StreamWriter(_filePath);
+            CountFiles();
+            StreamWriter writer = new StreamWriter(_filePath + $"game{_numberOfFiles + 1}.txt");
             ConvertGameFieldToArrayOfRows(gameField);
             writer.WriteLine($"Generation: {generation}");
             writer.WriteLine($"Alive cells: {aliveCount}({(int)Math.Round(aliveCount / (double)(deadCount + aliveCount) * 100.0)}%)");
@@ -118,13 +128,13 @@ namespace GameOfLife
         /// Method to load the saved field from the file.
         /// </summary>
         /// <returns>Returns call to ListToField method, which returns an array of the gamefield.</returns>
-        public GameFieldModel LoadGameFieldFromFile()
+        public GameFieldModel LoadGameFieldFromFile(int fileToLoad)
         {
             string line;
 
             try
             {
-                StreamReader reader = new StreamReader(_filePath);
+                StreamReader reader = new StreamReader(_filePath + $"game{fileToLoad}.txt");
                 while ((line = reader.ReadLine()) != null)
                 {
                     _stringList.Add(line);
@@ -134,8 +144,19 @@ namespace GameOfLife
             catch
             {
                 FileReadingError = true;
+                return null;
             }
             return ConvertListOfRowsToGameField(_stringList);
+        }
+
+        /// <summary>
+        /// Method to count the number of files in the folder.
+        /// </summary>
+        public int CountFiles()
+        {
+            DirectoryInfo directoryInfo = new(_filePath);
+            _numberOfFiles = directoryInfo.GetFiles().Length;
+            return _numberOfFiles;
         }
     }
 }

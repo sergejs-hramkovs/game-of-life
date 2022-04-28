@@ -34,6 +34,9 @@ namespace GameOfLife
         /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
         public GameFieldModel CheckInputMainMenu(ConsoleKeyInfo keyPressed)
         {
+            int numberOfFiles;
+            int fileNumber;
+
             switch (keyPressed.Key)
             {
                 case ConsoleKey.D1:
@@ -61,7 +64,20 @@ namespace GameOfLife
                     return EnterFieldDimensions(WrongInput);
 
                 case ConsoleKey.L:
-                    _gameField = _file.LoadGameFieldFromFile();
+                    numberOfFiles = _file.CountFiles();
+                    if (numberOfFiles == 1)
+                    {
+                        fileNumber = 1;
+                    }
+                    else
+                    {
+                        do
+                        {
+                            _render.ChooseFileToLoadMenuRender(numberOfFiles, _file.FilePath, WrongInput);
+                            fileNumber = CheckInputSavedGameMenu(numberOfFiles);
+                        } while (WrongInput);
+                    }
+                    _gameField = _file.LoadGameFieldFromFile(fileNumber);
                     if (!_file.FileReadingError)
                     {
                         _engine.Loaded = true;
@@ -98,7 +114,7 @@ namespace GameOfLife
                 case ConsoleKey.D1:
                     _engine.GliderGunType = 1;
                     return _gameField = new(40, 30);
-                    
+
 
                 case ConsoleKey.D2:
                     _engine.GliderGunType = 2;
@@ -250,6 +266,29 @@ namespace GameOfLife
                     WrongInput = true;
                     return false;
             }
+        }
+
+        /// <summary>
+        /// Method to check for user input when choosing which saved game file to load.
+        /// </summary>
+        /// <param name="numberOfFiles">The number of saved game files currently in the folder.</param>
+        /// <returns>Returns the number of saved game file to load.</returns>
+        private int CheckInputSavedGameMenu(int numberOfFiles)
+        {
+            string userInput;
+            int chosenFile = -1;
+            userInput = Console.ReadLine();
+
+            if (int.TryParse(userInput, out var fileNumber) && fileNumber > 0 && fileNumber <= numberOfFiles)
+            {
+                chosenFile = fileNumber;
+                WrongInput = false;
+            }
+            else
+            {
+                WrongInput = true;
+            }
+            return chosenFile;
         }
     }
 }

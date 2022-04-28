@@ -202,5 +202,39 @@ namespace GameOfLife
             Console.WriteLine("\n### THE WHOLE FIELD IS DEAD! ###");
             Console.WriteLine($"\nGenerations survived: {generation - 1}");
         }
+
+        /// <summary>
+        /// Method for rendering the UI for choosing which saved game file to load.
+        /// </summary>
+        /// <param name="numberOfFiles">The number of saved game files currently present in the folder.</param>
+        public void ChooseFileToLoadMenuRender(int numberOfFiles, string filePath, bool wrongInput)
+        {
+            Console.Clear();
+            Console.WriteLine("### Choose which saved game to load###");
+            Console.WriteLine($"\n# There are currently {numberOfFiles} files");
+            Console.WriteLine("---------");
+            RenderFileNames(filePath);
+            Console.WriteLine("---------");
+            Console.WriteLine($"\nChoose the number of the file");
+            Console.Write("\nChoice: ");
+            if (wrongInput)
+            {
+                Console.WriteLine("\n---------");
+                Console.WriteLine(WrongInputPhrase);
+            }
+        }
+
+        /// <summary>
+        /// Method to display all the names of files curently present in the folder.
+        /// </summary>
+        /// <param name="filePath">The location of the folder.</param>
+        private void RenderFileNames(string filePath)
+        {
+            string[] files = Directory.GetFiles(filePath);
+            foreach (string file in files)
+            {
+                Console.WriteLine(Path.GetFileName(file));
+            }
+        }
     }
 }

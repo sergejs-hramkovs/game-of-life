@@ -25,5 +25,7 @@ namespace GameOfLife.Interfaces
         void GameOverRender(int generation);
 
         void BlankUIRender();
+
+        void ChooseFileToLoadMenuRender(int numberOfFiles, string filePath, bool wrongInput);
     }
 }
