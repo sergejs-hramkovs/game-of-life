@@ -6,6 +6,8 @@ namespace GameOfLife.Interfaces
     {
         bool WrongInput { get; set; }
 
+        bool CorrectKeyPressed { get; set; }
+
         void Injection(IEngine engine, IFileIO file, IRender render, IFieldOperations operations, ILibrary library);
 
         GameFieldModel CheckInputMainMenu(ConsoleKeyInfo keyPressed);

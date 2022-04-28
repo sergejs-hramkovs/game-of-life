@@ -138,18 +138,16 @@ namespace GameOfLife
         /// <summary>
         /// Method for rendering the UI during the runtime.
         /// </summary>
-        /// <param name="aliveCells">The number of alive cells on the field.</param>
-        /// <param name="deadCells">The number of dead cells on the field.</param>
-        /// <param name="generation">The number of the current generation.</param>
+        /// <param name="gameField">An instance of the GameFieldModel class.</param>
         /// <param name="delay">Delay between generations in miliseconds.</param>
-        public void RuntimeUIRender(int aliveCells, int deadCells, int generation, int delay)
+        public void RuntimeUIRender(GameFieldModel gameField, int delay)
         {
             Console.WriteLine("# Press ESC to stop");
             Console.WriteLine("# Press Spacebar to pause");
             Console.WriteLine("# Change the delay using left and right arrows");
-            Console.WriteLine($"\nGeneration: {generation}");
-            Console.WriteLine($"Alive cells: {aliveCells}({(int)Math.Round(aliveCells / (double)(deadCells + aliveCells) * 100.0)}%)   ");
-            Console.WriteLine($"Dead cells: {deadCells}   ");
+            Console.WriteLine($"\nGeneration: {gameField.Generation}");
+            Console.WriteLine($"Alive cells: {gameField.AliveCellsNumber}({(int)Math.Round(gameField.AliveCellsNumber / (double)gameField.Area * 100.0)}%)   ");
+            Console.WriteLine($"Dead cells: {gameField.DeadCellsNumber}   ");
             Console.WriteLine($"Current delay between generations: {delay / 1000.0} seconds  ");
             Console.WriteLine($"Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   ");
         }
@@ -220,16 +218,17 @@ namespace GameOfLife
             Console.Clear();
             Console.WriteLine("### Choose which saved game to load###");
             Console.WriteLine($"\n# There are currently {numberOfFiles} files");
-            Console.WriteLine("---------");
+            Console.WriteLine("\n-------------");
             RenderFileNames(filePath);
-            Console.WriteLine("---------");
-            Console.WriteLine($"\nChoose the number of the file");
-            Console.Write("\nChoice: ");
+            Console.WriteLine("-------------");
+            Console.WriteLine($"\n# Choose the number of the file");
             if (wrongInput)
             {
-                Console.WriteLine("\n---------");
+                Console.WriteLine("\n-------------");
                 Console.WriteLine(WrongInputPhrase);
+                Console.WriteLine("-------------");
             }
+            Console.Write("\n# Choice: ");
         }
 
         /// <summary>
@@ -240,7 +239,7 @@ namespace GameOfLife
         {
             foreach (string file in Directory.GetFiles(filePath))
             {
-                Console.WriteLine(Path.GetFileName(file));
+                Console.WriteLine(" - " + Path.GetFileName(file));
             }
         }
     }

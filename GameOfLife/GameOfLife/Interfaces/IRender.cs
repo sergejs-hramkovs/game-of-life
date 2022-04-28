@@ -6,7 +6,7 @@ namespace GameOfLife.Interfaces
     {
         void RenderField(GameFieldModel gameField, bool dead = false);
 
-        void RuntimeUIRender(int aliveCells, int deadCells, int generation, int delay);
+        void RuntimeUIRender(GameFieldModel gameField, int delay);
 
         void SeedFieldMenuRender();
 

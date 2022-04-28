@@ -4,12 +4,12 @@ namespace GameOfLife.Models
 {
     public class GameFieldModel
     {
-
         private string[,] _gameField;
         private int _length;
         private int _width;
         private int _area;
         private int _generation;
+        private int _aliveCellsNumber;
         public string[,] GameField
         {
             get => _gameField;
@@ -31,6 +31,15 @@ namespace GameOfLife.Models
         {
             get => _generation;
             set => _generation = value;
+        }
+        public int AliveCellsNumber
+        {
+            get => _aliveCellsNumber;
+            set => _aliveCellsNumber = value;
+        }
+        public int DeadCellsNumber
+        {
+            get => Area - AliveCellsNumber;
         }
 
         public GameFieldModel(int length, int width)

@@ -10,6 +10,7 @@ namespace GameOfLife
         private string[] _stringField;
         private List<string> _stringList = new List<string>();
         private bool _fileReadingError = false;
+        private bool _fileLoaded = false;
         public bool FileReadingError
         {
             get => _fileReadingError;
@@ -18,6 +19,15 @@ namespace GameOfLife
         public string FilePath
         {
             get => _filePath;
+        }
+        public bool FileLoaded
+        {
+            get => _fileLoaded;
+            set => _fileLoaded = value;
+        }
+        public int NumberOfFiles
+        {
+            get => _numberOfFiles;
         }
 
         /// <summary>
@@ -103,18 +113,15 @@ namespace GameOfLife
         /// Method to save the current games state to a text file.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
-        /// <param name="aliveCount">Number of alive cells on the field.</param>
-        /// <param name="deadCount">Number of dead cells on the field.</param>
-        /// <param name="generation">Current generation number.</param>
-        public void SaveGameFieldToFile(GameFieldModel gameField, int aliveCount, int deadCount, int generation)
+        public void SaveGameFieldToFile(GameFieldModel gameField)
         {
             EnsureDirectoryExists(_filePath);
             CountFiles();
             StreamWriter writer = new StreamWriter(_filePath + $"game{_numberOfFiles + 1}.txt");
             ConvertGameFieldToArrayOfRows(gameField);
-            writer.WriteLine($"Generation: {generation}");
-            writer.WriteLine($"Alive cells: {aliveCount}({(int)Math.Round(aliveCount / (double)(deadCount + aliveCount) * 100.0)}%)");
-            writer.WriteLine($"Dead cells: {deadCount}");
+            writer.WriteLine($"Generation: {gameField.Generation}");
+            writer.WriteLine($"Alive cells: {gameField.AliveCellsNumber}({(int)Math.Round(gameField.AliveCellsNumber / (double)gameField.Area * 100.0)}%)");
+            writer.WriteLine($"Dead cells: {gameField.DeadCellsNumber}");
             writer.WriteLine();
 
             foreach (string line in _stringField)
@@ -152,11 +159,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to count the number of files in the folder.
         /// </summary>
-        public int CountFiles()
+        public void CountFiles()
         {
             DirectoryInfo directoryInfo = new(_filePath);
             _numberOfFiles = directoryInfo.GetFiles().Length;
-            return _numberOfFiles;
         }
     }
 }

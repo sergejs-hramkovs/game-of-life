@@ -8,10 +8,8 @@ namespace GameOfLife
     {
         private int _delay = 1000;
         private int _gliderGunType = 0;
-        private bool _loaded = false;
         private bool _readGeneration = false;
         private bool _gliderGunMode = false;
-        private bool _correctKeyPressed = false;
         private bool _gameOver = false;
         private GameFieldModel _gameField;
         private IFileIO _file;
@@ -21,17 +19,6 @@ namespace GameOfLife
         private IRulesApplier _rulesApplier;
         private IEngine _engine;
         private IInputProcessor _inputProcessor;
-        private Tuple<int, int, int> _returnValues;
-        public bool CorrectKeyPressed
-        {
-            get => _correctKeyPressed;
-            set => _correctKeyPressed = value;
-        }
-        public bool Loaded
-        {
-            get => _loaded;
-            set => _loaded = value;
-        }
         public bool ReadGeneration
         {
             get => _readGeneration;
@@ -69,7 +56,7 @@ namespace GameOfLife
 
             while (true)
             {
-                if (!_gliderGunMode)
+                if (!GliderGunMode)
                 {
                     _render.MainMenuRender(_inputProcessor.WrongInput, _file.FileReadingError);
                     _inputProcessor.WrongInput = false;
@@ -77,9 +64,9 @@ namespace GameOfLife
                     fieldSizeChoice = Console.ReadKey(true);
                     _gameField = _inputProcessor.CheckInputMainMenu(fieldSizeChoice);
 
-                    if (_correctKeyPressed)
+                    if (_inputProcessor.CorrectKeyPressed)
                     {
-                        _correctKeyPressed = false;
+                        _inputProcessor.CorrectKeyPressed = false;
                         break;
                     }
                     else
@@ -108,9 +95,9 @@ namespace GameOfLife
         /// </summary>
         public void RunGame()
         {
-            ConsoleKeyInfo cki;
+            ConsoleKeyInfo runTimeKeyPress;
 
-            if (!_loaded)
+            if (!_file.FileLoaded)
             {
                 FirstRenderCalculations();
             }
@@ -118,42 +105,42 @@ namespace GameOfLife
             {
                 Console.Clear();
             }
-            _loaded = false; // To reset the fact of previous loading to avoid disruption of the game after restart.
+            _file.FileLoaded = false; // To reset the fact of previous loading to avoid disruption of the game after restart.
 
             do
             {
                 while (Console.KeyAvailable == false)
                 {
                     Console.SetCursorPosition(0, 0);
-                    _returnValues = RuntimeCalculations(_delay, _gliderGunMode, _readGeneration);
+                    RuntimeCalculations();
                     if (_gameOver)
                     {
                         break;
                     }
-                    _readGeneration = false;
+                    ReadGeneration = false;
                     Thread.Sleep(_delay);
                 }
                 if (!_gameOver)
                 {
-                    cki = Console.ReadKey(true);
-                    PauseGame(cki);
-                    _delay = ChangeDelay(_delay, cki);
+                    runTimeKeyPress = Console.ReadKey(true);
+                    PauseGame(runTimeKeyPress);
+                    ChangeDelay(runTimeKeyPress);
                 }
                 else
                 {
                     _gameOver = false;
                     break;
                 }
-            } while (cki.Key != ConsoleKey.Escape);
+            } while (runTimeKeyPress.Key != ConsoleKey.Escape);
 
             _render.ExitMenuRender();
-            cki = Console.ReadKey(true);
+            runTimeKeyPress = Console.ReadKey(true);
 
-            if (cki.Key == ConsoleKey.R)
+            if (runTimeKeyPress.Key == ConsoleKey.R)
             {
                 RestartGame();
             }
-            else if (cki.Key == ConsoleKey.Escape)
+            else if (runTimeKeyPress.Key == ConsoleKey.Escape)
             {
                 Environment.Exit(0);
             }
@@ -180,41 +167,35 @@ namespace GameOfLife
         /// <param name="delay">Delay between generations in miliseconds</param>
         /// <param name="gliderGunMode">Parameter to enable the Glider Gun mode with dead borders rules.</param>
         /// <param name="readGeneration">Parameter that represents if the generation was read from the file.</param>
-        /// <returns>Returns a tuple containing an array of the game field, number of alive and dead cells and the generation number.</returns>
-        private Tuple<int, int, int> RuntimeCalculations(int delay, bool gliderGunMode, bool readGeneration)
+        private void RuntimeCalculations()
         {
             int generationsAfterLoading = 1; // Parameter for proper loading from file.
-            int aliveCells = 0;
-            int deadCells = 0;
 
-            if (readGeneration)
+            if (ReadGeneration)
             {
                 generationsAfterLoading = 0;
-                readGeneration = false;
+                ReadGeneration = false;
             }
             if (generationsAfterLoading >= 1)
             {
-                _rulesApplier.DetermineCellsDestiny(_gameField, gliderGunMode);
+                _rulesApplier.DetermineCellsDestiny(_gameField, GliderGunMode);
                 _rulesApplier.FieldRefresh(_gameField);
-                aliveCells = CountAliveCells();
-                deadCells = _gameField.Area - aliveCells;
+                CountAliveCells();
             }
             if (generationsAfterLoading == 0)
             {
                 generationsAfterLoading++;
-                aliveCells = CountAliveCells();
-                deadCells = _gameField.Area - aliveCells;
+                CountAliveCells();
             }
-            if (aliveCells == 0)
+            if (_gameField.AliveCellsNumber == 0)
             {
                 _render.GameOverRender(_gameField.Generation);
                 _gameOver = true;
             }
             else
             {
-                _render.RuntimeUIRender(aliveCells, deadCells, _gameField.Generation, delay);
+                _render.RuntimeUIRender(_gameField, _delay);
             }
-            _returnValues = new Tuple<int, int, int>(aliveCells, deadCells, _gameField.Generation);
             _gameField.Generation++;
             if (_gameOver)
             {
@@ -224,7 +205,6 @@ namespace GameOfLife
             {
                 _render.RenderField(_gameField);
             }
-            return _returnValues;
         }
 
         /// <summary>
@@ -233,17 +213,17 @@ namespace GameOfLife
         /// <param name="keyPressed">Parameter which stores Spacebar key press.</param>
         private void PauseGame(ConsoleKeyInfo keyPressed)
         {
-            ConsoleKeyInfo saveKey;
+            ConsoleKeyInfo pauseMenuKeyPress;
 
             if (keyPressed.Key == ConsoleKey.Spacebar)
             {
                 _render.PauseMenuRender();
-                saveKey = Console.ReadKey(true);
+                pauseMenuKeyPress = Console.ReadKey(true);
 
-                switch (saveKey.Key)
+                switch (pauseMenuKeyPress.Key)
                 {
                     case ConsoleKey.S:
-                        _file.SaveGameFieldToFile(_gameField, _returnValues.Item1, _returnValues.Item2, _returnValues.Item3);
+                        _file.SaveGameFieldToFile(_gameField);
                         Console.WriteLine(SuccessfullySavedPhrase);
                         Console.ReadKey();
                         Console.Clear();
@@ -269,7 +249,7 @@ namespace GameOfLife
         /// </summary>
         private void RestartGame()
         {
-            _gliderGunMode = false;
+            GliderGunMode = false;
             _delay = 1000;
             Console.Clear();
             StartGame(_render, _file, _fieldOperations, _library, _rulesApplier, _engine, _inputProcessor);
@@ -279,11 +259,9 @@ namespace GameOfLife
         /// <summary>
         /// Method to count the current number of alive cells on the field.
         /// </summary>
-        /// <param name="gameField">An array of the game field cells.</param>
-        /// <returns>Returns the number of alive cells currently in the gamefield array.</returns>
-        public int CountAliveCells()
+        public void CountAliveCells()
         {
-            int aliveCellCount = 0;
+            _gameField.AliveCellsNumber = 0;
 
             for (int i = 0; i < _gameField.Length; i++)
             {
@@ -291,49 +269,45 @@ namespace GameOfLife
                 {
                     if (_gameField.GameField[i, j] == AliveCellSymbol)
                     {
-                        aliveCellCount++;
+                        _gameField.AliveCellsNumber++;
                     }
                 }
             }
-            return aliveCellCount;
         }
 
         /// <summary>
         /// Method to change the time delay if LeftArrow or RightArrow keys are pressed.
         /// </summary>
-        /// <param name="timeDelay">Time delay in miliseconds between each generation.</param>
         /// <param name="keyPressed">Parameters which stores Left and Right Arrow key presses.</param>
-        /// <returns>Returns changed time delay.</returns>
-        private int ChangeDelay(int timeDelay, ConsoleKeyInfo keyPressed)
+        private void ChangeDelay(ConsoleKeyInfo keyPressed)
         {
             switch (keyPressed.Key)
             {
                 case ConsoleKey.LeftArrow:
-                    if (timeDelay <= 100 && timeDelay > 10)
+                    if (_delay <= 100 && _delay > 10)
                     {
-                        timeDelay -= 10;
+                        _delay -= 10;
                     }
-                    else if (timeDelay > 100)
+                    else if (_delay > 100)
                     {
-                        timeDelay -= 100;
+                        _delay -= 100;
                     }
                     break;
 
                 case ConsoleKey.RightArrow:
-                    if (timeDelay < 2000)
+                    if (_delay < 2000)
                     {
-                        if (timeDelay < 100)
+                        if (_delay < 100)
                         {
-                            timeDelay += 10;
+                            _delay += 10;
                         }
                         else
                         {
-                            timeDelay += 100;
+                            _delay += 100;
                         }
                     }
                     break;
             }
-            return timeDelay;
         }
     }
 }

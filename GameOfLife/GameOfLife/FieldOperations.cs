@@ -100,7 +100,7 @@ namespace GameOfLife
                 {
                     _inputProcessor.WrongInput = false;
                 }
-                if (!_stop)
+                if (!Stop)
                 {
                     if (gameField.GameField[_coordinateX, _coordinateY] == DeadCellSymbol)
                     {
@@ -113,7 +113,7 @@ namespace GameOfLife
                 }
                 else
                 {
-                    _stop = false;
+                    Stop = false;
                     break;
                 }
             }
@@ -204,13 +204,13 @@ namespace GameOfLife
         /// <param name="SpawnLibraryObject">Parameter that represents the method for spawning an object from the library that will be called.</param>
         public void CallSpawningMethod(GameFieldModel gameField, Func<GameFieldModel, int, int, GameFieldModel> SpawnLibraryObject)
         {
-            if (_inputProcessor.EnterCoordinates() && !_stop)
+            if (_inputProcessor.EnterCoordinates() && !Stop)
             {
-                SpawnLibraryObject(gameField, _coordinateX, _coordinateY);
+                SpawnLibraryObject(gameField, CoordinateX, CoordinateY);
             }
-            else if (_stop)
+            else if (Stop)
             {
-                _stop = false;
+                Stop = false;
             }
             else
             {

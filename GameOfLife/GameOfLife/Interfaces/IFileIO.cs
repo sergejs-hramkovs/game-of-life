@@ -6,12 +6,16 @@ namespace GameOfLife.Interfaces
     {
         bool FileReadingError { get; set; }
 
+        bool FileLoaded { get; set; }
+
         string FilePath { get; }
 
-        void SaveGameFieldToFile(GameFieldModel gameField, int aliveCount, int deadCount, int generation);
+        int NumberOfFiles { get; }
+
+        void SaveGameFieldToFile(GameFieldModel gameField);
 
         GameFieldModel LoadGameFieldFromFile(int fileNumber);
 
-        int CountFiles();
+        void CountFiles();
     }
 }

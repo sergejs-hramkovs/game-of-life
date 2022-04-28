@@ -13,10 +13,16 @@ namespace GameOfLife
         private IFieldOperations _fieldOperations;
         private ILibrary _library;
         private bool _wrongInput = false;
+        private bool _correctKeyPressed = false;
         public bool WrongInput
         {
             get => _wrongInput;
             set => _wrongInput = value;
+        }
+        public bool CorrectKeyPressed
+        {
+            get => _correctKeyPressed;
+            set => _correctKeyPressed = value;
         }
 
         public void Injection(IEngine engine, IFileIO file, IRender render, IFieldOperations operations, ILibrary library)
@@ -38,27 +44,27 @@ namespace GameOfLife
             switch (keyPressed.Key)
             {
                 case ConsoleKey.D1:
-                    _engine.CorrectKeyPressed = true;
+                    CorrectKeyPressed = true;
                     return _gameField = new(3, 3);
 
                 case ConsoleKey.D2:
-                    _engine.CorrectKeyPressed = true;
+                    CorrectKeyPressed = true;
                     return _gameField = new(5, 5);
 
                 case ConsoleKey.D3:
-                    _engine.CorrectKeyPressed = true;
+                    CorrectKeyPressed = true;
                     return _gameField = new(10, 10);
 
                 case ConsoleKey.D4:
-                    _engine.CorrectKeyPressed = true;
+                    CorrectKeyPressed = true;
                     return _gameField = new(20, 20);
 
                 case ConsoleKey.D5:
-                    _engine.CorrectKeyPressed = true;
+                    CorrectKeyPressed = true;
                     return _gameField = new(75, 40);
 
                 case ConsoleKey.D6:
-                    _engine.CorrectKeyPressed = true;
+                    CorrectKeyPressed = true;
                     return EnterFieldDimensions(WrongInput);
 
                 case ConsoleKey.L:
@@ -283,11 +289,10 @@ namespace GameOfLife
         /// </summary>
         private void LoadingFromFileProcessor()
         {
-            int numberOfFiles;
             int fileNumber;
 
-            numberOfFiles = _file.CountFiles();
-            if (numberOfFiles == 1)
+            _file.CountFiles();
+            if (_file.NumberOfFiles == 1)
             {
                 fileNumber = 1;
             }
@@ -295,17 +300,17 @@ namespace GameOfLife
             {
                 do
                 {
-                    _render.ChooseFileToLoadMenuRender(numberOfFiles, _file.FilePath, WrongInput);
-                    fileNumber = CheckInputSavedGameMenu(numberOfFiles);
+                    _render.ChooseFileToLoadMenuRender(_file.NumberOfFiles, _file.FilePath, WrongInput);
+                    fileNumber = CheckInputSavedGameMenu(_file.NumberOfFiles);
                     Console.CursorVisible = false;
                 } while (WrongInput);
             }
             _gameField = _file.LoadGameFieldFromFile(fileNumber);
             if (!_file.FileReadingError)
             {
-                _engine.Loaded = true;
+                _file.FileLoaded = true;
                 _engine.ReadGeneration = true;
-                _engine.CorrectKeyPressed = true;
+                CorrectKeyPressed = true;
             }
         }
     }

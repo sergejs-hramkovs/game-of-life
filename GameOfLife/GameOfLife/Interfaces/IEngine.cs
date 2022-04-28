@@ -8,10 +8,6 @@ namespace GameOfLife.Interfaces
 {
     public interface IEngine
     {
-        bool CorrectKeyPressed { get; set; }
-
-        bool Loaded { get; set; }
-
         bool ReadGeneration { get; set; }
 
         bool GliderGunMode { get; set; }
@@ -23,6 +19,6 @@ namespace GameOfLife.Interfaces
 
         void RunGame();
 
-        int CountAliveCells();
+        void CountAliveCells();
     }
 }
