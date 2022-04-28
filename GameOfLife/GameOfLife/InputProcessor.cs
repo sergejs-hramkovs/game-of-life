@@ -32,11 +32,9 @@ namespace GameOfLife
         /// Method to check user input in the main menu.
         /// </summary>
         /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
+        /// <returns>Returns and instance of the GameFieldModel class.</returns>
         public GameFieldModel CheckInputMainMenu(ConsoleKeyInfo keyPressed)
         {
-            int numberOfFiles;
-            int fileNumber;
-
             switch (keyPressed.Key)
             {
                 case ConsoleKey.D1:
@@ -64,26 +62,7 @@ namespace GameOfLife
                     return EnterFieldDimensions(WrongInput);
 
                 case ConsoleKey.L:
-                    numberOfFiles = _file.CountFiles();
-                    if (numberOfFiles == 1)
-                    {
-                        fileNumber = 1;
-                    }
-                    else
-                    {
-                        do
-                        {
-                            _render.ChooseFileToLoadMenuRender(numberOfFiles, _file.FilePath, WrongInput);
-                            fileNumber = CheckInputSavedGameMenu(numberOfFiles);
-                        } while (WrongInput);
-                    }
-                    _gameField = _file.LoadGameFieldFromFile(fileNumber);
-                    if (!_file.FileReadingError)
-                    {
-                        _engine.Loaded = true;
-                        _engine.ReadGeneration = true;
-                        _engine.CorrectKeyPressed = true;
-                    }
+                    LoadingFromFileProcessor();
                     return _gameField;
 
                 case ConsoleKey.G:
@@ -107,6 +86,7 @@ namespace GameOfLife
         /// Method to check user input in the glider gun menu,
         /// </summary>
         /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
+        /// <returns>Returns and instance of the GameFieldModel class.</returns>
         public GameFieldModel CheckInputGliderGunMenu(ConsoleKeyInfo keyPressed)
         {
             switch (keyPressed.Key)
@@ -123,10 +103,11 @@ namespace GameOfLife
                 case ConsoleKey.G:
                     Console.Clear();
                     _engine.GliderGunMode = false;
+                    WrongInput = false;
                     return null;
 
                 default:
-                    Console.WriteLine(WrongInputPhrase);
+                    WrongInput = true;
                     return null;
             }
         }
@@ -135,8 +116,11 @@ namespace GameOfLife
         /// Method to process user input field dimensions.
         /// </summary>
         /// <param name="wrongInput">Parameter that represent if there was wrong input.</param>
+        /// <returns>Returns and instance of the GameFieldModel class.</returns>
         public GameFieldModel EnterFieldDimensions(bool wrongInput)
         {
+            Console.CursorVisible = true;
+
             while (true)
             {
                 if (wrongInput)
@@ -150,6 +134,7 @@ namespace GameOfLife
                     Console.Write(EnterWidthPhrase);
                     if (int.TryParse(Console.ReadLine(), out int width) && width > 0)
                     {
+                        Console.CursorVisible = false;
                         return _gameField = new(length, width);
                     }
                     else
@@ -172,6 +157,7 @@ namespace GameOfLife
         {
             string inputCoordinate;
 
+            Console.CursorVisible = true;
             Console.WriteLine(StopSeedingPhrase);
             Console.Write(EnterXPhrase);
             inputCoordinate = Console.ReadLine();
@@ -203,6 +189,7 @@ namespace GameOfLife
             {
                 return false;
             }
+            Console.CursorVisible = false;
             return true;
         }
 
@@ -289,6 +276,37 @@ namespace GameOfLife
                 WrongInput = true;
             }
             return chosenFile;
+        }
+
+        /// <summary>
+        /// Method to call file loading methods.
+        /// </summary>
+        private void LoadingFromFileProcessor()
+        {
+            int numberOfFiles;
+            int fileNumber;
+
+            numberOfFiles = _file.CountFiles();
+            if (numberOfFiles == 1)
+            {
+                fileNumber = 1;
+            }
+            else
+            {
+                do
+                {
+                    _render.ChooseFileToLoadMenuRender(numberOfFiles, _file.FilePath, WrongInput);
+                    fileNumber = CheckInputSavedGameMenu(numberOfFiles);
+                    Console.CursorVisible = false;
+                } while (WrongInput);
+            }
+            _gameField = _file.LoadGameFieldFromFile(fileNumber);
+            if (!_file.FileReadingError)
+            {
+                _engine.Loaded = true;
+                _engine.ReadGeneration = true;
+                _engine.CorrectKeyPressed = true;
+            }
         }
     }
 }

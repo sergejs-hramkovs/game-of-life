@@ -13,8 +13,8 @@ namespace GameOfLife
         /// <summary>
         /// Method to determine which cells die and which are reborn, judging by the number of alive neighbours.
         /// </summary>
-        /// <param name="field">An array of the gamefield cells.</param>
-        /// <param name="disableWrappingAroundField">Parameter if field's wrapping around is enabled.</param>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
+        /// <param name="disableWrappingAroundField">Parameter that shows if field's wrapping around is enabled.</param>
         public void DetermineCellsDestiny(GameFieldModel gameField, bool disableWrappingAroundField)
         {
             for (int i = 0; i < gameField.Length; i++)
@@ -68,7 +68,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to count each cell's alive and dead neighbours to later determine which will die and which will be reborn.
         /// </summary>
-        /// <param name="field">An array of the gamefield cells.</param>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="x">Horizontal coordinate of a cell which neighbours are being counted.</param>
         /// <param name="y">Vertical coordinate of a cell which neighbours are being counted</param>
         /// <param name="checkDeadCell">Parameter which shows whether the cell, which neighbours are being counted, is alive or dead.</param>
@@ -119,7 +119,7 @@ namespace GameOfLife
         /// <summary>
         /// Removes or creates new cells according to the rules.
         /// </summary>
-        /// <param name="field">An array of a gamefield.</param>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <returns>Returns an array of a gamefield after applying the rules of the game.</returns>
         public void FieldRefresh(GameFieldModel gameField)
         {

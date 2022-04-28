@@ -71,8 +71,8 @@ namespace GameOfLife
             {
                 if (!_gliderGunMode)
                 {
-                    _render.MainMenuRender(inputProcessor.WrongInput, _file.FileReadingError);
-                    inputProcessor.WrongInput = false;
+                    _render.MainMenuRender(_inputProcessor.WrongInput, _file.FileReadingError);
+                    _inputProcessor.WrongInput = false;
                     _file.FileReadingError = false;
                     fieldSizeChoice = Console.ReadKey(true);
                     _gameField = _inputProcessor.CheckInputMainMenu(fieldSizeChoice);
@@ -86,13 +86,13 @@ namespace GameOfLife
                     {
                         if (fieldSizeChoice.Key != ConsoleKey.G && fieldSizeChoice.Key != ConsoleKey.F1)
                         {
-                            inputProcessor.WrongInput = true;
+                            _inputProcessor.WrongInput = true;
                         }
                     }
                 }
                 else
                 {
-                    _render.GliderGunModeRender();
+                    _render.GliderGunModeRender(_inputProcessor.WrongInput);
                     fieldSizeChoice = Console.ReadKey(true);
                     _gameField = _inputProcessor.CheckInputGliderGunMenu(fieldSizeChoice);
                     if (fieldSizeChoice.Key == ConsoleKey.D1 || fieldSizeChoice.Key == ConsoleKey.D2)

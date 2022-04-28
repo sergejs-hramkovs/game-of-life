@@ -9,10 +9,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn a glider pattern.
         /// </summary>
-        /// <param name="fieldArray">The array of the game field cells.</param>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a glider.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a glider.</param>
-        /// <returns>Returns an array with gamefield elements with a glider seeded in it.</returns>
+        /// <returns>Returns an instance of the GameFieldModel class with a glider seeded in it.</returns>
         public GameFieldModel SpawnGlider(GameFieldModel gameField, int locationX, int locationY)
         {
             for (int i = locationX; i < locationX + 3; i++)
@@ -50,10 +50,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn a light-weight spaceship pattern.
         /// </summary>
-        /// <param name="fieldArray">The array of the game field cells.</param>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a light-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a light-weight spaceship.</param>
-        /// <returns>Returns an array with gamefield elements with a light-weight spaceship seeded in it.</returns>
+        /// <returns>Returns an instance of the GameFieldModel class with a light-weight spaceship seeded in it.</returns>
         public GameFieldModel SpawnLightWeight(GameFieldModel gameField, int locationX, int locationY)
         {
             for (int i = locationX; i < locationX + 5; i++)
@@ -105,10 +105,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn a middle-weight spaceship pattern.
         /// </summary>
-        /// <param name="fieldArray">The array of the game field cells.</param>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a middle-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a middle-weight spaceship.</param>
-        /// <returns>Returns an array with gamefield elements with a middle-weight spaceship seeded in it.</returns>
+        /// <returns>Returns an instance of the GameFieldModel class with a middle-weight spaceship seeded in it.</returns>
         public GameFieldModel SpawnMiddleWeight(GameFieldModel gameField, int locationX, int locationY)
         {
             for (int i = locationX; i < locationX + 6; i++)
@@ -167,10 +167,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn a heavy-weight spaceship pattern.
         /// </summary>
-        /// <param name="fieldArray">The array of the game field cells.</param>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a heavy-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a heavy-weight spaceship.</param>
-        /// <returns>Returns an array with gamefield elements with a heavy-weight spaceship seeded in it.</returns>
+        /// <returns>Returns an instance of the GameFieldModel class with a heavy-weight spaceship seeded in it.</returns>
         public GameFieldModel SpawnHeavyWeight(GameFieldModel gameField, int locationX, int locationY)
         {
             for (int i = locationX; i < locationX + 7; i++)
@@ -236,10 +236,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn Gosper's glider gun.
         /// </summary>
-        /// <param name="fieldArray">The array of the game field cells.</param>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of the Gosper's glider gun.</param>
         /// <param name="locationY">Vertical location of the upper left corner of Gosper's glider gun.</param>
-        /// <returns>Returns an array with gamefield elements with the Gosper's glider gun seeded in it.</returns>
+        /// <returns>Returns an instance of the GameFieldModel class with the Gosper's glider gun seeded in it.</returns>
         public GameFieldModel SpawnGosperGliderGun(GameFieldModel gameField, int locationX, int locationY)
         {
             for (int i = locationX; i < locationX + 37; i++)
@@ -368,10 +368,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to spawn Simkin's glider gun.
         /// </summary>
-        /// <param name="fieldArray">The array of the game field cells.</param>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of the Simkin's glider gun.</param>
         /// <param name="locationY">Vertical location of the upper left corner of the Simkin's glider gun.</param>
-        /// <returns>Returns an array with gamefield elements with the Simkin's glider gun seeded in it.</returns>
+        /// <returns>Returns an instance of the GameFieldModel class with the Simkin's glider gun seeded in it.</returns>
         public GameFieldModel SpawnSimkinGliderGun(GameFieldModel gameField, int locationX, int locationY)
         {
             for (int i = locationX; i < locationX + 36; i++)

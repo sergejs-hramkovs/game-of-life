@@ -9,7 +9,7 @@ namespace GameOfLife
         /// <summary>
         /// Method that draws the field.
         /// </summary>
-        /// <param name="field">An array of a gamefield.</param>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="dead">Parameter to render the field with '+' when the whoel field is dead.</param>
         public void RenderField(GameFieldModel gameField, bool dead = false)
         {
@@ -63,7 +63,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method for rendering field size and mode choosing menu.
+        /// Method for rendering the main menu.
         /// </summary>
         /// <param name="wrongInput">Parameter that represents if there was an attempt of wrong input.</param>
         /// <param name="fileReadingError">Parameter that represents if there was an error during loading from the file.</param>
@@ -98,10 +98,17 @@ namespace GameOfLife
         /// <summary>
         /// Method for rendering the glider gun mode menu.
         /// </summary>
-        public void GliderGunModeRender()
+        public void GliderGunModeRender(bool wrongInput)
         {
             Console.Clear();
-            Console.WriteLine("### The Glider Gun Mode ###");
+            if (wrongInput)
+            {
+                Console.WriteLine(WrongInputPhrase);
+            }
+            else
+            {
+                Console.WriteLine("### The Glider Gun Mode ###");
+            }
             Console.WriteLine("\nChoose the type of the glider gun:");
             Console.WriteLine("\n1. Gosper's glider gun");
             Console.WriteLine("2. Simkin's glider gun.");
@@ -209,6 +216,7 @@ namespace GameOfLife
         /// <param name="numberOfFiles">The number of saved game files currently present in the folder.</param>
         public void ChooseFileToLoadMenuRender(int numberOfFiles, string filePath, bool wrongInput)
         {
+            Console.CursorVisible = true;
             Console.Clear();
             Console.WriteLine("### Choose which saved game to load###");
             Console.WriteLine($"\n# There are currently {numberOfFiles} files");
@@ -230,8 +238,7 @@ namespace GameOfLife
         /// <param name="filePath">The location of the folder.</param>
         private void RenderFileNames(string filePath)
         {
-            string[] files = Directory.GetFiles(filePath);
-            foreach (string file in files)
+            foreach (string file in Directory.GetFiles(filePath))
             {
                 Console.WriteLine(Path.GetFileName(file));
             }

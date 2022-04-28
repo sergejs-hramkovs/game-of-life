@@ -36,8 +36,8 @@ namespace GameOfLife
         /// <summary>
         /// Method which converts 2-dimensional array to a 1-dimensional in order to minimize the number of 'write' operations to a file.
         /// </summary>
-        /// <param name="gameField">An array containing game field cells.</param>
-        /// <returns>Returns new 1-dimensional array.</returns>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
+        /// <returns>Returns new 1-dimensional array of game field rows.</returns>
         private string[] ConvertGameFieldToArrayOfRows(GameFieldModel gameField)
         {
             _stringField = new string[gameField.Width];
@@ -56,7 +56,7 @@ namespace GameOfLife
         /// Method that takes the list of the game field cells and converts it to an array of the game field.
         /// </summary>
         /// <param name="inputList">List of the game field cells.</param>
-        /// <returns>Returns an array of the game field.</returns>
+        /// <returns>Returns an instance of the GameFieldModel class.</returns>
         private GameFieldModel ConvertListOfRowsToGameField(List<string> inputList)
         {
             int x = 0;
@@ -102,7 +102,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to save the current games state to a text file.
         /// </summary>
-        /// <param name="currentGameState">An array with field cells representing the current game state.</param>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="aliveCount">Number of alive cells on the field.</param>
         /// <param name="deadCount">Number of dead cells on the field.</param>
         /// <param name="generation">Current generation number.</param>
@@ -127,7 +127,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to load the saved field from the file.
         /// </summary>
-        /// <returns>Returns call to ListToField method, which returns an array of the gamefield.</returns>
+        /// <returns>Returns call to ListToField method, which returns an instance of the GameField class.</returns>
         public GameFieldModel LoadGameFieldFromFile(int fileToLoad)
         {
             string line;

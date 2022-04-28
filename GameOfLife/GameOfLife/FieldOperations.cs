@@ -8,7 +8,6 @@ namespace GameOfLife
     {
         private int _coordinateX;
         private int _coordinateY;
-        private bool _wrongInput = false;
         private bool _stop = false;
         private IRender _render;
         private ILibrary _library;
@@ -48,12 +47,12 @@ namespace GameOfLife
 
             while (true)
             {
-                if (_wrongInput)
+                if (_inputProcessor.WrongInput)
                 {
                     Console.Clear();
                     _render.RenderField(gameField);
                     Console.WriteLine("\n" + WrongInputPhrase);
-                    _wrongInput = false;
+                    _inputProcessor.WrongInput = false;
                 }
                 if (gliderGunMode)
                 {
@@ -82,24 +81,24 @@ namespace GameOfLife
             while (true)
             {
                 Console.Clear();
-                if (!_wrongInput)
+                if (!_inputProcessor.WrongInput)
                 {
                     _render.RenderField(gameField);
                 }
-                else if (_wrongInput)
+                else if (_inputProcessor.WrongInput)
                 {
                     _render.RenderField(gameField);
                     Console.WriteLine("\n" + WrongInputPhrase);
-                    _wrongInput = false;
+                    _inputProcessor.WrongInput = false;
                 }
                 if (!_inputProcessor.EnterCoordinates())
                 {
-                    _wrongInput = true;
+                    _inputProcessor.WrongInput = true;
                     continue;
                 }
                 else
                 {
-                    _wrongInput = false;
+                    _inputProcessor.WrongInput = false;
                 }
                 if (!_stop)
                 {
@@ -178,16 +177,16 @@ namespace GameOfLife
                     return gameField;
                 }
 
-                if (!_wrongInput)
+                if (!_inputProcessor.WrongInput)
                 {
                     _render.RenderField(gameField);
                 }
-                if (_wrongInput)
+                if (_inputProcessor.WrongInput)
                 {
                     Console.Clear();
                     _render.RenderField(gameField);
                     Console.WriteLine("\n" + WrongInputPhrase);
-                    _wrongInput = false;
+                    _inputProcessor.WrongInput = false;
                 }
                 _render.LibraryMenuRender();
                 libraryChoice = Console.ReadKey(true);
@@ -215,7 +214,7 @@ namespace GameOfLife
             }
             else
             {
-                _wrongInput = true;
+                _inputProcessor.WrongInput = true;
             }
             Console.Clear();
         }
