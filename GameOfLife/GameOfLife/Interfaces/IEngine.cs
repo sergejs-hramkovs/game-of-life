@@ -12,6 +12,8 @@ namespace GameOfLife.Interfaces
 
         bool GliderGunMode { get; set; }
 
+        bool MultipleGamesMode { get; set; }
+
         int GliderGunType { get; set; }
 
         int Delay { get; set; }
@@ -21,7 +23,7 @@ namespace GameOfLife.Interfaces
 
         void StartGame(bool firstLaunch = true);
 
-        void RunGame();
+        void RunGame(int indentationSize = 1);
 
         void RestartGame();
 

@@ -8,8 +8,10 @@ namespace GameOfLife
     {
         private int _delay = 1000;
         private int _gliderGunType = 0;
+        private int _indentationSize;
         private bool _readGeneration = false;
         private bool _gliderGunMode = false;
+        private bool _multipleGamesMode = false;
         private bool _gameOver = false;
         private GameFieldModel _gameField;
         private IFileIO _file;
@@ -29,6 +31,11 @@ namespace GameOfLife
             get => _gliderGunMode;
             set => _gliderGunMode = value;
         }
+        public bool MultipleGamesMode
+        {
+            get => _multipleGamesMode;
+            set => _multipleGamesMode = value;
+        }
         public int GliderGunType
         {
             get => _gliderGunType;
@@ -38,6 +45,11 @@ namespace GameOfLife
         {
             get => _delay;
             set => _delay = value;
+        }
+        public int IndentationSize
+        {
+            get => _indentationSize;
+            set => _indentationSize = value;
         }
 
         public void Injection(IRender render, IFileIO file, IFieldOperations operations, ILibrary library, IRulesApplier rulesApplier,
@@ -58,6 +70,7 @@ namespace GameOfLife
         public void StartGame(bool firstLaunch = true)
         {
             ConsoleKey fieldSizeChoice;
+
             if (firstLaunch)
             {
                 _inputController.Injection(_engine, _file, _render, _fieldOperations, _library);
@@ -68,7 +81,7 @@ namespace GameOfLife
             }
             while (true)
             {
-                if (!GliderGunMode)
+                if (!GliderGunMode && !MultipleGamesMode)
                 {
                     _render.MainMenuRender(_inputController.WrongInput, _file.FileReadingError, _file.NoSavedGames);
                     _inputController.WrongInput = false;
@@ -87,7 +100,7 @@ namespace GameOfLife
                         _inputController.WrongInput = true;
                     }
                 }
-                else
+                else if (GliderGunMode)
                 {
                     _render.GliderGunModeRender(_inputController.WrongInput);
                     fieldSizeChoice = Console.ReadKey(true).Key;
@@ -97,15 +110,22 @@ namespace GameOfLife
                         break;
                     }
                 }
+                else if (MultipleGamesMode)
+                {  
+                    Task task1 = Task.Factory.StartNew(() => RunMultithreaded(1));
+                    Task task2 = Task.Factory.StartNew(() => RunMultithreaded(40));
+                    Task.WaitAll(task1, task2);
+                }
             }
         }
 
         /// <summary>
         /// Main process of the game.
         /// </summary>
-        public void RunGame()
+        public void RunGame(int indentationSize = 1)
         {
             ConsoleKey runTimeKeyPress;
+            IndentationSize = indentationSize;
 
             if (!_file.FileLoaded)
             {
@@ -158,11 +178,11 @@ namespace GameOfLife
         private void FirstRenderCalculations()
         {
             Console.Clear();
-            _render.RenderField(_gameField);
+            _render.RenderField(_gameField, IndentationSize);
             _fieldOperations.PopulateField(_gameField, _gliderGunMode, _gliderGunType);
             Console.Clear();
             _render.BlankUIRender();
-            _render.RenderField(_gameField);
+            _render.RenderField(_gameField, IndentationSize);
             Thread.Sleep(2000);
             Console.Clear();
         }
@@ -209,7 +229,7 @@ namespace GameOfLife
 
             if (_gameOver)
             {
-                _render.RenderField(_gameField, true);
+                _render.RenderField(_gameField, IndentationSize, true);
             }
             else
             {
@@ -246,6 +266,13 @@ namespace GameOfLife
                     }
                 }
             }
+        }
+
+        public void RunMultithreaded(int indentationsize)
+        {
+            _gameField = new(10, 10);
+            _gameField = _fieldOperations.RandomSeeding(_gameField);
+            RunGame(indentationsize);
         }
     }
 }

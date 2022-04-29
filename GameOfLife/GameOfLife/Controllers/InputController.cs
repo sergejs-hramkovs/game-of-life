@@ -80,6 +80,11 @@ namespace GameOfLife
                     _engine.GliderGunMode = true;
                     return null;
 
+                case ConsoleKey.M:
+                    _engine.MultipleGamesMode = true;
+                    CorrectKeyPressed = true;
+                    return null;
+
                 case ConsoleKey.F1:
                     _render.PrintRules();
                     return null;

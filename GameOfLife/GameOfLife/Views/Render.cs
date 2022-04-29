@@ -18,14 +18,21 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="dead">Parameter to render the field with '+' when the whoel field is dead.</param>
-        public void RenderField(GameFieldModel gameField, bool dead = false)
+        public void RenderField(GameFieldModel gameField, int indentationSize = 1, bool dead = false)
         {
+            string indentation = "";
+
+            for (int i = 0; i < indentationSize; i++)
+            {
+                indentation += " ";
+            }
+
             Console.WriteLine();
             if (!dead)
             {
                 for (int i = 0; i < gameField.Width; i++)
                 {
-                    Console.Write(" ");
+                    Console.Write(indentation);
                     for (int j = 0; j < gameField.Length; j++)
                     {
                         Console.Write(" " + gameField.GameField[j, i]);
@@ -113,6 +120,7 @@ namespace GameOfLife
             Console.WriteLine(" 6. Custom");
             Console.WriteLine("\n # To load the field from the file press 'L'");
             Console.WriteLine(" # To load Glider Gun Mode press 'G'");
+            Console.WriteLine(" # To load Multiple Games Mode press 'M'");
             Console.WriteLine("\n # Press 'F1' to read the rules and the description of the game");
         }
 

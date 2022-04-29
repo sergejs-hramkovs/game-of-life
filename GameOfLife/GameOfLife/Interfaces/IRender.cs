@@ -6,7 +6,7 @@ namespace GameOfLife.Interfaces
     {
         void Injection(IFileIO file);
 
-        void RenderField(GameFieldModel gameField, bool dead = false);
+        void RenderField(GameFieldModel gameField, int indentationSize = 1, bool dead = false);
 
         void RuntimeUIRender(GameFieldModel gameField, int delay);
 
