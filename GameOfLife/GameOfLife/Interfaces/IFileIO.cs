@@ -8,6 +8,8 @@ namespace GameOfLife.Interfaces
 
         bool FileLoaded { get; set; }
 
+        bool NoSavedGames { get; set; }
+
         string FilePath { get; }
 
         int NumberOfFiles { get; }

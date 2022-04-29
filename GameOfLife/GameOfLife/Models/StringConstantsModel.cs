@@ -10,6 +10,8 @@ namespace GameOfLife
     {
         public const string WrongInputPhrase = " ### Wrong Input! ### ";
 
+        public const string NoSavedGamesPhrase = " ### There are no saved games! ###";
+
         public const string EnterLengthPhrase = "\n # Enter the length of the field: ";
 
         public const string EnterWidthPhrase = "\n # Enter the width of the field: ";

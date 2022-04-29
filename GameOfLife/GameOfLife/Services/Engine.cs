@@ -40,13 +40,9 @@ namespace GameOfLife
             set => _delay = value;
         }
 
-        /// <summary>
-        /// Initiate field size choice.
-        /// </summary>
-        public void StartGame(IRender render, IFileIO file, IFieldOperations operations, ILibrary library, IRulesApplier rulesApplier,
+        public void Injection(IRender render, IFileIO file, IFieldOperations operations, ILibrary library, IRulesApplier rulesApplier,
             IEngine engine, IInputController inputController)
         {
-            ConsoleKeyInfo fieldSizeChoice;
             _render = render;
             _file = file;
             _fieldOperations = operations;
@@ -54,18 +50,29 @@ namespace GameOfLife
             _rulesApplier = rulesApplier;
             _engine = engine;
             _inputController = inputController;
-            _inputController.Injection(_engine, _file, _render, _fieldOperations, _library);
-            _file.Injection(_render, _inputController, this);
+        }
 
-            Console.CursorVisible = false;
-            Console.SetWindowSize(170, 55);
-
+        /// <summary>
+        /// Initiate field size choice.
+        /// </summary>
+        public void StartGame(bool firstLaunch = true)
+        {
+            ConsoleKeyInfo fieldSizeChoice;
+            if (firstLaunch)
+            {
+                _inputController.Injection(_engine, _file, _render, _fieldOperations, _library);
+                _file.Injection(_render, _inputController, this);
+                _render.Injection(_file);
+                Console.CursorVisible = false;
+                Console.SetWindowSize(170, 55);
+            }
             while (true)
             {
                 if (!GliderGunMode)
                 {
-                    _render.MainMenuRender(_inputController.WrongInput, _file.FileReadingError);
+                    _render.MainMenuRender(_inputController.WrongInput, _file.FileReadingError, _file.NoSavedGames);
                     _inputController.WrongInput = false;
+                    _file.NoSavedGames = false;
                     _file.FileReadingError = false;
                     fieldSizeChoice = Console.ReadKey(true);
                     _gameField = _inputController.CheckInputMainMenu(fieldSizeChoice);
@@ -220,7 +227,7 @@ namespace GameOfLife
             GliderGunMode = false;
             Delay = 1000;
             Console.Clear();
-            StartGame(_render, _file, _fieldOperations, _library, _rulesApplier, _engine, _inputController);
+            StartGame(false);
             RunGame();
         }
 

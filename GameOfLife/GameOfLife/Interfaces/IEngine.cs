@@ -16,8 +16,10 @@ namespace GameOfLife.Interfaces
 
         int Delay { get; set; }
 
-        void StartGame(IRender render, IFileIO file, IFieldOperations field, ILibrary library, IRulesApplier rulesApplier,
+        void Injection(IRender render, IFileIO file, IFieldOperations field, ILibrary library, IRulesApplier rulesApplier,
             IEngine engine, IInputController inputProcessor);
+
+        void StartGame(bool firstLaunch = true);
 
         void RunGame();
 

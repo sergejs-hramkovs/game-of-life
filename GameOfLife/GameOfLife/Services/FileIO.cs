@@ -14,6 +14,7 @@ namespace GameOfLife
         private List<string> _stringList = new List<string>();
         private bool _fileReadingError = false;
         private bool _fileLoaded = false;
+        private bool _noSavedGames = false;
         public bool FileReadingError
         {
             get => _fileReadingError;
@@ -27,6 +28,11 @@ namespace GameOfLife
         {
             get => _fileLoaded;
             set => _fileLoaded = value;
+        }
+        public bool NoSavedGames
+        {
+            get => _noSavedGames;
+            set => _noSavedGames = value;
         }
         public int NumberOfFiles
         {
@@ -173,6 +179,10 @@ namespace GameOfLife
         {
             DirectoryInfo directoryInfo = new(_filePath);
             _numberOfFiles = directoryInfo.GetFiles().Length;
+            if (_numberOfFiles == 0)
+            {
+                _noSavedGames = true;
+            }
         }
 
         /// <summary>
@@ -182,27 +192,36 @@ namespace GameOfLife
         {
             int fileNumber;
 
+            EnsureDirectoryExists(FilePath);
             CountFiles();
-            if (NumberOfFiles == 1)
+            if (NoSavedGames)
             {
-                fileNumber = 1;
+                _engine.StartGame(false);
+                _inputController.CorrectKeyPressed = true;
             }
             else
             {
-                do
+                if (NumberOfFiles == 1)
                 {
-                    _render.ChooseFileToLoadMenuRender(NumberOfFiles, FilePath, _inputController.WrongInput);
-                    fileNumber = _inputController.CheckInputSavedGameMenu(NumberOfFiles);
-                    Console.CursorVisible = false;
-                } while (_inputController.WrongInput);
-            }
-            _inputController.GameField = LoadGameFieldFromFile(fileNumber);
-            if (!FileReadingError)
-            {
-                FileLoaded = true;
-                _engine.ReadGeneration = true;
-                _inputController.CorrectKeyPressed = true;
-            }
+                    fileNumber = 1;
+                }
+                else
+                {
+                    do
+                    {
+                        _render.ChooseFileToLoadMenuRender(NumberOfFiles, FilePath, _inputController.WrongInput);
+                        fileNumber = _inputController.CheckInputSavedGameMenu(NumberOfFiles);
+                        Console.CursorVisible = false;
+                    } while (_inputController.WrongInput);
+                }
+                _inputController.GameField = LoadGameFieldFromFile(fileNumber);
+                if (!FileReadingError)
+                {
+                    FileLoaded = true;
+                    _engine.ReadGeneration = true;
+                    _inputController.CorrectKeyPressed = true;
+                }
+            }         
         }
     }
 }

@@ -6,6 +6,13 @@ namespace GameOfLife
 {
     public class Render : IRender
     {
+        private IFileIO _file;
+
+        public void Injection(IFileIO file)
+        {
+            _file = file;
+        }
+
         /// <summary>
         /// Method that draws the field.
         /// </summary>
@@ -76,7 +83,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="wrongInput">Parameter that represents if there was an attempt of wrong input.</param>
         /// <param name="fileReadingError">Parameter that represents if there was an error during loading from the file.</param>
-        public void MainMenuRender(bool wrongInput, bool fileReadingError)
+        public void MainMenuRender(bool wrongInput, bool fileReadingError, bool noSavedGames = false)
         {
             Console.Clear();
             if (fileReadingError)
@@ -87,6 +94,11 @@ namespace GameOfLife
             else if (wrongInput)
             {
                 Console.WriteLine(WrongInputPhrase);
+            }
+            else if (noSavedGames)
+            {
+                Console.WriteLine(NoSavedGamesPhrase);
+                _file.NoSavedGames = false;
             }
             else
             {
@@ -226,7 +238,7 @@ namespace GameOfLife
         {
             Console.CursorVisible = true;
             Console.Clear();
-            Console.WriteLine(" ### Choose which saved game to load###");
+            Console.WriteLine(" ### Choose which saved game to load ###");
             Console.WriteLine($"\n # There are currently {numberOfFiles} files");
             Console.WriteLine("\n--------------");
             RenderFileNames(filePath);

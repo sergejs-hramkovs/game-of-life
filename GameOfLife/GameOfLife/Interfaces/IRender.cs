@@ -4,6 +4,8 @@ namespace GameOfLife.Interfaces
 {
     public interface IRender
     {
+        void Injection(IFileIO file);
+
         void RenderField(GameFieldModel gameField, bool dead = false);
 
         void RuntimeUIRender(GameFieldModel gameField, int delay);
@@ -12,7 +14,7 @@ namespace GameOfLife.Interfaces
 
         void LibraryMenuRender(bool wrongInput);
 
-        void MainMenuRender(bool wrongIput, bool fileReadingError);
+        void MainMenuRender(bool wrongIput, bool fileReadingError, bool noSavedGames);
 
         void GliderGunModeRender(bool wrongInput);
 
