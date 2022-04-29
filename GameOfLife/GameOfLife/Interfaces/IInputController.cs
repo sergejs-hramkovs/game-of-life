@@ -12,26 +12,26 @@ namespace GameOfLife.Interfaces
 
         void Injection(IEngine engine, IFileIO file, IRender render, IFieldOperations operations, ILibrary library);
 
-        GameFieldModel CheckInputMainMenu(ConsoleKeyInfo keyPressed);
+        GameFieldModel CheckInputMainMenu(ConsoleKey keyPressed);
 
-        GameFieldModel CheckInputGliderGunMenu(ConsoleKeyInfo keyPressed);
+        GameFieldModel CheckInputGliderGunMenu(ConsoleKey keyPressed);
 
         GameFieldModel EnterFieldDimensions(bool wrongInput);
 
         bool EnterCoordinates();
 
-        bool CheckInputPopulateFieldMenu(ConsoleKeyInfo keyPressed);
+        bool CheckInputPopulateFieldMenu(ConsoleKey keyPressed);
 
-        bool CheckInputLibraryMenu(ConsoleKeyInfo keyPressed);
+        bool CheckInputLibraryMenu(ConsoleKey keyPressed);
 
-        void CheckInputPauseMenu(ConsoleKeyInfo keyPressed);
+        void CheckInputPauseMenu(ConsoleKey keyPressed);
 
-        void PauseGame(ConsoleKeyInfo keyPressed);
+        void PauseGame(ConsoleKey keyPressed);
 
         int CheckInputSavedGameMenu(int numberOfFiles);
 
-        void CheckInputExitMenu(ConsoleKeyInfo keyPressed);
+        void CheckInputExitMenu(ConsoleKey keyPressed);
 
-        void ChangeDelay(ConsoleKeyInfo keyPressed);
+        void ChangeDelay(ConsoleKey keyPressed);
     }
 }

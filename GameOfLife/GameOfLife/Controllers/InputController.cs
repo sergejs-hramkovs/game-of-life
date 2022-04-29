@@ -30,7 +30,7 @@ namespace GameOfLife
             set => _gameField = value;
         }
 
-        public void Injection(IEngine engine, IFileIO file, IRender render, IFieldOperations operations, ILibrary library)
+        public void Injection(IEngine engine, IFileIO? file = null, IRender? render = null, IFieldOperations? operations = null, ILibrary? library = null)
         {
             _engine = engine;
             _file = file;
@@ -44,9 +44,9 @@ namespace GameOfLife
         /// </summary>
         /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
         /// <returns>Returns and instance of the GameFieldModel class.</returns>
-        public GameFieldModel CheckInputMainMenu(ConsoleKeyInfo keyPressed)
+        public GameFieldModel CheckInputMainMenu(ConsoleKey keyPressed)
         {
-            switch (keyPressed.Key)
+            switch (keyPressed)
             {
                 case ConsoleKey.D1:
                     CorrectKeyPressed = true;
@@ -98,9 +98,9 @@ namespace GameOfLife
         /// </summary>
         /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
         /// <returns>Returns and instance of the GameFieldModel class.</returns>
-        public GameFieldModel CheckInputGliderGunMenu(ConsoleKeyInfo keyPressed)
+        public GameFieldModel CheckInputGliderGunMenu(ConsoleKey keyPressed)
         {
-            switch (keyPressed.Key)
+            switch (keyPressed)
             {
                 case ConsoleKey.D1:
                     _engine.GliderGunType = 1;
@@ -209,9 +209,9 @@ namespace GameOfLife
         /// </summary>
         /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
         /// <returns>Returns 'true' if the correct key is pressed, otherwise 'false'</returns>
-        public bool CheckInputPopulateFieldMenu(ConsoleKeyInfo keyPressed)
+        public bool CheckInputPopulateFieldMenu(ConsoleKey keyPressed)
         {
-            switch (keyPressed.Key)
+            switch (keyPressed)
             {
                 case ConsoleKey.D1:
                     _fieldOperations.ManualSeeding(_gameField);
@@ -237,9 +237,9 @@ namespace GameOfLife
         /// </summary>
         /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
         /// <returns>Returns 'true' if the 'Escape' key is pressed, otherwise 'false'</returns>
-        public bool CheckInputLibraryMenu(ConsoleKeyInfo keyPressed)
+        public bool CheckInputLibraryMenu(ConsoleKey keyPressed)
         {
-            switch (keyPressed.Key)
+            switch (keyPressed)
             {
                 case ConsoleKey.Escape:
                     return true;
@@ -293,9 +293,9 @@ namespace GameOfLife
         /// Method to change the time delay if LeftArrow or RightArrow keys are pressed.
         /// </summary>
         /// <param name="keyPressed">Parameters which stores Left and Right Arrow key presses.</param>
-        public void ChangeDelay(ConsoleKeyInfo keyPressed)
+        public void ChangeDelay(ConsoleKey keyPressed)
         {
-            switch (keyPressed.Key)
+            switch (keyPressed)
             {
                 case ConsoleKey.LeftArrow:
                     if (_engine.Delay <= 100 && _engine.Delay > 10)
@@ -328,9 +328,9 @@ namespace GameOfLife
         /// Method to check user input in the pause menu.
         /// </summary>
         /// <param name="keyPressed">Parameter which stores the key pressed in the pause menu.</param>
-        public void CheckInputPauseMenu(ConsoleKeyInfo keyPressed)
+        public void CheckInputPauseMenu(ConsoleKey keyPressed)
         {
-            switch (keyPressed.Key)
+            switch (keyPressed)
             {
                 case ConsoleKey.S:
                     _file.SaveGameFieldToFile(_gameField);
@@ -360,14 +360,14 @@ namespace GameOfLife
         /// Method to pause the game by pressing the Spacebar.
         /// </summary>
         /// <param name="keyPressed">Parameter which stores Spacebar key press.</param>
-        public void PauseGame(ConsoleKeyInfo keyPressed)
+        public void PauseGame(ConsoleKey keyPressed)
         {
-            ConsoleKeyInfo pauseMenuKeyPress;
+            ConsoleKey pauseMenuKeyPress;
 
-            if (keyPressed.Key == ConsoleKey.Spacebar)
+            if (keyPressed == ConsoleKey.Spacebar)
             {
                 _render.PauseMenuRender();
-                pauseMenuKeyPress = Console.ReadKey(true);
+                pauseMenuKeyPress = Console.ReadKey(true).Key;
                 CheckInputPauseMenu(pauseMenuKeyPress);
             }
         }
@@ -376,13 +376,13 @@ namespace GameOfLife
         /// Method to check user input in the exit menu.
         /// </summary>
         /// <param name="keyPressed">Parameter which stores the key pressed in the exit menu.</param>
-        public void CheckInputExitMenu(ConsoleKeyInfo keyPressed)
+        public void CheckInputExitMenu(ConsoleKey keyPressed)
         {
-            if (keyPressed.Key == ConsoleKey.R)
+            if (keyPressed == ConsoleKey.R)
             {
                 _engine.RestartGame();
             }
-            else if (keyPressed.Key == ConsoleKey.Escape)
+            else if (keyPressed == ConsoleKey.Escape)
             {
                 Environment.Exit(0);
             }

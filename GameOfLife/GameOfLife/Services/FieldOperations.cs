@@ -44,7 +44,7 @@ namespace GameOfLife
         /// <returns>Returns an instance of the GameFieldModel class.</returns>
         public GameFieldModel PopulateField(GameFieldModel gameField, bool gliderGunMode, int gliderGunType)
         {
-            ConsoleKeyInfo seedingChoice;
+            ConsoleKey seedingChoice;
 
             while (true)
             {
@@ -64,7 +64,7 @@ namespace GameOfLife
                 else
                 {
                     _render.SeedFieldMenuRender();
-                    seedingChoice = Console.ReadKey(true);
+                    seedingChoice = Console.ReadKey(true).Key;
                 }
                 if (_inputProcessor.CheckInputPopulateFieldMenu(seedingChoice))
                 {
@@ -159,7 +159,7 @@ namespace GameOfLife
         /// <returns>Returns an instance of the GameFieldModel class with a library object seeded in its field.</returns>
         public GameFieldModel LibrarySeeding(GameFieldModel gameField, bool gliderGunMode, int gliderGunType)
         {
-            ConsoleKeyInfo libraryChoice;
+            ConsoleKey libraryChoice;
 
             while (true)
             {
@@ -185,7 +185,7 @@ namespace GameOfLife
                 _render.RenderField(gameField);
                 _render.LibraryMenuRender(_inputProcessor.WrongInput);
                 _inputProcessor.WrongInput = false;
-                libraryChoice = Console.ReadKey(true);
+                libraryChoice = Console.ReadKey(true).Key;
 
                 if (_inputProcessor.CheckInputLibraryMenu(libraryChoice))
                 {

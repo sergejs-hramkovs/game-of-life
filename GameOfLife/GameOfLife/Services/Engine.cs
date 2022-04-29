@@ -57,7 +57,7 @@ namespace GameOfLife
         /// </summary>
         public void StartGame(bool firstLaunch = true)
         {
-            ConsoleKeyInfo fieldSizeChoice;
+            ConsoleKey fieldSizeChoice;
             if (firstLaunch)
             {
                 _inputController.Injection(_engine, _file, _render, _fieldOperations, _library);
@@ -74,7 +74,7 @@ namespace GameOfLife
                     _inputController.WrongInput = false;
                     _file.NoSavedGames = false;
                     _file.FileReadingError = false;
-                    fieldSizeChoice = Console.ReadKey(true);
+                    fieldSizeChoice = Console.ReadKey(true).Key;
                     _gameField = _inputController.CheckInputMainMenu(fieldSizeChoice);
 
                     if (_inputController.CorrectKeyPressed)
@@ -82,7 +82,7 @@ namespace GameOfLife
                         _inputController.CorrectKeyPressed = false;
                         break;
                     }
-                    else if (fieldSizeChoice.Key != ConsoleKey.G && fieldSizeChoice.Key != ConsoleKey.F1)
+                    else if (fieldSizeChoice != ConsoleKey.G && fieldSizeChoice != ConsoleKey.F1)
                     {
                         _inputController.WrongInput = true;
                     }
@@ -90,9 +90,9 @@ namespace GameOfLife
                 else
                 {
                     _render.GliderGunModeRender(_inputController.WrongInput);
-                    fieldSizeChoice = Console.ReadKey(true);
+                    fieldSizeChoice = Console.ReadKey(true).Key;
                     _gameField = _inputController.CheckInputGliderGunMenu(fieldSizeChoice);
-                    if (fieldSizeChoice.Key == ConsoleKey.D1 || fieldSizeChoice.Key == ConsoleKey.D2)
+                    if (fieldSizeChoice == ConsoleKey.D1 || fieldSizeChoice == ConsoleKey.D2)
                     {
                         break;
                     }
@@ -105,7 +105,7 @@ namespace GameOfLife
         /// </summary>
         public void RunGame()
         {
-            ConsoleKeyInfo runTimeKeyPress;
+            ConsoleKey runTimeKeyPress;
 
             if (!_file.FileLoaded)
             {
@@ -133,7 +133,7 @@ namespace GameOfLife
                 }
                 if (!_gameOver)
                 {
-                    runTimeKeyPress = Console.ReadKey(true);
+                    runTimeKeyPress = Console.ReadKey(true).Key;
                     _inputController.PauseGame(runTimeKeyPress);
                     _inputController.ChangeDelay(runTimeKeyPress);
                 }
@@ -142,14 +142,14 @@ namespace GameOfLife
                     _gameOver = false;
                     break;
                 }
-            } while (runTimeKeyPress.Key != ConsoleKey.Escape);
+            } while (runTimeKeyPress != ConsoleKey.Escape);
 
             _render.ExitMenuRender();
             do
             {
-                runTimeKeyPress = Console.ReadKey(true);
+                runTimeKeyPress = Console.ReadKey(true).Key;
                 _inputController.CheckInputExitMenu(runTimeKeyPress);
-            } while (runTimeKeyPress.Key != ConsoleKey.Escape || runTimeKeyPress.Key != ConsoleKey.R);
+            } while (runTimeKeyPress != ConsoleKey.Escape || runTimeKeyPress != ConsoleKey.R);
         }
 
         /// <summary>
