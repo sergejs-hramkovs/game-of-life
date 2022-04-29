@@ -227,7 +227,7 @@ namespace GameOfLife
                 Console.WriteLine("---------------------------------");
             }
             Console.WriteLine("\n ### THE WHOLE FIELD IS DEAD! ###");
-            Console.WriteLine($"\n Generations survived: {generation - 1}");
+            Console.WriteLine($"\n Generations survived: {generation}");
         }
 
         /// <summary>

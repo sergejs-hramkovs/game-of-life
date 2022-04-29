@@ -202,9 +202,9 @@ namespace GameOfLife
                 _gameOver = true;
             }
             else
-            {
-                _gameField.Generation++;
+            {     
                 _render.RuntimeUIRender(_gameField, Delay);
+                _gameField.Generation++;
             }
 
             if (_gameOver)
@@ -216,8 +216,6 @@ namespace GameOfLife
                 _render.RenderField(_gameField);
             }
         }
-
-
 
         /// <summary>
         /// Method to restart the game without rerunning the application.
