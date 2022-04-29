@@ -38,9 +38,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to choose how to seed the field - manually or automatically.
         /// </summary>
+        /// <param name="gameField">An instance of the GameFieldModel class.</param>
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
         /// <param name="gliderGunType">Parameter that represents the chosen type of the glider gun.</param>
-        /// <returns>Returns an array of a seeded gamefield.</returns>
+        /// <returns>Returns an instance of the GameFieldModel class.</returns>
         public GameFieldModel PopulateField(GameFieldModel gameField, bool gliderGunMode, int gliderGunType)
         {
             ConsoleKeyInfo seedingChoice;
@@ -75,7 +76,8 @@ namespace GameOfLife
         /// <summary>
         /// Cell seeding coordinates are entered manually by the user.
         /// </summary>
-        /// <returns>Returns an array of manually seeded gamefield.</returns>
+        /// <param name="gameField">An instance of the GameFieldModel class.</param>
+        /// <returns>Returns an instance of the GameFieldModel class with alive cells manually seeded in its field.</returns>
         public GameFieldModel ManualSeeding(GameFieldModel gameField)
         {
             while (true)
@@ -123,9 +125,8 @@ namespace GameOfLife
         /// <summary>
         /// Cell amount and coordinates are generated automatically and randomly.
         /// </summary>
-        /// <param name="fieldLength">The horizontal dimension of the field.</param>
-        /// <param name="fieldWidth">The vertical dimension of the field.</param>
-        /// <returns>Returns an array of randomly seeded gamefield.</returns>
+        /// <param name="gameField">An instance of the GameFieldModel class.</param>
+        /// <returns>Returns an instance of the GameFieldModel class with alive cells randomly seeded in its field.</returns>
         public GameFieldModel RandomSeeding(GameFieldModel gameField)
         {
             Random random = new();
@@ -152,9 +153,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to choose a cell pattern from the premade library.
         /// </summary
+        /// <param name="gameField">An instance of the GameFieldModel class.</param>
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
         /// <param name="gliderGunType">Parameter that represents the chosen type of the glider gun.</param>
-        /// <returns>Returns an array of a gamefield seeded with objects from the library.</returns>
+        /// <returns>Returns an instance of the GameFieldModel class with a library object seeded in its field.</returns>
         public GameFieldModel LibrarySeeding(GameFieldModel gameField, bool gliderGunMode, int gliderGunType)
         {
             ConsoleKeyInfo libraryChoice;
@@ -176,19 +178,13 @@ namespace GameOfLife
                     Console.Clear();
                     return gameField;
                 }
-
-                if (!_inputProcessor.WrongInput)
-                {
-                    _render.RenderField(gameField);
-                }
                 if (_inputProcessor.WrongInput)
                 {
                     Console.Clear();
-                    _render.RenderField(gameField);
-                    Console.WriteLine("\n" + WrongInputPhrase);
-                    _inputProcessor.WrongInput = false;
                 }
-                _render.LibraryMenuRender();
+                _render.RenderField(gameField);
+                _render.LibraryMenuRender(_inputProcessor.WrongInput);
+                _inputProcessor.WrongInput = false;
                 libraryChoice = Console.ReadKey(true);
 
                 if (_inputProcessor.CheckInputLibraryMenu(libraryChoice))
@@ -201,9 +197,12 @@ namespace GameOfLife
         /// <summary>
         /// Method to call one of the methods for spawning an object from the library, depending on the pressed key.
         /// </summary>
+        /// <param name="gameField">An instance of the GameFieldModel class.</param>
         /// <param name="SpawnLibraryObject">Parameter that represents the method for spawning an object from the library that will be called.</param>
         public void CallSpawningMethod(GameFieldModel gameField, Func<GameFieldModel, int, int, GameFieldModel> SpawnLibraryObject)
         {
+            Console.Clear();
+            _render.RenderField(gameField);
             if (_inputProcessor.EnterCoordinates() && !Stop)
             {
                 SpawnLibraryObject(gameField, CoordinateX, CoordinateY);

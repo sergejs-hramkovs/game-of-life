@@ -75,12 +75,9 @@ namespace GameOfLife
                         _inputController.CorrectKeyPressed = false;
                         break;
                     }
-                    else
+                    else if (fieldSizeChoice.Key != ConsoleKey.G && fieldSizeChoice.Key != ConsoleKey.F1)
                     {
-                        if (fieldSizeChoice.Key != ConsoleKey.G && fieldSizeChoice.Key != ConsoleKey.F1)
-                        {
-                            _inputController.WrongInput = true;
-                        }
+                        _inputController.WrongInput = true;
                     }
                 }
                 else
@@ -111,7 +108,8 @@ namespace GameOfLife
             {
                 Console.Clear();
             }
-            _file.FileLoaded = false; // To reset the fact of previous loading to avoid disruption of the game after restart.
+            // To reset the fact of previous loading to avoid disruption of the game after restart.
+            _file.FileLoaded = false;
 
             do
             {
@@ -129,7 +127,7 @@ namespace GameOfLife
                 if (!_gameOver)
                 {
                     runTimeKeyPress = Console.ReadKey(true);
-                    PauseGame(runTimeKeyPress);
+                    _inputController.PauseGame(runTimeKeyPress);
                     _inputController.ChangeDelay(runTimeKeyPress);
                 }
                 else
@@ -140,16 +138,11 @@ namespace GameOfLife
             } while (runTimeKeyPress.Key != ConsoleKey.Escape);
 
             _render.ExitMenuRender();
-            runTimeKeyPress = Console.ReadKey(true);
-
-            if (runTimeKeyPress.Key == ConsoleKey.R)
+            do
             {
-                RestartGame();
-            }
-            else if (runTimeKeyPress.Key == ConsoleKey.Escape)
-            {
-                Environment.Exit(0);
-            }
+                runTimeKeyPress = Console.ReadKey(true);
+                _inputController.CheckInputExitMenu(runTimeKeyPress);
+            } while (runTimeKeyPress.Key != ConsoleKey.Escape || runTimeKeyPress.Key != ConsoleKey.R);
         }
 
         /// <summary>
@@ -172,13 +165,18 @@ namespace GameOfLife
         /// </summary>
         private void RuntimeCalculations()
         {
-            int generationsAfterLoading = 1; // Parameter for proper loading from file.
+            // Parameter for proper loading from file.
+            int generationsAfterLoading = 1;
 
+            // ReadGeneration ensures loading of a proper generation number when loading from the file.
             if (ReadGeneration)
             {
                 generationsAfterLoading = 0;
                 ReadGeneration = false;
             }
+
+            // generationsAfterLoading ensure proper game field rendering.
+            // Helps to avoid loading of the previous or next game state.
             if (generationsAfterLoading >= 1)
             {
                 _rulesApplier.DetermineCellsDestiny(_gameField, GliderGunMode);
@@ -190,6 +188,7 @@ namespace GameOfLife
                 generationsAfterLoading++;
                 CountAliveCells();
             }
+
             if (_gameField.AliveCellsNumber == 0)
             {
                 _render.GameOverRender(_gameField.Generation);
@@ -197,9 +196,10 @@ namespace GameOfLife
             }
             else
             {
+                _gameField.Generation++;
                 _render.RuntimeUIRender(_gameField, Delay);
             }
-            _gameField.Generation++;
+
             if (_gameOver)
             {
                 _render.RenderField(_gameField, true);
@@ -210,47 +210,12 @@ namespace GameOfLife
             }
         }
 
-        /// <summary>
-        /// Method to pause the game by pressing the Spacebar.
-        /// </summary>
-        /// <param name="keyPressed">Parameter which stores Spacebar key press.</param>
-        private void PauseGame(ConsoleKeyInfo keyPressed)
-        {
-            ConsoleKeyInfo pauseMenuKeyPress;
 
-            if (keyPressed.Key == ConsoleKey.Spacebar)
-            {
-                _render.PauseMenuRender();
-                pauseMenuKeyPress = Console.ReadKey(true);
-
-                switch (pauseMenuKeyPress.Key)
-                {
-                    case ConsoleKey.S:
-                        _file.SaveGameFieldToFile(_gameField);
-                        Console.WriteLine(SuccessfullySavedPhrase);
-                        Console.ReadKey();
-                        Console.Clear();
-                        break;
-
-                    case ConsoleKey.Escape:
-                        Environment.Exit(0);
-                        break;
-
-                    case ConsoleKey.R:
-                        RestartGame();
-                        break;
-
-                    default:
-                        Console.Clear();
-                        break;
-                }
-            }
-        }
 
         /// <summary>
         /// Method to restart the game without rerunning the application.
         /// </summary>
-        private void RestartGame()
+        public void RestartGame()
         {
             GliderGunMode = false;
             Delay = 1000;

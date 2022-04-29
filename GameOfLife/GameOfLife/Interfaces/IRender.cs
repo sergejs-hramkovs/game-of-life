@@ -10,7 +10,7 @@ namespace GameOfLife.Interfaces
 
         void SeedFieldMenuRender();
 
-        void LibraryMenuRender();
+        void LibraryMenuRender(bool wrongInput);
 
         void MainMenuRender(bool wrongIput, bool fileReadingError);
 

@@ -21,6 +21,8 @@ namespace GameOfLife.Interfaces
 
         void RunGame();
 
+        void RestartGame();
+
         void CountAliveCells();
     }
 }

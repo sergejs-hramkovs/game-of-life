@@ -48,7 +48,7 @@ namespace GameOfLife.Models
             _length = _gameField.GetLength(0);
             _width = _gameField.GetLength(1);
             _area = Length * Width;
-            _generation = 1;
+            _generation = 0;
 
             for (int i = 0; i < Length; i++)
             {

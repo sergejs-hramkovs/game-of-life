@@ -24,7 +24,13 @@ namespace GameOfLife.Interfaces
 
         bool CheckInputLibraryMenu(ConsoleKeyInfo keyPressed);
 
+        void CheckInputPauseMenu(ConsoleKeyInfo keyPressed);
+
+        void PauseGame(ConsoleKeyInfo keyPressed);
+
         int CheckInputSavedGameMenu(int numberOfFiles);
+
+        void CheckInputExitMenu(ConsoleKeyInfo keyPressed);
 
         void ChangeDelay(ConsoleKeyInfo keyPressed);
     }

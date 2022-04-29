@@ -323,5 +323,69 @@ namespace GameOfLife
                     break;
             }
         }
+
+        /// <summary>
+        /// Method to check user input in the pause menu.
+        /// </summary>
+        /// <param name="keyPressed">Parameter which stores the key pressed in the pause menu.</param>
+        public void CheckInputPauseMenu(ConsoleKeyInfo keyPressed)
+        {
+            switch (keyPressed.Key)
+            {
+                case ConsoleKey.S:
+                    _file.SaveGameFieldToFile(_gameField);
+                    Console.Clear();
+                    _render.RuntimeUIRender(GameField, _engine.Delay);
+                    _render.RenderField(GameField);
+                    Console.WriteLine(SuccessfullySavedPhrase);
+                    Console.ReadKey();
+                    Console.Clear();
+                    break;
+
+                case ConsoleKey.Escape:
+                    Environment.Exit(0);
+                    break;
+
+                case ConsoleKey.R:
+                    _engine.RestartGame();
+                    break;
+
+                default:
+                    Console.Clear();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Method to pause the game by pressing the Spacebar.
+        /// </summary>
+        /// <param name="keyPressed">Parameter which stores Spacebar key press.</param>
+        public void PauseGame(ConsoleKeyInfo keyPressed)
+        {
+            ConsoleKeyInfo pauseMenuKeyPress;
+
+            if (keyPressed.Key == ConsoleKey.Spacebar)
+            {
+                _render.PauseMenuRender();
+                pauseMenuKeyPress = Console.ReadKey(true);
+                CheckInputPauseMenu(pauseMenuKeyPress);
+            }
+        }
+
+        /// <summary>
+        /// Method to check user input in the exit menu.
+        /// </summary>
+        /// <param name="keyPressed">Parameter which stores the key pressed in the exit menu.</param>
+        public void CheckInputExitMenu(ConsoleKeyInfo keyPressed)
+        {
+            if (keyPressed.Key == ConsoleKey.R)
+            {
+                _engine.RestartGame();
+            }
+            else if (keyPressed.Key == ConsoleKey.Escape)
+            {
+                Environment.Exit(0);
+            }
+        }
     }
 }
