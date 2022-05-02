@@ -17,7 +17,6 @@
 
             engine.Injection(render, file, field, library, applier, engine, processor);
             engine.StartGame();
-            engine.RunGame();
         }
     }
 }

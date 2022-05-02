@@ -90,15 +90,17 @@ namespace GameOfLife
                     fieldSizeChoice = Console.ReadKey(true).Key;
                     _gameField = _inputController.CheckInputMainMenu(fieldSizeChoice);
 
-                    if (_inputController.CorrectKeyPressed)
+                    if (_inputController.CorrectKeyPressed && !MultipleGamesMode)
                     {
                         _inputController.CorrectKeyPressed = false;
+                        RunGame();
                         break;
                     }
-                    else if (fieldSizeChoice != ConsoleKey.G && fieldSizeChoice != ConsoleKey.F1)
+                    else if (fieldSizeChoice != ConsoleKey.G && fieldSizeChoice != ConsoleKey.F1 && fieldSizeChoice != ConsoleKey.M)
                     {
                         _inputController.WrongInput = true;
                     }
+
                 }
                 else if (GliderGunMode)
                 {
@@ -107,14 +109,14 @@ namespace GameOfLife
                     _gameField = _inputController.CheckInputGliderGunMenu(fieldSizeChoice);
                     if (fieldSizeChoice == ConsoleKey.D1 || fieldSizeChoice == ConsoleKey.D2)
                     {
+                        RunGame();
                         break;
                     }
                 }
                 else if (MultipleGamesMode)
-                {  
-                    Task task1 = Task.Factory.StartNew(() => RunMultithreaded(1));
-                    Task task2 = Task.Factory.StartNew(() => RunMultithreaded(40));
-                    Task.WaitAll(task1, task2);
+                {
+                    RunMultipleGames();
+                    break;
                 }
             }
         }
@@ -127,7 +129,7 @@ namespace GameOfLife
             ConsoleKey runTimeKeyPress;
             IndentationSize = indentationSize;
 
-            if (!_file.FileLoaded)
+            if (!_file.FileLoaded && !MultipleGamesMode)
             {
                 FirstRenderCalculations();
             }
@@ -208,12 +210,12 @@ namespace GameOfLife
             {
                 _rulesApplier.DetermineCellsDestiny(_gameField, GliderGunMode);
                 _rulesApplier.FieldRefresh(_gameField);
-                CountAliveCells();
+                CountAliveCells(_gameField);
             }
             if (generationsAfterLoading == 0)
             {
                 generationsAfterLoading++;
-                CountAliveCells();
+                CountAliveCells(_gameField);
             }
 
             if (_gameField.AliveCellsNumber == 0)
@@ -222,7 +224,7 @@ namespace GameOfLife
                 _gameOver = true;
             }
             else
-            {     
+            {
                 _render.RuntimeUIRender(_gameField, Delay);
                 _gameField.Generation++;
             }
@@ -233,7 +235,7 @@ namespace GameOfLife
             }
             else
             {
-                _render.RenderField(_gameField);
+                _render.RenderField(_gameField, IndentationSize);
             }
         }
 
@@ -243,6 +245,7 @@ namespace GameOfLife
         public void RestartGame()
         {
             GliderGunMode = false;
+            MultipleGamesMode = false;
             Delay = 1000;
             Console.Clear();
             StartGame(false);
@@ -252,27 +255,109 @@ namespace GameOfLife
         /// <summary>
         /// Method to count the current number of alive cells on the field.
         /// </summary>
-        public void CountAliveCells()
+        public int CountAliveCells(GameFieldModel gameField)
         {
-            _gameField.AliveCellsNumber = 0;
+            gameField.AliveCellsNumber = 0;
 
-            for (int i = 0; i < _gameField.Length; i++)
+            for (int i = 0; i < gameField.Length; i++)
             {
-                for (int j = 0; j < _gameField.Width; j++)
+                for (int j = 0; j < gameField.Width; j++)
                 {
-                    if (_gameField.GameField[i, j] == AliveCellSymbol)
+                    if (gameField.GameField[i, j] == AliveCellSymbol)
                     {
-                        _gameField.AliveCellsNumber++;
+                        gameField.AliveCellsNumber++;
                     }
                 }
             }
+            return gameField.AliveCellsNumber;
         }
 
-        public void RunMultithreaded(int indentationsize)
+        private void RunMultipleGames()
         {
-            _gameField = new(10, 10);
-            _gameField = _fieldOperations.RandomSeeding(_gameField);
-            RunGame(indentationsize);
+            ConsoleKey runTimeKeyPress;
+            List<GameFieldModel> listOfGames = new List<GameFieldModel>();
+            List<int> gamesToBeDisplayed = new List<int>();
+            List<int> deadFields = new List<int>();
+            Random random = new Random();
+            int numbersOfFieldsAlive;
+            int totalCellsAlive;
+            int gameNumber;
+
+            for (int i = 0; i < 1000; i++)
+            {
+                listOfGames.Add(new(10, 10));
+                listOfGames[i] = _fieldOperations.RandomSeeding(listOfGames[i]);
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                gamesToBeDisplayed.Add(random.Next(0, listOfGames.Count));
+            }
+            numbersOfFieldsAlive = listOfGames.Count;
+            Console.Clear();
+
+            do
+            {
+                while (Console.KeyAvailable == false)
+                {
+                    totalCellsAlive = 0;
+
+                    foreach (var field in listOfGames)
+                    {
+                        _gameField = field;
+                        CountAliveCells(_gameField);
+                        totalCellsAlive += _gameField.AliveCellsNumber;
+                    }
+
+                    Console.SetCursorPosition(0, 0);
+                    Console.WriteLine($"Delay: {Delay}  ");
+                    Console.WriteLine($"Fields alive: {numbersOfFieldsAlive}   ");
+                    Console.WriteLine($"Total alive cells: {totalCellsAlive}   ");
+
+                    for (int i = 0; i < gamesToBeDisplayed.Count; i++)
+                    {
+                        if (CountAliveCells(listOfGames[gamesToBeDisplayed[i]]) == 0)
+                        {
+                            Console.WriteLine("\nThe whole field is dead");
+                            _render.RenderField(listOfGames[gamesToBeDisplayed[i]], 1, true);
+                            gamesToBeDisplayed[i] = random.Next(0, listOfGames.Count);
+                        }
+                        else
+                        {
+                            Console.WriteLine($"\nGame #{gamesToBeDisplayed[i]}. Alive: {listOfGames[gamesToBeDisplayed[i]].AliveCellsNumber}             ");
+                            _render.RenderField(listOfGames[gamesToBeDisplayed[i]]);
+                        }
+                        
+                    }
+
+                    for (int i = 0; i < listOfGames.Count; i++)
+                    {
+                        _gameField = listOfGames[i];
+                        _rulesApplier.DetermineCellsDestiny(_gameField, GliderGunMode);
+                        _rulesApplier.FieldRefresh(_gameField);
+                        CountAliveCells(_gameField);
+                        if (_gameField.AliveCellsNumber > 0)
+                        {
+                            listOfGames[i] = _gameField;
+                        }
+                        else if (!deadFields.Contains(i))
+                        {
+                            numbersOfFieldsAlive--;
+                            deadFields.Add(i);
+                        }
+                    }
+                    Thread.Sleep(Delay);
+                }
+                runTimeKeyPress = Console.ReadKey(true).Key;
+                _inputController.PauseGame(runTimeKeyPress);
+                _inputController.ChangeDelay(runTimeKeyPress);
+            } while (runTimeKeyPress != ConsoleKey.Escape);
+
+            _render.ExitMenuRender();
+            do
+            {
+                runTimeKeyPress = Console.ReadKey(true).Key;
+                _inputController.CheckInputExitMenu(runTimeKeyPress);
+            } while (runTimeKeyPress != ConsoleKey.Escape || runTimeKeyPress != ConsoleKey.R);
         }
     }
 }

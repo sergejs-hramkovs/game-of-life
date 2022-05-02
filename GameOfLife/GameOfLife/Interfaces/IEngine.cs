@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameOfLife.Models;
 
 namespace GameOfLife.Interfaces
 {
@@ -27,6 +23,6 @@ namespace GameOfLife.Interfaces
 
         void RestartGame();
 
-        void CountAliveCells();
+        int CountAliveCells(GameFieldModel gameField);
     }
 }
