@@ -3,7 +3,7 @@
     public class Launcher
     {
         /// <summary>
-        /// Method to launch one instance of the game.
+        /// Method to launch the game.
         /// </summary>
         public void LaunchGame()
         {

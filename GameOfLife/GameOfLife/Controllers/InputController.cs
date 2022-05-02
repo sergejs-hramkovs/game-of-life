@@ -442,6 +442,10 @@ namespace GameOfLife
             return true;
         }
 
+        /// <summary>
+        /// Method to process user input in the multiple games mode menu.
+        /// </summary>
+        /// <param name="keyPressed">Parameter which stores user input.</param>
         public void CheckInputMultipleGamesMenu(ConsoleKey keyPressed)
         {
             Random random = new();

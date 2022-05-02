@@ -297,6 +297,11 @@ namespace GameOfLife
             Console.WriteLine(" # 2. Random numbers");
         }
 
+        /// <summary>
+        /// Method to render each game's title in the multiple games mode.
+        /// </summary>
+        /// <param name="gameNumber">The number of the game.</param>
+        /// <param name="cellsAliveNumber">The number of alive cells on the correspongind game field.</param>
         public void MultipleGamesModeGameTitleRender(int gameNumber, int cellsAliveNumber)
         {
             Console.WriteLine($"\nGame #{gameNumber}. Alive: {cellsAliveNumber}              ");

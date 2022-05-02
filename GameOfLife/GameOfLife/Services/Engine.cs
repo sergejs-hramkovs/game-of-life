@@ -14,9 +14,9 @@ namespace GameOfLife
         private bool _gliderGunMode = false;
         private bool _multipleGamesMode = false;
         private bool _gameOver = false;
-        private List<int> _gamesToBeDisplayed = new List<int>();
-        private List<GameFieldModel> _listOfGames = new List<GameFieldModel>();
-        List<int> _deadFields = new List<int>();
+        private List<int> _gamesToBeDisplayed = new();
+        private List<GameFieldModel> _listOfGames = new();
+        private List<int> _deadFields = new();
         private GameFieldModel _gameField;
         private IFileIO _file;
         private IRender _render;
