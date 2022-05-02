@@ -18,15 +18,19 @@ namespace GameOfLife.Interfaces
 
         void GliderGunModeRender(bool wrongInput);
 
-        void PauseMenuRender();
+        void PauseMenuRender(bool multipleGamesMode = false);
 
         void ExitMenuRender();
+
+        void MultipleGamesMenuRender();
 
         void PrintRules();
 
         void GameOverRender(int generation);
 
         void BlankUIRender();
+
+        void MultipleGamesModeUIRender(int delay, int generation, int numberOfFieldsAlive, int totalCellsAlive);
 
         void ChooseFileToLoadMenuRender(int numberOfFiles, string filePath, bool wrongInput);
     }

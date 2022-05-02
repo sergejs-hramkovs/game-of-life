@@ -14,6 +14,10 @@ namespace GameOfLife.Interfaces
 
         int Delay { get; set; }
 
+        List<int> GamesToBeDisplayed { get; set; }
+
+        List<GameFieldModel> ListOfGames { get; set; }
+
         void Injection(IRender render, IFileIO file, IFieldOperations field, ILibrary library, IRulesApplier rulesApplier,
             IEngine engine, IInputController inputProcessor);
 

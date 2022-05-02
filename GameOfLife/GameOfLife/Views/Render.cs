@@ -147,10 +147,14 @@ namespace GameOfLife
         /// <summary>
         /// Method for rendering the pause menu.
         /// </summary>
-        public void PauseMenuRender()
+        public void PauseMenuRender(bool multipleGamesMode = false)
         {
             Console.WriteLine("\n # To save the current game state to a file press 'S'");
             Console.WriteLine(" # To restart the game press 'R'");
+            if (multipleGamesMode)
+            {
+                Console.WriteLine(" # To change the displayed games press 'N'");
+            }
             Console.WriteLine(" # Press any other key to cancel saving and continue with the game");
             Console.WriteLine(" # Press 'Esc' to exit");
         }
@@ -179,6 +183,15 @@ namespace GameOfLife
             Console.WriteLine($" Dead cells: {gameField.DeadCellsNumber}   ");
             Console.WriteLine($" Current delay between generations: {delay / 1000.0} seconds  ");
             Console.WriteLine($" Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   ");
+        }
+
+        public void MultipleGamesModeUIRender(int delay, int generation, int numberOfFieldsAlive, int totalCellsAlive)
+        {
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine($"Delay: {delay}  ");
+            Console.WriteLine($"Generation: {generation}");
+            Console.WriteLine($"Fields alive: {numberOfFieldsAlive}   ");
+            Console.WriteLine($"Total alive cells: {totalCellsAlive}   ");
         }
 
         /// <summary>
@@ -271,6 +284,14 @@ namespace GameOfLife
             {
                 Console.WriteLine(" - " + Path.GetFileName(file));
             }
+        }
+
+        public void MultipleGamesMenuRender()
+        {
+            Console.Clear();
+            Console.WriteLine("### Multiple Games Mode ###");
+            Console.WriteLine("\n # 1. Enter numbers manually");
+            Console.WriteLine(" # 2. Random numbers");
         }
     }
 }

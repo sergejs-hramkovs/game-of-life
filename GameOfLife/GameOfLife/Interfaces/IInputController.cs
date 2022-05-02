@@ -20,13 +20,17 @@ namespace GameOfLife.Interfaces
 
         bool EnterCoordinates();
 
+        bool EnterGameNumber();
+
         bool CheckInputPopulateFieldMenu(ConsoleKey keyPressed);
 
         bool CheckInputLibraryMenu(ConsoleKey keyPressed);
 
-        void CheckInputPauseMenu(ConsoleKey keyPressed);
+        void CheckInputPauseMenu(ConsoleKey keyPressed, bool multipleGamesMode = false);
 
-        void PauseGame(ConsoleKey keyPressed);
+        void CheckInputMultipleGamesMenu(ConsoleKey keyPressed);
+
+        void PauseGame(ConsoleKey keyPressed, bool multipleGamesMode = false);
 
         int CheckInputSavedGameMenu(int numberOfFiles);
 

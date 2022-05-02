@@ -333,7 +333,7 @@ namespace GameOfLife
         /// Method to check user input in the pause menu.
         /// </summary>
         /// <param name="keyPressed">Parameter which stores the key pressed in the pause menu.</param>
-        public void CheckInputPauseMenu(ConsoleKey keyPressed)
+        public void CheckInputPauseMenu(ConsoleKey keyPressed, bool multipleGamesMode = false)
         {
             switch (keyPressed)
             {
@@ -355,6 +355,18 @@ namespace GameOfLife
                     _engine.RestartGame();
                     break;
 
+                case ConsoleKey.N:
+                    if (multipleGamesMode)
+                    {
+                        _engine.GamesToBeDisplayed.Clear();
+                        for (int i = 0; i < 4; i++)
+                        {
+                            EnterGameNumber();
+                        }
+                    }
+                    Console.Clear();
+                    break;
+
                 default:
                     Console.Clear();
                     break;
@@ -365,15 +377,15 @@ namespace GameOfLife
         /// Method to pause the game by pressing the Spacebar.
         /// </summary>
         /// <param name="keyPressed">Parameter which stores Spacebar key press.</param>
-        public void PauseGame(ConsoleKey keyPressed)
+        public void PauseGame(ConsoleKey keyPressed, bool multipleGamesMode = false)
         {
             ConsoleKey pauseMenuKeyPress;
 
             if (keyPressed == ConsoleKey.Spacebar)
             {
-                _render.PauseMenuRender();
+                _render.PauseMenuRender(multipleGamesMode);
                 pauseMenuKeyPress = Console.ReadKey(true).Key;
-                CheckInputPauseMenu(pauseMenuKeyPress);
+                CheckInputPauseMenu(pauseMenuKeyPress, multipleGamesMode);
             }
         }
 
@@ -390,6 +402,68 @@ namespace GameOfLife
             else if (keyPressed == ConsoleKey.Escape)
             {
                 Environment.Exit(0);
+            }
+        }
+
+        /// <summary>
+        /// Method to process user input chosen games numbers.
+        /// </summary>
+        /// <returns>Returns "stop = true" if the process ended successfully. Returns false if there is wrong input.</returns>
+        public bool EnterGameNumber()
+        {
+            string gameNumber;
+
+            Console.CursorVisible = true;
+
+            while (true)
+            {
+                Console.Write(EnterGameNumberPhrase);
+                gameNumber = Console.ReadLine();
+
+                if (int.TryParse(gameNumber, out var number) && number > 0 && number <= 1000)
+                {
+                    if (!_engine.GamesToBeDisplayed.Contains(number))
+                    {
+                        _engine.GamesToBeDisplayed.Add(number);
+                        Console.CursorVisible = false;
+                        break;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(WrongInputPhrase);
+                }
+            }
+            return true;
+        }
+
+        public void CheckInputMultipleGamesMenu(ConsoleKey keyPressed)
+        {
+            Random random = new();
+
+            switch (keyPressed)
+            {
+                case ConsoleKey.D1:
+                    for (int i = 0; i < 4; i++)
+                    {
+                        EnterGameNumber();
+                    }
+                    break;
+
+                case ConsoleKey.D2:
+                    for (int i = 0; i < 4; i++)
+                    {
+                        _engine.GamesToBeDisplayed.Add(random.Next(0, _engine.ListOfGames.Count));
+                    }
+                    break;
+
+                default:
+                    WrongInput = true;
+                    break;
             }
         }
     }
