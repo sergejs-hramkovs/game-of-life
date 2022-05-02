@@ -34,8 +34,10 @@ namespace GameOfLife
 
         public const string FileNotFoundPhrase = " ### The file is missing! ###";
 
-        public const string EnterGameNumberPhrase = " # Enter the number of a game (from 1 to 1000): ";
+        public const string EnterGameNumberPhrase = " # Enter the number of a game (from 0 to 999): ";
 
-        public const string FieldDeadPhrase = "\n### The whole field is dead! ###";
+        public const string FieldDeadPhrase = "\n ### THE WHOLE FIELD IS DEAD! ###";
+
+        public const string DashesConstant = "---------------------------------";
     }
 }

@@ -23,7 +23,7 @@ namespace GameOfLife.Interfaces
 
         void StartGame(bool firstLaunch = true);
 
-        void RunGame(int indentationSize = 1);
+        void RunGame();
 
         void RestartGame();
 

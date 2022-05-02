@@ -6,7 +6,7 @@ namespace GameOfLife.Interfaces
     {
         void Injection(IFileIO file);
 
-        void RenderField(GameFieldModel gameField, int indentationSize = 1, bool dead = false);
+        void RenderField(GameFieldModel gameField, bool dead = false);
 
         void RuntimeUIRender(GameFieldModel gameField, int delay);
 
@@ -33,5 +33,7 @@ namespace GameOfLife.Interfaces
         void MultipleGamesModeUIRender(int delay, int generation, int numberOfFieldsAlive, int totalCellsAlive);
 
         void ChooseFileToLoadMenuRender(int numberOfFiles, string filePath, bool wrongInput);
+
+        void MultipleGamesModeGameTitleRender(int gameNumber, int cellsAliveNumber);
     }
 }

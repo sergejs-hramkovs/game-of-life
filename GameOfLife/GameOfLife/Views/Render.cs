@@ -18,21 +18,14 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="dead">Parameter to render the field with '+' when the whoel field is dead.</param>
-        public void RenderField(GameFieldModel gameField, int indentationSize = 1, bool dead = false)
+        public void RenderField(GameFieldModel gameField, bool dead = false)
         {
-            string indentation = "";
-
-            for (int i = 0; i < indentationSize; i++)
-            {
-                indentation += " ";
-            }
-
             Console.WriteLine();
             if (!dead)
             {
                 for (int i = 0; i < gameField.Width; i++)
                 {
-                    Console.Write(indentation);
+                    Console.Write(" ");
                     for (int j = 0; j < gameField.Length; j++)
                     {
                         Console.Write(" " + gameField.GameField[j, i]);
@@ -155,8 +148,8 @@ namespace GameOfLife
             {
                 Console.WriteLine(" # To change the displayed games press 'N'");
             }
-            Console.WriteLine(" # Press any other key to cancel saving and continue with the game");
-            Console.WriteLine(" # Press 'Esc' to exit");
+            Console.WriteLine("\n # Press any other key to cancel saving and continue with the game");
+            Console.WriteLine("\n # Press 'Esc' to exit");
         }
 
         /// <summary>
@@ -185,6 +178,13 @@ namespace GameOfLife
             Console.WriteLine($" Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   ");
         }
 
+        /// <summary>
+        /// Method to display the user interface during the multiple games mode runtime.
+        /// </summary>
+        /// <param name="delay">The delay in miliseconds between redrawings.</param>
+        /// <param name="generation">The number of the current generation.</param>
+        /// <param name="numberOfFieldsAlive">The number of fields that have at least 1 alive cell.</param>
+        /// <param name="totalCellsAlive">The total number of alive cells across all the fields.</param>
         public void MultipleGamesModeUIRender(int delay, int generation, int numberOfFieldsAlive, int totalCellsAlive)
         {
             Console.SetCursorPosition(0, 0);
@@ -245,9 +245,9 @@ namespace GameOfLife
             Console.Clear();
             for (int i = 0; i < 5; i++)
             {
-                Console.WriteLine("---------------------------------");
+                Console.WriteLine(DashesConstant);
             }
-            Console.WriteLine("\n ### THE WHOLE FIELD IS DEAD! ###");
+            Console.WriteLine(FieldDeadPhrase);
             Console.WriteLine($"\n Generations survived: {generation}");
         }
 
@@ -286,12 +286,20 @@ namespace GameOfLife
             }
         }
 
+        /// <summary>
+        /// Method to display the main menu in the multiple games mode.
+        /// </summary>
         public void MultipleGamesMenuRender()
         {
             Console.Clear();
             Console.WriteLine("### Multiple Games Mode ###");
             Console.WriteLine("\n # 1. Enter numbers manually");
             Console.WriteLine(" # 2. Random numbers");
+        }
+
+        public void MultipleGamesModeGameTitleRender(int gameNumber, int cellsAliveNumber)
+        {
+            Console.WriteLine($"\nGame #{gameNumber}. Alive: {cellsAliveNumber}              ");
         }
     }
 }

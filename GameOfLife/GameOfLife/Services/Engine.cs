@@ -8,13 +8,15 @@ namespace GameOfLife
     {
         private int _delay = 1000;
         private int _gliderGunType = 0;
-        private int _indentationSize;
+        private int _numberOfFieldsAlive;
+        private int _totalCellsAlive;
         private bool _readGeneration = false;
         private bool _gliderGunMode = false;
         private bool _multipleGamesMode = false;
         private bool _gameOver = false;
         private List<int> _gamesToBeDisplayed = new List<int>();
         private List<GameFieldModel> _listOfGames = new List<GameFieldModel>();
+        List<int> _deadFields = new List<int>();
         private GameFieldModel _gameField;
         private IFileIO _file;
         private IRender _render;
@@ -47,11 +49,6 @@ namespace GameOfLife
         {
             get => _delay;
             set => _delay = value;
-        }
-        public int IndentationSize
-        {
-            get => _indentationSize;
-            set => _indentationSize = value;
         }
         public List<int> GamesToBeDisplayed
         {
@@ -136,10 +133,9 @@ namespace GameOfLife
         /// <summary>
         /// Main process of the game.
         /// </summary>
-        public void RunGame(int indentationSize = 1)
+        public void RunGame()
         {
             ConsoleKey runTimeKeyPress;
-            IndentationSize = indentationSize;
 
             if (!_file.FileLoaded && !MultipleGamesMode)
             {
@@ -192,11 +188,11 @@ namespace GameOfLife
         private void FirstRenderCalculations()
         {
             Console.Clear();
-            _render.RenderField(_gameField, IndentationSize);
+            _render.RenderField(_gameField);
             _fieldOperations.PopulateField(_gameField, _gliderGunMode, _gliderGunType);
             Console.Clear();
             _render.BlankUIRender();
-            _render.RenderField(_gameField, IndentationSize);
+            _render.RenderField(_gameField);
             Thread.Sleep(2000);
             Console.Clear();
         }
@@ -243,11 +239,11 @@ namespace GameOfLife
 
             if (_gameOver)
             {
-                _render.RenderField(_gameField, IndentationSize, true);
+                _render.RenderField(_gameField, true);
             }
             else
             {
-                _render.RenderField(_gameField, IndentationSize);
+                _render.RenderField(_gameField);
             }
         }
 
@@ -286,6 +282,21 @@ namespace GameOfLife
         }
 
         /// <summary>
+        /// Method to count total alive cells number across all the fields in the multiple games mode.
+        /// </summary>
+        private void CountTotalAliveCells()
+        {
+            _totalCellsAlive = 0;
+
+            foreach (var field in ListOfGames)
+            {
+                _gameField = field;
+                CountAliveCells(_gameField);
+                _totalCellsAlive += _gameField.AliveCellsNumber;
+            }
+        }
+
+        /// <summary>
         /// Method to run and display multiple games simultaneously.
         /// </summary>
         private void RunMultipleGames()
@@ -293,17 +304,7 @@ namespace GameOfLife
             ConsoleKey runTimeKeyPress;
             ConsoleKey numberChoice;
 
-            List<int> deadFields = new List<int>();
-            Random random = new Random();
-            int numberOfFieldsAlive;
-            int totalCellsAlive;
-
-            for (int i = 0; i < 1000; i++)
-            {
-                ListOfGames.Add(new(7, 7));
-                ListOfGames[i] = _fieldOperations.RandomSeeding(ListOfGames[i]);
-            }
-            numberOfFieldsAlive = ListOfGames.Count;
+            MultipleGameFieldsInitialization();
             _render.MultipleGamesMenuRender();
             numberChoice = Console.ReadKey(true).Key;
             _inputController.CheckInputMultipleGamesMenu(numberChoice);
@@ -313,62 +314,82 @@ namespace GameOfLife
             {
                 while (Console.KeyAvailable == false)
                 {
-                    totalCellsAlive = 0;
-
-                    foreach (var field in ListOfGames)
-                    {
-                        _gameField = field;
-                        CountAliveCells(_gameField);
-                        totalCellsAlive += _gameField.AliveCellsNumber;
-                    }
-                    _render.MultipleGamesModeUIRender(Delay, _gameField.Generation, numberOfFieldsAlive, totalCellsAlive);
-
-                    for (int i = 0; i < GamesToBeDisplayed.Count; i++)
-                    {
-                        if (CountAliveCells(ListOfGames[GamesToBeDisplayed[i]]) == 0)
-                        {
-                            Console.WriteLine(FieldDeadPhrase);
-                            _render.RenderField(ListOfGames[GamesToBeDisplayed[i]], 1, true);
-                            GamesToBeDisplayed[i] = random.Next(0, ListOfGames.Count);
-                        }
-                        else
-                        {
-                            Console.WriteLine($"\nGame #{GamesToBeDisplayed[i]}. Alive: {ListOfGames[GamesToBeDisplayed[i]].AliveCellsNumber}             ");
-                            _render.RenderField(ListOfGames[GamesToBeDisplayed[i]]);
-                        }
-
-                    }
-
-                    for (int i = 0; i < ListOfGames.Count; i++)
-                    {
-                        _gameField = ListOfGames[i];
-                        _rulesApplier.DetermineCellsDestiny(_gameField, GliderGunMode);
-                        _rulesApplier.FieldRefresh(_gameField);
-                        CountAliveCells(_gameField);
-                        _gameField.Generation++;
-                        if (_gameField.AliveCellsNumber > 0)
-                        {
-                            ListOfGames[i] = _gameField;
-                        }
-                        else if (!deadFields.Contains(i))
-                        {
-                            numberOfFieldsAlive--;
-                            deadFields.Add(i);
-                        }
-                    }
+                    CountTotalAliveCells();
+                    _render.MultipleGamesModeUIRender(Delay, _gameField.Generation, _numberOfFieldsAlive, _totalCellsAlive);
+                    FilterDeadFields();
+                    MultipleGamesModeRuntimeCalculations();
                     Thread.Sleep(Delay);
                 }
                 runTimeKeyPress = Console.ReadKey(true).Key;
                 _inputController.PauseGame(runTimeKeyPress, true);
                 _inputController.ChangeDelay(runTimeKeyPress);
             } while (runTimeKeyPress != ConsoleKey.Escape);
-
             _render.ExitMenuRender();
             do
             {
                 runTimeKeyPress = Console.ReadKey(true).Key;
                 _inputController.CheckInputExitMenu(runTimeKeyPress);
             } while (runTimeKeyPress != ConsoleKey.Escape || runTimeKeyPress != ConsoleKey.R);
+        }
+
+        /// <summary>
+        /// Method to perform necessary runtime calculations in the multiple games mode.
+        /// </summary>
+        private void MultipleGamesModeRuntimeCalculations()
+        {
+            for (int i = 0; i < ListOfGames.Count; i++)
+            {
+                _gameField = ListOfGames[i];
+                _rulesApplier.DetermineCellsDestiny(_gameField, GliderGunMode);
+                _rulesApplier.FieldRefresh(_gameField);
+                CountAliveCells(_gameField);
+                _gameField.Generation++;
+                if (_gameField.AliveCellsNumber > 0)
+                {
+                    ListOfGames[i] = _gameField;
+                }
+                else if (!_deadFields.Contains(i))
+                {
+                    _numberOfFieldsAlive--;
+                    _deadFields.Add(i);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method to create a list of the game fields and to seed them automatically and randomly.
+        /// </summary>
+        private void MultipleGameFieldsInitialization()
+        {
+            for (int i = 0; i < 1000; i++)
+            {
+                ListOfGames.Add(new(10, 10));
+                ListOfGames[i] = _fieldOperations.RandomSeeding(ListOfGames[i]);
+            }
+            _numberOfFieldsAlive = ListOfGames.Count;
+        }
+
+        /// <summary>
+        /// Method to check for the fields where all the cells are dead and to remove them from rendering.
+        /// </summary>
+        private void FilterDeadFields()
+        {
+            Random random = new();
+
+            for (int i = 0; i < GamesToBeDisplayed.Count; i++)
+            {
+                if (CountAliveCells(ListOfGames[GamesToBeDisplayed[i]]) == 0)
+                {
+                    Console.WriteLine(FieldDeadPhrase);
+                    _render.RenderField(ListOfGames[GamesToBeDisplayed[i]], true);
+                    GamesToBeDisplayed[i] = random.Next(0, ListOfGames.Count);
+                }
+                else
+                {
+                    _render.MultipleGamesModeGameTitleRender(GamesToBeDisplayed[i], ListOfGames[GamesToBeDisplayed[i]].AliveCellsNumber);
+                    _render.RenderField(ListOfGames[GamesToBeDisplayed[i]]);
+                }
+            }
         }
     }
 }

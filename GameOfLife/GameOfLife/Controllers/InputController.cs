@@ -417,10 +417,11 @@ namespace GameOfLife
 
             while (true)
             {
+                Console.WriteLine(DashesConstant);
                 Console.Write(EnterGameNumberPhrase);
                 gameNumber = Console.ReadLine();
 
-                if (int.TryParse(gameNumber, out var number) && number > 0 && number <= 1000)
+                if (int.TryParse(gameNumber, out var number) && number >= 0 && number < 1000)
                 {
                     if (!_engine.GamesToBeDisplayed.Contains(number))
                     {
