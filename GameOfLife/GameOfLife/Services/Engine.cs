@@ -55,7 +55,7 @@ namespace GameOfLife
 
             if (firstLaunch)
             {
-                _inputController.Injection(_engine, _file, _render, _fieldOperations, _library);
+                _inputController.Injection(this, _file, _render, _fieldOperations, _library);
                 _file.Injection(_render, _inputController, this);
                 _render.Injection(_file);
                 Console.CursorVisible = false;

@@ -56,11 +56,11 @@ namespace GameOfLife
         {
             _stringField = new string[gameField.Width];
 
-            for (int x = 0; x < gameField.Length; x++)
+            for (int horizontalX = 0; horizontalX < gameField.Length; horizontalX++)
             {
-                for (int y = 0; y < gameField.Width; y++)
+                for (int verticalY = 0; verticalY < gameField.Width; verticalY++)
                 {
-                    _stringField[y] = _stringField[y] + gameField.GameField[x, y] + " ";
+                    _stringField[verticalY] = _stringField[verticalY] + gameField.GameField[horizontalX, verticalY] + " ";
                 }
             }
             return _stringField;
@@ -73,8 +73,8 @@ namespace GameOfLife
         /// <returns>Returns an instance of the GameFieldModel class.</returns>
         private GameFieldModel ConvertListOfRowsToGameField(List<string> inputList)
         {
-            int x = 0;
-            int y = 0;
+            int horizontalX = 0;
+            int verticalY = 0;
             string generationString = "";
             GameFieldModel gameField = new(inputList[4].Length / 2, inputList.Count - 4);
 
@@ -91,19 +91,19 @@ namespace GameOfLife
             {
                 foreach (char character in inputList[i])
                 {
-                    if ((x < inputList[4].Length / 2) && (y < inputList.Count - 4))
+                    if ((horizontalX < inputList[4].Length / 2) && (verticalY < inputList.Count - 4))
                     {
                         if (character == 'X' || character == '.')
                         {
-                            gameField.GameField[x, y] = character.ToString();
-                            if (x == inputList[4].Length / 2 - 1)
+                            gameField.GameField[horizontalX, verticalY] = character.ToString();
+                            if (horizontalX == inputList[4].Length / 2 - 1)
                             {
-                                x = 0;
-                                y++;
+                                horizontalX = 0;
+                                verticalY++;
                             }
                             else
                             {
-                                x++;
+                                horizontalX++;
                             }
                         }
                     }
