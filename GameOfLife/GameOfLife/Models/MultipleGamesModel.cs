@@ -9,66 +9,16 @@ namespace GameOfLife.Models
     public class MultipleGamesModel
     {
         private IFieldOperations _fieldOperations;
-        private int _length;
-        public int Length
-        {
-            get => _length;
-            set => _length = value;
-        }
-        private int _width;
-        public int Width
-        {
-            get => _width;
-            set => _width = value;
-        }
-        private int _generation;
-        public int Generation
-        {
-            get => _generation;
-            set => _generation = value;
-        }
-        private int _numberOfFieldsAlive;
-        public int NumberOfFieldsAlive
-        {
-            get => _numberOfFieldsAlive;
-            set => _numberOfFieldsAlive = value;
-        }
-        private int _totalNumberOfGames;
-        public int TotalNumberOfGames
-        {
-            get => _totalNumberOfGames;
-            set => _totalNumberOfGames = value;
-        }
-        private int _totalCellsAlive;
-        public int TotalCellsAlive
-        {
-            get => _totalCellsAlive;
-            set => _totalCellsAlive = value;
-        }
-        private List<GameFieldModel> _listOfGames = new();
-        public List<GameFieldModel> ListOfGames
-        {
-            get => _listOfGames;
-            set => _listOfGames = value;
-        }
-        private List<int> _gamesToBeDisplayed = new();
-        public List<int> GamesToBeDisplayed
-        {
-            get => _gamesToBeDisplayed;
-            set => _gamesToBeDisplayed = value;
-        }
-        private List<int> _deadFields = new();
-        public List<int> DeadFields
-        {
-            get => _deadFields;
-            set => _deadFields = value;
-        }
-        private int _numberOfGamesToBeDisplayed;
-        public int NumberOfGamesToBeDisplayed
-        {
-            get => _numberOfGamesToBeDisplayed;
-            set => _numberOfGamesToBeDisplayed = value;
-        }
+        public int Length { get; set; }
+        public int Width { get; set; }
+        public int Generation { get; set; }
+        public int NumberOfFieldsAlive { get; set; }
+        public int TotalNumberOfGames { get; set; }
+        public int TotalCellsAlive { get; set; }
+        public List<GameFieldModel> ListOfGames { get; set; } = new();
+        public List<int> GamesToBeDisplayed { get; set; } = new();
+        public List<int> DeadFields { get; set; } = new();
+        public int NumberOfGamesToBeDisplayed { get; set; }
 
         /// <summary>
         /// Method to create a list of Game Fields.
@@ -83,7 +33,7 @@ namespace GameOfLife.Models
                 ListOfGames.Add(new(Length, Width));
                 ListOfGames[i] = _fieldOperations.RandomSeeding(ListOfGames[i]);
             }
-            _numberOfFieldsAlive = ListOfGames.Count;
+            NumberOfFieldsAlive = ListOfGames.Count;
         }
     }
 }

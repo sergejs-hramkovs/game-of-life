@@ -13,36 +13,13 @@ namespace GameOfLife
         private IRender _render;
         private IInputController _inputController;
         private IEngine _engine;
-        private int _numberOfFiles;
-        private string _filePath = @"C:\GameOfLife_SavedGames\";
         private string[] _stringField;
         private List<string> _stringList = new List<string>();
-        private bool _fileReadingError = false;
-        private bool _fileLoaded = false;
-        private bool _noSavedGames = false;
-        public bool FileReadingError
-        {
-            get => _fileReadingError;
-            set => _fileReadingError = value;
-        }
-        public string FilePath
-        {
-            get => _filePath;
-        }
-        public bool FileLoaded
-        {
-            get => _fileLoaded;
-            set => _fileLoaded = value;
-        }
-        public bool NoSavedGames
-        {
-            get => _noSavedGames;
-            set => _noSavedGames = value;
-        }
-        public int NumberOfFiles
-        {
-            get => _numberOfFiles;
-        }
+        public string FilePath { get; } = @"C:\GameOfLife_SavedGames\";
+        public bool FileReadingError { get; set; } = false;
+        public bool FileLoaded { get; set; } = false;
+        public bool NoSavedGames { get; set; } = false;
+        public int NumberOfFiles { get; private set; }
 
         /// <summary>
         /// Method to inject required objects into the class.
@@ -142,9 +119,9 @@ namespace GameOfLife
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         public void SaveGameFieldToFile(GameFieldModel gameField)
         {
-            EnsureDirectoryExists(_filePath);
+            EnsureDirectoryExists(FilePath);
             CountFiles();
-            StreamWriter writer = new StreamWriter(_filePath + $"game{_numberOfFiles + 1}.txt");
+            StreamWriter writer = new StreamWriter(FilePath + $"game{NumberOfFiles + 1}.txt");
             ConvertGameFieldToArrayOfRows(gameField);
             writer.WriteLine($"Generation: {gameField.Generation}");
             writer.WriteLine($"Alive cells: {gameField.AliveCellsNumber}({(int)Math.Round(gameField.AliveCellsNumber / (double)gameField.Area * 100.0)}%)");
@@ -168,7 +145,7 @@ namespace GameOfLife
 
             try
             {
-                StreamReader reader = new StreamReader(_filePath + $"game{fileToLoad}.txt");
+                StreamReader reader = new StreamReader(FilePath + $"game{fileToLoad}.txt");
                 while ((line = reader.ReadLine()) != null)
                 {
                     _stringList.Add(line);
@@ -188,11 +165,11 @@ namespace GameOfLife
         /// </summary>
         public void CountFiles()
         {
-            DirectoryInfo directoryInfo = new(_filePath);
-            _numberOfFiles = directoryInfo.GetFiles().Length;
-            if (_numberOfFiles == 0)
+            DirectoryInfo directoryInfo = new(FilePath);
+            NumberOfFiles = directoryInfo.GetFiles().Length;
+            if (NumberOfFiles == 0)
             {
-                _noSavedGames = true;
+                NoSavedGames = true;
             }
         }
 

@@ -9,27 +9,12 @@ namespace GameOfLife
     /// </summary>
     public class FieldOperations : IFieldOperations
     {
-        private int _coordinateX;
-        private int _coordinateY;
-        private bool _stop = false;
         private IRender _render;
         private ILibrary _library;
         private IInputController _inputController;
-        public int CoordinateX
-        {
-            get => _coordinateX;
-            set => _coordinateX = value;
-        }
-        public int CoordinateY
-        {
-            get => _coordinateY;
-            set => _coordinateY = value;
-        }
-        public bool Stop
-        {
-            get => _stop;
-            set => _stop = value;
-        }
+        public int CoordinateX { get; set; }
+        public int CoordinateY { get; set; }
+        public bool StopDataInput { get; set; } = false;
 
         /// <summary>
         /// Constructor to inject required onjects in the class.
@@ -111,20 +96,20 @@ namespace GameOfLife
                 {
                     _inputController.WrongInput = false;
                 }
-                if (!Stop)
+                if (!StopDataInput)
                 {
-                    if (gameField.GameField[_coordinateX, _coordinateY] == DeadCellSymbol)
+                    if (gameField.GameField[CoordinateX, CoordinateY] == DeadCellSymbol)
                     {
-                        gameField.GameField[_coordinateX, _coordinateY] = AliveCellSymbol;
+                        gameField.GameField[CoordinateX, CoordinateY] = AliveCellSymbol;
                     }
                     else
                     {
-                        gameField.GameField[_coordinateX, _coordinateY] = DeadCellSymbol;
+                        gameField.GameField[CoordinateX, CoordinateY] = DeadCellSymbol;
                     }
                 }
                 else
                 {
-                    Stop = false;
+                    StopDataInput = false;
                     break;
                 }
             }
@@ -212,13 +197,13 @@ namespace GameOfLife
         {
             Console.Clear();
             _render.RenderField(gameField);
-            if (_inputController.EnterCoordinates() && !Stop)
+            if (_inputController.EnterCoordinates() && !StopDataInput)
             {
                 SpawnLibraryObject(gameField, CoordinateX, CoordinateY);
             }
-            else if (Stop)
+            else if (StopDataInput)
             {
-                Stop = false;
+                StopDataInput = false;
             }
             else
             {

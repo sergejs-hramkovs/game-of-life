@@ -10,12 +10,6 @@ namespace GameOfLife
     /// </summary>
     public class Engine : IEngine
     {
-        private int _delay = 1000;
-        private int _gliderGunType = 0;
-        private bool _readGeneration = false;
-        private bool _gliderGunMode = false;
-        private bool _multipleGamesMode = false;
-        private bool _gameOver = false;
         private GameFieldModel _gameField;
         private MultipleGamesModel _multipleGames;
         private IFileIO _file;
@@ -25,31 +19,12 @@ namespace GameOfLife
         private IRulesApplier _rulesApplier;
         private IEngine _engine;
         private IInputController _inputController;
-        public bool ReadGeneration
-        {
-            get => _readGeneration;
-            set => _readGeneration = value;
-        }
-        public bool GliderGunMode
-        {
-            get => _gliderGunMode;
-            set => _gliderGunMode = value;
-        }
-        public bool MultipleGamesMode
-        {
-            get => _multipleGamesMode;
-            set => _multipleGamesMode = value;
-        }
-        public int GliderGunType
-        {
-            get => _gliderGunType;
-            set => _gliderGunType = value;
-        }
-        public int Delay
-        {
-            get => _delay;
-            set => _delay = value;
-        }
+        private bool _gameOver = false;
+        public bool ReadGeneration { get; set; } = false;
+        public bool GliderGunMode { get; set; } = false;
+        public bool MultipleGamesMode { get; set; } = false;
+        public int GliderGunType { get; set; } = 0;
+        public int Delay { get; set; } = 1000;
 
         /// <summary>
         /// Method to inject objects into the Engine class.
@@ -187,7 +162,7 @@ namespace GameOfLife
         {
             Console.Clear();
             _render.RenderField(_gameField);
-            _fieldOperations.PopulateField(_gameField, _gliderGunMode, _gliderGunType);
+            _fieldOperations.PopulateField(_gameField, GliderGunMode, GliderGunType);
             Console.Clear();
             _render.BlankUIRender();
             _render.RenderField(_gameField);

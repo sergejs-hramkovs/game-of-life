@@ -9,35 +9,15 @@ namespace GameOfLife
     /// </summary>
     public class InputController : IInputController
     {
-        private GameFieldModel _gameField;
-        private MultipleGamesModel _multipleGames;
         private IEngine _engine;
         private IFileIO _file;
         private IRender _render;
         private IFieldOperations _fieldOperations;
         private ILibrary _library;
-        private bool _wrongInput = false;
-        private bool _correctKeyPressed = false;
-        public bool WrongInput
-        {
-            get => _wrongInput;
-            set => _wrongInput = value;
-        }
-        public bool CorrectKeyPressed
-        {
-            get => _correctKeyPressed;
-            set => _correctKeyPressed = value;
-        }
-        public GameFieldModel GameField
-        {
-            get => _gameField;
-            set => _gameField = value;
-        }
-        public MultipleGamesModel MultipleGames
-        {
-            get => _multipleGames;
-            set => _multipleGames = value;
-        }
+        public bool WrongInput { get; set; } = false;
+        public bool CorrectKeyPressed { get; set; } = false;
+        public GameFieldModel GameField { get; set; }
+        public MultipleGamesModel MultipleGames { get; set; }
 
         /// <summary>
         /// Method to inject objects in the InputController class.
@@ -67,23 +47,23 @@ namespace GameOfLife
             {
                 case ConsoleKey.D1:
                     CorrectKeyPressed = true;
-                    return _gameField = new(3, 3);
+                    return GameField = new(3, 3);
 
                 case ConsoleKey.D2:
                     CorrectKeyPressed = true;
-                    return _gameField = new(5, 5);
+                    return GameField = new(5, 5);
 
                 case ConsoleKey.D3:
                     CorrectKeyPressed = true;
-                    return _gameField = new(10, 10);
+                    return GameField = new(10, 10);
 
                 case ConsoleKey.D4:
                     CorrectKeyPressed = true;
-                    return _gameField = new(20, 20);
+                    return GameField = new(20, 20);
 
                 case ConsoleKey.D5:
                     CorrectKeyPressed = true;
-                    return _gameField = new(75, 40);
+                    return GameField = new(75, 40);
 
                 case ConsoleKey.D6:
                     CorrectKeyPressed = true;
@@ -91,7 +71,7 @@ namespace GameOfLife
 
                 case ConsoleKey.L:
                     _file.InitiateLoadingFromFile();
-                    return _gameField;
+                    return GameField;
 
                 case ConsoleKey.G:
                     _engine.GliderGunMode = true;
@@ -126,12 +106,12 @@ namespace GameOfLife
             {
                 case ConsoleKey.D1:
                     _engine.GliderGunType = 1;
-                    return _gameField = new(40, 30);
+                    return GameField = new(40, 30);
 
 
                 case ConsoleKey.D2:
                     _engine.GliderGunType = 2;
-                    return _gameField = new(37, 40);
+                    return GameField = new(37, 40);
 
                 case ConsoleKey.G:
                     Console.Clear();
@@ -168,7 +148,7 @@ namespace GameOfLife
                     if (int.TryParse(Console.ReadLine(), out int width) && width > 0)
                     {
                         Console.CursorVisible = false;
-                        return _gameField = new(length, width);
+                        return GameField = new(length, width);
                     }
                     else
                     {
@@ -197,9 +177,9 @@ namespace GameOfLife
 
             if (inputCoordinate == StopWord)
             {
-                _fieldOperations.Stop = true;
+                _fieldOperations.StopDataInput = true;
             }
-            else if (int.TryParse(inputCoordinate, out var resultX) && resultX >= 0 && resultX < _gameField.Length)
+            else if (int.TryParse(inputCoordinate, out var resultX) && resultX >= 0 && resultX < GameField.Length)
             {
                 _fieldOperations.CoordinateX = resultX;
                 Console.Write(EnterYPhrase);
@@ -207,9 +187,9 @@ namespace GameOfLife
 
                 if (inputCoordinate == StopWord)
                 {
-                    _fieldOperations.Stop = true;
+                    _fieldOperations.StopDataInput = true;
                 }
-                else if (int.TryParse(inputCoordinate, out var resultY) && resultY >= 0 && resultY < _gameField.Width)
+                else if (int.TryParse(inputCoordinate, out var resultY) && resultY >= 0 && resultY < GameField.Width)
                 {
                     _fieldOperations.CoordinateY = resultY;
                 }
@@ -236,16 +216,16 @@ namespace GameOfLife
             switch (keyPressed)
             {
                 case ConsoleKey.D1:
-                    _fieldOperations.ManualSeeding(_gameField);
+                    _fieldOperations.ManualSeeding(GameField);
                     return true;
 
                 case ConsoleKey.D2:
-                    _fieldOperations.RandomSeeding(_gameField);
+                    _fieldOperations.RandomSeeding(GameField);
                     return true;
 
                 case ConsoleKey.D3:
                     Console.Clear();
-                    _fieldOperations.LibrarySeeding(_gameField, _engine.GliderGunMode, _engine.GliderGunType);
+                    _fieldOperations.LibrarySeeding(GameField, _engine.GliderGunMode, _engine.GliderGunType);
                     return true;
 
                 default:
@@ -267,19 +247,19 @@ namespace GameOfLife
                     return true;
 
                 case ConsoleKey.D1:
-                    _fieldOperations.CallSpawningMethod(_gameField, _library.SpawnGlider);
+                    _fieldOperations.CallSpawningMethod(GameField, _library.SpawnGlider);
                     return false;
 
                 case ConsoleKey.D2:
-                    _fieldOperations.CallSpawningMethod(_gameField, _library.SpawnLightWeight);
+                    _fieldOperations.CallSpawningMethod(GameField, _library.SpawnLightWeight);
                     return false;
 
                 case ConsoleKey.D3:
-                    _fieldOperations.CallSpawningMethod(_gameField, _library.SpawnMiddleWeight);
+                    _fieldOperations.CallSpawningMethod(GameField, _library.SpawnMiddleWeight);
                     return false;
 
                 case ConsoleKey.D4:
-                    _fieldOperations.CallSpawningMethod(_gameField, _library.SpawnHeavyWeight);
+                    _fieldOperations.CallSpawningMethod(GameField, _library.SpawnHeavyWeight);
                     return false;
 
                 default:
@@ -355,7 +335,7 @@ namespace GameOfLife
             switch (keyPressed)
             {
                 case ConsoleKey.S:
-                    _file.SaveGameFieldToFile(_gameField);
+                    _file.SaveGameFieldToFile(GameField);
                     Console.Clear();
                     _render.RuntimeUIRender(GameField, _engine.Delay);
                     _render.RenderField(GameField);

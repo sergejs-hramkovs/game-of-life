@@ -8,39 +8,12 @@ namespace GameOfLife.Models
     /// </summary>
     public class GameFieldModel
     {
-        private string[,] _gameField;
-        private int _length;
-        private int _width;
-        private int _area;
-        private int _generation;
-        private int _aliveCellsNumber;
-        public string[,] GameField
-        {
-            get => _gameField;
-            set => _gameField = value;
-        }
-        public int Length
-        {
-            get => _length;
-        }
-        public int Width
-        {
-            get => _width;
-        }
-        public int Area
-        {
-            get => _area;
-        }
-        public int Generation
-        {
-            get => _generation;
-            set => _generation = value;
-        }
-        public int AliveCellsNumber
-        {
-            get => _aliveCellsNumber;
-            set => _aliveCellsNumber = value;
-        }
+        public string[,] GameField { get; set; }
+        public int Length { get; }
+        public int Width { get; }
+        public int Area { get; }
+        public int Generation { get; set; }
+        public int AliveCellsNumber { get; set; }
         public int DeadCellsNumber
         {
             get => Area - AliveCellsNumber;
@@ -54,11 +27,11 @@ namespace GameOfLife.Models
         /// <param name="width">THe vertical dimension of the field.</param>
         public GameFieldModel(int length, int width)
         {
-            _gameField = new string[length, width];
-            _length = _gameField.GetLength(0);
-            _width = _gameField.GetLength(1);
-            _area = Length * Width;
-            _generation = 1;
+            GameField = new string[length, width];
+            Length = GameField.GetLength(0);
+            Width = GameField.GetLength(1);
+            Area = Length * Width;
+            Generation = 1;
 
             for (int i = 0; i < Length; i++)
             {

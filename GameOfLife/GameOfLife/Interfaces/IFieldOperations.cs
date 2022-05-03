@@ -8,7 +8,7 @@ namespace GameOfLife.Interfaces
 
         int CoordinateY { get; set; }
 
-        bool Stop { get; set; }
+        bool StopDataInput { get; set; }
 
         GameFieldModel PopulateField(GameFieldModel gameField, bool gliderGunMode, int gliderGunType);
 
