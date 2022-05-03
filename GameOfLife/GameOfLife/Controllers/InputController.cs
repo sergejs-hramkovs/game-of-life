@@ -358,8 +358,9 @@ namespace GameOfLife
                 case ConsoleKey.N:
                     if (multipleGamesMode)
                     {
+                        EnterNumberOfGamesToBeDisplayed();
                         _engine.GamesToBeDisplayed.Clear();
-                        for (int i = 0; i < 4; i++)
+                        for (int i = 0; i < _engine.NumberOfGamestoBeDisplayed; i++)
                         {
                             EnterGameNumber();
                         }
@@ -409,7 +410,7 @@ namespace GameOfLife
         /// Method to process user input chosen games numbers.
         /// </summary>
         /// <returns>Returns "stop = true" if the process ended successfully. Returns false if there is wrong input.</returns>
-        public bool EnterGameNumber()
+        public void EnterGameNumber()
         {
             string gameNumber;
 
@@ -421,7 +422,7 @@ namespace GameOfLife
                 Console.Write(EnterGameNumberPhrase);
                 gameNumber = Console.ReadLine();
 
-                if (int.TryParse(gameNumber, out var number) && number >= 0 && number < 1000)
+                if (int.TryParse(gameNumber, out var number) && number >= 0 && number < _engine.NumberOfGamesToBeCreated)
                 {
                     if (!_engine.GamesToBeDisplayed.Contains(number))
                     {
@@ -431,7 +432,7 @@ namespace GameOfLife
                     }
                     else
                     {
-                        return false;
+                        Console.WriteLine(GameAlreadyChosenPhrase);
                     }
                 }
                 else
@@ -439,37 +440,118 @@ namespace GameOfLife
                     Console.WriteLine(WrongInputPhrase);
                 }
             }
-            return true;
         }
 
         /// <summary>
         /// Method to process user input in the multiple games mode menu.
         /// </summary>
         /// <param name="keyPressed">Parameter which stores user input.</param>
-        public void CheckInputMultipleGamesMenu(ConsoleKey keyPressed)
+        public bool CheckInputMultipleGamesMenu(ConsoleKey keyPressed)
         {
             Random random = new();
 
             switch (keyPressed)
             {
                 case ConsoleKey.D1:
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < _engine.NumberOfGamestoBeDisplayed; i++)
                     {
                         EnterGameNumber();
                     }
-                    break;
+                    return true;
 
                 case ConsoleKey.D2:
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < _engine.NumberOfGamestoBeDisplayed; i++)
                     {
                         _engine.GamesToBeDisplayed.Add(random.Next(0, _engine.ListOfGames.Count));
                     }
-                    break;
+                    return true;
 
                 default:
-                    WrongInput = true;
-                    break;
+                    Console.WriteLine(WrongInputPhrase);
+                    return false;
             }
+        }
+
+        /// <summary>
+        /// Method to process user input number of games and game field sizes for the multiple games mode.
+        /// </summary>
+        public void EnterMultipleGamesData()
+        {
+            string userInput;
+
+            Console.CursorVisible = true;
+            Console.Clear();
+
+            while (true)
+            {
+                Console.Write(EnterTotalGamesNumberPhrase);
+                userInput = Console.ReadLine();
+
+                if (int.TryParse(userInput, out var totalNumberOfGames) && totalNumberOfGames > 1 && totalNumberOfGames <= 2000)
+                {
+                    _engine.NumberOfGamesToBeCreated = totalNumberOfGames;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine(WrongInputPhrase);
+                }
+            }
+            while (true)
+            {
+                Console.Write(EnterLengthMultipleGamesPhrase);
+                userInput = Console.ReadLine();
+
+                if (int.TryParse(userInput, out var length) && length >= 3 && length <= 30)
+                {
+                    _engine.Length = length;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine(WrongInputPhrase);
+                }
+            }
+            while (true)
+            {
+                Console.Write(EnterWidthMultipleGamesPhrase);
+                userInput = Console.ReadLine();
+
+                if (int.TryParse(userInput, out var width) && width >= 3 && width <= 10)
+                {
+                    _engine.Width = width;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine(WrongInputPhrase);
+                }
+            }
+            EnterNumberOfGamesToBeDisplayed();
+            Console.CursorVisible = false;
+        }
+
+        private void EnterNumberOfGamesToBeDisplayed()
+        {
+            string userInput;
+            Console.CursorVisible = true;
+
+            while (true)
+            {
+                Console.Write(EnterNumberOfGamesDisplayedPhrase);
+                userInput = Console.ReadLine();
+
+                if (int.TryParse(userInput, out var gamesToBeDisplayed) && gamesToBeDisplayed >= 2 && gamesToBeDisplayed <= 4)
+                {
+                    _engine.NumberOfGamestoBeDisplayed = gamesToBeDisplayed;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine(WrongInputPhrase);
+                }
+            }
+            Console.CursorVisible = false;
         }
     }
 }

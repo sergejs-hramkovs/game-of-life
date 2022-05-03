@@ -14,6 +14,14 @@ namespace GameOfLife.Interfaces
 
         int Delay { get; set; }
 
+        int NumberOfGamesToBeCreated { get; set; }
+
+        int NumberOfGamestoBeDisplayed { get; set; }
+
+        int Length { get; set; }
+
+        int Width { get; set; }
+
         List<int> GamesToBeDisplayed { get; set; }
 
         List<GameFieldModel> ListOfGames { get; set; }

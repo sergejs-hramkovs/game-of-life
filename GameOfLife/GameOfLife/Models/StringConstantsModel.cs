@@ -34,10 +34,20 @@ namespace GameOfLife
 
         public const string FileNotFoundPhrase = " ### The file is missing! ###";
 
-        public const string EnterGameNumberPhrase = " # Enter the number of a game (from 0 to 999): ";
+        public const string EnterGameNumberPhrase = " # Enter the number of a game: ";
 
         public const string FieldDeadPhrase = "\n ### THE WHOLE FIELD IS DEAD! ###";
 
         public const string DashesConstant = "---------------------------------";
+
+        public const string EnterTotalGamesNumberPhrase = "\n # Enter the number of games to be created (2-2000): ";
+
+        public const string EnterLengthMultipleGamesPhrase = "\n # Enter the horizontal dimension of the field (3-30): ";
+
+        public const string EnterWidthMultipleGamesPhrase = "\n # Enter the vertical dimension of the field (3-10): ";
+
+        public const string EnterNumberOfGamesDisplayedPhrase = "\n # Enter the number of how many game will be displayed (2-4): ";
+
+        public const string GameAlreadyChosenPhrase = "\n ### This number has already been chosen! ###";
     }
 }

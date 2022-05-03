@@ -10,6 +10,10 @@ namespace GameOfLife
         private int _gliderGunType = 0;
         private int _numberOfFieldsAlive;
         private int _totalCellsAlive;
+        private int _numberOfGamesToBeCreated;
+        private int _numberOfGamesToBeDisplayed;
+        private int _length;
+        private int _width;
         private bool _readGeneration = false;
         private bool _gliderGunMode = false;
         private bool _multipleGamesMode = false;
@@ -49,6 +53,26 @@ namespace GameOfLife
         {
             get => _delay;
             set => _delay = value;
+        }
+        public int NumberOfGamesToBeCreated
+        {
+            get => _numberOfGamesToBeCreated;
+            set => _numberOfGamesToBeCreated = value;
+        }
+        public int NumberOfGamestoBeDisplayed
+        {
+            get => _numberOfGamesToBeDisplayed;
+            set => _numberOfGamesToBeDisplayed = value;
+        }
+        public int Length
+        {
+            get => _length;
+            set => _length = value;
+        }
+        public int Width
+        {
+            get => _width;
+            set => _width = value;
         }
         public List<int> GamesToBeDisplayed
         {
@@ -304,10 +328,17 @@ namespace GameOfLife
             ConsoleKey runTimeKeyPress;
             ConsoleKey numberChoice;
 
+            _inputController.EnterMultipleGamesData();
             MultipleGameFieldsInitialization();
             _render.MultipleGamesMenuRender();
-            numberChoice = Console.ReadKey(true).Key;
-            _inputController.CheckInputMultipleGamesMenu(numberChoice);
+            while (true)
+            {
+                numberChoice = Console.ReadKey(true).Key;
+                if (_inputController.CheckInputMultipleGamesMenu(numberChoice))
+                {
+                    break;
+                }
+            }
             Console.Clear();
 
             do
@@ -361,9 +392,9 @@ namespace GameOfLife
         /// </summary>
         private void MultipleGameFieldsInitialization()
         {
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < NumberOfGamesToBeCreated; i++)
             {
-                ListOfGames.Add(new(10, 10));
+                ListOfGames.Add(new(Length, Width));
                 ListOfGames[i] = _fieldOperations.RandomSeeding(ListOfGames[i]);
             }
             _numberOfFieldsAlive = ListOfGames.Count;
@@ -376,7 +407,7 @@ namespace GameOfLife
         {
             Random random = new();
 
-            for (int i = 0; i < GamesToBeDisplayed.Count; i++)
+            for (int i = 0; i < NumberOfGamestoBeDisplayed; i++)
             {
                 if (CountAliveCells(ListOfGames[GamesToBeDisplayed[i]]) == 0)
                 {

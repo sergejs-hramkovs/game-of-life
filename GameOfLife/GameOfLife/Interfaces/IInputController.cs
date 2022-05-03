@@ -20,7 +20,7 @@ namespace GameOfLife.Interfaces
 
         bool EnterCoordinates();
 
-        bool EnterGameNumber();
+        void EnterGameNumber();
 
         bool CheckInputPopulateFieldMenu(ConsoleKey keyPressed);
 
@@ -28,7 +28,7 @@ namespace GameOfLife.Interfaces
 
         void CheckInputPauseMenu(ConsoleKey keyPressed, bool multipleGamesMode = false);
 
-        void CheckInputMultipleGamesMenu(ConsoleKey keyPressed);
+        bool CheckInputMultipleGamesMenu(ConsoleKey keyPressed);
 
         void PauseGame(ConsoleKey keyPressed, bool multipleGamesMode = false);
 
@@ -37,5 +37,7 @@ namespace GameOfLife.Interfaces
         void CheckInputExitMenu(ConsoleKey keyPressed);
 
         void ChangeDelay(ConsoleKey keyPressed);
+
+        void EnterMultipleGamesData();
     }
 }
