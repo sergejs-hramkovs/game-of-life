@@ -4,6 +4,9 @@ using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
+    /// <summary>
+    /// The RulesApplier class deals with the apllication of the rules of the game to cells.
+    /// </summary>
     public class RulesApplier : IRulesApplier
     {
         private List<(int x, int y)> _cellsToDie = new List<(int x, int y)>();

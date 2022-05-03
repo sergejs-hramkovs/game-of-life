@@ -4,9 +4,13 @@ using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
+    /// <summary>
+    /// InputController class takes input from the user and deals with it accordingly.
+    /// </summary>
     public class InputController : IInputController
     {
         private GameFieldModel _gameField;
+        private MultipleGamesModel _multipleGames;
         private IEngine _engine;
         private IFileIO _file;
         private IRender _render;
@@ -29,7 +33,20 @@ namespace GameOfLife
             get => _gameField;
             set => _gameField = value;
         }
+        public MultipleGamesModel MultipleGames
+        {
+            get => _multipleGames;
+            set => _multipleGames = value;
+        }
 
+        /// <summary>
+        /// Method to inject objects in the InputController class.
+        /// </summary>
+        /// <param name="engine">Engine class parameter.</param>
+        /// <param name="file">File class parameter.</param>
+        /// <param name="render">Render class parameter.</param>
+        /// <param name="operations">FieldOperations class parameter.</param>
+        /// <param name="library">Library class parameter.</param>
         public void Injection(IEngine engine, IFileIO? file = null, IRender? render = null, IFieldOperations? operations = null, ILibrary? library = null)
         {
             _engine = engine;
@@ -40,10 +57,10 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to check user input in the main menu.
+        /// Method to take and process user's input in the Main Menu.
         /// </summary>
         /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
-        /// <returns>Returns and instance of the GameFieldModel class.</returns>
+        /// <returns>Returns an instance of the GameFieldModel class.</returns>
         public GameFieldModel CheckInputMainMenu(ConsoleKey keyPressed)
         {
             switch (keyPressed)
@@ -99,10 +116,10 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to check user input in the glider gun menu,
+        /// Method to take and process user's input in the Glider Gun Menu.
         /// </summary>
         /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
-        /// <returns>Returns and instance of the GameFieldModel class.</returns>
+        /// <returns>Returns an instance of the GameFieldModel class.</returns>
         public GameFieldModel CheckInputGliderGunMenu(ConsoleKey keyPressed)
         {
             switch (keyPressed)
@@ -129,10 +146,10 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to process user input field dimensions.
+        /// Method to take and process the Game Field dimensions entered by the user.
         /// </summary>
-        /// <param name="wrongInput">Parameter that represent if there was wrong input.</param>
-        /// <returns>Returns and instance of the GameFieldModel class.</returns>
+        /// <param name="wrongInput">Parameter that represents if there was wrong input.</param>
+        /// <returns>Returns an instance of the GameFieldModel class.</returns>
         public GameFieldModel EnterFieldDimensions(bool wrongInput)
         {
             Console.CursorVisible = true;
@@ -166,9 +183,9 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to process user input coordinates.
+        /// Method to take and process the coordinates of cells or library objects entered by the user.
         /// </summary>
-        /// <returns>Returns "stop = true" if the process of entering coordinates was stopped. Returns false if there is wrong input.</returns>
+        /// <returns>Returns "stop = true" if the process of entering coordinates was stopped. Returns false if there was wrong input.</returns>
         public bool EnterCoordinates()
         {
             string inputCoordinate;
@@ -210,7 +227,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to check user input in the populate the field menu.
+        /// Method to take and process user's input in the Field Seeding Menu.
         /// </summary>
         /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
         /// <returns>Returns 'true' if the correct key is pressed, otherwise 'false'</returns>
@@ -238,7 +255,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to check user input in the library menu.
+        /// Method to take and process user's input in the Library Menu.
         /// </summary>
         /// <param name="keyPressed">Parameter that stores the key pressed by the user.</param>
         /// <returns>Returns 'true' if the 'Escape' key is pressed, otherwise 'false'</returns>
@@ -272,10 +289,10 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to check for user input when choosing which saved game file to load.
+        /// Method to take and process the user's choice of the saved game file.
         /// </summary>
         /// <param name="numberOfFiles">The number of saved game files currently in the folder.</param>
-        /// <returns>Returns the number of saved game file to load.</returns>
+        /// <returns>Returns the number of the saved game file to load.</returns>
         public int CheckInputSavedGameMenu(int numberOfFiles)
         {
             string userInput;
@@ -330,9 +347,9 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to check user input in the pause menu.
+        /// Method to take and process user's input in the Pause Menu.
         /// </summary>
-        /// <param name="keyPressed">Parameter which stores the key pressed in the pause menu.</param>
+        /// <param name="keyPressed">Parameter which stores the key pressed in the Pause Menu.</param>
         public void CheckInputPauseMenu(ConsoleKey keyPressed, bool multipleGamesMode = false)
         {
             switch (keyPressed)
@@ -359,8 +376,8 @@ namespace GameOfLife
                     if (multipleGamesMode)
                     {
                         EnterNumberOfGamesToBeDisplayed();
-                        _engine.GamesToBeDisplayed.Clear();
-                        for (int i = 0; i < _engine.NumberOfGamestoBeDisplayed; i++)
+                        MultipleGames.GamesToBeDisplayed.Clear();
+                        for (int i = 0; i < MultipleGames.NumberOfGamesToBeDisplayed; i++)
                         {
                             EnterGameNumber();
                         }
@@ -391,9 +408,9 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to check user input in the exit menu.
+        /// Method to take and process user's input in the Exit Menu.
         /// </summary>
-        /// <param name="keyPressed">Parameter which stores the key pressed in the exit menu.</param>
+        /// <param name="keyPressed">Parameter which stores the key pressed in the Exit Menu.</param>
         public void CheckInputExitMenu(ConsoleKey keyPressed)
         {
             if (keyPressed == ConsoleKey.R)
@@ -407,9 +424,8 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to process user input chosen games numbers.
+        /// Method to take and process the numbers of the games entered by the user.
         /// </summary>
-        /// <returns>Returns "stop = true" if the process ended successfully. Returns false if there is wrong input.</returns>
         public void EnterGameNumber()
         {
             string gameNumber;
@@ -422,11 +438,11 @@ namespace GameOfLife
                 Console.Write(EnterGameNumberPhrase);
                 gameNumber = Console.ReadLine();
 
-                if (int.TryParse(gameNumber, out var number) && number >= 0 && number < _engine.NumberOfGamesToBeCreated)
+                if (int.TryParse(gameNumber, out var number) && number >= 0 && number < MultipleGames.TotalNumberOfGames)
                 {
-                    if (!_engine.GamesToBeDisplayed.Contains(number))
+                    if (!MultipleGames.GamesToBeDisplayed.Contains(number))
                     {
-                        _engine.GamesToBeDisplayed.Add(number);
+                        MultipleGames.GamesToBeDisplayed.Add(number);
                         Console.CursorVisible = false;
                         break;
                     }
@@ -443,7 +459,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to process user input in the multiple games mode menu.
+        /// Method to take and process user's input in the Multiple Games Mode Menu.
         /// </summary>
         /// <param name="keyPressed">Parameter which stores user input.</param>
         public bool CheckInputMultipleGamesMenu(ConsoleKey keyPressed)
@@ -453,16 +469,16 @@ namespace GameOfLife
             switch (keyPressed)
             {
                 case ConsoleKey.D1:
-                    for (int i = 0; i < _engine.NumberOfGamestoBeDisplayed; i++)
+                    for (int i = 0; i < MultipleGames.NumberOfGamesToBeDisplayed; i++)
                     {
                         EnterGameNumber();
                     }
                     return true;
 
                 case ConsoleKey.D2:
-                    for (int i = 0; i < _engine.NumberOfGamestoBeDisplayed; i++)
+                    for (int i = 0; i < MultipleGames.NumberOfGamesToBeDisplayed; i++)
                     {
-                        _engine.GamesToBeDisplayed.Add(random.Next(0, _engine.ListOfGames.Count));
+                        MultipleGames.GamesToBeDisplayed.Add(random.Next(0, MultipleGames.ListOfGames.Count));
                     }
                     return true;
 
@@ -473,11 +489,12 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to process user input number of games and game field sizes for the multiple games mode.
+        /// Method to take and process user's input of the number of games and Game Field sizes for the Multiple Games Mode.
         /// </summary>
-        public void EnterMultipleGamesData()
+        public MultipleGamesModel EnterMultipleGamesData(MultipleGamesModel multipleGames)
         {
             string userInput;
+            MultipleGames = multipleGames;
 
             Console.CursorVisible = true;
             Console.Clear();
@@ -489,7 +506,7 @@ namespace GameOfLife
 
                 if (int.TryParse(userInput, out var totalNumberOfGames) && totalNumberOfGames > 1 && totalNumberOfGames <= 2000)
                 {
-                    _engine.NumberOfGamesToBeCreated = totalNumberOfGames;
+                    MultipleGames.TotalNumberOfGames = totalNumberOfGames;
                     break;
                 }
                 else
@@ -504,7 +521,7 @@ namespace GameOfLife
 
                 if (int.TryParse(userInput, out var length) && length >= 3 && length <= 30)
                 {
-                    _engine.Length = length;
+                    MultipleGames.Length = length;
                     break;
                 }
                 else
@@ -519,7 +536,7 @@ namespace GameOfLife
 
                 if (int.TryParse(userInput, out var width) && width >= 3 && width <= 10)
                 {
-                    _engine.Width = width;
+                    MultipleGames.Width = width;
                     break;
                 }
                 else
@@ -529,8 +546,12 @@ namespace GameOfLife
             }
             EnterNumberOfGamesToBeDisplayed();
             Console.CursorVisible = false;
+            return MultipleGames;
         }
-
+        
+        /// <summary>
+        /// Method to take and process the number of the games that the user wants to be displayed.
+        /// </summary>
         private void EnterNumberOfGamesToBeDisplayed()
         {
             string userInput;
@@ -543,7 +564,7 @@ namespace GameOfLife
 
                 if (int.TryParse(userInput, out var gamesToBeDisplayed) && gamesToBeDisplayed >= 2 && gamesToBeDisplayed <= 4)
                 {
-                    _engine.NumberOfGamestoBeDisplayed = gamesToBeDisplayed;
+                    MultipleGames.NumberOfGamesToBeDisplayed = gamesToBeDisplayed;
                     break;
                 }
                 else

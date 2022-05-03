@@ -6,10 +6,17 @@ using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
+    /// <summary>
+    /// The Render class deals with the rendering of the User Interface.
+    /// </summary>
     public class Render : IRender
     {
         private IFileIO _file;
 
+        /// <summary>
+        /// Method to inject the required objects in the class.
+        /// </summary>
+        /// <param name="file">An instance of the FileIO class.</param>
         public void Injection(IFileIO file)
         {
             _file = file;
@@ -49,7 +56,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method for rendering the field seeding menu.
+        /// Method for rendering the Field Seeding Menu.
         /// </summary>
         public void SeedFieldMenuRender()
         {
@@ -60,8 +67,9 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method for rendering the library selection menu.
+        /// Method for rendering the Library Selection Menu.
         /// </summary>
+        /// <param name="wrongInput">Parameter that represents if there was an attempt of wrong input.</param>
         public void LibraryMenuRender(bool wrongInput)
         {    
             if (wrongInput)
@@ -81,10 +89,11 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method for rendering the main menu.
+        /// Method for rendering the Main Menu.
         /// </summary>
         /// <param name="wrongInput">Parameter that represents if there was an attempt of wrong input.</param>
         /// <param name="fileReadingError">Parameter that represents if there was an error during loading from the file.</param>
+        /// <param name="noSavedGames">Parameter that represents if there are no saved games present in the folder.</param>
         public void MainMenuRender(bool wrongInput, bool fileReadingError, bool noSavedGames = false)
         {
             Console.Clear();
@@ -120,8 +129,9 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method for rendering the glider gun mode menu.
+        /// Method for rendering the Glider Gun Mode Menu.
         /// </summary>
+        /// <param name="wrongInput">Parameter that represents if there was an attempt of wrong input.</param>
         public void GliderGunModeRender(bool wrongInput)
         {
             Console.Clear();
@@ -140,8 +150,9 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method for rendering the pause menu.
+        /// Method for rendering the Pause Menu.
         /// </summary>
+        /// <param name="multipleGamesMode">Parameter that represents if the Multiple Games Mode is turned on.</param>
         public void PauseMenuRender(bool multipleGamesMode = false)
         {
             Console.WriteLine("\n # To save the current game state to a file press 'S'");
@@ -155,7 +166,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method for rendering the exit menu.
+        /// Method for rendering the Exit Menu.
         /// </summary>
         public void ExitMenuRender()
         {
@@ -181,7 +192,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to display the user interface during the multiple games mode runtime.
+        /// Method for rendering the UI during the Multiple Games Mode runtime.
         /// </summary>
         /// <param name="delay">The delay in miliseconds between redrawings.</param>
         /// <param name="generation">The number of the current generation.</param>
@@ -191,7 +202,7 @@ namespace GameOfLife
         {
             Console.SetCursorPosition(0, 0);
             Console.WriteLine($"Delay: {delay}  ");
-            Console.WriteLine($"Generation: {generation}");
+            Console.WriteLine($"Generation: {generation}   ");
             Console.WriteLine($"Fields alive: {numberOfFieldsAlive}   ");
             Console.WriteLine($"Total alive cells: {totalCellsAlive}   ");
         }
@@ -257,6 +268,8 @@ namespace GameOfLife
         /// Method for rendering the UI for choosing which saved game file to load.
         /// </summary>
         /// <param name="numberOfFiles">The number of saved game files currently present in the folder.</param>
+        /// <param name="filePath">Parameter that stores the path to the folder with the saved games.</param>
+        /// <param name="wrongInput">Parameter that represents if there was an attempt of wrong input.</param>
         public void ChooseFileToLoadMenuRender(int numberOfFiles, string filePath, bool wrongInput)
         {
             Console.CursorVisible = true;
@@ -289,7 +302,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to display the main menu in the multiple games mode.
+        /// Method to display the Main Menu in the Multiple Games Mode.
         /// </summary>
         public void MultipleGamesMenuRender()
         {
@@ -300,10 +313,10 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to render each game's title in the multiple games mode.
+        /// Method to render each game's title in the Multiple Games Mode.
         /// </summary>
         /// <param name="gameNumber">The number of the game.</param>
-        /// <param name="cellsAliveNumber">The number of alive cells on the correspongind game field.</param>
+        /// <param name="cellsAliveNumber">The number of alive cells on the correspongind Game Field.</param>
         public void MultipleGamesModeGameTitleRender(int gameNumber, int cellsAliveNumber)
         {
             Console.WriteLine($"\nGame #{gameNumber}. Alive: {cellsAliveNumber}              ");

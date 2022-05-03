@@ -4,24 +4,20 @@ using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
+    /// <summary>
+    /// The Engine class deals with different calculations that occur before and during the runtime,
+    /// except rendering and applying the rules of the game.
+    /// </summary>
     public class Engine : IEngine
     {
         private int _delay = 1000;
         private int _gliderGunType = 0;
-        private int _numberOfFieldsAlive;
-        private int _totalCellsAlive;
-        private int _numberOfGamesToBeCreated;
-        private int _numberOfGamesToBeDisplayed;
-        private int _length;
-        private int _width;
         private bool _readGeneration = false;
         private bool _gliderGunMode = false;
         private bool _multipleGamesMode = false;
         private bool _gameOver = false;
-        private List<int> _gamesToBeDisplayed = new();
-        private List<GameFieldModel> _listOfGames = new();
-        private List<int> _deadFields = new();
         private GameFieldModel _gameField;
+        private MultipleGamesModel _multipleGames;
         private IFileIO _file;
         private IRender _render;
         private IFieldOperations _fieldOperations;
@@ -54,51 +50,29 @@ namespace GameOfLife
             get => _delay;
             set => _delay = value;
         }
-        public int NumberOfGamesToBeCreated
-        {
-            get => _numberOfGamesToBeCreated;
-            set => _numberOfGamesToBeCreated = value;
-        }
-        public int NumberOfGamestoBeDisplayed
-        {
-            get => _numberOfGamesToBeDisplayed;
-            set => _numberOfGamesToBeDisplayed = value;
-        }
-        public int Length
-        {
-            get => _length;
-            set => _length = value;
-        }
-        public int Width
-        {
-            get => _width;
-            set => _width = value;
-        }
-        public List<int> GamesToBeDisplayed
-        {
-            get => _gamesToBeDisplayed;
-            set => _gamesToBeDisplayed = value;
-        }
-        public List<GameFieldModel> ListOfGames
-        {
-            get => _listOfGames;
-            set => _listOfGames = value;
-        }
 
-        public void Injection(IRender render, IFileIO file, IFieldOperations operations, ILibrary library, IRulesApplier rulesApplier,
-            IEngine engine, IInputController inputController)
+        /// <summary>
+        /// Method to inject objects into the Engine class.
+        /// </summary>
+        /// <param name="render">An object of the Render class.</param>
+        /// <param name="file">An object of the FileIO class.</param>
+        /// <param name="operations">An object of the FieldOperations class.</param>
+        /// <param name="library">An object of the Library class.</param>
+        /// <param name="rulesApplier">An object of the RulesApplier class.</param>
+        /// <param name="inputController">An object of the InputController class.</param>
+        public void Injection(IRender render, IFileIO file, IFieldOperations operations, ILibrary library, 
+            IRulesApplier rulesApplier, IInputController inputController)
         {
             _render = render;
             _file = file;
             _fieldOperations = operations;
             _library = library;
             _rulesApplier = rulesApplier;
-            _engine = engine;
             _inputController = inputController;
         }
 
         /// <summary>
-        /// Initiate field size choice.
+        /// Method to start the game.
         /// </summary>
         public void StartGame(bool firstLaunch = true)
         {
@@ -278,7 +252,7 @@ namespace GameOfLife
         {
             GliderGunMode = false;
             MultipleGamesMode = false;
-            GamesToBeDisplayed.Clear();
+            _multipleGames.GamesToBeDisplayed.Clear();
             Delay = 1000;
             Console.Clear();
             StartGame(false);
@@ -288,6 +262,8 @@ namespace GameOfLife
         /// <summary>
         /// Method to count the current number of alive cells on the field.
         /// </summary>
+        /// <param name="gameField">An instance of the GameFieldModel class.</param>
+        /// <returns>Returns the number of alive cells on the field.</returns>
         public int CountAliveCells(GameFieldModel gameField)
         {
             gameField.AliveCellsNumber = 0;
@@ -306,30 +282,33 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to count total alive cells number across all the fields in the multiple games mode.
+        /// Method to count total alive cells number across all the fields in the Multiple Games Mode.
         /// </summary>
         private void CountTotalAliveCells()
         {
-            _totalCellsAlive = 0;
+            _multipleGames.TotalCellsAlive = 0;
 
-            foreach (var field in ListOfGames)
+            foreach (var field in _multipleGames.ListOfGames)
             {
                 _gameField = field;
                 CountAliveCells(_gameField);
-                _totalCellsAlive += _gameField.AliveCellsNumber;
+                _multipleGames.TotalCellsAlive += _gameField.AliveCellsNumber;
             }
         }
 
         /// <summary>
-        /// Method to run and display multiple games simultaneously.
+        /// Main process of the game in the Multiple Games Mode.
         /// </summary>
         private void RunMultipleGames()
         {
             ConsoleKey runTimeKeyPress;
             ConsoleKey numberChoice;
 
-            _inputController.EnterMultipleGamesData();
-            MultipleGameFieldsInitialization();
+            _multipleGames = new();
+            
+            _inputController.EnterMultipleGamesData(_multipleGames);
+            _multipleGames.InitializeGames(_fieldOperations);
+            _multipleGames = _inputController.MultipleGames;
             _render.MultipleGamesMenuRender();
             while (true)
             {
@@ -346,7 +325,8 @@ namespace GameOfLife
                 while (Console.KeyAvailable == false)
                 {
                     CountTotalAliveCells();
-                    _render.MultipleGamesModeUIRender(Delay, _gameField.Generation, _numberOfFieldsAlive, _totalCellsAlive);
+                    _render.MultipleGamesModeUIRender(Delay, _multipleGames.Generation, _multipleGames.NumberOfFieldsAlive, _multipleGames.TotalCellsAlive);
+                    _multipleGames.Generation++;
                     FilterDeadFields();
                     MultipleGamesModeRuntimeCalculations();
                     Thread.Sleep(Delay);
@@ -364,40 +344,26 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to perform necessary runtime calculations in the multiple games mode.
+        /// Method to perform necessary runtime calculations in the Multiple Games Mode.
         /// </summary>
         private void MultipleGamesModeRuntimeCalculations()
         {
-            for (int i = 0; i < ListOfGames.Count; i++)
+            for (int i = 0; i < _multipleGames.TotalNumberOfGames; i++)
             {
-                _gameField = ListOfGames[i];
+                _gameField = _multipleGames.ListOfGames[i];
                 _rulesApplier.DetermineCellsDestiny(_gameField, GliderGunMode);
                 _rulesApplier.FieldRefresh(_gameField);
-                CountAliveCells(_gameField);
-                _gameField.Generation++;
+                CountAliveCells(_gameField);             
                 if (_gameField.AliveCellsNumber > 0)
                 {
-                    ListOfGames[i] = _gameField;
+                    _multipleGames.ListOfGames[i] = _gameField;
                 }
-                else if (!_deadFields.Contains(i))
+                else if (!_multipleGames.DeadFields.Contains(i))
                 {
-                    _numberOfFieldsAlive--;
-                    _deadFields.Add(i);
+                    _multipleGames.NumberOfFieldsAlive--;
+                    _multipleGames.DeadFields.Add(i);
                 }
             }
-        }
-
-        /// <summary>
-        /// Method to create a list of the game fields and to seed them automatically and randomly.
-        /// </summary>
-        private void MultipleGameFieldsInitialization()
-        {
-            for (int i = 0; i < NumberOfGamesToBeCreated; i++)
-            {
-                ListOfGames.Add(new(Length, Width));
-                ListOfGames[i] = _fieldOperations.RandomSeeding(ListOfGames[i]);
-            }
-            _numberOfFieldsAlive = ListOfGames.Count;
         }
 
         /// <summary>
@@ -407,18 +373,18 @@ namespace GameOfLife
         {
             Random random = new();
 
-            for (int i = 0; i < NumberOfGamestoBeDisplayed; i++)
+            for (int i = 0; i < _multipleGames.NumberOfGamesToBeDisplayed; i++)
             {
-                if (CountAliveCells(ListOfGames[GamesToBeDisplayed[i]]) == 0)
+                if (CountAliveCells(_multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[i]]) == 0)
                 {
                     Console.WriteLine(FieldDeadPhrase);
-                    _render.RenderField(ListOfGames[GamesToBeDisplayed[i]], true);
-                    GamesToBeDisplayed[i] = random.Next(0, ListOfGames.Count);
+                    _render.RenderField(_multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[i]], true);
+                    _multipleGames.GamesToBeDisplayed[i] = random.Next(0, _multipleGames.TotalNumberOfGames);
                 }
                 else
                 {
-                    _render.MultipleGamesModeGameTitleRender(GamesToBeDisplayed[i], ListOfGames[GamesToBeDisplayed[i]].AliveCellsNumber);
-                    _render.RenderField(ListOfGames[GamesToBeDisplayed[i]]);
+                    _render.MultipleGamesModeGameTitleRender(_multipleGames.GamesToBeDisplayed[i], _multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[i]].AliveCellsNumber);
+                    _render.RenderField(_multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[i]]);
                 }
             }
         }

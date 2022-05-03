@@ -4,10 +4,13 @@ using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
+    /// <summary>
+    /// The Library class deals with seeding the Game Field with premade cell patterns.
+    /// </summary>
     public class Library : ILibrary
     {
         /// <summary>
-        /// Method to spawn a glider pattern.
+        /// Method to spawn a Glider pattern.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a glider.</param>
@@ -48,7 +51,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to spawn a light-weight spaceship pattern.
+        /// Method to spawn a Light-Weight Spaceship pattern.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a light-weight spaceship.</param>
@@ -103,7 +106,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to spawn a middle-weight spaceship pattern.
+        /// Method to spawn a Middle-Weight Spaceship pattern.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a middle-weight spaceship.</param>
@@ -165,7 +168,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to spawn a heavy-weight spaceship pattern.
+        /// Method to spawn a Heavy-Weight Spaceship pattern.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a heavy-weight spaceship.</param>
@@ -234,7 +237,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to spawn Gosper's glider gun.
+        /// Method to spawn Gosper's Glider Gun.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of the Gosper's glider gun.</param>
@@ -366,7 +369,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to spawn Simkin's glider gun.
+        /// Method to spawn Simkin's Glider Gun.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of the Simkin's glider gun.</param>

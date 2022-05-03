@@ -10,6 +10,8 @@ namespace GameOfLife.Interfaces
 
         GameFieldModel GameField { get; set; }
 
+        MultipleGamesModel MultipleGames { get; set; }
+
         void Injection(IEngine engine, IFileIO file, IRender render, IFieldOperations operations, ILibrary library);
 
         GameFieldModel CheckInputMainMenu(ConsoleKey keyPressed);
@@ -38,6 +40,6 @@ namespace GameOfLife.Interfaces
 
         void ChangeDelay(ConsoleKey keyPressed);
 
-        void EnterMultipleGamesData();
+        MultipleGamesModel EnterMultipleGamesData(MultipleGamesModel multipleGames);
     }
 }

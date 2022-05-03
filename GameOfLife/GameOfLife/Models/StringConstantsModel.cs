@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GameOfLife
 {
+    /// <summary>
+    /// The StringConstantsModel class stores various string constants that are used across the application.
+    /// </summary>
     public static class StringConstantsModel
     {
         public const string WrongInputPhrase = " ### Wrong Input! ### ";

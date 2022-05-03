@@ -4,6 +4,10 @@ using System.IO;
 
 namespace GameOfLife
 {
+    /// <summary>
+    /// The FileIO class deals with writing to the file and reading from it.
+    /// It saves the state of the Game Field to the text file and then reads and restores data from it, if needed.
+    /// </summary>
     public class FileIO : IFileIO
     {
         private IRender _render;
@@ -40,6 +44,12 @@ namespace GameOfLife
             get => _numberOfFiles;
         }
 
+        /// <summary>
+        /// Method to inject required objects into the class.
+        /// </summary>
+        /// <param name="render">An instance of the Render class.</param>
+        /// <param name="inputController">An instance of the InputController class.</param>
+        /// <param name="engine">An instance of the Engine class.</param>
         public void Injection(IRender render, IInputController inputController, IEngine engine)
         {
             _render = render;
@@ -61,7 +71,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method which converts 2-dimensional array to a 1-dimensional in order to minimize the number of 'write' operations to a file.
+        /// Method which converts 2-dimensional array to a 1-dimensional one in order to minimize the number of 'write' operations to a file.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <returns>Returns new 1-dimensional array of game field rows.</returns>
@@ -80,7 +90,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method that takes the list of the game field cells and converts it to an array of the game field.
+        /// Method that takes the list of the Game Field cells and converts it into an array of the Game Field.
         /// </summary>
         /// <param name="inputList">List of the game field cells.</param>
         /// <returns>Returns an instance of the GameFieldModel class.</returns>
@@ -222,7 +232,7 @@ namespace GameOfLife
                     _engine.ReadGeneration = true;
                     _inputController.CorrectKeyPressed = true;
                 }
-            }         
+            }
         }
     }
 }

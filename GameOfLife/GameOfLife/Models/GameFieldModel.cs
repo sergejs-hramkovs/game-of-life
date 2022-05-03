@@ -2,6 +2,10 @@
 
 namespace GameOfLife.Models
 {
+    /// <summary>
+    /// The GameFieldModel class represents the Game Field. It stores the field itself, with dead and alive cells, the number of dead and alive cells
+    /// field dimensions and the number of generation.
+    /// </summary>
     public class GameFieldModel
     {
         private string[,] _gameField;
@@ -42,6 +46,12 @@ namespace GameOfLife.Models
             get => Area - AliveCellsNumber;
         }
 
+        /// <summary>
+        /// The GameFieldModel constructor is used to initialize an instance of the class, while also initializing field's dimensions, generation
+        /// and seeding the field with dead cells.
+        /// </summary>
+        /// <param name="length">The horizontal dimension of the field.</param>
+        /// <param name="width">THe vertical dimension of the field.</param>
         public GameFieldModel(int length, int width)
         {
             _gameField = new string[length, width];

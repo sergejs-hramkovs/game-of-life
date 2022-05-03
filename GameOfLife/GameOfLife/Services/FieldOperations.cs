@@ -4,6 +4,9 @@ using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
+    /// <summary>
+    /// The FieldOperations class deals with populating game fields with alive cells or cell patterns from the library.
+    /// </summary>
     public class FieldOperations : IFieldOperations
     {
         private int _coordinateX;
@@ -11,7 +14,7 @@ namespace GameOfLife
         private bool _stop = false;
         private IRender _render;
         private ILibrary _library;
-        private IInputController _inputProcessor;
+        private IInputController _inputController;
         public int CoordinateX
         {
             get => _coordinateX;
@@ -28,15 +31,21 @@ namespace GameOfLife
             set => _stop = value;
         }
 
-        public FieldOperations(ILibrary library, IRender render, IInputController processor)
+        /// <summary>
+        /// Constructor to inject required onjects in the class.
+        /// </summary>
+        /// <param name="library">An instance of the Library class.</param>
+        /// <param name="render">An instance of the Render class.</param>
+        /// <param name="controller">An instance of the InputController class.</param>
+        public FieldOperations(ILibrary library, IRender render, IInputController controller)
         {
             _library = library;
             _render = render;
-            _inputProcessor = processor;
+            _inputController = controller;
         }
 
         /// <summary>
-        /// Method to choose how to seed the field - manually or automatically.
+        /// Method to initiate the field seeding.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class.</param>
         /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
@@ -48,12 +57,12 @@ namespace GameOfLife
 
             while (true)
             {
-                if (_inputProcessor.WrongInput)
+                if (_inputController.WrongInput)
                 {
                     Console.Clear();
                     _render.RenderField(gameField);
                     Console.WriteLine("\n" + WrongInputPhrase);
-                    _inputProcessor.WrongInput = false;
+                    _inputController.WrongInput = false;
                 }
                 if (gliderGunMode)
                 {
@@ -66,7 +75,7 @@ namespace GameOfLife
                     _render.SeedFieldMenuRender();
                     seedingChoice = Console.ReadKey(true).Key;
                 }
-                if (_inputProcessor.CheckInputPopulateFieldMenu(seedingChoice))
+                if (_inputController.CheckInputPopulateFieldMenu(seedingChoice))
                 {
                     return gameField;
                 }
@@ -83,24 +92,24 @@ namespace GameOfLife
             while (true)
             {
                 Console.Clear();
-                if (!_inputProcessor.WrongInput)
+                if (!_inputController.WrongInput)
                 {
                     _render.RenderField(gameField);
                 }
-                else if (_inputProcessor.WrongInput)
+                else if (_inputController.WrongInput)
                 {
                     _render.RenderField(gameField);
                     Console.WriteLine("\n" + WrongInputPhrase);
-                    _inputProcessor.WrongInput = false;
+                    _inputController.WrongInput = false;
                 }
-                if (!_inputProcessor.EnterCoordinates())
+                if (!_inputController.EnterCoordinates())
                 {
-                    _inputProcessor.WrongInput = true;
+                    _inputController.WrongInput = true;
                     continue;
                 }
                 else
                 {
-                    _inputProcessor.WrongInput = false;
+                    _inputController.WrongInput = false;
                 }
                 if (!Stop)
                 {
@@ -123,7 +132,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Cell amount and coordinates are generated automatically and randomly.
+        /// Cells amount and coordinates are generated automatically and randomly.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class.</param>
         /// <returns>Returns an instance of the GameFieldModel class with alive cells randomly seeded in its field.</returns>
@@ -178,16 +187,16 @@ namespace GameOfLife
                     Console.Clear();
                     return gameField;
                 }
-                if (_inputProcessor.WrongInput)
+                if (_inputController.WrongInput)
                 {
                     Console.Clear();
                 }
                 _render.RenderField(gameField);
-                _render.LibraryMenuRender(_inputProcessor.WrongInput);
-                _inputProcessor.WrongInput = false;
+                _render.LibraryMenuRender(_inputController.WrongInput);
+                _inputController.WrongInput = false;
                 libraryChoice = Console.ReadKey(true).Key;
 
-                if (_inputProcessor.CheckInputLibraryMenu(libraryChoice))
+                if (_inputController.CheckInputLibraryMenu(libraryChoice))
                 {
                     return gameField;
                 }
@@ -195,7 +204,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to call one of the methods for spawning an object from the library, depending on the pressed key.
+        /// Method to call one of the methods for spawning an object from the library.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class.</param>
         /// <param name="SpawnLibraryObject">Parameter that represents the method for spawning an object from the library that will be called.</param>
@@ -203,7 +212,7 @@ namespace GameOfLife
         {
             Console.Clear();
             _render.RenderField(gameField);
-            if (_inputProcessor.EnterCoordinates() && !Stop)
+            if (_inputController.EnterCoordinates() && !Stop)
             {
                 SpawnLibraryObject(gameField, CoordinateX, CoordinateY);
             }
@@ -213,7 +222,7 @@ namespace GameOfLife
             }
             else
             {
-                _inputProcessor.WrongInput = true;
+                _inputController.WrongInput = true;
             }
             Console.Clear();
         }

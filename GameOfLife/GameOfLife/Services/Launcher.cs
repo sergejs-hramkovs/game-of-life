@@ -1,9 +1,12 @@
 ﻿namespace GameOfLife
 {
+    /// <summary>
+    /// The Launcher class deals with all the required class instantiations and calls the StartGame method.
+    /// </summary>
     public class Launcher
     {
         /// <summary>
-        /// Method to launch the game.
+        /// Method to start the game.
         /// </summary>
         public void LaunchGame()
         {
@@ -15,7 +18,7 @@
             InputController processor = new();
             FieldOperations field = new(library, render, processor);
 
-            engine.Injection(render, file, field, library, applier, engine, processor);
+            engine.Injection(render, file, field, library, applier, processor);
             engine.StartGame();
         }
     }
