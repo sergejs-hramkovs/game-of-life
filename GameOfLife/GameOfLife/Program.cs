@@ -1,6 +1,5 @@
 ﻿using GameOfLife;
 
-Engine engine = new Engine();
+Launcher launcher = new();
 
-engine.Start();
-engine.Run();
+launcher.LaunchGame();
