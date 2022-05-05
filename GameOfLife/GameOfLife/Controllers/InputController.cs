@@ -547,7 +547,7 @@ namespace GameOfLife
             {
                 Console.Write(EnterNumberOfGamesDisplayedPhrase);
                 userInput = Console.ReadLine();
-                if (int.TryParse(userInput, out var gamesToBeDisplayed) && gamesToBeDisplayed >= 2 && gamesToBeDisplayed <= 4)
+                if (int.TryParse(userInput, out var gamesToBeDisplayed) && gamesToBeDisplayed >= 2 && gamesToBeDisplayed <= 8)
                 {
                     MultipleGames.NumberOfGamesToBeDisplayed = gamesToBeDisplayed;
                     break;

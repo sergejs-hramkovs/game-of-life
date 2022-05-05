@@ -54,7 +54,7 @@ namespace GameOfLife
 
         public const string EnterWidthMultipleGamesPhrase = "\n # Enter the vertical dimension of the field (3-10): ";
 
-        public const string EnterNumberOfGamesDisplayedPhrase = "\n # Enter the number of how many game will be displayed (2-4): ";
+        public const string EnterNumberOfGamesDisplayedPhrase = "\n # Enter the number of how many game will be displayed (2-8): ";
 
         public const string GameAlreadyChosenPhrase = "\n ### This number has already been chosen! ###";
 

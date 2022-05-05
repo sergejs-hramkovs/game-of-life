@@ -363,13 +363,15 @@ namespace GameOfLife
                 if (CountAliveCells(MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]]) == 0)
                 {
                     Console.WriteLine(FieldDeadPhrase);
-                    _render.RenderField(MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]], true);
+                    _render.RenderTwoFields(MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]], MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber + 1]]);
                     MultipleGames.GamesToBeDisplayed[gameNumber] = random.Next(0, MultipleGames.TotalNumberOfGames);
+                    gameNumber++;
                 }
                 else
                 {
-                    _render.MultipleGamesModeGameTitleRender(MultipleGames.GamesToBeDisplayed[gameNumber], MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber);
-                    _render.RenderField(MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]]);
+                    _render.MultipleGamesModeTwoTitlesRender(MultipleGames.GamesToBeDisplayed[gameNumber], MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber, MultipleGames.GamesToBeDisplayed[gameNumber + 1], MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber + 1]].AliveCellsNumber);
+                    _render.RenderTwoFields(MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]], MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber + 1]]);
+                    gameNumber++;
                 }
             }
         }
