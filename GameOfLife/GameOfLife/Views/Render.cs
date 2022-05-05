@@ -8,6 +8,7 @@ namespace GameOfLife
     /// <summary>
     /// The Render class deals with the rendering of the User Interface.
     /// </summary>
+    [Serializable]
     public class Render : IRender
     {
         private IFileIO _file;
@@ -55,6 +56,8 @@ namespace GameOfLife
                 }
             }
         }
+
+
 
         /// <summary>
         /// Method for rendering the Field Seeding Menu.

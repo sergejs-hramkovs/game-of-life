@@ -3,6 +3,7 @@
     /// <summary>
     /// The Launcher class deals with all the required class instantiations and calls the StartGame method.
     /// </summary>
+    [Serializable]
     public class Launcher
     {
         /// <summary>

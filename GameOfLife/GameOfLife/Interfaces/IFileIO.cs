@@ -26,7 +26,7 @@ namespace GameOfLife.Interfaces
 
         void InitiateLoadingFromFile();
 
-        void Serializer(List<GameFieldModel> listOfGames);
+        void Serializer(MultipleGamesModel multipleGames);
 
        MultipleGamesModel Deserializer();
     }

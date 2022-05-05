@@ -7,6 +7,7 @@ namespace GameOfLife
     /// <summary>
     /// InputController class takes input from the user and deals with it accordingly.
     /// </summary>
+    [Serializable]
     public class InputController : IInputController
     {
         private IEngine _engine;
@@ -346,7 +347,7 @@ namespace GameOfLife
                     }
                     else
                     {
-                        _file.Serializer(MultipleGames.ListOfGames);
+                        _file.Serializer(_engine.MultipleGames);
                     }
                     
                     Console.WriteLine(SuccessfullySavedPhrase);
@@ -366,8 +367,8 @@ namespace GameOfLife
                     if (multipleGamesMode)
                     {
                         EnterNumberOfGamesToBeDisplayed();
-                        MultipleGames.GamesToBeDisplayed.Clear();
-                        for (int gameNumbersEntered = 0; gameNumbersEntered < MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
+                        _engine.MultipleGames.GamesToBeDisplayed.Clear();
+                        for (int gameNumbersEntered = 0; gameNumbersEntered < _engine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
                         {
                             EnterGameNumber();
                         }
@@ -425,11 +426,11 @@ namespace GameOfLife
                 Console.WriteLine(DashesConstant);
                 Console.Write(EnterGameNumberPhrase);
                 gameNumber = Console.ReadLine();
-                if (int.TryParse(gameNumber, out var number) && number >= 0 && number < MultipleGames.TotalNumberOfGames)
+                if (int.TryParse(gameNumber, out var number) && number >= 0 && number < _engine.MultipleGames.TotalNumberOfGames)
                 {
-                    if (!MultipleGames.GamesToBeDisplayed.Contains(number))
+                    if (!_engine.MultipleGames.GamesToBeDisplayed.Contains(number))
                     {
-                        MultipleGames.GamesToBeDisplayed.Add(number);
+                        _engine.MultipleGames.GamesToBeDisplayed.Add(number);
                         Console.CursorVisible = false;
                         break;
                     }
@@ -572,14 +573,7 @@ namespace GameOfLife
                     Random random = new();
                     _engine.MultipleGamesMode = true;
                     _engine.MultipleGamesLoaded = true;
-                    _engine.MultipleGames = _file.Deserializer();
-                    _engine.MultipleGames.TotalNumberOfGames = _engine.MultipleGames.ListOfGames.Count;
-                    _engine.MultipleGames.NumberOfFieldsAlive = _engine.MultipleGames.ListOfGames.Count;
-                    _engine.MultipleGames.NumberOfGamesToBeDisplayed = 4;
-                    for (int gameNumbersEntered = 0; gameNumbersEntered < _engine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
-                    {
-                        _engine.MultipleGames.GamesToBeDisplayed.Add(random.Next(0, _engine.MultipleGames.ListOfGames.Count));
-                    }
+                    MultipleGames = _file.Deserializer();
                     break;
             }
         }

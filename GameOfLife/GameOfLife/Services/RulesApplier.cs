@@ -7,6 +7,7 @@ namespace GameOfLife
     /// <summary>
     /// The RulesApplier class deals with the apllication of the rules of the game to cells.
     /// </summary>
+    [Serializable]
     public class RulesApplier : IRulesApplier
     {
         private List<(int xCoordinate, int yCoordinate)> _cellsToDie = new List<(int xCoordinate, int yCoordinate)>();

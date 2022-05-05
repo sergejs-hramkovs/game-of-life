@@ -10,6 +10,7 @@ namespace GameOfLife
     /// The FileIO class deals with writing to the file and reading from it.
     /// It saves the state of the Game Field to the text file and then reads and restores data from it, if needed.
     /// </summary>
+    [Serializable]
     public class FileIO : IFileIO
     {
         private IRender _render;
@@ -225,23 +226,23 @@ namespace GameOfLife
             }
         }
 
-        public void Serializer(List<GameFieldModel> listOfGames)
+        public void Serializer(MultipleGamesModel multipleGames)
         {
             EnsureDirectoryExists(MultipleGamesModeFilePath);
             using (Stream stream = File.Open(MultipleGamesModeFilePath + "games.bin", FileMode.Create))
             {
                 BinaryFormatter binaryFormatter = new();
-                binaryFormatter.Serialize(stream, listOfGames);
+                binaryFormatter.Serialize(stream, multipleGames);
             }
         }
 
         public MultipleGamesModel Deserializer()
         {
-            MultipleGamesModel multipleGames = new();
+            MultipleGamesModel multipleGames;
             using (Stream stream = File.Open(MultipleGamesModeFilePath + "games.bin", FileMode.Open))
             {
                 BinaryFormatter binaryFormatter = new();
-                multipleGames.ListOfGames = (List<GameFieldModel>)binaryFormatter.Deserialize(stream);
+                multipleGames = (MultipleGamesModel)binaryFormatter.Deserialize(stream);
             }
 
             return multipleGames;

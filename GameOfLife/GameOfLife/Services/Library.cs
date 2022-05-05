@@ -7,6 +7,7 @@ namespace GameOfLife
     /// <summary>
     /// The Library class deals with seeding the Game Field with premade cell patterns.
     /// </summary>
+    [Serializable]
     public class Library : ILibrary
     {
         /// <summary>

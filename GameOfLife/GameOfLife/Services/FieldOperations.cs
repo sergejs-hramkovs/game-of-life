@@ -7,6 +7,7 @@ namespace GameOfLife
     /// <summary>
     /// The FieldOperations class deals with populating game fields with alive cells or cell patterns from the library.
     /// </summary>
+    [Serializable]
     public class FieldOperations : IFieldOperations
     {
         private IRender _render;

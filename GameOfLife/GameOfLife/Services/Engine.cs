@@ -8,6 +8,7 @@ namespace GameOfLife
     /// The Engine class deals with different calculations that occur before and during the runtime,
     /// except rendering and applying the rules of the game.
     /// </summary>
+    [Serializable]
     public class Engine : IEngine
     {
         private GameFieldModel _gameField;
@@ -296,6 +297,10 @@ namespace GameOfLife
                     }
                 }
             }
+            else
+            {
+                MultipleGames = _inputController.MultipleGames;
+            }
 
             Console.Clear();
             do
@@ -332,6 +337,7 @@ namespace GameOfLife
             {
                 _gameField = MultipleGames.ListOfGames[gameNumber];
                 _rulesApplier.IterateThroughGameFieldCells(_gameField, GliderGunMode);
+                _gameField.Generation++;
                 _rulesApplier.FieldRefresh(_gameField);
                 CountAliveCells(_gameField);
                 if (_gameField.AliveCellsNumber > 0)
