@@ -14,7 +14,7 @@ namespace GameOfLife
         private IInputController _inputController;
         public int CoordinateX { get; set; }
         public int CoordinateY { get; set; }
-        public bool StopDataInput { get; set; } = false;
+        public bool StopDataInput { get; set; }
 
         /// <summary>
         /// Constructor to inject required onjects in the class.
@@ -39,7 +39,6 @@ namespace GameOfLife
         public GameFieldModel PopulateField(GameFieldModel gameField, bool gliderGunMode, int gliderGunType)
         {
             ConsoleKey seedingChoice;
-
             while (true)
             {
                 if (_inputController.WrongInput)
@@ -49,6 +48,7 @@ namespace GameOfLife
                     Console.WriteLine("\n" + WrongInputPhrase);
                     _inputController.WrongInput = false;
                 }
+
                 if (gliderGunMode)
                 {
                     Console.Clear();
@@ -60,6 +60,7 @@ namespace GameOfLife
                     _render.SeedFieldMenuRender();
                     seedingChoice = Console.ReadKey(true).Key;
                 }
+
                 if (_inputController.CheckInputPopulateFieldMenu(seedingChoice))
                 {
                     return gameField;
@@ -87,6 +88,7 @@ namespace GameOfLife
                     Console.WriteLine("\n" + WrongInputPhrase);
                     _inputController.WrongInput = false;
                 }
+
                 if (!_inputController.EnterCoordinates())
                 {
                     _inputController.WrongInput = true;
@@ -96,6 +98,7 @@ namespace GameOfLife
                 {
                     _inputController.WrongInput = false;
                 }
+
                 if (!StopDataInput)
                 {
                     if (gameField.GameField[CoordinateX, CoordinateY] == DeadCellSymbol)
@@ -113,6 +116,7 @@ namespace GameOfLife
                     break;
                 }
             }
+
             return gameField;
         }
 
@@ -126,12 +130,10 @@ namespace GameOfLife
             Random random = new();
             int aliveCellCount = random.Next(1, gameField.Length * gameField.Width);
             int randomX, randomY;
-
             for (int i = 1; i <= aliveCellCount; i++)
             {
                 randomX = random.Next(0, gameField.Length);
                 randomY = random.Next(0, gameField.Width);
-
                 if (gameField.GameField[randomX, randomY] != AliveCellSymbol)
                 {
                     gameField.GameField[randomX, randomY] = AliveCellSymbol;
@@ -141,6 +143,7 @@ namespace GameOfLife
                     random = new();
                 }
             }
+
             return gameField;
         }
 
@@ -154,7 +157,6 @@ namespace GameOfLife
         public GameFieldModel LibrarySeeding(GameFieldModel gameField, bool gliderGunMode, int gliderGunType)
         {
             ConsoleKey libraryChoice;
-
             while (true)
             {
                 if (gliderGunMode)
@@ -169,18 +171,20 @@ namespace GameOfLife
                             _library.SpawnSimkinGliderGun(gameField, 0, 16);
                             break;
                     }
+
                     Console.Clear();
                     return gameField;
                 }
+
                 if (_inputController.WrongInput)
                 {
                     Console.Clear();
                 }
+
                 _render.RenderField(gameField);
                 _render.LibraryMenuRender(_inputController.WrongInput);
                 _inputController.WrongInput = false;
                 libraryChoice = Console.ReadKey(true).Key;
-
                 if (_inputController.CheckInputLibraryMenu(libraryChoice))
                 {
                     return gameField;
@@ -209,6 +213,7 @@ namespace GameOfLife
             {
                 _inputController.WrongInput = true;
             }
+
             Console.Clear();
         }
     }

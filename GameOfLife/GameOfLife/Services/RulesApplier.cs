@@ -34,6 +34,7 @@ namespace GameOfLife
                                 {
                                     _cellsToDie.Add((i, j));
                                 }
+
                                 break;
 
                             case true:
@@ -41,6 +42,7 @@ namespace GameOfLife
                                 {
                                     _cellsToDie.Add((i, j));
                                 }
+
                                 break;
                         }
                     }
@@ -54,6 +56,7 @@ namespace GameOfLife
                                 {
                                     _cellsToBeBorn.Add((i, j));
                                 }
+
                                 break;
 
                             case true:
@@ -61,6 +64,7 @@ namespace GameOfLife
                                 {
                                     _cellsToBeBorn.Add((i, j));
                                 }
+
                                 break;
                         }
                     }
@@ -81,7 +85,6 @@ namespace GameOfLife
             bool wrappedX = false;
             bool wrappedY = false;
             neighboursCount = 0;
-
             for (int neighbourX = x - 1; neighbourX <= x + 1; neighbourX++)
             {
                 for (int neighbourY = y - 1; neighbourY <= y + 1; neighbourY++)
@@ -91,31 +94,37 @@ namespace GameOfLife
                         neighbourX = gameField.Length - 1;
                         wrappedX = true;
                     }
+
                     if (neighbourY == -1)
                     {
                         neighbourY = gameField.Width - 1;
                         wrappedY = true;
                     }
+
                     if (gameField.GameField[neighbourX % gameField.Length, neighbourY % gameField.Width] == AliveCellSymbol)
                     {
                         neighboursCount++;
                     }
+
                     if (!checkDeadCell && (neighbourX == x && neighbourY == y && neighboursCount > 0))
                     {
                         neighboursCount--;
                     }
+
                     if (wrappedY)
                     {
                         neighbourY = y - 1;
                         wrappedY = false;
                     }
                 }
+
                 if (wrappedX)
                 {
                     neighbourX = x - 1;
                     wrappedX = false;
                 }
             }
+
             return neighboursCount;
         }
 
@@ -130,10 +139,12 @@ namespace GameOfLife
             {
                 gameField.GameField[cell.x, cell.y] = DeadCellSymbol;
             }
+
             foreach ((int x, int y) cell in _cellsToBeBorn)
             {
                 gameField.GameField[cell.x, cell.y] = AliveCellSymbol;
             }
+
             _cellsToBeBorn.Clear();
             _cellsToDie.Clear();
         }

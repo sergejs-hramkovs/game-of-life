@@ -14,8 +14,8 @@ namespace GameOfLife
         private IRender _render;
         private IFieldOperations _fieldOperations;
         private ILibrary _library;
-        public bool WrongInput { get; set; } = false;
-        public bool CorrectKeyPressed { get; set; } = false;
+        public bool WrongInput { get; set; }
+        public bool CorrectKeyPressed { get; set; }
         public GameFieldModel GameField { get; set; }
         public MultipleGamesModel MultipleGames { get; set; }
 
@@ -133,7 +133,6 @@ namespace GameOfLife
         public GameFieldModel EnterFieldDimensions(bool wrongInput)
         {
             Console.CursorVisible = true;
-
             while (true)
             {
                 if (wrongInput)
@@ -141,6 +140,7 @@ namespace GameOfLife
                     Console.Clear();
                     Console.WriteLine(WrongInputPhrase);
                 }
+
                 Console.Write(EnterLengthPhrase);
                 if (int.TryParse(Console.ReadLine(), out int length) && length > 0)
                 {
@@ -169,12 +169,10 @@ namespace GameOfLife
         public bool EnterCoordinates()
         {
             string inputCoordinate;
-
             Console.CursorVisible = true;
             Console.WriteLine(StopSeedingPhrase);
             Console.Write(EnterXPhrase);
             inputCoordinate = Console.ReadLine();
-
             if (inputCoordinate == StopWord)
             {
                 _fieldOperations.StopDataInput = true;
@@ -184,7 +182,6 @@ namespace GameOfLife
                 _fieldOperations.CoordinateX = resultX;
                 Console.Write(EnterYPhrase);
                 inputCoordinate = Console.ReadLine();
-
                 if (inputCoordinate == StopWord)
                 {
                     _fieldOperations.StopDataInput = true;
@@ -202,6 +199,7 @@ namespace GameOfLife
             {
                 return false;
             }
+
             Console.CursorVisible = false;
             return true;
         }
@@ -278,7 +276,6 @@ namespace GameOfLife
             string userInput;
             int chosenFile = -1;
             userInput = Console.ReadLine();
-
             if (int.TryParse(userInput, out var fileNumber) && fileNumber > 0 && fileNumber <= numberOfFiles)
             {
                 chosenFile = fileNumber;
@@ -288,6 +285,7 @@ namespace GameOfLife
             {
                 WrongInput = true;
             }
+
             return chosenFile;
         }
 
@@ -308,6 +306,7 @@ namespace GameOfLife
                     {
                         _engine.Delay -= 100;
                     }
+
                     break;
 
                 case ConsoleKey.RightArrow:
@@ -322,6 +321,7 @@ namespace GameOfLife
                             _engine.Delay += 100;
                         }
                     }
+
                     break;
             }
         }
@@ -362,6 +362,7 @@ namespace GameOfLife
                             EnterGameNumber();
                         }
                     }
+
                     Console.Clear();
                     break;
 
@@ -378,7 +379,6 @@ namespace GameOfLife
         public void PauseGame(ConsoleKey keyPressed, bool multipleGamesMode = false)
         {
             ConsoleKey pauseMenuKeyPress;
-
             if (keyPressed == ConsoleKey.Spacebar)
             {
                 _render.PauseMenuRender(multipleGamesMode);
@@ -409,15 +409,12 @@ namespace GameOfLife
         public void EnterGameNumber()
         {
             string gameNumber;
-
             Console.CursorVisible = true;
-
             while (true)
             {
                 Console.WriteLine(DashesConstant);
                 Console.Write(EnterGameNumberPhrase);
                 gameNumber = Console.ReadLine();
-
                 if (int.TryParse(gameNumber, out var number) && number >= 0 && number < MultipleGames.TotalNumberOfGames)
                 {
                     if (!MultipleGames.GamesToBeDisplayed.Contains(number))
@@ -445,7 +442,6 @@ namespace GameOfLife
         public bool CheckInputMultipleGamesMenu(ConsoleKey keyPressed)
         {
             Random random = new();
-
             switch (keyPressed)
             {
                 case ConsoleKey.D1:
@@ -453,6 +449,7 @@ namespace GameOfLife
                     {
                         EnterGameNumber();
                     }
+
                     return true;
 
                 case ConsoleKey.D2:
@@ -460,6 +457,7 @@ namespace GameOfLife
                     {
                         MultipleGames.GamesToBeDisplayed.Add(random.Next(0, MultipleGames.ListOfGames.Count));
                     }
+
                     return true;
 
                 default:
@@ -475,15 +473,12 @@ namespace GameOfLife
         {
             string userInput;
             MultipleGames = multipleGames;
-
             Console.CursorVisible = true;
             Console.Clear();
-
             while (true)
             {
                 Console.Write(EnterTotalGamesNumberPhrase);
                 userInput = Console.ReadLine();
-
                 if (int.TryParse(userInput, out var totalNumberOfGames) && totalNumberOfGames > 1 && totalNumberOfGames <= 2000)
                 {
                     MultipleGames.TotalNumberOfGames = totalNumberOfGames;
@@ -494,11 +489,11 @@ namespace GameOfLife
                     Console.WriteLine(WrongInputPhrase);
                 }
             }
+
             while (true)
             {
                 Console.Write(EnterLengthMultipleGamesPhrase);
                 userInput = Console.ReadLine();
-
                 if (int.TryParse(userInput, out var length) && length >= 3 && length <= 30)
                 {
                     MultipleGames.Length = length;
@@ -509,11 +504,11 @@ namespace GameOfLife
                     Console.WriteLine(WrongInputPhrase);
                 }
             }
+
             while (true)
             {
                 Console.Write(EnterWidthMultipleGamesPhrase);
                 userInput = Console.ReadLine();
-
                 if (int.TryParse(userInput, out var width) && width >= 3 && width <= 10)
                 {
                     MultipleGames.Width = width;
@@ -524,6 +519,7 @@ namespace GameOfLife
                     Console.WriteLine(WrongInputPhrase);
                 }
             }
+
             EnterNumberOfGamesToBeDisplayed();
             Console.CursorVisible = false;
             return MultipleGames;
@@ -536,12 +532,10 @@ namespace GameOfLife
         {
             string userInput;
             Console.CursorVisible = true;
-
             while (true)
             {
                 Console.Write(EnterNumberOfGamesDisplayedPhrase);
                 userInput = Console.ReadLine();
-
                 if (int.TryParse(userInput, out var gamesToBeDisplayed) && gamesToBeDisplayed >= 2 && gamesToBeDisplayed <= 4)
                 {
                     MultipleGames.NumberOfGamesToBeDisplayed = gamesToBeDisplayed;
@@ -552,6 +546,7 @@ namespace GameOfLife
                     Console.WriteLine(WrongInputPhrase);
                 }
             }
+
             Console.CursorVisible = false;
         }
     }

@@ -17,7 +17,6 @@
             FileIO file = new();
             InputController processor = new();
             FieldOperations field = new(library, render, processor);
-
             engine.Injection(render, file, field, library, applier, processor);
             engine.StartGame();
         }

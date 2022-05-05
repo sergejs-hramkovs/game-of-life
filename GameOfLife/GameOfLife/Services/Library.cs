@@ -29,6 +29,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 1:
@@ -36,6 +37,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 2:
@@ -43,10 +45,12 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
                     }
                 }
             }
+
             return gameField;
         }
 
@@ -70,6 +74,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 1:
@@ -77,6 +82,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 2:
@@ -84,6 +90,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 3:
@@ -91,6 +98,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 4:
@@ -98,10 +106,12 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
                     }
                 }
             }
+
             return gameField;
         }
 
@@ -125,6 +135,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 1:
@@ -132,6 +143,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 2:
@@ -139,6 +151,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 3:
@@ -146,6 +159,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 4:
@@ -153,6 +167,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 5:
@@ -160,10 +175,12 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
                     }
                 }
             }
+
             return gameField;
         }
 
@@ -187,6 +204,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 1:
@@ -194,6 +212,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 2:
@@ -201,6 +220,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 3:
@@ -208,6 +228,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 4:
@@ -215,6 +236,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 5:
@@ -222,6 +244,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 6:
@@ -229,10 +252,12 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
                     }
                 }
             }
+
             return gameField;
         }
 
@@ -256,6 +281,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 2:
@@ -263,6 +289,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 11:
@@ -270,6 +297,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 12:
@@ -277,6 +305,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 13:
@@ -284,6 +313,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 14:
@@ -291,6 +321,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 15:
@@ -298,6 +329,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 16:
@@ -305,6 +337,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 17:
@@ -312,6 +345,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 18:
@@ -319,6 +353,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 21:
@@ -326,6 +361,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 22:
@@ -333,6 +369,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 23:
@@ -340,6 +377,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 25:
@@ -347,6 +385,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 35:
@@ -354,6 +393,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 36:
@@ -361,10 +401,12 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
                     }
                 }
             }
+
             return gameField;
         }
 
@@ -388,6 +430,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 3:
@@ -395,6 +438,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 6:
@@ -402,6 +446,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 7:
@@ -409,6 +454,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 9:
@@ -416,6 +462,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 10:
@@ -423,6 +470,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 22:
@@ -430,6 +478,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 23:
@@ -437,6 +486,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 24:
@@ -444,6 +494,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 25:
@@ -451,6 +502,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 27:
@@ -458,6 +510,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 28:
@@ -465,6 +518,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 29:
@@ -472,6 +526,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 30:
@@ -479,6 +534,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 33:
@@ -486,6 +542,7 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
 
                         case 34:
@@ -493,10 +550,12 @@ namespace GameOfLife
                             {
                                 gameField.GameField[i % gameField.Length, j % gameField.Width] = AliveCellSymbol;
                             }
+
                             break;
                     }
                 }
             }
+
             return gameField;
         }
     }

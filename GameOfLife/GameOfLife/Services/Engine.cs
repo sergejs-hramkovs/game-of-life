@@ -17,12 +17,11 @@ namespace GameOfLife
         private IFieldOperations _fieldOperations;
         private ILibrary _library;
         private IRulesApplier _rulesApplier;
-        private IEngine _engine;
         private IInputController _inputController;
-        private bool _gameOver = false;
-        public bool ReadGeneration { get; set; } = false;
-        public bool GliderGunMode { get; set; } = false;
-        public bool MultipleGamesMode { get; set; } = false;
+        private bool _gameOver;
+        public bool ReadGeneration { get; set; }
+        public bool GliderGunMode { get; set; }
+        public bool MultipleGamesMode { get; set; }
         public int GliderGunType { get; set; } = 0;
         public int Delay { get; set; } = 1000;
 
@@ -35,7 +34,7 @@ namespace GameOfLife
         /// <param name="library">An object of the Library class.</param>
         /// <param name="rulesApplier">An object of the RulesApplier class.</param>
         /// <param name="inputController">An object of the InputController class.</param>
-        public void Injection(IRender render, IFileIO file, IFieldOperations operations, ILibrary library, 
+        public void Injection(IRender render, IFileIO file, IFieldOperations operations, ILibrary library,
             IRulesApplier rulesApplier, IInputController inputController)
         {
             _render = render;
@@ -52,7 +51,6 @@ namespace GameOfLife
         public void StartGame(bool firstLaunch = true)
         {
             ConsoleKey fieldSizeChoice;
-
             if (firstLaunch)
             {
                 _inputController.Injection(this, _file, _render, _fieldOperations, _library);
@@ -61,6 +59,7 @@ namespace GameOfLife
                 Console.CursorVisible = false;
                 Console.SetWindowSize(170, 60);
             }
+
             while (true)
             {
                 if (!GliderGunMode && !MultipleGamesMode)
@@ -71,7 +70,6 @@ namespace GameOfLife
                     _file.FileReadingError = false;
                     fieldSizeChoice = Console.ReadKey(true).Key;
                     _gameField = _inputController.CheckInputMainMenu(fieldSizeChoice);
-
                     if (_inputController.CorrectKeyPressed && !MultipleGamesMode)
                     {
                         _inputController.CorrectKeyPressed = false;
@@ -82,7 +80,6 @@ namespace GameOfLife
                     {
                         _inputController.WrongInput = true;
                     }
-
                 }
                 else if (GliderGunMode)
                 {
@@ -109,7 +106,6 @@ namespace GameOfLife
         public void RunGame()
         {
             ConsoleKey runTimeKeyPress;
-
             if (!_file.FileLoaded && !MultipleGamesMode)
             {
                 FirstRenderCalculations();
@@ -118,9 +114,9 @@ namespace GameOfLife
             {
                 Console.Clear();
             }
+
             // To reset the fact of previous loading to avoid disruption of the game after restart.
             _file.FileLoaded = false;
-
             do
             {
                 while (Console.KeyAvailable == false)
@@ -131,9 +127,11 @@ namespace GameOfLife
                     {
                         break;
                     }
+
                     ReadGeneration = false;
                     Thread.Sleep(Delay);
                 }
+
                 if (!_gameOver)
                 {
                     runTimeKeyPress = Console.ReadKey(true).Key;
@@ -177,7 +175,6 @@ namespace GameOfLife
         {
             // Parameter for proper loading from file.
             int generationsAfterLoading = 1;
-
             // ReadGeneration ensures loading of a proper generation number when loading from the file.
             if (ReadGeneration)
             {
@@ -242,7 +239,6 @@ namespace GameOfLife
         public int CountAliveCells(GameFieldModel gameField)
         {
             gameField.AliveCellsNumber = 0;
-
             for (int i = 0; i < gameField.Length; i++)
             {
                 for (int j = 0; j < gameField.Width; j++)
@@ -253,6 +249,7 @@ namespace GameOfLife
                     }
                 }
             }
+
             return gameField.AliveCellsNumber;
         }
 
@@ -262,7 +259,6 @@ namespace GameOfLife
         private void CountTotalAliveCells()
         {
             _multipleGames.TotalCellsAlive = 0;
-
             foreach (var field in _multipleGames.ListOfGames)
             {
                 _gameField = field;
@@ -278,9 +274,7 @@ namespace GameOfLife
         {
             ConsoleKey runTimeKeyPress;
             ConsoleKey numberChoice;
-
             _multipleGames = new();
-            
             _inputController.EnterMultipleGamesData(_multipleGames);
             _multipleGames.InitializeGames(_fieldOperations);
             _multipleGames = _inputController.MultipleGames;
@@ -293,8 +287,8 @@ namespace GameOfLife
                     break;
                 }
             }
-            Console.Clear();
 
+            Console.Clear();
             do
             {
                 while (Console.KeyAvailable == false)
@@ -306,10 +300,12 @@ namespace GameOfLife
                     MultipleGamesModeRuntimeCalculations();
                     Thread.Sleep(Delay);
                 }
+
                 runTimeKeyPress = Console.ReadKey(true).Key;
                 _inputController.PauseGame(runTimeKeyPress, true);
                 _inputController.ChangeDelay(runTimeKeyPress);
             } while (runTimeKeyPress != ConsoleKey.Escape);
+
             _render.ExitMenuRender();
             do
             {
@@ -328,7 +324,7 @@ namespace GameOfLife
                 _gameField = _multipleGames.ListOfGames[i];
                 _rulesApplier.DetermineCellsDestiny(_gameField, GliderGunMode);
                 _rulesApplier.FieldRefresh(_gameField);
-                CountAliveCells(_gameField);             
+                CountAliveCells(_gameField);
                 if (_gameField.AliveCellsNumber > 0)
                 {
                     _multipleGames.ListOfGames[i] = _gameField;
@@ -347,7 +343,6 @@ namespace GameOfLife
         private void FilterDeadFields()
         {
             Random random = new();
-
             for (int i = 0; i < _multipleGames.NumberOfGamesToBeDisplayed; i++)
             {
                 if (CountAliveCells(_multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[i]]) == 0)

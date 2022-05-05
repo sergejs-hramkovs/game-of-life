@@ -15,10 +15,10 @@ namespace GameOfLife
         private IEngine _engine;
         private string[] _stringField;
         private List<string> _stringList = new List<string>();
-        public string FilePath { get; } = @"C:\GameOfLife_SavedGames\";
-        public bool FileReadingError { get; set; } = false;
-        public bool FileLoaded { get; set; } = false;
-        public bool NoSavedGames { get; set; } = false;
+        public string FilePath { get; } = @"C:\GameOfLife_SavedGames\"; // make relative folder.
+        public bool FileReadingError { get; set; }
+        public bool FileLoaded { get; set; }
+        public bool NoSavedGames { get; set; }
         public int NumberOfFiles { get; private set; }
 
         /// <summary>
@@ -55,7 +55,6 @@ namespace GameOfLife
         private string[] ConvertGameFieldToArrayOfRows(GameFieldModel gameField)
         {
             _stringField = new string[gameField.Width];
-
             for (int horizontalX = 0; horizontalX < gameField.Length; horizontalX++)
             {
                 for (int verticalY = 0; verticalY < gameField.Width; verticalY++)
@@ -63,6 +62,7 @@ namespace GameOfLife
                     _stringField[verticalY] = _stringField[verticalY] + gameField.GameField[horizontalX, verticalY] + " ";
                 }
             }
+
             return _stringField;
         }
 
@@ -77,7 +77,6 @@ namespace GameOfLife
             int verticalY = 0;
             string generationString = "";
             GameFieldModel gameField = new(inputList[4].Length / 2, inputList.Count - 4);
-
             foreach (char character in inputList[0])
             {
                 if (int.TryParse(character.ToString(), out int number))
@@ -85,8 +84,8 @@ namespace GameOfLife
                     generationString += number.ToString();
                 }
             }
-            gameField.Generation = int.Parse(generationString);
 
+            gameField.Generation = int.Parse(generationString);
             for (int i = 4; i < inputList.Count; i++)
             {
                 foreach (char character in inputList[i])
@@ -109,6 +108,7 @@ namespace GameOfLife
                     }
                 }
             }
+
             _stringList.Clear();
             return gameField;
         }
@@ -127,11 +127,11 @@ namespace GameOfLife
             writer.WriteLine($"Alive cells: {gameField.AliveCellsNumber}({(int)Math.Round(gameField.AliveCellsNumber / (double)gameField.Area * 100.0)}%)");
             writer.WriteLine($"Dead cells: {gameField.DeadCellsNumber}");
             writer.WriteLine();
-
             foreach (string line in _stringField)
             {
                 writer.WriteLine(line);
             }
+
             writer.Close();
         }
 
@@ -142,7 +142,6 @@ namespace GameOfLife
         public GameFieldModel LoadGameFieldFromFile(int fileToLoad)
         {
             string line;
-
             try
             {
                 StreamReader reader = new StreamReader(FilePath + $"game{fileToLoad}.txt");
@@ -150,6 +149,7 @@ namespace GameOfLife
                 {
                     _stringList.Add(line);
                 }
+
                 reader.Close();
             }
             catch
@@ -157,6 +157,7 @@ namespace GameOfLife
                 FileReadingError = true;
                 return null;
             }
+
             return ConvertListOfRowsToGameField(_stringList);
         }
 
@@ -179,7 +180,6 @@ namespace GameOfLife
         public void InitiateLoadingFromFile()
         {
             int fileNumber;
-
             EnsureDirectoryExists(FilePath);
             CountFiles();
             if (NoSavedGames)
@@ -202,6 +202,7 @@ namespace GameOfLife
                         Console.CursorVisible = false;
                     } while (_inputController.WrongInput);
                 }
+
                 _inputController.GameField = LoadGameFieldFromFile(fileNumber);
                 if (!FileReadingError)
                 {

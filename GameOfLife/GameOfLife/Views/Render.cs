@@ -1,7 +1,6 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
 using System.IO;
-using System.Windows.Forms;
 using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
@@ -39,6 +38,7 @@ namespace GameOfLife
                     {
                         Console.Write(" " + gameField.GameField[j, i]);
                     }
+
                     Console.WriteLine();
                 }
             }
@@ -50,6 +50,7 @@ namespace GameOfLife
                     {
                         Console.Write(" " + GameOverCellSymbol);
                     }
+
                     Console.WriteLine();
                 }
             }
@@ -71,7 +72,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="wrongInput">Parameter that represents if there was an attempt of wrong input.</param>
         public void LibraryMenuRender(bool wrongInput)
-        {    
+        {
             if (wrongInput)
             {
                 Console.WriteLine();
@@ -81,6 +82,7 @@ namespace GameOfLife
             {
                 Console.WriteLine("\n ### Choose an object from the library ###");
             }
+
             Console.WriteLine("\n 1. Spawn a glider");
             Console.WriteLine(" 2. Spawn a light-weight spaceship");
             Console.WriteLine(" 3. Spawn a middle-weight spaceship");
@@ -115,6 +117,7 @@ namespace GameOfLife
             {
                 Console.WriteLine(" ### Welcome to the Game of Life! ###");
             }
+
             Console.WriteLine("\n # Choose the field size:");
             Console.WriteLine(" 1. 3x3");
             Console.WriteLine(" 2. 5x5");
@@ -143,6 +146,7 @@ namespace GameOfLife
             {
                 Console.WriteLine(" ### The Glider Gun Mode ###");
             }
+
             Console.WriteLine("\n Choose the type of the glider gun:");
             Console.WriteLine("\n 1. Gosper's glider gun");
             Console.WriteLine(" 2. Simkin's glider gun.");
@@ -161,6 +165,7 @@ namespace GameOfLife
             {
                 Console.WriteLine(" # To change the displayed games press 'N'");
             }
+
             Console.WriteLine("\n # Press any other key to cancel saving and continue with the game");
             Console.WriteLine("\n # Press 'Esc' to exit");
         }
@@ -260,6 +265,7 @@ namespace GameOfLife
             {
                 Console.WriteLine(DashesConstant);
             }
+
             Console.WriteLine(FieldDeadPhrase);
             Console.WriteLine($"\n Generations survived: {generation}");
         }
@@ -286,6 +292,7 @@ namespace GameOfLife
                 Console.WriteLine(WrongInputPhrase);
                 Console.WriteLine("--------------");
             }
+
             Console.Write("\n # Choice: ");
         }
 
