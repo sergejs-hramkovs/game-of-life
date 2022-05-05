@@ -70,7 +70,9 @@ namespace GameOfLife
                     return EnterFieldDimensions(WrongInput);
 
                 case ConsoleKey.L:
-                    _file.InitiateLoadingFromFile();
+                    _render.LoadSavedGamesMenu();
+                    ConsoleKey loadingTypeChoice = Console.ReadKey(true).Key;
+                    CheckInputLoadGameMenu(loadingTypeChoice);
                     return GameField;
 
                 case ConsoleKey.G:
@@ -335,10 +337,18 @@ namespace GameOfLife
             switch (keyPressed)
             {
                 case ConsoleKey.S:
-                    _file.SaveGameFieldToFile(GameField);
-                    Console.Clear();
-                    _render.RuntimeUIRender(GameField, _engine.Delay);
-                    _render.RenderField(GameField);
+                    if (!_engine.MultipleGamesMode)
+                    {
+                        _file.SaveGameFieldToFile(GameField);
+                        Console.Clear();
+                        _render.RuntimeUIRender(GameField, _engine.Delay);
+                        _render.RenderField(GameField);
+                    }
+                    else
+                    {
+                        _file.Serializer(MultipleGames.ListOfGames);
+                    }
+                    
                     Console.WriteLine(SuccessfullySavedPhrase);
                     Console.ReadKey();
                     Console.Clear();
@@ -548,6 +558,30 @@ namespace GameOfLife
             }
 
             Console.CursorVisible = false;
+        }
+
+        private void CheckInputLoadGameMenu(ConsoleKey keyPressed)
+        {
+            switch (keyPressed)
+            {
+                case ConsoleKey.D1:
+                    _file.InitiateLoadingFromFile();
+                    break;
+
+                case ConsoleKey.D2:
+                    Random random = new();
+                    _engine.MultipleGamesMode = true;
+                    _engine.MultipleGamesLoaded = true;
+                    _engine.MultipleGames = _file.Deserializer();
+                    _engine.MultipleGames.TotalNumberOfGames = _engine.MultipleGames.ListOfGames.Count;
+                    _engine.MultipleGames.NumberOfFieldsAlive = _engine.MultipleGames.ListOfGames.Count;
+                    _engine.MultipleGames.NumberOfGamesToBeDisplayed = 4;
+                    for (int gameNumbersEntered = 0; gameNumbersEntered < _engine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
+                    {
+                        _engine.MultipleGames.GamesToBeDisplayed.Add(random.Next(0, _engine.MultipleGames.ListOfGames.Count));
+                    }
+                    break;
+            }
         }
     }
 }

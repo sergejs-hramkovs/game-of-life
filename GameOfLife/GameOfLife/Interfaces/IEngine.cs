@@ -10,9 +10,13 @@ namespace GameOfLife.Interfaces
 
         bool MultipleGamesMode { get; set; }
 
+        bool MultipleGamesLoaded { get; set; }
+
         int GliderGunType { get; set; }
 
         int Delay { get; set; }
+
+        MultipleGamesModel MultipleGames { get; set; }
 
         void Injection(IRender render, IFileIO file, IFieldOperations field, ILibrary library, IRulesApplier rulesApplier, IInputController inputProcessor);
 

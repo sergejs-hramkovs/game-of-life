@@ -11,7 +11,6 @@ namespace GameOfLife
     public class Engine : IEngine
     {
         private GameFieldModel _gameField;
-        private MultipleGamesModel _multipleGames;
         private IFileIO _file;
         private IRender _render;
         private IFieldOperations _fieldOperations;
@@ -19,9 +18,11 @@ namespace GameOfLife
         private IRulesApplier _rulesApplier;
         private IInputController _inputController;
         private bool _gameOver;
+        public MultipleGamesModel MultipleGames { get; set; }
         public bool ReadGeneration { get; set; }
         public bool GliderGunMode { get; set; }
         public bool MultipleGamesMode { get; set; }
+        public bool MultipleGamesLoaded { get; set; }
         public int GliderGunType { get; set; } = 0;
         public int Delay { get; set; } = 1000;
 
@@ -76,7 +77,8 @@ namespace GameOfLife
                         RunGame();
                         break;
                     }
-                    else if (fieldSizeChoice != ConsoleKey.G && fieldSizeChoice != ConsoleKey.F1 && fieldSizeChoice != ConsoleKey.M)
+                    else if (fieldSizeChoice != ConsoleKey.G && fieldSizeChoice != ConsoleKey.F1 && fieldSizeChoice != ConsoleKey.M &&
+                        fieldSizeChoice != ConsoleKey.L)
                     {
                         _inputController.WrongInput = true;
                     }
@@ -225,10 +227,10 @@ namespace GameOfLife
             GliderGunMode = false;
             if (MultipleGamesMode)
             {
-                _multipleGames.GamesToBeDisplayed.Clear();
+                MultipleGames.GamesToBeDisplayed.Clear();
                 MultipleGamesMode = false;
             }
-
+            MultipleGamesLoaded = false;
             Delay = 1000;
             Console.Clear();
             StartGame(false);
@@ -262,12 +264,12 @@ namespace GameOfLife
         /// </summary>
         private void CountTotalAliveCells()
         {
-            _multipleGames.TotalCellsAlive = 0;
-            foreach (var field in _multipleGames.ListOfGames)
+            MultipleGames.TotalCellsAlive = 0;
+            foreach (var field in MultipleGames.ListOfGames)
             {
                 _gameField = field;
                 CountAliveCells(_gameField);
-                _multipleGames.TotalCellsAlive += _gameField.AliveCellsNumber;
+                MultipleGames.TotalCellsAlive += _gameField.AliveCellsNumber;
             }
         }
 
@@ -278,17 +280,20 @@ namespace GameOfLife
         {
             ConsoleKey runTimeKeyPress;
             ConsoleKey numberChoice;
-            _multipleGames = new();
-            _inputController.EnterMultipleGamesData(_multipleGames);
-            _multipleGames.InitializeGames(_fieldOperations);
-            _multipleGames = _inputController.MultipleGames;
-            _render.MultipleGamesMenuRender();
-            while (true)
+            if (!MultipleGamesLoaded)
             {
-                numberChoice = Console.ReadKey(true).Key;
-                if (_inputController.CheckInputMultipleGamesMenu(numberChoice))
+                MultipleGames = new();
+                _inputController.EnterMultipleGamesData(MultipleGames);
+                MultipleGames.InitializeGames(_fieldOperations);
+                MultipleGames = _inputController.MultipleGames;
+                _render.MultipleGamesMenuRender();
+                while (true)
                 {
-                    break;
+                    numberChoice = Console.ReadKey(true).Key;
+                    if (_inputController.CheckInputMultipleGamesMenu(numberChoice))
+                    {
+                        break;
+                    }
                 }
             }
 
@@ -298,8 +303,8 @@ namespace GameOfLife
                 while (Console.KeyAvailable == false)
                 {
                     CountTotalAliveCells();
-                    _render.MultipleGamesModeUIRender(Delay, _multipleGames.Generation, _multipleGames.NumberOfFieldsAlive, _multipleGames.TotalCellsAlive);
-                    _multipleGames.Generation++;
+                    _render.MultipleGamesModeUIRender(Delay, MultipleGames.Generation, MultipleGames.NumberOfFieldsAlive, MultipleGames.TotalCellsAlive);
+                    MultipleGames.Generation++;
                     FilterDeadFields();
                     MultipleGamesModeRuntimeCalculations();
                     Thread.Sleep(Delay);
@@ -323,20 +328,20 @@ namespace GameOfLife
         /// </summary>
         private void MultipleGamesModeRuntimeCalculations()
         {
-            for (int gameNumber = 0; gameNumber < _multipleGames.TotalNumberOfGames; gameNumber++)
+            for (int gameNumber = 0; gameNumber < MultipleGames.TotalNumberOfGames; gameNumber++)
             {
-                _gameField = _multipleGames.ListOfGames[gameNumber];
+                _gameField = MultipleGames.ListOfGames[gameNumber];
                 _rulesApplier.IterateThroughGameFieldCells(_gameField, GliderGunMode);
                 _rulesApplier.FieldRefresh(_gameField);
                 CountAliveCells(_gameField);
                 if (_gameField.AliveCellsNumber > 0)
                 {
-                    _multipleGames.ListOfGames[gameNumber] = _gameField;
+                    MultipleGames.ListOfGames[gameNumber] = _gameField;
                 }
-                else if (!_multipleGames.DeadFields.Contains(gameNumber))
+                else if (!MultipleGames.DeadFields.Contains(gameNumber))
                 {
-                    _multipleGames.NumberOfFieldsAlive--;
-                    _multipleGames.DeadFields.Add(gameNumber);
+                    MultipleGames.NumberOfFieldsAlive--;
+                    MultipleGames.DeadFields.Add(gameNumber);
                 }
             }
         }
@@ -347,18 +352,18 @@ namespace GameOfLife
         private void FilterDeadFields()
         {
             Random random = new();
-            for (int gameNumber = 0; gameNumber < _multipleGames.NumberOfGamesToBeDisplayed; gameNumber++)
+            for (int gameNumber = 0; gameNumber < MultipleGames.NumberOfGamesToBeDisplayed; gameNumber++)
             {
-                if (CountAliveCells(_multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[gameNumber]]) == 0)
+                if (CountAliveCells(MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]]) == 0)
                 {
                     Console.WriteLine(FieldDeadPhrase);
-                    _render.RenderField(_multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[gameNumber]], true);
-                    _multipleGames.GamesToBeDisplayed[gameNumber] = random.Next(0, _multipleGames.TotalNumberOfGames);
+                    _render.RenderField(MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]], true);
+                    MultipleGames.GamesToBeDisplayed[gameNumber] = random.Next(0, MultipleGames.TotalNumberOfGames);
                 }
                 else
                 {
-                    _render.MultipleGamesModeGameTitleRender(_multipleGames.GamesToBeDisplayed[gameNumber], _multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber);
-                    _render.RenderField(_multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[gameNumber]]);
+                    _render.MultipleGamesModeGameTitleRender(MultipleGames.GamesToBeDisplayed[gameNumber], MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber);
+                    _render.RenderField(MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]]);
                 }
             }
         }

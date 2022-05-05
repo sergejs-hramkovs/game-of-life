@@ -6,6 +6,7 @@ namespace GameOfLife.Models
     /// The MultipleGamesModel class represents the list of GameFieldModel class objects - the list of Game Fields for the Multiple Games Mode.
     /// It stores the list of fields and different its various parameters.
     /// </summary>
+    [Serializable]
     public class MultipleGamesModel
     {
         private IFieldOperations _fieldOperations;

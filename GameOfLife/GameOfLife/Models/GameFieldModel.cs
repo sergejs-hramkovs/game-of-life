@@ -6,6 +6,7 @@ namespace GameOfLife.Models
     /// The GameFieldModel class represents the Game Field. It stores the field itself, with dead and alive cells, the number of dead and alive cells
     /// field dimensions and the number of generation.
     /// </summary>
+    [Serializable]
     public class GameFieldModel
     {
         public string[,] GameField { get; set; }

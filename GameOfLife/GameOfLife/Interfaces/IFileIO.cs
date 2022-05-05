@@ -12,6 +12,8 @@ namespace GameOfLife.Interfaces
 
         string FilePath { get; }
 
+        string MultipleGamesModeFilePath { get; }
+
         int NumberOfFiles { get; }
 
         void Injection(IRender render, IInputController inputController, IEngine engine);
@@ -23,5 +25,9 @@ namespace GameOfLife.Interfaces
         void CountFiles();
 
         void InitiateLoadingFromFile();
+
+        void Serializer(List<GameFieldModel> listOfGames);
+
+       MultipleGamesModel Deserializer();
     }
 }

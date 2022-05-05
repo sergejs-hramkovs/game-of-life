@@ -1,6 +1,7 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
@@ -16,7 +17,8 @@ namespace GameOfLife
         private IEngine _engine;
         private string[] _stringField;
         private List<string> _stringList = new List<string>();
-        public string FilePath { get; }
+        public string FilePath { get; set; }
+        public string MultipleGamesModeFilePath { get; set; }
         public bool FileReadingError { get; set; }
         public bool FileLoaded { get; set; }
         public bool NoSavedGames { get; set; }
@@ -28,6 +30,7 @@ namespace GameOfLife
         public FileIO()
         {
             FilePath = AppDomain.CurrentDomain.BaseDirectory + SavedGamesFolderName;
+            MultipleGamesModeFilePath = AppDomain.CurrentDomain.BaseDirectory + MultipleGamesModeSavedGamesFolderName;
         }
 
         /// <summary>
@@ -220,6 +223,28 @@ namespace GameOfLife
                     _inputController.CorrectKeyPressed = true;
                 }
             }
+        }
+
+        public void Serializer(List<GameFieldModel> listOfGames)
+        {
+            EnsureDirectoryExists(MultipleGamesModeFilePath);
+            using (Stream stream = File.Open(MultipleGamesModeFilePath + "games.bin", FileMode.Create))
+            {
+                BinaryFormatter binaryFormatter = new();
+                binaryFormatter.Serialize(stream, listOfGames);
+            }
+        }
+
+        public MultipleGamesModel Deserializer()
+        {
+            MultipleGamesModel multipleGames = new();
+            using (Stream stream = File.Open(MultipleGamesModeFilePath + "games.bin", FileMode.Open))
+            {
+                BinaryFormatter binaryFormatter = new();
+                multipleGames.ListOfGames = (List<GameFieldModel>)binaryFormatter.Deserialize(stream);
+            }
+
+            return multipleGames;
         }
     }
 }

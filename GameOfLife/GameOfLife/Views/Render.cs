@@ -328,5 +328,17 @@ namespace GameOfLife
         {
             Console.WriteLine($"\nGame #{gameNumber}. Alive: {cellsAliveNumber}                ");
         }
+
+        /// <summary>
+        /// Method to render the game loading menu.
+        /// </summary>
+        public void LoadSavedGamesMenu()
+        {
+            Console.Clear();
+            Console.WriteLine(" ### Game loading menu ###");
+            Console.WriteLine("\n # Choose what kind of games to load");
+            Console.WriteLine("\n 1. Single game");
+            Console.WriteLine("\n 2. Multiple games");
+        }
     }
 }

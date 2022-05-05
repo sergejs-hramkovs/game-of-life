@@ -58,5 +58,7 @@ namespace GameOfLife
         public const string GameAlreadyChosenPhrase = "\n ### This number has already been chosen! ###";
 
         public const string SavedGamesFolderName = "SavedGames\\";
+
+        public const string MultipleGamesModeSavedGamesFolderName = "SavedGames\\MultipleGamesMode\\";
     }
 }

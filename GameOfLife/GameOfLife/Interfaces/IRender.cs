@@ -35,5 +35,7 @@ namespace GameOfLife.Interfaces
         void ChooseFileToLoadMenuRender(int numberOfFiles, string filePath, bool wrongInput);
 
         void MultipleGamesModeGameTitleRender(int gameNumber, int cellsAliveNumber);
+
+        void LoadSavedGamesMenu();
     }
 }
