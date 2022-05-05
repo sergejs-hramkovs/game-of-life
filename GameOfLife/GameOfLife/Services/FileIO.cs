@@ -22,6 +22,9 @@ namespace GameOfLife
         public bool NoSavedGames { get; set; }
         public int NumberOfFiles { get; private set; }
 
+        /// <summary>
+        /// Constructor that creates a path to the folder that stores the saved games files.
+        /// </summary>
         public FileIO()
         {
             FilePath = AppDomain.CurrentDomain.BaseDirectory + SavedGamesFolderName;
