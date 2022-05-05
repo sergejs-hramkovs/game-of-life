@@ -239,11 +239,11 @@ namespace GameOfLife
         public int CountAliveCells(GameFieldModel gameField)
         {
             gameField.AliveCellsNumber = 0;
-            for (int i = 0; i < gameField.Length; i++)
+            for (int xCoordinate = 0; xCoordinate < gameField.Length; xCoordinate++)
             {
-                for (int j = 0; j < gameField.Width; j++)
+                for (int yCoordinate = 0; yCoordinate < gameField.Width; yCoordinate++)
                 {
-                    if (gameField.GameField[i, j] == AliveCellSymbol)
+                    if (gameField.GameField[xCoordinate, yCoordinate] == AliveCellSymbol)
                     {
                         gameField.AliveCellsNumber++;
                     }
@@ -319,20 +319,20 @@ namespace GameOfLife
         /// </summary>
         private void MultipleGamesModeRuntimeCalculations()
         {
-            for (int i = 0; i < _multipleGames.TotalNumberOfGames; i++)
+            for (int gameNumber = 0; gameNumber < _multipleGames.TotalNumberOfGames; gameNumber++)
             {
-                _gameField = _multipleGames.ListOfGames[i];
+                _gameField = _multipleGames.ListOfGames[gameNumber];
                 _rulesApplier.DetermineCellsDestiny(_gameField, GliderGunMode);
                 _rulesApplier.FieldRefresh(_gameField);
                 CountAliveCells(_gameField);
                 if (_gameField.AliveCellsNumber > 0)
                 {
-                    _multipleGames.ListOfGames[i] = _gameField;
+                    _multipleGames.ListOfGames[gameNumber] = _gameField;
                 }
-                else if (!_multipleGames.DeadFields.Contains(i))
+                else if (!_multipleGames.DeadFields.Contains(gameNumber))
                 {
                     _multipleGames.NumberOfFieldsAlive--;
-                    _multipleGames.DeadFields.Add(i);
+                    _multipleGames.DeadFields.Add(gameNumber);
                 }
             }
         }
@@ -343,18 +343,18 @@ namespace GameOfLife
         private void FilterDeadFields()
         {
             Random random = new();
-            for (int i = 0; i < _multipleGames.NumberOfGamesToBeDisplayed; i++)
+            for (int gameNumber = 0; gameNumber < _multipleGames.NumberOfGamesToBeDisplayed; gameNumber++)
             {
-                if (CountAliveCells(_multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[i]]) == 0)
+                if (CountAliveCells(_multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[gameNumber]]) == 0)
                 {
                     Console.WriteLine(FieldDeadPhrase);
-                    _render.RenderField(_multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[i]], true);
-                    _multipleGames.GamesToBeDisplayed[i] = random.Next(0, _multipleGames.TotalNumberOfGames);
+                    _render.RenderField(_multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[gameNumber]], true);
+                    _multipleGames.GamesToBeDisplayed[gameNumber] = random.Next(0, _multipleGames.TotalNumberOfGames);
                 }
                 else
                 {
-                    _render.MultipleGamesModeGameTitleRender(_multipleGames.GamesToBeDisplayed[i], _multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[i]].AliveCellsNumber);
-                    _render.RenderField(_multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[i]]);
+                    _render.MultipleGamesModeGameTitleRender(_multipleGames.GamesToBeDisplayed[gameNumber], _multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber);
+                    _render.RenderField(_multipleGames.ListOfGames[_multipleGames.GamesToBeDisplayed[gameNumber]]);
                 }
             }
         }

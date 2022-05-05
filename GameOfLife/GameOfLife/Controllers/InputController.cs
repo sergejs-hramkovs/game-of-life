@@ -357,7 +357,7 @@ namespace GameOfLife
                     {
                         EnterNumberOfGamesToBeDisplayed();
                         MultipleGames.GamesToBeDisplayed.Clear();
-                        for (int i = 0; i < MultipleGames.NumberOfGamesToBeDisplayed; i++)
+                        for (int gameNumbersEntered = 0; gameNumbersEntered < MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
                         {
                             EnterGameNumber();
                         }
@@ -445,7 +445,7 @@ namespace GameOfLife
             switch (keyPressed)
             {
                 case ConsoleKey.D1:
-                    for (int i = 0; i < MultipleGames.NumberOfGamesToBeDisplayed; i++)
+                    for (int gameNumbersEntered = 0; gameNumbersEntered < MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
                     {
                         EnterGameNumber();
                     }
@@ -453,7 +453,7 @@ namespace GameOfLife
                     return true;
 
                 case ConsoleKey.D2:
-                    for (int i = 0; i < MultipleGames.NumberOfGamesToBeDisplayed; i++)
+                    for (int gameNumbersEntered = 0; gameNumbersEntered < MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
                     {
                         MultipleGames.GamesToBeDisplayed.Add(random.Next(0, MultipleGames.ListOfGames.Count));
                     }
@@ -524,7 +524,7 @@ namespace GameOfLife
             Console.CursorVisible = false;
             return MultipleGames;
         }
-        
+
         /// <summary>
         /// Method to take and process the number of the games that the user wants to be displayed.
         /// </summary>

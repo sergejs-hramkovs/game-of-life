@@ -31,12 +31,12 @@ namespace GameOfLife
             Console.WriteLine();
             if (!dead)
             {
-                for (int i = 0; i < gameField.Width; i++)
+                for (int yCoordinate = 0; yCoordinate < gameField.Width; yCoordinate++)
                 {
                     Console.Write(" ");
-                    for (int j = 0; j < gameField.Length; j++)
+                    for (int xCoordinate = 0; xCoordinate < gameField.Length; xCoordinate++)
                     {
-                        Console.Write(" " + gameField.GameField[j, i]);
+                        Console.Write(" " + gameField.GameField[xCoordinate, yCoordinate]);
                     }
 
                     Console.WriteLine();
@@ -44,9 +44,9 @@ namespace GameOfLife
             }
             else
             {
-                for (int i = 0; i < gameField.Width; i++)
+                for (int yCoordinate = 0; yCoordinate < gameField.Width; yCoordinate++)
                 {
-                    for (int j = 0; j < gameField.Length; j++)
+                    for (int xCoordinate = 0; xCoordinate < gameField.Length; xCoordinate++)
                     {
                         Console.Write(" " + GameOverCellSymbol);
                     }
@@ -261,7 +261,7 @@ namespace GameOfLife
         public void GameOverRender(int generation)
         {
             Console.Clear();
-            for (int i = 0; i < 5; i++)
+            for (int dashNumber = 0; dashNumber < 5; dashNumber++)
             {
                 Console.WriteLine(DashesConstant);
             }

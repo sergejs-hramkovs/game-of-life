@@ -23,7 +23,11 @@ namespace GameOfLife
 
         public const string AliveCellSymbol = "X";
 
+        public const char AliveCellSymbolChar = 'X';
+
         public const string DeadCellSymbol = ".";
+
+        public const char DeadCellSymbolChar = '.';
 
         public const string GameOverCellSymbol = "+";
 

@@ -130,7 +130,7 @@ namespace GameOfLife
             Random random = new();
             int aliveCellCount = random.Next(1, gameField.Length * gameField.Width);
             int randomX, randomY;
-            for (int i = 1; i <= aliveCellCount; i++)
+            for (int cellNumber = 1; cellNumber <= aliveCellCount; cellNumber++)
             {
                 randomX = random.Next(0, gameField.Length);
                 randomY = random.Next(0, gameField.Width);

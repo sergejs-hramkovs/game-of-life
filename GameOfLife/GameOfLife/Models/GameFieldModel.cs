@@ -32,11 +32,11 @@ namespace GameOfLife.Models
             Width = GameField.GetLength(1);
             Area = Length * Width;
             Generation = 1;
-            for (int i = 0; i < Length; i++)
+            for (int xCoordinate = 0; xCoordinate < Length; xCoordinate++)
             {
-                for (int j = 0; j < Width; j++)
+                for (int yCoordinate = 0; yCoordinate < Width; yCoordinate++)
                 {
-                    GameField[i, j] = DeadCellSymbol;
+                    GameField[xCoordinate, yCoordinate] = DeadCellSymbol;
                 }
             }
         }

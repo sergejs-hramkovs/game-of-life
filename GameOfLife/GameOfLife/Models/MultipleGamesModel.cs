@@ -27,10 +27,10 @@ namespace GameOfLife.Models
         public void InitializeGames(IFieldOperations fieldOperations)
         {
             _fieldOperations = fieldOperations;
-            for (int i = 0; i < TotalNumberOfGames; i++)
+            for (int gameNumber = 0; gameNumber < TotalNumberOfGames; gameNumber++)
             {
                 ListOfGames.Add(new(Length, Width));
-                ListOfGames[i] = _fieldOperations.RandomSeeding(ListOfGames[i]);
+                ListOfGames[gameNumber] = _fieldOperations.RandomSeeding(ListOfGames[gameNumber]);
             }
 
             NumberOfFieldsAlive = ListOfGames.Count;

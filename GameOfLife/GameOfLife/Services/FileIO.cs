@@ -1,6 +1,7 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
 using System.IO;
+using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
@@ -55,11 +56,11 @@ namespace GameOfLife
         private string[] ConvertGameFieldToArrayOfRows(GameFieldModel gameField)
         {
             _stringField = new string[gameField.Width];
-            for (int horizontalX = 0; horizontalX < gameField.Length; horizontalX++)
+            for (int xCoordinate = 0; xCoordinate < gameField.Length; xCoordinate++)
             {
-                for (int verticalY = 0; verticalY < gameField.Width; verticalY++)
+                for (int yCoordinate = 0; yCoordinate < gameField.Width; yCoordinate++)
                 {
-                    _stringField[verticalY] = _stringField[verticalY] + gameField.GameField[horizontalX, verticalY] + " ";
+                    _stringField[yCoordinate] = _stringField[yCoordinate] + gameField.GameField[xCoordinate, yCoordinate] + " ";
                 }
             }
 
@@ -73,8 +74,8 @@ namespace GameOfLife
         /// <returns>Returns an instance of the GameFieldModel class.</returns>
         private GameFieldModel ConvertListOfRowsToGameField(List<string> inputList)
         {
-            int horizontalX = 0;
-            int verticalY = 0;
+            int xCoordinate = 0;
+            int yCoordinate = 0;
             string generationString = "";
             GameFieldModel gameField = new(inputList[4].Length / 2, inputList.Count - 4);
             foreach (char character in inputList[0])
@@ -86,23 +87,23 @@ namespace GameOfLife
             }
 
             gameField.Generation = int.Parse(generationString);
-            for (int i = 4; i < inputList.Count; i++)
+            for (int listElementNumber = 4; listElementNumber < inputList.Count; listElementNumber++)
             {
-                foreach (char character in inputList[i])
+                foreach (char character in inputList[listElementNumber])
                 {
-                    if ((horizontalX < inputList[4].Length / 2) && (verticalY < inputList.Count - 4))
+                    if ((xCoordinate < inputList[4].Length / 2) && (yCoordinate < inputList.Count - 4))
                     {
-                        if (character == 'X' || character == '.')
+                        if (character ==  AliveCellSymbolChar || character == DeadCellSymbolChar)
                         {
-                            gameField.GameField[horizontalX, verticalY] = character.ToString();
-                            if (horizontalX == inputList[4].Length / 2 - 1)
+                            gameField.GameField[xCoordinate, yCoordinate] = character.ToString();
+                            if (xCoordinate == inputList[4].Length / 2 - 1)
                             {
-                                horizontalX = 0;
-                                verticalY++;
+                                xCoordinate = 0;
+                                yCoordinate++;
                             }
                             else
                             {
-                                horizontalX++;
+                                xCoordinate++;
                             }
                         }
                     }
