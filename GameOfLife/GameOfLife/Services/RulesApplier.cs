@@ -14,11 +14,11 @@ namespace GameOfLife
         private int neighboursCount;
 
         /// <summary>
-        /// Method to determine which cells die and which are reborn, judging by the number of alive neighbours.
+        /// Method to go through all the field cells and call the corresponding method if the cell is alive or dead.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
-        /// <param name="disableWrappingAroundField">Parameter that shows if field's wrapping around is enabled.</param>
-        public void DetermineCellsDestiny(GameFieldModel gameField, bool disableWrappingAroundField)
+        /// <param name="disableWrappingAroundField">Parameter that shows if field's wrapping around is disabled.</param>
+        public void IterateThroughGameFieldCells(GameFieldModel gameField, bool disableWrappingAroundField)
         {
             for (int xCoordinate = 0; xCoordinate < gameField.Length; xCoordinate++)
             {
@@ -26,49 +26,73 @@ namespace GameOfLife
                 {
                     if (gameField.GameField[xCoordinate, yCoordinate] == AliveCellSymbol)
                     {
-                        neighboursCount = CountNeighbourCells(gameField, xCoordinate, yCoordinate, false);
-                        switch (disableWrappingAroundField)
-                        {
-                            case false:
-                                if (neighboursCount < 2 || neighboursCount > 3)
-                                {
-                                    _cellsToDie.Add((xCoordinate, yCoordinate));
-                                }
-
-                                break;
-
-                            case true:
-                                if (neighboursCount < 2 || neighboursCount > 3 || xCoordinate == gameField.Length - 1 || yCoordinate == gameField.Width - 1)
-                                {
-                                    _cellsToDie.Add((xCoordinate, yCoordinate));
-                                }
-
-                                break;
-                        }
+                        ActOnAliveCell(gameField, xCoordinate, yCoordinate, disableWrappingAroundField);
                     }
                     else
                     {
-                        neighboursCount = CountNeighbourCells(gameField, xCoordinate, yCoordinate, true);
-                        switch (disableWrappingAroundField)
-                        {
-                            case false:
-                                if (neighboursCount == 3)
-                                {
-                                    _cellsToBeBorn.Add((xCoordinate, yCoordinate));
-                                }
-
-                                break;
-
-                            case true:
-                                if (neighboursCount == 3 && xCoordinate != gameField.Length - 1 && yCoordinate != gameField.Width - 1)
-                                {
-                                    _cellsToBeBorn.Add((xCoordinate, yCoordinate));
-                                }
-
-                                break;
-                        }
+                        ActOnDeadCell(gameField, xCoordinate, yCoordinate, disableWrappingAroundField);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Method to count the neighbours of an alive cell and add it to the list of cells to be die in the next generation if it meets the rules.
+        /// </summary>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
+        /// <param name="xCoordinate">Horizontal coordinate of a cell which neighbours are being counted.</param>
+        /// <param name="yCoordinate">Vertical coordinate of a cell which neighbours are being counted</param>
+        /// <param name="disableWrappingAroundField">Parameter that shows if field's wrapping around is disabled.</param>
+        private void ActOnAliveCell(GameFieldModel gameField, int xCoordinate, int yCoordinate, bool disableWrappingAroundField)
+        {
+            neighboursCount = CountNeighbourCells(gameField, xCoordinate, yCoordinate, false);
+            switch (disableWrappingAroundField)
+            {
+                case false:
+                    if (neighboursCount < 2 || neighboursCount > 3)
+                    {
+                        _cellsToDie.Add((xCoordinate, yCoordinate));
+                    }
+
+                    break;
+
+                case true:
+                    if (neighboursCount < 2 || neighboursCount > 3 || xCoordinate == gameField.Length - 1 || yCoordinate == gameField.Width - 1)
+                    {
+                        _cellsToDie.Add((xCoordinate, yCoordinate));
+                    }
+
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Method to count the neighbours of a dead cell and add it to the list of cells to be reborn in the next generation if it meets the rules.
+        /// </summary>
+        /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
+        /// <param name="xCoordinate">Horizontal coordinate of a cell which neighbours are being counted.</param>
+        /// <param name="yCoordinate">Vertical coordinate of a cell which neighbours are being counted</param>
+        /// <param name="disableWrappingAroundField">Parameter that shows if field's wrapping around is disabled.</param>
+        private void ActOnDeadCell(GameFieldModel gameField, int xCoordinate, int yCoordinate, bool disableWrappingAroundField)
+        {
+            neighboursCount = CountNeighbourCells(gameField, xCoordinate, yCoordinate, true);
+            switch (disableWrappingAroundField)
+            {
+                case false:
+                    if (neighboursCount == 3)
+                    {
+                        _cellsToBeBorn.Add((xCoordinate, yCoordinate));
+                    }
+
+                    break;
+
+                case true:
+                    if (neighboursCount == 3 && xCoordinate != gameField.Length - 1 && yCoordinate != gameField.Width - 1)
+                    {
+                        _cellsToBeBorn.Add((xCoordinate, yCoordinate));
+                    }
+
+                    break;
             }
         }
 

@@ -326,7 +326,7 @@ namespace GameOfLife
         /// <param name="cellsAliveNumber">The number of alive cells on the correspongind Game Field.</param>
         public void MultipleGamesModeGameTitleRender(int gameNumber, int cellsAliveNumber)
         {
-            Console.WriteLine($"\nGame #{gameNumber}. Alive: {cellsAliveNumber}              ");
+            Console.WriteLine($"\nGame #{gameNumber}. Alive: {cellsAliveNumber}                ");
         }
     }
 }

@@ -186,7 +186,7 @@ namespace GameOfLife
             // Helps to avoid loading of the previous or next game state.
             if (generationsAfterLoading >= 1)
             {
-                _rulesApplier.DetermineCellsDestiny(_gameField, GliderGunMode);
+                _rulesApplier.IterateThroughGameFieldCells(_gameField, GliderGunMode);
                 _rulesApplier.FieldRefresh(_gameField);
                 CountAliveCells(_gameField);
             }
@@ -322,7 +322,7 @@ namespace GameOfLife
             for (int gameNumber = 0; gameNumber < _multipleGames.TotalNumberOfGames; gameNumber++)
             {
                 _gameField = _multipleGames.ListOfGames[gameNumber];
-                _rulesApplier.DetermineCellsDestiny(_gameField, GliderGunMode);
+                _rulesApplier.IterateThroughGameFieldCells(_gameField, GliderGunMode);
                 _rulesApplier.FieldRefresh(_gameField);
                 CountAliveCells(_gameField);
                 if (_gameField.AliveCellsNumber > 0)
