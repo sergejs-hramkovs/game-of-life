@@ -56,5 +56,7 @@ namespace GameOfLife
         public const string EnterNumberOfGamesDisplayedPhrase = "\n # Enter the number of how many game will be displayed (2-4): ";
 
         public const string GameAlreadyChosenPhrase = "\n ### This number has already been chosen! ###";
+
+        public const string SavedGamesFolderName = "SavedGames\\";
     }
 }

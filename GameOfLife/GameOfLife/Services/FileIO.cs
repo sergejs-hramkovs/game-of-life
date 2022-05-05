@@ -16,11 +16,16 @@ namespace GameOfLife
         private IEngine _engine;
         private string[] _stringField;
         private List<string> _stringList = new List<string>();
-        public string FilePath { get; } = @"C:\GameOfLife_SavedGames\"; // make relative folder.
+        public string FilePath { get; }
         public bool FileReadingError { get; set; }
         public bool FileLoaded { get; set; }
         public bool NoSavedGames { get; set; }
         public int NumberOfFiles { get; private set; }
+
+        public FileIO()
+        {
+            FilePath = AppDomain.CurrentDomain.BaseDirectory + SavedGamesFolderName;
+        }
 
         /// <summary>
         /// Method to inject required objects into the class.
@@ -93,7 +98,7 @@ namespace GameOfLife
                 {
                     if ((xCoordinate < inputList[4].Length / 2) && (yCoordinate < inputList.Count - 4))
                     {
-                        if (character ==  AliveCellSymbolChar || character == DeadCellSymbolChar)
+                        if (character == AliveCellSymbolChar || character == DeadCellSymbolChar)
                         {
                             gameField.GameField[xCoordinate, yCoordinate] = character.ToString();
                             if (xCoordinate == inputList[4].Length / 2 - 1)

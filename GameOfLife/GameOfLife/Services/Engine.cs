@@ -223,8 +223,12 @@ namespace GameOfLife
         public void RestartGame()
         {
             GliderGunMode = false;
-            MultipleGamesMode = false;
-            _multipleGames.GamesToBeDisplayed.Clear();
+            if (MultipleGamesMode)
+            {
+                _multipleGames.GamesToBeDisplayed.Clear();
+                MultipleGamesMode = false;
+            }
+
             Delay = 1000;
             Console.Clear();
             StartGame(false);
