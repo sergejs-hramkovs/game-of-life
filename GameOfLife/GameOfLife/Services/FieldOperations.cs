@@ -1,6 +1,7 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
 using static GameOfLife.StringConstantsModel;
+using static GameOfLife.Views.MenuViews;
 
 namespace GameOfLife
 {
@@ -10,7 +11,7 @@ namespace GameOfLife
     [Serializable]
     public class FieldOperations : IFieldOperations
     {
-        private IRender _render;
+        private IRenderer _renderer;
         private ILibrary _library;
         private IInputController _inputController;
         public int CoordinateX { get; set; }
@@ -23,10 +24,10 @@ namespace GameOfLife
         /// <param name="library">An instance of the Library class.</param>
         /// <param name="render">An instance of the Render class.</param>
         /// <param name="controller">An instance of the InputController class.</param>
-        public FieldOperations(ILibrary library, IRender render, IInputController controller)
+        public FieldOperations(ILibrary library, IRenderer render, IInputController controller)
         {
             _library = library;
-            _render = render;
+            _renderer = render;
             _inputController = controller;
         }
 
@@ -45,7 +46,7 @@ namespace GameOfLife
                 if (_inputController.WrongInput)
                 {
                     Console.Clear();
-                    _render.RenderField(gameField);
+                    _renderer.RenderField(gameField);
                     Console.WriteLine("\n" + WrongInputPhrase);
                     _inputController.WrongInput = false;
                 }
@@ -58,7 +59,7 @@ namespace GameOfLife
                 }
                 else
                 {
-                    _render.SeedFieldMenuRender();
+                    _renderer.MenuRenderer(FieldSeedingChoiceChoiceMenu, clearScreen:false);
                     seedingChoice = Console.ReadKey(true).Key;
                 }
 
@@ -81,11 +82,11 @@ namespace GameOfLife
                 Console.Clear();
                 if (!_inputController.WrongInput)
                 {
-                    _render.RenderField(gameField);
+                    _renderer.RenderField(gameField);
                 }
                 else if (_inputController.WrongInput)
                 {
-                    _render.RenderField(gameField);
+                    _renderer.RenderField(gameField);
                     Console.WriteLine("\n" + WrongInputPhrase);
                     _inputController.WrongInput = false;
                 }
@@ -182,8 +183,8 @@ namespace GameOfLife
                     Console.Clear();
                 }
 
-                _render.RenderField(gameField);
-                _render.LibraryMenuRender(_inputController.WrongInput);
+                _renderer.RenderField(gameField);
+                _renderer.MenuRenderer(LibraryMenu, _inputController.WrongInput);
                 _inputController.WrongInput = false;
                 libraryChoice = Console.ReadKey(true).Key;
                 if (_inputController.CheckInputLibraryMenu(libraryChoice))
@@ -201,7 +202,7 @@ namespace GameOfLife
         public void CallSpawningMethod(GameFieldModel gameField, Func<GameFieldModel, int, int, GameFieldModel> SpawnLibraryObject)
         {
             Console.Clear();
-            _render.RenderField(gameField);
+            _renderer.RenderField(gameField);
             if (_inputController.EnterCoordinates() && !StopDataInput)
             {
                 SpawnLibraryObject(gameField, CoordinateX, CoordinateY);

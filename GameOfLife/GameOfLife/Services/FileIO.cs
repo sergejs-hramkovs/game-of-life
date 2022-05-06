@@ -13,7 +13,7 @@ namespace GameOfLife
     [Serializable]
     public class FileIO : IFileIO
     {
-        private IRender _render;
+        private IRenderer _render;
         private IInputController _inputController;
         private IEngine _engine;
         private string[] _stringField;
@@ -40,7 +40,7 @@ namespace GameOfLife
         /// <param name="render">An instance of the Render class.</param>
         /// <param name="inputController">An instance of the InputController class.</param>
         /// <param name="engine">An instance of the Engine class.</param>
-        public void Injection(IRender render, IInputController inputController, IEngine engine)
+        public void Injection(IRenderer render, IInputController inputController, IEngine engine)
         {
             _render = render;
             _inputController = inputController;

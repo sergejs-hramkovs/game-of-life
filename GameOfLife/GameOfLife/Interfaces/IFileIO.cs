@@ -16,7 +16,7 @@ namespace GameOfLife.Interfaces
 
         int NumberOfFiles { get; }
 
-        void Injection(IRender render, IInputController inputController, IEngine engine);
+        void Injection(IRenderer render, IInputController inputController, IEngine engine);
 
         void SaveGameFieldToFile(GameFieldModel gameField);
 

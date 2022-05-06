@@ -1,6 +1,7 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
 using static GameOfLife.StringConstantsModel;
+using static GameOfLife.Views.MenuViews;
 
 namespace GameOfLife
 {
@@ -12,7 +13,7 @@ namespace GameOfLife
     {
         private IEngine _engine;
         private IFileIO _file;
-        private IRender _render;
+        private IRenderer _render;
         private IFieldOperations _fieldOperations;
         private ILibrary _library;
         public bool WrongInput { get; set; }
@@ -28,7 +29,7 @@ namespace GameOfLife
         /// <param name="render">Render class parameter.</param>
         /// <param name="operations">FieldOperations class parameter.</param>
         /// <param name="library">Library class parameter.</param>
-        public void Injection(IEngine engine, IFileIO? file = null, IRender? render = null, IFieldOperations? operations = null, ILibrary? library = null)
+        public void Injection(IEngine engine, IFileIO? file = null, IRenderer? render = null, IFieldOperations? operations = null, ILibrary? library = null)
         {
             _engine = engine;
             _file = file;
@@ -71,7 +72,7 @@ namespace GameOfLife
                     return EnterFieldDimensions(WrongInput);
 
                 case ConsoleKey.L:
-                    _render.LoadSavedGamesMenu();
+                    _render.MenuRenderer(LoadGameMenu, clearScreen:true);
                     ConsoleKey loadingTypeChoice = Console.ReadKey(true).Key;
                     CheckInputLoadGameMenu(loadingTypeChoice);
                     return GameField;
@@ -86,7 +87,8 @@ namespace GameOfLife
                     return null;
 
                 case ConsoleKey.F1:
-                    _render.PrintRules();
+                    _render.MenuRenderer(RulesPage);
+                    Console.ReadKey();
                     return null;
 
                 case ConsoleKey.Escape:
@@ -391,7 +393,7 @@ namespace GameOfLife
             ConsoleKey pauseMenuKeyPress;
             if (keyPressed == ConsoleKey.Spacebar)
             {
-                _render.PauseMenuRender(multipleGamesMode);
+                _render.MenuRenderer(PauseMenu, multipleGames:multipleGamesMode, clearScreen:false);
                 pauseMenuKeyPress = Console.ReadKey(true).Key;
                 CheckInputPauseMenu(pauseMenuKeyPress, multipleGamesMode);
             }
@@ -477,8 +479,9 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to take and process user's input in the Multiple Games Mode Menu.
+        /// Method to take and process user's input in the Multiple Games Mode field size choosing Menu.
         /// </summary>
+        /// <param name="multipleGames">An object with a list of Game Fields.</param>
         /// <param name="keyPressed">Parameter which stores user input.</param>
         public MultipleGamesModel CheckInputMultipleGamesMenuFieldSize(MultipleGamesModel multipleGames, ConsoleKey keyPressed)
         {
@@ -517,20 +520,17 @@ namespace GameOfLife
         /// <summary>
         /// Method to take and process user's input of the number of games and Game Field sizes for the Multiple Games Mode.
         /// </summary>
-        public MultipleGamesModel EnterMultipleGamesData(MultipleGamesModel multipleGames)
+        public MultipleGamesModel EnterNumberOfMultipleGames(MultipleGamesModel multipleGames)
         {
             string userInput;
             MultipleGames = multipleGames;
             Console.CursorVisible = true;
-            Console.Clear();
-
             while (true)
             {
-                Console.Write(EnterLengthMultipleGamesPhrase);
                 userInput = Console.ReadLine();
-                if (int.TryParse(userInput, out var length) && length >= 3 && length <= 30)
+                if (int.TryParse(userInput, out var totalNumberOfGames) && totalNumberOfGames >= 100 && totalNumberOfGames <= 10000)
                 {
-                    MultipleGames.Length = length;
+                    MultipleGames.TotalNumberOfGames = totalNumberOfGames;
                     break;
                 }
                 else
@@ -538,52 +538,14 @@ namespace GameOfLife
                     Console.WriteLine(WrongInputPhrase);
                 }
             }
-
-            while (true)
-            {
-                Console.Write(EnterWidthMultipleGamesPhrase);
-                userInput = Console.ReadLine();
-                if (int.TryParse(userInput, out var width) && width >= 3 && width <= 30)
-                {
-                    MultipleGames.Width = width;
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine(WrongInputPhrase);
-                }
-            }
-
-            EnterNumberOfGamesToBeDisplayed();
             Console.CursorVisible = false;
             return MultipleGames;
         }
 
         /// <summary>
-        /// Method to take and process the number of the games that the user wants to be displayed.
+        /// Method to take and process user's input in the Load Game Menu.
         /// </summary>
-        private void EnterNumberOfGamesToBeDisplayed()
-        {
-            string userInput;
-            Console.CursorVisible = true;
-            while (true)
-            {
-                Console.Write(EnterNumberOfGamesDisplayedPhrase);
-                userInput = Console.ReadLine();
-                if (int.TryParse(userInput, out var gamesToBeDisplayed) && gamesToBeDisplayed >= 2 && gamesToBeDisplayed <= 108)
-                {
-                    MultipleGames.NumberOfGamesToBeDisplayed = gamesToBeDisplayed;
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine(WrongInputPhrase);
-                }
-            }
-
-            Console.CursorVisible = false;
-        }
-
+        /// <param name="keyPressed">Parameter which stores user's input.</param>
         private void CheckInputLoadGameMenu(ConsoleKey keyPressed)
         {
             switch (keyPressed)

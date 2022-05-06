@@ -1,6 +1,7 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
 using static GameOfLife.StringConstantsModel;
+using static GameOfLife.Views.MenuViews;
 
 namespace GameOfLife
 {
@@ -13,7 +14,7 @@ namespace GameOfLife
     {
         private GameFieldModel _gameField;
         private IFileIO _file;
-        private IRender _render;
+        private IRenderer _render;
         private IFieldOperations _fieldOperations;
         private ILibrary _library;
         private IRulesApplier _rulesApplier;
@@ -36,7 +37,7 @@ namespace GameOfLife
         /// <param name="library">An object of the Library class.</param>
         /// <param name="rulesApplier">An object of the RulesApplier class.</param>
         /// <param name="inputController">An object of the InputController class.</param>
-        public void Injection(IRender render, IFileIO file, IFieldOperations operations, ILibrary library,
+        public void Injection(IRenderer render, IFileIO file, IFieldOperations operations, ILibrary library,
             IRulesApplier rulesApplier, IInputController inputController)
         {
             _render = render;
@@ -66,13 +67,13 @@ namespace GameOfLife
             {
                 if (!GliderGunMode && !MultipleGamesMode)
                 {
-                    _render.MainMenuRender(_inputController.WrongInput, _file.FileReadingError, _file.NoSavedGames);
+                    _render.MenuRenderer(MainMenu, _inputController.WrongInput, _file.FileReadingError, _file.NoSavedGames);
                     _inputController.WrongInput = false;
                     _file.NoSavedGames = false;
                     _file.FileReadingError = false;
                     fieldSizeChoice = Console.ReadKey(true).Key;
                     _gameField = _inputController.CheckInputMainMenu(fieldSizeChoice);
-                    if (_inputController.CorrectKeyPressed && !MultipleGamesMode)
+                    if (_inputController.CorrectKeyPressed && !MultipleGamesMode && !GliderGunMode)
                     {
                         _inputController.CorrectKeyPressed = false;
                         RunGame();
@@ -86,7 +87,7 @@ namespace GameOfLife
                 }
                 else if (GliderGunMode)
                 {
-                    _render.GliderGunModeRender(_inputController.WrongInput);
+                    _render.MenuRenderer(GliderGunModeMenu, _inputController.WrongInput);
                     fieldSizeChoice = Console.ReadKey(true).Key;
                     _gameField = _inputController.CheckInputGliderGunMenu(fieldSizeChoice);
                     if (fieldSizeChoice == ConsoleKey.D1 || fieldSizeChoice == ConsoleKey.D2)
@@ -148,7 +149,7 @@ namespace GameOfLife
                 }
             } while (runTimeKeyPress != ConsoleKey.Escape);
 
-            _render.ExitMenuRender();
+            _render.MenuRenderer(ExitMenu, clearScreen:false);
             do
             {
                 runTimeKeyPress = Console.ReadKey(true).Key;
@@ -164,8 +165,7 @@ namespace GameOfLife
             Console.Clear();
             _render.RenderField(_gameField);
             _fieldOperations.PopulateField(_gameField, GliderGunMode, GliderGunType);
-            Console.Clear();
-            _render.BlankUIRender();
+            _render.MenuRenderer(BlankUI);
             _render.RenderField(_gameField);
             Thread.Sleep(2000);
             Console.Clear();
@@ -234,6 +234,8 @@ namespace GameOfLife
             MultipleGamesLoaded = false;
             Delay = 1000;
             Console.Clear();
+            _gameField = null;
+            MultipleGames = null;
             StartGame(false);
             RunGame();
         }
@@ -285,12 +287,15 @@ namespace GameOfLife
             if (!MultipleGamesLoaded)
             {
                 MultipleGames = new();
-                _render.MultipleGamesFieldSizeMenuRender();
+                _render.MenuRenderer(MultipleGamesModeGamesQuantityMenu, clearScreen:true, newLine:false);
+                _inputController.EnterNumberOfMultipleGames(MultipleGames);
+                MultipleGames = _inputController.MultipleGames;
+                _render.MenuRenderer(MultipleGamesModeFieldSizeChoiceMenu, clearScreen:true);
                 fieldsSizeChoice = Console.ReadKey(true).Key;
                 _inputController.CheckInputMultipleGamesMenuFieldSize(MultipleGames, fieldsSizeChoice);
                 MultipleGames.InitializeGames(_fieldOperations);
                 MultipleGames = _inputController.MultipleGames;
-                _render.MultipleGamesMenuRender();
+                _render.MenuRenderer(MultipleGamesModeMenu, clearScreen:true);
                 while (true)
                 {
                     numberChoice = Console.ReadKey(true).Key;
@@ -323,7 +328,7 @@ namespace GameOfLife
                 _inputController.ChangeDelay(runTimeKeyPress);
             } while (runTimeKeyPress != ConsoleKey.Escape);
 
-            _render.ExitMenuRender();
+            _render.MenuRenderer(ExitMenu, clearScreen:false);
             do
             {
                 runTimeKeyPress = Console.ReadKey(true).Key;
@@ -360,27 +365,8 @@ namespace GameOfLife
         /// </summary>
         private void FilterDeadFields()
         {
-            int rows = 1;
+            int rows = SetNumberOfRows(MultipleGames.ListOfGames[0].Length);
             Random random = new();
-            switch (MultipleGames.ListOfGames[0].Length)
-            {
-                case 25:
-                    rows = 2;
-                    break;
-
-                case 20:
-                    rows = 2;
-                    break;
-
-                case 15:
-                    rows = 3;
-                    break;
-
-                case 10:
-                    rows = 4;
-                    break;
-            }
-
             for (int rowNumber = 0; rowNumber < rows; rowNumber++)
             {
                 int numberOfHorizontalFields = _render.RenderMultipleHorizontalFields(MultipleGames, rowNumber);
@@ -391,6 +377,32 @@ namespace GameOfLife
                         MultipleGames.GamesToBeDisplayed[i] = random.Next(0, MultipleGames.TotalNumberOfGames);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Method to define the number of rows of Game Fields, depending on the size of the side of the Game Field.
+        /// </summary>
+        /// <param name="length">Size of the side of the GameField.</param>
+        /// <returns>Returns the number of rows.</returns>
+        private int SetNumberOfRows(int length)
+        {
+            switch (MultipleGames.ListOfGames[0].Length)
+            {
+                case 25:
+                    return 2;
+
+                case 20:
+                    return 2;
+
+                case 15:
+                    return 3;
+
+                case 10:
+                    return 4;
+
+                default:
+                    return 2;
             }
         }
     }

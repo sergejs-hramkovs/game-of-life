@@ -63,5 +63,7 @@ namespace GameOfLife
         public const string SavedGamesFolderName = "SavedGames\\";
 
         public const string MultipleGamesModeSavedGamesFolderName = "SavedGames\\MultipleGamesMode\\";
+
+        public const string EnterNewGameNumbersPhrase = " # To change the displayed games press 'N'";
     }
 }
