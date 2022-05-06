@@ -36,7 +36,7 @@ namespace GameOfLife.Interfaces
 
         void LoadSavedGamesMenu();
 
-        void RenderMultipleHorizontalFields(MultipleGamesModel multipleGames, int rowNumber);
+        int RenderMultipleHorizontalFields(MultipleGamesModel multipleGames, int rowNumber);
 
         void MultipleGamesFieldSizeMenuRender();
     }

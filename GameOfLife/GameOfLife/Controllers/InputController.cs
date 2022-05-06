@@ -366,7 +366,6 @@ namespace GameOfLife
                 case ConsoleKey.N:
                     if (multipleGamesMode)
                     {
-                        EnterNumberOfGamesToBeDisplayed();
                         _engine.MultipleGames.GamesToBeDisplayed.Clear();
                         for (int gameNumbersEntered = 0; gameNumbersEntered < _engine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
                         {

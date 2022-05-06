@@ -285,7 +285,6 @@ namespace GameOfLife
             if (!MultipleGamesLoaded)
             {
                 MultipleGames = new();
-                //_inputController.EnterMultipleGamesData(MultipleGames);
                 _render.MultipleGamesFieldSizeMenuRender();
                 fieldsSizeChoice = Console.ReadKey(true).Key;
                 _inputController.CheckInputMultipleGamesMenuFieldSize(MultipleGames, fieldsSizeChoice);
@@ -362,6 +361,7 @@ namespace GameOfLife
         private void FilterDeadFields()
         {
             int rows = 1;
+            Random random = new();
             switch (MultipleGames.ListOfGames[0].Length)
             {
                 case 25:
@@ -381,9 +381,16 @@ namespace GameOfLife
                     break;
             }
 
-            for (int gameNumber = 0; gameNumber < rows; gameNumber++)
+            for (int rowNumber = 0; rowNumber < rows; rowNumber++)
             {
-                _render.RenderMultipleHorizontalFields(MultipleGames, gameNumber);
+                int numberOfHorizontalFields = _render.RenderMultipleHorizontalFields(MultipleGames, rowNumber);
+                for (int i = rowNumber * numberOfHorizontalFields; i < numberOfHorizontalFields + rowNumber * numberOfHorizontalFields; i++)
+                {
+                    if (MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[i]].AliveCellsNumber == 0)
+                    {
+                        MultipleGames.GamesToBeDisplayed[i] = random.Next(0, MultipleGames.TotalNumberOfGames);
+                    }
+                }
             }
         }
     }

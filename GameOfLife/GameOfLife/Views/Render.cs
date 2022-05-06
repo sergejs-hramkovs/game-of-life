@@ -57,45 +57,30 @@ namespace GameOfLife
             }
         }
 
-        public void RenderMultipleHorizontalFields(MultipleGamesModel multipleGames, int rowNumber)
+        public int RenderMultipleHorizontalFields(MultipleGamesModel multipleGames, int rowNumber)
         {
             int numberOfHorizontalFields = 2;
             int i;
             bool titleRendered = false;
             string indentation = "";
+            string titleString;
             Console.WriteLine();
             switch (multipleGames.ListOfGames[0].Length)
             {
                 case 25:
                     numberOfHorizontalFields = 3;
-                    for (int j = 0; j < 35; j++)
-                    {
-                        indentation += " ";
-                    }
                     break;
 
                 case 20:
                     numberOfHorizontalFields = 3;
-                    for (int j = 0; j < 24; j++)
-                    {
-                        indentation += " ";
-                    }
                     break;
 
                 case 15:
                     numberOfHorizontalFields = 4;
-                    for (int j = 0; j < 15; j++)
-                    {
-                        indentation += " ";
-                    }
                     break;
 
                 case 10:
                     numberOfHorizontalFields = 6;
-                    for (int j = 0; j < 5; j++)
-                    {
-                        indentation += " ";
-                    }
                     break;
             }
             i = numberOfHorizontalFields * rowNumber;
@@ -107,8 +92,29 @@ namespace GameOfLife
                     Console.WriteLine();
                     for (int fieldNumber = 0; fieldNumber < numberOfHorizontalFields; fieldNumber++)
                     {
+                        if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[i]].AliveCellsNumber == 0)
+                        {
+                            for (int k = 0; k < multipleGames.ListOfGames[0].Length * 2 + 6 - FieldIsDeadPhrase.Length; k++)
+                            {
+                                indentation += " ";
+                            }
 
-                        Console.Write($" Game #{multipleGames.GamesToBeDisplayed[i]}. Alive: {multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[i]].AliveCellsNumber}" + indentation);
+                            Console.Write(FieldIsDeadPhrase + indentation);
+                            indentation = "";
+                        }
+                        else
+                        {
+                            titleString = $"  Game #{multipleGames.GamesToBeDisplayed[i]}. Alive: {multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[i]].AliveCellsNumber}";
+
+                            for (int k = 0; k < multipleGames.ListOfGames[0].Length * 2 + 6 - titleString.Length; k++)
+                            {
+                                indentation += " ";
+                            }
+
+                            Console.Write(titleString + indentation);
+                            indentation = "";
+                        }
+
                         i++;
                     }
 
@@ -121,7 +127,14 @@ namespace GameOfLife
                     Console.Write(" ");
                     for (int xCoordinate = 0; xCoordinate < multipleGames.ListOfGames[0].Length; xCoordinate++)
                     {
-                        Console.Write(" " + multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[fieldNumber + numberOfHorizontalFields * rowNumber]].GameField[xCoordinate, yCoordinate]);
+                        if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[fieldNumber + numberOfHorizontalFields * rowNumber]].AliveCellsNumber == 0)
+                        {
+                            Console.Write(" " + GameOverCellSymbol);
+                        }
+                        else
+                        {
+                            Console.Write(" " + multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[fieldNumber + numberOfHorizontalFields * rowNumber]].GameField[xCoordinate, yCoordinate]);
+                        }
                     }
 
                     Console.Write("     ");
@@ -129,6 +142,8 @@ namespace GameOfLife
 
                 Console.WriteLine();
             }
+
+            return numberOfHorizontalFields;
         }
 
         /// <summary>
@@ -341,7 +356,7 @@ namespace GameOfLife
                 Console.WriteLine(DashesConstant);
             }
 
-            Console.WriteLine(FieldDeadPhrase);
+            Console.WriteLine(WholeFieldDeadPhrase);
             Console.WriteLine($"\n Generations survived: {generation}");
         }
 

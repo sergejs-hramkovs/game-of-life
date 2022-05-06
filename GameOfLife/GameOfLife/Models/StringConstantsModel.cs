@@ -44,7 +44,9 @@ namespace GameOfLife
 
         public const string EnterGameNumberPhrase = " # Enter the number of a game: ";
 
-        public const string FieldDeadPhrase = "\n ### THE WHOLE FIELD IS DEAD! ###";
+        public const string WholeFieldDeadPhrase = "\n ### THE WHOLE FIELD IS DEAD! ###";
+
+        public const string FieldIsDeadPhrase = "  THE FIELD IS DEAD ";
 
         public const string DashesConstant = "---------------------------------";
 
