@@ -10,6 +10,6 @@ namespace GameOfLife.Interfaces
 
         void SingleGameRuntimeUIParameterInitialization(GameFieldModel gameField, int delay);
 
-        void MultiGameRuntimeUIParameterInitialization(int delay, int generation, int numberOfFieldsAlive, int totalCellsAlive);
+        void MultiGameRuntimeUIParameterInitialization(int delay, MultipleGamesModel multipleGames);
     }
 }

@@ -14,6 +14,11 @@ namespace GameOfLife.Views
         public string[] SingleGameUI { get; set; }
         public string[] MultiGameUI { get; set; }
 
+        /// <summary>
+        /// Method to fill the runtime UI with relevant and current information about the Game Field.
+        /// </summary>
+        /// <param name="gameField">A Game Field object filled with cells.</param>
+        /// <param name="delay">Delay in miliseconds between generations.</param>
         public void SingleGameRuntimeUIParameterInitialization(GameFieldModel gameField, int delay)
         {
             _gameField = gameField;
@@ -31,14 +36,19 @@ namespace GameOfLife.Views
             };
         }
 
-        public void MultiGameRuntimeUIParameterInitialization(int delay, int generation, int numberOfFieldsAlive, int totalCellsAlive)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="delay"></param>
+        /// <param name="multipleGames">An object with a list of Game Fields.</param>
+        public void MultiGameRuntimeUIParameterInitialization(int delay, MultipleGamesModel multipleGames)
         {
             MultiGameUI = new string[]
             {
                 $"Delay: {delay}  ",
-                $"Generation: {generation}   ",
-                $"Fields alive: {numberOfFieldsAlive}   ",
-                $"Total alive cells: {totalCellsAlive}   "
+                $"Generation: {multipleGames.Generation}   ",
+                $"Fields alive: {multipleGames.NumberOfFieldsAlive}   ",
+                $"Total alive cells: {multipleGames.TotalCellsAlive}   "
             };
         }
     }

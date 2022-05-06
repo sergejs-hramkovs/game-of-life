@@ -319,7 +319,7 @@ namespace GameOfLife
                 {
                     Console.SetCursorPosition(0, 0);
                     CountTotalAliveCells();
-                    _userInterfaceViews.MultiGameRuntimeUIParameterInitialization(Delay, MultipleGames.Generation, MultipleGames.NumberOfFieldsAlive, MultipleGames.TotalCellsAlive);
+                    _userInterfaceViews.MultiGameRuntimeUIParameterInitialization(Delay, MultipleGames);
                     _render.MenuRenderer(_userInterfaceViews.MultiGameUI, clearScreen:false);
                     MultipleGames.Generation++;
                     FilterDeadFields();
