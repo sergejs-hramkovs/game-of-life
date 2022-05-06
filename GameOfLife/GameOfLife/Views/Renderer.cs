@@ -205,39 +205,6 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method for rendering the UI during the runtime.
-        /// </summary>
-        /// <param name="gameField">An instance of the GameFieldModel class.</param>
-        /// <param name="delay">Delay between generations in miliseconds.</param>
-        public void RuntimeUIRender(GameFieldModel gameField, int delay)
-        {
-            Console.WriteLine(" # Press ESC to stop");
-            Console.WriteLine(" # Press Spacebar to pause");
-            Console.WriteLine(" # Change the delay using left and right arrows");
-            Console.WriteLine($"\n Generation: {gameField.Generation}");
-            Console.WriteLine($" Alive cells: {gameField.AliveCellsNumber}({(int)Math.Round(gameField.AliveCellsNumber / (double)gameField.Area * 100.0)}%)   ");
-            Console.WriteLine($" Dead cells: {gameField.DeadCellsNumber}   ");
-            Console.WriteLine($" Current delay between generations: {delay / 1000.0} seconds  ");
-            Console.WriteLine($" Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   ");
-        }
-
-        /// <summary>
-        /// Method for rendering the UI during the Multiple Games Mode runtime.
-        /// </summary>
-        /// <param name="delay">The delay in miliseconds between redrawings.</param>
-        /// <param name="generation">The number of the current generation.</param>
-        /// <param name="numberOfFieldsAlive">The number of fields that have at least 1 alive cell.</param>
-        /// <param name="totalCellsAlive">The total number of alive cells across all the fields.</param>
-        public void MultipleGamesModeUIRender(int delay, int generation, int numberOfFieldsAlive, int totalCellsAlive)
-        {
-            Console.SetCursorPosition(0, 0);
-            Console.WriteLine($"Delay: {delay}  ");
-            Console.WriteLine($"Generation: {generation}   ");
-            Console.WriteLine($"Fields alive: {numberOfFieldsAlive}   ");
-            Console.WriteLine($"Total alive cells: {totalCellsAlive}   ");
-        }
-
-        /// <summary>
         /// Method for rendering the UI when all the cells on the field are dead.
         /// </summary>
         /// <param name="generation">Parameter that represents the generation number.</param>

@@ -1,4 +1,6 @@
-﻿namespace GameOfLife
+﻿using GameOfLife.Views;
+
+namespace GameOfLife
 {
     /// <summary>
     /// The Launcher class deals with all the required class instantiations and calls the StartGame method.
@@ -18,7 +20,8 @@
             FileIO file = new();
             InputController processor = new();
             FieldOperations field = new(library, render, processor);
-            engine.Injection(render, file, field, library, applier, processor);
+            UserInterfaceViews userInterfaceViews = new();
+            engine.Injection(render, file, field, library, applier, processor, userInterfaceViews);
             engine.StartGame();
         }
     }

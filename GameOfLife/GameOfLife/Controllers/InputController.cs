@@ -16,6 +16,7 @@ namespace GameOfLife
         private IRenderer _render;
         private IFieldOperations _fieldOperations;
         private ILibrary _library;
+        private IUserInterfaceViews _userInterfaceViews;
         public bool WrongInput { get; set; }
         public bool CorrectKeyPressed { get; set; }
         public GameFieldModel GameField { get; set; }
@@ -29,13 +30,14 @@ namespace GameOfLife
         /// <param name="render">Render class parameter.</param>
         /// <param name="operations">FieldOperations class parameter.</param>
         /// <param name="library">Library class parameter.</param>
-        public void Injection(IEngine engine, IFileIO? file = null, IRenderer? render = null, IFieldOperations? operations = null, ILibrary? library = null)
+        public void Injection(IEngine engine, IUserInterfaceViews userInterfaceViews, IFileIO? file = null, IRenderer? render = null, IFieldOperations? operations = null, ILibrary? library = null)
         {
             _engine = engine;
             _file = file;
             _render = render;
             _fieldOperations = operations;
             _library = library;
+            _userInterfaceViews = userInterfaceViews;
         }
 
         /// <summary>
@@ -343,8 +345,8 @@ namespace GameOfLife
                     if (!_engine.MultipleGamesMode)
                     {
                         _file.SaveGameFieldToFile(GameField);
-                        Console.Clear();
-                        _render.RuntimeUIRender(GameField, _engine.Delay);
+                        _userInterfaceViews.SingleGameRuntimeUIParameterInitialization(GameField, _engine.Delay);
+                        _render.MenuRenderer(_userInterfaceViews.SingleGameUI, clearScreen:false);
                         _render.RenderField(GameField);
                     }
                     else

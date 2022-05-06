@@ -9,11 +9,7 @@ namespace GameOfLife.Interfaces
 
         void RenderField(GameFieldModel gameField, bool dead = false);
 
-        void RuntimeUIRender(GameFieldModel gameField, int delay);
-
         void GameOverRender(int generation);
-
-        void MultipleGamesModeUIRender(int delay, int generation, int numberOfFieldsAlive, int totalCellsAlive);
 
         void ChooseFileToLoadMenuRender(int numberOfFiles, string filePath, bool wrongInput);
 

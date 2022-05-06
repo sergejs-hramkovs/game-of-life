@@ -2,6 +2,9 @@
 
 namespace GameOfLife.Views
 {
+    /// <summary>
+    /// The MenuViews class store string arrays of menu lines for each menu.
+    /// </summary>
     public static class MenuViews
     {
         public static string[] MainMenu { get; } = {
