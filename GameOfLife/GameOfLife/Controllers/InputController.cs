@@ -478,6 +478,44 @@ namespace GameOfLife
         }
 
         /// <summary>
+        /// Method to take and process user's input in the Multiple Games Mode Menu.
+        /// </summary>
+        /// <param name="keyPressed">Parameter which stores user input.</param>
+        public MultipleGamesModel CheckInputMultipleGamesMenuFieldSize(MultipleGamesModel multipleGames, ConsoleKey keyPressed)
+        {
+            MultipleGames = multipleGames;
+            switch (keyPressed)
+            {
+                case ConsoleKey.D1:
+                    MultipleGames.Length = 10;
+                    MultipleGames.Width = 10;
+                    MultipleGames.NumberOfGamesToBeDisplayed = 24;
+                    return MultipleGames;
+
+                case ConsoleKey.D2:
+                    MultipleGames.Length = 15;
+                    MultipleGames.Width = 15;
+                    MultipleGames.NumberOfGamesToBeDisplayed = 12;
+                    return MultipleGames;
+
+                case ConsoleKey.D3:
+                    MultipleGames.Length = 20;
+                    MultipleGames.Width = 20;
+                    MultipleGames.NumberOfGamesToBeDisplayed = 6;
+                    return MultipleGames;
+
+                case ConsoleKey.D4:
+                    MultipleGames.Length = 25;
+                    MultipleGames.Width = 25;
+                    MultipleGames.NumberOfGamesToBeDisplayed = 6;
+                    return MultipleGames;
+
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
         /// Method to take and process user's input of the number of games and Game Field sizes for the Multiple Games Mode.
         /// </summary>
         public MultipleGamesModel EnterMultipleGamesData(MultipleGamesModel multipleGames)
@@ -486,20 +524,6 @@ namespace GameOfLife
             MultipleGames = multipleGames;
             Console.CursorVisible = true;
             Console.Clear();
-            while (true)
-            {
-                Console.Write(EnterTotalGamesNumberPhrase);
-                userInput = Console.ReadLine();
-                if (int.TryParse(userInput, out var totalNumberOfGames) && totalNumberOfGames > 1 && totalNumberOfGames <= 2000)
-                {
-                    MultipleGames.TotalNumberOfGames = totalNumberOfGames;
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine(WrongInputPhrase);
-                }
-            }
 
             while (true)
             {
@@ -520,7 +544,7 @@ namespace GameOfLife
             {
                 Console.Write(EnterWidthMultipleGamesPhrase);
                 userInput = Console.ReadLine();
-                if (int.TryParse(userInput, out var width) && width >= 3 && width <= 10)
+                if (int.TryParse(userInput, out var width) && width >= 3 && width <= 30)
                 {
                     MultipleGames.Width = width;
                     break;
@@ -547,7 +571,7 @@ namespace GameOfLife
             {
                 Console.Write(EnterNumberOfGamesDisplayedPhrase);
                 userInput = Console.ReadLine();
-                if (int.TryParse(userInput, out var gamesToBeDisplayed) && gamesToBeDisplayed >= 2 && gamesToBeDisplayed <= 8)
+                if (int.TryParse(userInput, out var gamesToBeDisplayed) && gamesToBeDisplayed >= 2 && gamesToBeDisplayed <= 108)
                 {
                     MultipleGames.NumberOfGamesToBeDisplayed = gamesToBeDisplayed;
                     break;

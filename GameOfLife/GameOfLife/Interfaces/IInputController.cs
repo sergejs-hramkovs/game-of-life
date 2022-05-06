@@ -41,5 +41,7 @@ namespace GameOfLife.Interfaces
         void ChangeDelay(ConsoleKey keyPressed);
 
         MultipleGamesModel EnterMultipleGamesData(MultipleGamesModel multipleGames);
+
+        MultipleGamesModel CheckInputMultipleGamesMenuFieldSize(MultipleGamesModel multipleGames, ConsoleKey keyPressed);
     }
 }

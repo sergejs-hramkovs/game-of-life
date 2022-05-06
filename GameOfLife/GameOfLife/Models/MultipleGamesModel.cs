@@ -14,7 +14,7 @@ namespace GameOfLife.Models
         public int Width { get; set; }
         public int Generation { get; set; }
         public int NumberOfFieldsAlive { get; set; }
-        public int TotalNumberOfGames { get; set; }
+        public int TotalNumberOfGames { get; } = 3000;
         public int TotalCellsAlive { get; set; }
         public List<GameFieldModel> ListOfGames { get; set; } = new();
         public List<int> GamesToBeDisplayed { get; set; } = new();

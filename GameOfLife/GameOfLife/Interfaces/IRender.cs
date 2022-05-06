@@ -34,12 +34,10 @@ namespace GameOfLife.Interfaces
 
         void ChooseFileToLoadMenuRender(int numberOfFiles, string filePath, bool wrongInput);
 
-        void MultipleGamesModeGameTitleRender(int gameNumber, int cellsAliveNumber);
-
-        void MultipleGamesModeTwoTitlesRender(int firstGameNumber, int firstCellsAliveNumber, int secondeGameNumber, int secondCellsALiveNumber);
-
         void LoadSavedGamesMenu();
 
-        void RenderTwoFields(GameFieldModel firstGameField, GameFieldModel secondGameField, bool dead = false);
+        void RenderMultipleHorizontalFields(MultipleGamesModel multipleGames, int rowNumber);
+
+        void MultipleGamesFieldSizeMenuRender();
     }
 }

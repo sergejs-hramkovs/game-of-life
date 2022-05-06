@@ -59,7 +59,7 @@ namespace GameOfLife
                 _file.Injection(_render, _inputController, this);
                 _render.Injection(_file);
                 Console.CursorVisible = false;
-                Console.SetWindowSize(170, 60);
+                Console.SetWindowSize(175, 61);
             }
 
             while (true)
@@ -281,10 +281,14 @@ namespace GameOfLife
         {
             ConsoleKey runTimeKeyPress;
             ConsoleKey numberChoice;
+            ConsoleKey fieldsSizeChoice;
             if (!MultipleGamesLoaded)
             {
                 MultipleGames = new();
-                _inputController.EnterMultipleGamesData(MultipleGames);
+                //_inputController.EnterMultipleGamesData(MultipleGames);
+                _render.MultipleGamesFieldSizeMenuRender();
+                fieldsSizeChoice = Console.ReadKey(true).Key;
+                _inputController.CheckInputMultipleGamesMenuFieldSize(MultipleGames, fieldsSizeChoice);
                 MultipleGames.InitializeGames(_fieldOperations);
                 MultipleGames = _inputController.MultipleGames;
                 _render.MultipleGamesMenuRender();
@@ -357,22 +361,29 @@ namespace GameOfLife
         /// </summary>
         private void FilterDeadFields()
         {
-            Random random = new();
-            for (int gameNumber = 0; gameNumber < MultipleGames.NumberOfGamesToBeDisplayed; gameNumber++)
+            int rows = 1;
+            switch (MultipleGames.ListOfGames[0].Length)
             {
-                if (CountAliveCells(MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]]) == 0)
-                {
-                    Console.WriteLine(FieldDeadPhrase);
-                    _render.RenderTwoFields(MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]], MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber + 1]]);
-                    MultipleGames.GamesToBeDisplayed[gameNumber] = random.Next(0, MultipleGames.TotalNumberOfGames);
-                    gameNumber++;
-                }
-                else
-                {
-                    _render.MultipleGamesModeTwoTitlesRender(MultipleGames.GamesToBeDisplayed[gameNumber], MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber, MultipleGames.GamesToBeDisplayed[gameNumber + 1], MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber + 1]].AliveCellsNumber);
-                    _render.RenderTwoFields(MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber]], MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[gameNumber + 1]]);
-                    gameNumber++;
-                }
+                case 25:
+                    rows = 2;
+                    break;
+
+                case 20:
+                    rows = 2;
+                    break;
+
+                case 15:
+                    rows = 3;
+                    break;
+
+                case 10:
+                    rows = 4;
+                    break;
+            }
+
+            for (int gameNumber = 0; gameNumber < rows; gameNumber++)
+            {
+                _render.RenderMultipleHorizontalFields(MultipleGames, gameNumber);
             }
         }
     }
