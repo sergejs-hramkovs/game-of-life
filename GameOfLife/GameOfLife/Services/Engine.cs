@@ -150,7 +150,7 @@ namespace GameOfLife
                 }
             } while (runTimeKeyPress != ConsoleKey.Escape);
 
-            _render.MenuRenderer(ExitMenu, clearScreen:false);
+            _render.MenuRenderer(ExitMenu, clearScreen: false);
             do
             {
                 runTimeKeyPress = Console.ReadKey(true).Key;
@@ -209,7 +209,7 @@ namespace GameOfLife
             else
             {
                 _userInterfaceFiller.SingleGameRuntimeUICreation(_gameField, Delay);
-                _render.MenuRenderer(SingleGameUI, clearScreen:false);
+                _render.MenuRenderer(SingleGameUI, clearScreen: false);
                 _gameField.Generation++;
             }
 
@@ -233,16 +233,14 @@ namespace GameOfLife
             {
                 MultipleGames.GamesToBeDisplayed.Clear();
                 MultipleGamesMode = false;
+                _inputController.MultipleGames.ListOfGames = null;
+                MultipleGames.ListOfGames = null;
             }
-            
-            // null assignments to unload game fields from the memory.
-            _gameField = null;
-            _inputController.MultipleGames = null;
+
             MultipleGamesLoaded = false;
             Delay = 1000;
             Console.Clear();
             StartGame(false);
-            RunGame();
         }
 
         /// <summary>
@@ -291,25 +289,13 @@ namespace GameOfLife
             Console.Clear();
             do
             {
-                while (Console.KeyAvailable == false)
-                {
-                    Console.SetCursorPosition(0, 0);
-                    CountTotalAliveCells();
-                    _userInterfaceFiller.MultiGameRuntimeUICreation(Delay, MultipleGames);
-                    _render.MenuRenderer(MultiGameUI, clearScreen:false);
-                    MultipleGames.Generation++;
-                    _render.RenderGridOfFields(MultipleGames);
-                    RemoveDeadFieldsFromRendering();
-                    MultipleGamesModeRuntimeCalculations();
-                    Thread.Sleep(Delay);
-                }
-
+                MultipleGamesModeCoreLoop();
                 runTimeKeyPress = Console.ReadKey(true).Key;
                 _inputController.PauseGame(runTimeKeyPress, true);
                 _inputController.ChangeDelay(runTimeKeyPress);
             } while (runTimeKeyPress != ConsoleKey.Escape);
 
-            _render.MenuRenderer(ExitMenu, clearScreen:false);
+            _render.MenuRenderer(ExitMenu, clearScreen: false);
             do
             {
                 runTimeKeyPress = Console.ReadKey(true).Key;
@@ -360,7 +346,6 @@ namespace GameOfLife
             {
                 _gameField = MultipleGames.ListOfGames[gameNumber];
                 _rulesApplier.IterateThroughGameFieldCells(_gameField);
-                _gameField.Generation++;
                 _rulesApplier.FieldRefresh(_gameField);
                 CountAliveCells(_gameField);
                 if (_gameField.AliveCellsNumber > 0)
@@ -376,7 +361,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to replace dead fields with alive ones in the list of fields to be displayed.
+        /// Method to replace rendered dead fields with alive ones in the list of fields to be displayed.
         /// </summary>
         private void RemoveDeadFieldsFromRendering()
         {
@@ -390,6 +375,25 @@ namespace GameOfLife
                         MultipleGames.GamesToBeDisplayed[i] = random.Next(0, MultipleGames.TotalNumberOfGames);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// The very runtime core in the Multiple Games Mode.
+        /// </summary>
+        private void MultipleGamesModeCoreLoop()
+        {
+            while (Console.KeyAvailable == false)
+            {
+                Console.SetCursorPosition(0, 0);
+                CountTotalAliveCells();
+                _userInterfaceFiller.MultiGameRuntimeUICreation(Delay, MultipleGames);
+                _render.MenuRenderer(MultiGameUI, clearScreen: false);
+                MultipleGames.Generation++;
+                _render.RenderGridOfFields(MultipleGames);
+                RemoveDeadFieldsFromRendering();
+                MultipleGamesModeRuntimeCalculations();
+                Thread.Sleep(Delay);
             }
         }
     }
