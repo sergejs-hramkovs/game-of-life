@@ -2,6 +2,7 @@
 using GameOfLife.Models;
 using System.IO;
 using static GameOfLife.StringConstantsModel;
+using static GameOfLife.Views.MenuViews;
 
 namespace GameOfLife
 {
@@ -22,7 +23,7 @@ namespace GameOfLife
             {
                 Console.Clear();
             }
-            
+
             foreach (string line in menuLines)
             {
                 if (line == WrongInputPhrase)
@@ -202,60 +203,6 @@ namespace GameOfLife
             }
 
             return numberOfHorizontalFields;
-        }
-
-        /// <summary>
-        /// Method for rendering the UI when all the cells on the field are dead.
-        /// </summary>
-        /// <param name="generation">Parameter that represents the generation number.</param>
-        public void GameOverRender(int generation)
-        {
-            Console.Clear();
-            for (int dashNumber = 0; dashNumber < 5; dashNumber++)
-            {
-                Console.WriteLine(DashesConstant);
-            }
-
-            Console.WriteLine(WholeFieldDeadPhrase);
-            Console.WriteLine($"\n Generations survived: {generation}");
-        }
-
-        /// <summary>
-        /// Method for rendering the UI for choosing which saved game file to load.
-        /// </summary>
-        /// <param name="numberOfFiles">The number of saved game files currently present in the folder.</param>
-        /// <param name="filePath">Parameter that stores the path to the folder with the saved games.</param>
-        /// <param name="wrongInput">Parameter that represents if there was an attempt of wrong input.</param>
-        public void ChooseFileToLoadMenuRender(int numberOfFiles, string filePath, bool wrongInput)
-        {
-            Console.CursorVisible = true;
-            Console.Clear();
-            Console.WriteLine(" ### Choose which saved game to load ###");
-            Console.WriteLine($"\n # There are currently {numberOfFiles} files");
-            Console.WriteLine("\n--------------");
-            RenderFileNames(filePath);
-            Console.WriteLine("--------------");
-            Console.WriteLine("\n # Choose the number of the file");
-            if (wrongInput)
-            {
-                Console.WriteLine("\n--------------");
-                Console.WriteLine(WrongInputPhrase);
-                Console.WriteLine("--------------");
-            }
-
-            Console.Write("\n # Choice: ");
-        }
-
-        /// <summary>
-        /// Method to display all the names of files curently present in the folder.
-        /// </summary>
-        /// <param name="filePath">The location of the folder.</param>
-        private void RenderFileNames(string filePath)
-        {
-            foreach (string file in Directory.GetFiles(filePath))
-            {
-                Console.WriteLine(" - " + Path.GetFileName(file));
-            }
         }
     }
 }

@@ -20,7 +20,7 @@ namespace GameOfLife
             FileIO file = new();
             InputController processor = new();
             FieldOperations field = new(library, render, processor);
-            UserInterfaceViews userInterfaceViews = new();
+            UserInterfaceFiller userInterfaceViews = new();
             engine.Injection(render, file, field, library, applier, processor, userInterfaceViews);
             engine.StartGame();
         }

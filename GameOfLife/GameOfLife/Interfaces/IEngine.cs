@@ -19,7 +19,7 @@ namespace GameOfLife.Interfaces
         MultipleGamesModel MultipleGames { get; set; }
 
         void Injection(IRenderer render, IFileIO file, IFieldOperations field, ILibrary library, IRulesApplier rulesApplier, IInputController inputProcessor,
-            IUserInterfaceViews userInterfaceViews);
+            IUserInterfaceFiller userInterfaceViews);
 
         void StartGame(bool firstLaunch = true);
 

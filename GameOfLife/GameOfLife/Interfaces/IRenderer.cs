@@ -9,10 +9,6 @@ namespace GameOfLife.Interfaces
 
         void RenderField(GameFieldModel gameField, bool dead = false);
 
-        void GameOverRender(int generation);
-
-        void ChooseFileToLoadMenuRender(int numberOfFiles, string filePath, bool wrongInput);
-
         int RenderMultipleHorizontalFields(MultipleGamesModel multipleGames, int rowNumber);
     }
 }

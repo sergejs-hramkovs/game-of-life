@@ -19,7 +19,7 @@ namespace GameOfLife
         private ILibrary _library;
         private IRulesApplier _rulesApplier;
         private IInputController _inputController;
-        private IUserInterfaceViews _userInterfaceViews;
+        private IUserInterfaceFiller _userInterfaceFiller;
         private bool _gameOver;
         public MultipleGamesModel MultipleGames { get; set; }
         public bool ReadGeneration { get; set; }
@@ -39,7 +39,7 @@ namespace GameOfLife
         /// <param name="rulesApplier">An object of the RulesApplier class.</param>
         /// <param name="inputController">An object of the InputController class.</param>
         public void Injection(IRenderer render, IFileIO file, IFieldOperations operations, ILibrary library,
-            IRulesApplier rulesApplier, IInputController inputController, IUserInterfaceViews userInterfaceViews)
+            IRulesApplier rulesApplier, IInputController inputController, IUserInterfaceFiller userInterfaceFiller)
         {
             _render = render;
             _file = file;
@@ -47,7 +47,7 @@ namespace GameOfLife
             _library = library;
             _rulesApplier = rulesApplier;
             _inputController = inputController;
-            _userInterfaceViews = userInterfaceViews;
+            _userInterfaceFiller = userInterfaceFiller;
         }
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace GameOfLife
             ConsoleKey fieldSizeChoice;
             if (firstLaunch)
             {
-                _inputController.Injection(this, _userInterfaceViews, _file, _render, _fieldOperations, _library);
-                _file.Injection(_render, _inputController, this);
+                _inputController.Injection(this, _userInterfaceFiller, _file, _render, _fieldOperations, _library);
+                _file.Injection(_render, _inputController, this, _userInterfaceFiller);
                 Console.CursorVisible = false;
                 Console.SetWindowSize(175, 61);
             }
@@ -202,13 +202,14 @@ namespace GameOfLife
 
             if (_gameField.AliveCellsNumber == 0)
             {
-                _render.GameOverRender(_gameField.Generation);
+                _userInterfaceFiller.GameOverUICreation(_gameField.Generation);
+                _render.MenuRenderer(GameOverUI);
                 _gameOver = true;
             }
             else
             {
-                _userInterfaceViews.SingleGameRuntimeUIParameterInitialization(_gameField, Delay);
-                _render.MenuRenderer(_userInterfaceViews.SingleGameUI, clearScreen:false);
+                _userInterfaceFiller.SingleGameRuntimeUICreation(_gameField, Delay);
+                _render.MenuRenderer(SingleGameUI, clearScreen:false);
                 _gameField.Generation++;
             }
 
@@ -319,8 +320,8 @@ namespace GameOfLife
                 {
                     Console.SetCursorPosition(0, 0);
                     CountTotalAliveCells();
-                    _userInterfaceViews.MultiGameRuntimeUIParameterInitialization(Delay, MultipleGames);
-                    _render.MenuRenderer(_userInterfaceViews.MultiGameUI, clearScreen:false);
+                    _userInterfaceFiller.MultiGameRuntimeUICreation(Delay, MultipleGames);
+                    _render.MenuRenderer(MultiGameUI, clearScreen:false);
                     MultipleGames.Generation++;
                     FilterDeadFields();
                     MultipleGamesModeRuntimeCalculations();

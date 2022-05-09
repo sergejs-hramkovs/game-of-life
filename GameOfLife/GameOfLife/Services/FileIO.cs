@@ -3,6 +3,7 @@ using GameOfLife.Models;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using static GameOfLife.StringConstantsModel;
+using static GameOfLife.Views.MenuViews;
 
 namespace GameOfLife
 {
@@ -16,6 +17,7 @@ namespace GameOfLife
         private IRenderer _render;
         private IInputController _inputController;
         private IEngine _engine;
+        private IUserInterfaceFiller _userInterfaceFiller;
         private string[] _stringField;
         private List<string> _stringList = new List<string>();
         public string FilePath { get; set; }
@@ -40,11 +42,12 @@ namespace GameOfLife
         /// <param name="render">An instance of the Render class.</param>
         /// <param name="inputController">An instance of the InputController class.</param>
         /// <param name="engine">An instance of the Engine class.</param>
-        public void Injection(IRenderer render, IInputController inputController, IEngine engine)
+        public void Injection(IRenderer render, IInputController inputController, IEngine engine, IUserInterfaceFiller userInterfaceFiller)
         {
             _render = render;
             _inputController = inputController;
             _engine = engine;
+            _userInterfaceFiller = userInterfaceFiller;
         }
 
         /// <summary>
@@ -210,7 +213,15 @@ namespace GameOfLife
                 {
                     do
                     {
-                        _render.ChooseFileToLoadMenuRender(NumberOfFiles, FilePath, _inputController.WrongInput);
+                        Console.CursorVisible = true;
+                        CreateListOfFileNames(FilePath);
+                        _userInterfaceFiller.ChooseFileMenuCreation(NumberOfFiles, FileNames);
+                        if (_inputController.WrongInput)
+                        {
+                            _render.MenuRenderer(WrongInputFileMenu, wrongInput:true);
+                        }
+                        _render.MenuRenderer(ChooseFileMenu, newLine:false, clearScreen:!_inputController.WrongInput);
+                        FileNames.Clear();
                         fileNumber = _inputController.CheckInputSavedGameMenu(NumberOfFiles);
                         Console.CursorVisible = false;
                     } while (_inputController.WrongInput);
@@ -226,7 +237,11 @@ namespace GameOfLife
             }
         }
 
-        public void Serializer(MultipleGamesModel multipleGames)
+        /// <summary>
+        /// Method to save all the game in the Multiple Games Mode to file.
+        /// </summary>
+        /// <param name="multipleGames">An object that contains a list of Multiple Games.</param>
+        public void SaveMultipleGamesToFile(MultipleGamesModel multipleGames)
         {
             EnsureDirectoryExists(MultipleGamesModeFilePath);
             using (Stream stream = File.Open(MultipleGamesModeFilePath + "games.bin", FileMode.Create))
@@ -236,7 +251,11 @@ namespace GameOfLife
             }
         }
 
-        public MultipleGamesModel Deserializer()
+        /// <summary>
+        /// Method to load Multiple Games from the file.
+        /// </summary>
+        /// <returns>Returns an object containing a lsit of Multiple Games.</returns>
+        public MultipleGamesModel LoadMultipleGamesFromFile()
         {
             MultipleGamesModel multipleGames;
             using (Stream stream = File.Open(MultipleGamesModeFilePath + "games.bin", FileMode.Open))
@@ -246,6 +265,18 @@ namespace GameOfLife
             }
 
             return multipleGames;
+        }
+
+        /// <summary>
+        /// Method to create a list of names of the saved games files.
+        /// </summary>
+        /// <param name="filePath">The location of the folder.</param>
+        private void CreateListOfFileNames(string filePath)
+        {
+            foreach (string file in Directory.GetFiles(filePath))
+            {
+                FileNames.Add(Path.GetFileName(file));
+            }
         }
     }
 }

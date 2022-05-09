@@ -12,7 +12,7 @@ namespace GameOfLife.Interfaces
 
         MultipleGamesModel MultipleGames { get; set; }
 
-        void Injection(IEngine engine, IUserInterfaceViews userInterfaceViews, IFileIO file, IRenderer render, IFieldOperations operations, ILibrary library);
+        void Injection(IEngine engine, IUserInterfaceFiller userInterfaceViews, IFileIO file, IRenderer render, IFieldOperations operations, ILibrary library);
 
         GameFieldModel CheckInputMainMenu(ConsoleKey keyPressed);
 

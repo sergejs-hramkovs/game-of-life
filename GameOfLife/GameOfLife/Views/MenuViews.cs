@@ -122,5 +122,29 @@ namespace GameOfLife.Views
             "\n 1. Single game",
             " 2. Multiple games"
         };
+
+        public static string[] GameOverUI { get; set; } = {
+            DashesConstant,
+            DashesConstant,
+            DashesConstant,
+            DashesConstant,
+            DashesConstant,
+            WholeFieldDeadPhrase,
+            ""
+        };
+
+        public static string[] WrongInputFileMenu { get; } = {
+            DashesConstant,
+            WrongInputPhrase,
+            DashesConstant
+        };
+
+        public static string[] SingleGameUI { get; set; }
+
+        public static string[] MultiGameUI { get; set; }
+
+        public static string[] ChooseFileMenu { get; set; }
+
+        public static List<string> FileNames { get; set; } = new();
     }
 }
