@@ -9,6 +9,8 @@ namespace GameOfLife.Interfaces
 
         void RenderField(GameFieldModel gameField, bool dead = false);
 
-        int RenderMultipleHorizontalFields(MultipleGamesModel multipleGames, int rowNumber);
+        void RenderMultipleHorizontalFields(MultipleGamesModel multipleGames, int rowNumber);
+
+        void RenderGridOfFields(MultipleGamesModel multipleGames);
     }
 }

@@ -8,6 +8,7 @@ namespace GameOfLife.Views
     /// <summary>
     /// The UserInterfaceFiller class fills the UI with necessary parameters.
     /// </summary>
+    [Serializable]
     public class UserInterfaceFiller : IUserInterfaceFiller
     {
         /// <summary>

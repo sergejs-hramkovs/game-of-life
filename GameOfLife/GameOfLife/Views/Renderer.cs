@@ -1,8 +1,6 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
-using System.IO;
 using static GameOfLife.StringConstantsModel;
-using static GameOfLife.Views.MenuViews;
 
 namespace GameOfLife
 {
@@ -116,42 +114,22 @@ namespace GameOfLife
         /// <param name="multipleGames">An instance of the MultipleGamesModel class.</param>
         /// <param name="rowNumber">The number of the Game Field row currently displayed.</param>
         /// <returns>Returns the number of how many fields are displayed horizontally.</returns>
-        public int RenderMultipleHorizontalFields(MultipleGamesModel multipleGames, int rowNumber)
+        public void RenderMultipleHorizontalFields(MultipleGamesModel multipleGames, int rowNumber)
         {
-            int numberOfHorizontalFields = 2;
-            int i;
+            int gameNumber;
             bool titleRendered = false;
             string indentation = "";
             string titleString;
             Console.WriteLine();
-            switch (multipleGames.ListOfGames[0].Length)
-            {
-                case 25:
-                    numberOfHorizontalFields = 3;
-                    break;
-
-                case 20:
-                    numberOfHorizontalFields = 3;
-                    break;
-
-                case 15:
-                    numberOfHorizontalFields = 4;
-                    break;
-
-                case 10:
-                    numberOfHorizontalFields = 6;
-                    break;
-            }
-            i = numberOfHorizontalFields * rowNumber;
-
+            gameNumber = multipleGames.NumberOfHorizontalFields * rowNumber;
             for (int yCoordinate = 0; yCoordinate < multipleGames.ListOfGames[0].Width; yCoordinate++)
             {
                 if (!titleRendered)
                 {
                     Console.WriteLine();
-                    for (int fieldNumber = 0; fieldNumber < numberOfHorizontalFields; fieldNumber++)
+                    for (int fieldNumber = 0; fieldNumber < multipleGames.NumberOfHorizontalFields; fieldNumber++)
                     {
-                        if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[i]].AliveCellsNumber == 0)
+                        if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber == 0)
                         {
                             for (int k = 0; k < multipleGames.ListOfGames[0].Length * 2 + 6 - FieldIsDeadPhrase.Length; k++)
                             {
@@ -163,7 +141,7 @@ namespace GameOfLife
                         }
                         else
                         {
-                            titleString = $"  Game #{multipleGames.GamesToBeDisplayed[i]}. Alive: {multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[i]].AliveCellsNumber}";
+                            titleString = $"  Game #{multipleGames.GamesToBeDisplayed[gameNumber]}. Alive: {multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber}";
 
                             for (int k = 0; k < multipleGames.ListOfGames[0].Length * 2 + 6 - titleString.Length; k++)
                             {
@@ -174,25 +152,25 @@ namespace GameOfLife
                             indentation = "";
                         }
 
-                        i++;
+                        gameNumber++;
                     }
 
                     Console.WriteLine();
                     titleRendered = true;
                 }
 
-                for (int fieldNumber = 0; fieldNumber < numberOfHorizontalFields; fieldNumber++)
+                for (int fieldNumber = 0; fieldNumber < multipleGames.NumberOfHorizontalFields; fieldNumber++)
                 {
                     Console.Write(" ");
                     for (int xCoordinate = 0; xCoordinate < multipleGames.ListOfGames[0].Length; xCoordinate++)
                     {
-                        if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[fieldNumber + numberOfHorizontalFields * rowNumber]].AliveCellsNumber == 0)
+                        if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[fieldNumber + multipleGames.NumberOfHorizontalFields * rowNumber]].AliveCellsNumber == 0)
                         {
                             Console.Write(" " + GameOverCellSymbol);
                         }
                         else
                         {
-                            Console.Write(" " + multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[fieldNumber + numberOfHorizontalFields * rowNumber]].GameField[xCoordinate, yCoordinate]);
+                            Console.Write(" " + multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[fieldNumber + multipleGames.NumberOfHorizontalFields * rowNumber]].GameField[xCoordinate, yCoordinate]);
                         }
                     }
 
@@ -201,8 +179,18 @@ namespace GameOfLife
 
                 Console.WriteLine();
             }
+        }
 
-            return numberOfHorizontalFields;
+        /// <summary>
+        /// Method to render several rows of Game Fields.
+        /// </summary>
+        /// <param name="multipleGames">An object that contains a list of Game Fields.</param>
+        public void RenderGridOfFields(MultipleGamesModel multipleGames)
+        {
+            for (int rowNumber = 0; rowNumber < multipleGames.NumberOfRows; rowNumber++)
+            {
+                RenderMultipleHorizontalFields(multipleGames, rowNumber);
+            }
         }
     }
 }

@@ -28,6 +28,6 @@ namespace GameOfLife.Interfaces
 
         void SaveMultipleGamesToFile(MultipleGamesModel multipleGames);
 
-       MultipleGamesModel LoadMultipleGamesFromFile();
+        MultipleGamesModel LoadMultipleGamesFromFile();
     }
 }

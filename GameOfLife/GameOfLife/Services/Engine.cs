@@ -26,7 +26,7 @@ namespace GameOfLife
         public bool GliderGunMode { get; set; }
         public bool MultipleGamesMode { get; set; }
         public bool MultipleGamesLoaded { get; set; }
-        public int GliderGunType { get; set; } = 0;
+        public int GliderGunType { get; set; }
         public int Delay { get; set; } = 1000;
 
         /// <summary>
@@ -234,11 +234,13 @@ namespace GameOfLife
                 MultipleGames.GamesToBeDisplayed.Clear();
                 MultipleGamesMode = false;
             }
+            
+            // null assignments to unload game fields from the memory.
+            _gameField = null;
+            _inputController.MultipleGames = null;
             MultipleGamesLoaded = false;
             Delay = 1000;
             Console.Clear();
-            _gameField = null;
-            MultipleGames = null;
             StartGame(false);
             RunGame();
         }
@@ -285,34 +287,7 @@ namespace GameOfLife
         private void RunMultipleGames()
         {
             ConsoleKey runTimeKeyPress;
-            ConsoleKey numberChoice;
-            ConsoleKey fieldsSizeChoice;
-            if (!MultipleGamesLoaded)
-            {
-                MultipleGames = new();
-                _render.MenuRenderer(MultipleGamesModeGamesQuantityMenu, clearScreen:true, newLine:false);
-                _inputController.EnterNumberOfMultipleGames(MultipleGames);
-                MultipleGames = _inputController.MultipleGames;
-                _render.MenuRenderer(MultipleGamesModeFieldSizeChoiceMenu, clearScreen:true);
-                fieldsSizeChoice = Console.ReadKey(true).Key;
-                _inputController.CheckInputMultipleGamesMenuFieldSize(MultipleGames, fieldsSizeChoice);
-                MultipleGames.InitializeGames(_fieldOperations);
-                MultipleGames = _inputController.MultipleGames;
-                _render.MenuRenderer(MultipleGamesModeMenu, clearScreen:true);
-                while (true)
-                {
-                    numberChoice = Console.ReadKey(true).Key;
-                    if (_inputController.CheckInputMultipleGamesMenu(numberChoice))
-                    {
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                MultipleGames = _inputController.MultipleGames;
-            }
-
+            MultipleGamesModeInitialCalculations();
             Console.Clear();
             do
             {
@@ -323,7 +298,8 @@ namespace GameOfLife
                     _userInterfaceFiller.MultiGameRuntimeUICreation(Delay, MultipleGames);
                     _render.MenuRenderer(MultiGameUI, clearScreen:false);
                     MultipleGames.Generation++;
-                    FilterDeadFields();
+                    _render.RenderGridOfFields(MultipleGames);
+                    RemoveDeadFieldsFromRendering();
                     MultipleGamesModeRuntimeCalculations();
                     Thread.Sleep(Delay);
                 }
@@ -342,6 +318,40 @@ namespace GameOfLife
         }
 
         /// <summary>
+        /// Method to perform all the necessary calculations and preparations upon starting the Multiple Games Mode.
+        /// </summary>
+        private void MultipleGamesModeInitialCalculations()
+        {
+            ConsoleKey numberChoice;
+            ConsoleKey fieldsSizeChoice;
+            if (!MultipleGamesLoaded)
+            {
+                MultipleGames = new();
+                _render.MenuRenderer(MultipleGamesModeGamesQuantityMenu, clearScreen: true, newLine: false);
+                _inputController.EnterNumberOfMultipleGames(MultipleGames);
+                MultipleGames = _inputController.MultipleGames;
+                _render.MenuRenderer(MultipleGamesModeFieldSizeChoiceMenu, clearScreen: true);
+                fieldsSizeChoice = Console.ReadKey(true).Key;
+                _inputController.CheckInputMultipleGamesMenuFieldSize(MultipleGames, fieldsSizeChoice);
+                MultipleGames.InitializeGames(_fieldOperations);
+                MultipleGames = _inputController.MultipleGames;
+                _render.MenuRenderer(MultipleGamesModeMenu, clearScreen: true);
+                while (true)
+                {
+                    numberChoice = Console.ReadKey(true).Key;
+                    if (_inputController.CheckInputMultipleGamesMenu(numberChoice))
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                MultipleGames = _inputController.MultipleGames;
+            }
+        }
+
+        /// <summary>
         /// Method to perform necessary runtime calculations in the Multiple Games Mode.
         /// </summary>
         private void MultipleGamesModeRuntimeCalculations()
@@ -349,7 +359,7 @@ namespace GameOfLife
             for (int gameNumber = 0; gameNumber < MultipleGames.TotalNumberOfGames; gameNumber++)
             {
                 _gameField = MultipleGames.ListOfGames[gameNumber];
-                _rulesApplier.IterateThroughGameFieldCells(_gameField, GliderGunMode);
+                _rulesApplier.IterateThroughGameFieldCells(_gameField);
                 _gameField.Generation++;
                 _rulesApplier.FieldRefresh(_gameField);
                 CountAliveCells(_gameField);
@@ -366,48 +376,20 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to check for the fields where all the cells are dead and to remove them from rendering.
+        /// Method to replace dead fields with alive ones in the list of fields to be displayed.
         /// </summary>
-        private void FilterDeadFields()
+        private void RemoveDeadFieldsFromRendering()
         {
-            int rows = SetNumberOfRows(MultipleGames.ListOfGames[0].Length);
             Random random = new();
-            for (int rowNumber = 0; rowNumber < rows; rowNumber++)
+            for (int rowNumber = 0; rowNumber < MultipleGames.NumberOfRows; rowNumber++)
             {
-                int numberOfHorizontalFields = _render.RenderMultipleHorizontalFields(MultipleGames, rowNumber);
-                for (int i = rowNumber * numberOfHorizontalFields; i < numberOfHorizontalFields + rowNumber * numberOfHorizontalFields; i++)
+                for (int i = rowNumber * MultipleGames.NumberOfHorizontalFields; i < MultipleGames.NumberOfHorizontalFields + rowNumber * MultipleGames.NumberOfHorizontalFields; i++)
                 {
                     if (MultipleGames.ListOfGames[MultipleGames.GamesToBeDisplayed[i]].AliveCellsNumber == 0)
                     {
                         MultipleGames.GamesToBeDisplayed[i] = random.Next(0, MultipleGames.TotalNumberOfGames);
                     }
                 }
-            }
-        }
-
-        /// <summary>
-        /// Method to define the number of rows of Game Fields, depending on the size of the side of the Game Field.
-        /// </summary>
-        /// <param name="length">Size of the side of the GameField.</param>
-        /// <returns>Returns the number of rows.</returns>
-        private int SetNumberOfRows(int length)
-        {
-            switch (MultipleGames.ListOfGames[0].Length)
-            {
-                case 25:
-                    return 2;
-
-                case 20:
-                    return 2;
-
-                case 15:
-                    return 3;
-
-                case 10:
-                    return 4;
-
-                default:
-                    return 2;
             }
         }
     }

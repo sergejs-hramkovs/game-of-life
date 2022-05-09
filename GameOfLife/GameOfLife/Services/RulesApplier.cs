@@ -19,7 +19,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="disableWrappingAroundField">Parameter that shows if field's wrapping around is disabled.</param>
-        public void IterateThroughGameFieldCells(GameFieldModel gameField, bool disableWrappingAroundField)
+        public void IterateThroughGameFieldCells(GameFieldModel gameField, bool disableWrappingAroundField = false)
         {
             for (int xCoordinate = 0; xCoordinate < gameField.Length; xCoordinate++)
             {

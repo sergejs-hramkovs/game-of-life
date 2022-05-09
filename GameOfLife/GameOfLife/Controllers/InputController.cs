@@ -373,7 +373,7 @@ namespace GameOfLife
                         _engine.MultipleGames.GamesToBeDisplayed.Clear();
                         for (int gameNumbersEntered = 0; gameNumbersEntered < _engine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
                         {
-                            EnterGameNumber();
+                            EnterGameNumbers();
                         }
                     }
 
@@ -420,7 +420,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to take and process the numbers of the games entered by the user.
         /// </summary>
-        public void EnterGameNumber()
+        public void EnterGameNumbers()
         {
             string gameNumber;
             Console.CursorVisible = true;
@@ -461,7 +461,7 @@ namespace GameOfLife
                 case ConsoleKey.D1:
                     for (int gameNumbersEntered = 0; gameNumbersEntered < MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
                     {
-                        EnterGameNumber();
+                        EnterGameNumbers();
                     }
 
                     return true;
@@ -540,6 +540,7 @@ namespace GameOfLife
                     Console.WriteLine(WrongInputPhrase);
                 }
             }
+
             Console.CursorVisible = false;
             return MultipleGames;
         }

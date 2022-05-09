@@ -22,7 +22,7 @@ namespace GameOfLife.Interfaces
 
         bool EnterCoordinates();
 
-        void EnterGameNumber();
+        void EnterGameNumbers();
 
         bool CheckInputPopulateFieldMenu(ConsoleKey keyPressed);
 
