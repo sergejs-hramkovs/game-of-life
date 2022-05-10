@@ -55,7 +55,7 @@ namespace GameOfLife.Views
             "\n # To save the current game state to a file press 'S'",
             " # To restart the game press 'R'",
             EnterNewGameNumbersPhrase,
-            "\n # Press any other key to cancel saving and continue with the game",
+            "\n # Press any other key to continue",
             "\n # Press 'Esc' to exit"
         };
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GameOfLife.Models;
 using GameOfLife.Interfaces;
+using GameOfLife.Views;
 using System;
 
 namespace GameOfLife.Tests

@@ -30,7 +30,8 @@ namespace GameOfLife
         /// <param name="render">Render class parameter.</param>
         /// <param name="operations">FieldOperations class parameter.</param>
         /// <param name="library">Library class parameter.</param>
-        public void Injection(IEngine engine, IUserInterfaceFiller userInterfaceViews, IFileIO? file = null, IRenderer? render = null, IFieldOperations? operations = null, ILibrary? library = null)
+        public void Injection(IEngine engine, IUserInterfaceFiller? userInterfaceViews = null, IFileIO? file = null, 
+            IRenderer? render = null, IFieldOperations? operations = null, ILibrary? library = null)
         {
             _engine = engine;
             _file = file;
@@ -562,6 +563,10 @@ namespace GameOfLife
                     _engine.MultipleGamesMode = true;
                     _engine.MultipleGamesLoaded = true;
                     MultipleGames = _file.LoadMultipleGamesFromFile();
+                    break;
+
+                default:
+                    WrongInput = true;
                     break;
             }
         }
