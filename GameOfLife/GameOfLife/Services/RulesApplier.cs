@@ -1,6 +1,5 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
-using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
@@ -25,7 +24,7 @@ namespace GameOfLife
             {
                 for (int yCoordinate = 0; yCoordinate < gameField.Width; yCoordinate++)
                 {
-                    if (gameField.GameField[xCoordinate, yCoordinate] == AliveCellSymbol)
+                    if (gameField.GameField[xCoordinate, yCoordinate] == StringConstants.AliveCellSymbol)
                     {
                         ActOnAliveCell(gameField, xCoordinate, yCoordinate, disableWrappingAroundField);
                     }
@@ -126,7 +125,7 @@ namespace GameOfLife
                         wrappedY = true;
                     }
 
-                    if (gameField.GameField[neighbourX % gameField.Length, neighbourY % gameField.Width] == AliveCellSymbol)
+                    if (gameField.GameField[neighbourX % gameField.Length, neighbourY % gameField.Width] == StringConstants.AliveCellSymbol)
                     {
                         neighboursCount++;
                     }
@@ -161,12 +160,12 @@ namespace GameOfLife
         {
             foreach ((int xCoordinate, int yCoordinate) cell in _cellsToDie)
             {
-                gameField.GameField[cell.xCoordinate, cell.yCoordinate] = DeadCellSymbol;
+                gameField.GameField[cell.xCoordinate, cell.yCoordinate] = StringConstants.DeadCellSymbol;
             }
 
             foreach ((int xCoordinate, int yCoordinate) cell in _cellsToBeBorn)
             {
-                gameField.GameField[cell.xCoordinate, cell.yCoordinate] = AliveCellSymbol;
+                gameField.GameField[cell.xCoordinate, cell.yCoordinate] = StringConstants.AliveCellSymbol;
             }
 
             _cellsToBeBorn.Clear();

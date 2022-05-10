@@ -1,6 +1,4 @@
-﻿using static GameOfLife.StringConstantsModel;
-
-namespace GameOfLife.Views
+﻿namespace GameOfLife.Views
 {
     /// <summary>
     /// The MenuViews class store string arrays of menu lines for each menu.
@@ -8,9 +6,9 @@ namespace GameOfLife.Views
     public static class MenuViews
     {
         public static string[] MainMenu { get; } = {
-            FileNotFoundPhrase,
-            WrongInputPhrase,
-            NoSavedGamesPhrase,
+            StringConstants.FileNotFoundPhrase,
+            StringConstants.WrongInputPhrase,
+            StringConstants.NoSavedGamesPhrase,
             " ### Welcome to the Game of Life! ###",
             "\n # Choose the field size:",
             " 1. 3x3",
@@ -33,7 +31,7 @@ namespace GameOfLife.Views
         };
 
         public static string[] LibraryMenu { get; } = {
-            WrongInputPhrase,
+            StringConstants.WrongInputPhrase,
             "\n ### Choose an object from the library ###",
             "\n 1. Spawn a glider",
             " 2. Spawn a light-weight spaceship",
@@ -43,7 +41,7 @@ namespace GameOfLife.Views
         };
 
         public static string[] GliderGunModeMenu { get; } = {
-            WrongInputPhrase,
+            StringConstants.WrongInputPhrase,
             " ### The Glider Gun Mode ###",
             "\n Choose the type of the glider gun:",
             "\n 1. Gosper's glider gun",
@@ -54,7 +52,7 @@ namespace GameOfLife.Views
         public static string[] PauseMenu { get; } = {
             "\n # To save the current game state to a file press 'S'",
             " # To restart the game press 'R'",
-            EnterNewGameNumbersPhrase,
+            StringConstants.EnterNewGameNumbersPhrase,
             "\n # Press any other key to continue",
             "\n # Press 'Esc' to exit"
         };
@@ -124,19 +122,19 @@ namespace GameOfLife.Views
         };
 
         public static string[] GameOverUI { get; set; } = {
-            DashesConstant,
-            DashesConstant,
-            DashesConstant,
-            DashesConstant,
-            DashesConstant,
-            WholeFieldDeadPhrase,
+            StringConstants.DashesConstant,
+            StringConstants.DashesConstant,
+            StringConstants.DashesConstant,
+            StringConstants.DashesConstant,
+            StringConstants.DashesConstant,
+            StringConstants.WholeFieldDeadPhrase,
             ""
         };
 
         public static string[] WrongInputFileMenu { get; } = {
-            DashesConstant,
-            WrongInputPhrase,
-            DashesConstant
+            StringConstants.DashesConstant,
+            StringConstants.WrongInputPhrase,
+            StringConstants.DashesConstant
         };
 
         public static string[] SingleGameUI { get; set; }

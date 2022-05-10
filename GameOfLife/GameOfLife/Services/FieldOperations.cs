@@ -1,7 +1,6 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
-using static GameOfLife.StringConstantsModel;
-using static GameOfLife.Views.MenuViews;
+using GameOfLife.Views;
 
 namespace GameOfLife
 {
@@ -47,7 +46,7 @@ namespace GameOfLife
                 {
                     Console.Clear();
                     _renderer.RenderField(gameField);
-                    Console.WriteLine("\n" + WrongInputPhrase);
+                    Console.WriteLine("\n" + StringConstants.WrongInputPhrase);
                     _inputController.WrongInput = false;
                 }
 
@@ -59,7 +58,7 @@ namespace GameOfLife
                 }
                 else
                 {
-                    _renderer.MenuRenderer(FieldSeedingChoiceChoiceMenu, clearScreen:false);
+                    _renderer.MenuRenderer(MenuViews.FieldSeedingChoiceChoiceMenu, clearScreen:false);
                     seedingChoice = Console.ReadKey(true).Key;
                 }
 
@@ -87,7 +86,7 @@ namespace GameOfLife
                 else if (_inputController.WrongInput)
                 {
                     _renderer.RenderField(gameField);
-                    Console.WriteLine("\n" + WrongInputPhrase);
+                    Console.WriteLine("\n" + StringConstants.WrongInputPhrase);
                     _inputController.WrongInput = false;
                 }
 
@@ -103,13 +102,13 @@ namespace GameOfLife
 
                 if (!StopDataInput)
                 {
-                    if (gameField.GameField[CoordinateX, CoordinateY] == DeadCellSymbol)
+                    if (gameField.GameField[CoordinateX, CoordinateY] == StringConstants.DeadCellSymbol)
                     {
-                        gameField.GameField[CoordinateX, CoordinateY] = AliveCellSymbol;
+                        gameField.GameField[CoordinateX, CoordinateY] = StringConstants.AliveCellSymbol;
                     }
                     else
                     {
-                        gameField.GameField[CoordinateX, CoordinateY] = DeadCellSymbol;
+                        gameField.GameField[CoordinateX, CoordinateY] = StringConstants.DeadCellSymbol;
                     }
                 }
                 else
@@ -136,9 +135,9 @@ namespace GameOfLife
             {
                 randomX = random.Next(0, gameField.Length);
                 randomY = random.Next(0, gameField.Width);
-                if (gameField.GameField[randomX, randomY] != AliveCellSymbol)
+                if (gameField.GameField[randomX, randomY] != StringConstants.AliveCellSymbol)
                 {
-                    gameField.GameField[randomX, randomY] = AliveCellSymbol;
+                    gameField.GameField[randomX, randomY] = StringConstants.AliveCellSymbol;
                 }
                 else
                 {
@@ -184,7 +183,7 @@ namespace GameOfLife
                 }
 
                 _renderer.RenderField(gameField);
-                _renderer.MenuRenderer(LibraryMenu, _inputController.WrongInput, clearScreen: false);
+                _renderer.MenuRenderer(MenuViews.LibraryMenu, _inputController.WrongInput, clearScreen: false);
                 _inputController.WrongInput = false;
                 libraryChoice = Console.ReadKey(true).Key;
                 if (_inputController.CheckInputLibraryMenu(libraryChoice))

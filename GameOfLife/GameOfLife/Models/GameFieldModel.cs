@@ -1,6 +1,4 @@
-﻿using static GameOfLife.StringConstantsModel;
-
-namespace GameOfLife.Models
+﻿namespace GameOfLife.Models
 {
     /// <summary>
     /// The GameFieldModel class represents the Game Field. It stores the field itself, with dead and alive cells, the number of dead and alive cells
@@ -37,7 +35,7 @@ namespace GameOfLife.Models
             {
                 for (int yCoordinate = 0; yCoordinate < Width; yCoordinate++)
                 {
-                    GameField[xCoordinate, yCoordinate] = DeadCellSymbol;
+                    GameField[xCoordinate, yCoordinate] = StringConstants.DeadCellSymbol;
                 }
             }
         }

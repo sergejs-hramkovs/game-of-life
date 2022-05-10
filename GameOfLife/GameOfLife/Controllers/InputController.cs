@@ -1,7 +1,6 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
-using static GameOfLife.StringConstantsModel;
-using static GameOfLife.Views.MenuViews;
+using GameOfLife.Views;
 
 namespace GameOfLife
 {
@@ -75,7 +74,7 @@ namespace GameOfLife
                     return EnterFieldDimensions(WrongInput);
 
                 case ConsoleKey.L:
-                    _render.MenuRenderer(LoadGameMenu, clearScreen: true);
+                    _render.MenuRenderer(MenuViews.LoadGameMenu, clearScreen: true);
                     ConsoleKey loadingTypeChoice = Console.ReadKey(true).Key;
                     CheckInputLoadGameMenu(loadingTypeChoice);
                     return GameField;
@@ -90,7 +89,7 @@ namespace GameOfLife
                     return null;
 
                 case ConsoleKey.F1:
-                    _render.MenuRenderer(RulesPage);
+                    _render.MenuRenderer(MenuViews.RulesPage);
                     Console.ReadKey();
                     return null;
 
@@ -146,13 +145,13 @@ namespace GameOfLife
                 if (wrongInput)
                 {
                     Console.Clear();
-                    Console.WriteLine(WrongInputPhrase);
+                    Console.WriteLine(StringConstants.WrongInputPhrase);
                 }
 
-                Console.Write(EnterLengthPhrase);
+                Console.Write(StringConstants.EnterLengthPhrase);
                 if (int.TryParse(Console.ReadLine(), out int length) && length > 0)
                 {
-                    Console.Write(EnterWidthPhrase);
+                    Console.Write(StringConstants.EnterWidthPhrase);
                     if (int.TryParse(Console.ReadLine(), out int width) && width > 0)
                     {
                         Console.CursorVisible = false;
@@ -178,19 +177,19 @@ namespace GameOfLife
         {
             string inputCoordinate;
             Console.CursorVisible = true;
-            Console.WriteLine(StopSeedingPhrase);
-            Console.Write(EnterXPhrase);
+            Console.WriteLine(StringConstants.StopSeedingPhrase);
+            Console.Write(StringConstants.EnterXPhrase);
             inputCoordinate = Console.ReadLine();
-            if (inputCoordinate == StopWord)
+            if (inputCoordinate == StringConstants.StopWord)
             {
                 _fieldOperations.StopDataInput = true;
             }
             else if (int.TryParse(inputCoordinate, out var resultX) && resultX >= 0 && resultX < GameField.Length)
             {
                 _fieldOperations.CoordinateX = resultX;
-                Console.Write(EnterYPhrase);
+                Console.Write(StringConstants.EnterYPhrase);
                 inputCoordinate = Console.ReadLine();
-                if (inputCoordinate == StopWord)
+                if (inputCoordinate == StringConstants.StopWord)
                 {
                     _fieldOperations.StopDataInput = true;
                 }
@@ -347,7 +346,7 @@ namespace GameOfLife
                     {
                         _file.SaveGameFieldToFile(GameField);
                         _userInterfaceViews.SingleGameRuntimeUICreation(GameField, _engine.Delay);
-                        _render.MenuRenderer(SingleGameUI, clearScreen: true);
+                        _render.MenuRenderer(MenuViews.SingleGameUI, clearScreen: true);
                         _render.RenderField(GameField);
                     }
                     else
@@ -355,7 +354,7 @@ namespace GameOfLife
                         _file.SaveMultipleGamesToFile(_engine.MultipleGames);
                     }
 
-                    Console.WriteLine(SuccessfullySavedPhrase);
+                    Console.WriteLine(StringConstants.SuccessfullySavedPhrase);
                     Console.ReadKey();
                     Console.Clear();
                     break;
@@ -396,7 +395,7 @@ namespace GameOfLife
             ConsoleKey pauseMenuKeyPress;
             if (keyPressed == ConsoleKey.Spacebar)
             {
-                _render.MenuRenderer(PauseMenu, multipleGames: multipleGamesMode, clearScreen: false);
+                _render.MenuRenderer(MenuViews.PauseMenu, multipleGames: multipleGamesMode, clearScreen: false);
                 pauseMenuKeyPress = Console.ReadKey(true).Key;
                 CheckInputPauseMenu(pauseMenuKeyPress, multipleGamesMode);
             }
@@ -427,8 +426,8 @@ namespace GameOfLife
             Console.CursorVisible = true;
             while (true)
             {
-                Console.WriteLine(DashesConstant);
-                Console.Write(EnterGameNumberPhrase);
+                Console.WriteLine(StringConstants.DashesConstant);
+                Console.Write(StringConstants.EnterGameNumberPhrase);
                 gameNumber = Console.ReadLine();
                 if (int.TryParse(gameNumber, out var number) && number >= 0 && number < _engine.MultipleGames.TotalNumberOfGames)
                 {
@@ -440,12 +439,12 @@ namespace GameOfLife
                     }
                     else
                     {
-                        Console.WriteLine(GameAlreadyChosenPhrase);
+                        Console.WriteLine(StringConstants.GameAlreadyChosenPhrase);
                     }
                 }
                 else
                 {
-                    Console.WriteLine(WrongInputPhrase);
+                    Console.WriteLine(StringConstants.WrongInputPhrase);
                 }
             }
         }
@@ -476,7 +475,7 @@ namespace GameOfLife
                     return true;
 
                 default:
-                    Console.WriteLine(WrongInputPhrase);
+                    Console.WriteLine(StringConstants.WrongInputPhrase);
                     return false;
             }
         }
@@ -538,7 +537,7 @@ namespace GameOfLife
                 }
                 else
                 {
-                    Console.WriteLine(WrongInputPhrase);
+                    Console.WriteLine(StringConstants.WrongInputPhrase);
                 }
             }
 

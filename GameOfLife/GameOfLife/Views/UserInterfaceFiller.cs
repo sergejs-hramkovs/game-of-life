@@ -1,7 +1,5 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
-using static GameOfLife.StringConstantsModel;
-using static GameOfLife.Views.MenuViews;
 
 namespace GameOfLife.Views
 {
@@ -18,7 +16,7 @@ namespace GameOfLife.Views
         /// <param name="delay">Delay in miliseconds between generations.</param>
         public void SingleGameRuntimeUICreation(GameFieldModel gameField, int delay)
         {
-            SingleGameUI = new string[]
+            MenuViews.SingleGameUI = new string[]
             {
                 " # Press ESC to stop",
                 " # Press Spacebar to pause",
@@ -38,7 +36,7 @@ namespace GameOfLife.Views
         /// <param name="multipleGames">An object with a list of Game Fields.</param>
         public void MultiGameRuntimeUICreation(int delay, MultipleGamesModel multipleGames)
         {
-            MultiGameUI = new string[]
+            MenuViews.MultiGameUI = new string[]
             {
                 $"Delay: {delay}  ",
                 $"Generation: {multipleGames.Generation}   ",
@@ -53,7 +51,7 @@ namespace GameOfLife.Views
         /// <param name="generation">The number of survived generations.</param>
         public void GameOverUICreation(int generation)
         {
-            GameOverUI[GameOverUI.Length - 1] = $"\n Generations survived: {generation}";
+            MenuViews.GameOverUI[MenuViews.GameOverUI.Length - 1] = $"\n Generations survived: {generation}";
         }
 
         /// <summary>
@@ -63,18 +61,18 @@ namespace GameOfLife.Views
         /// <param name="fileNames">The list of names of saved games files.</param>
         public void ChooseFileMenuCreation(int numberOfFiles, List<string> fileNames)
         {
-            ChooseFileMenu = new string[6 + fileNames.Count];
-            ChooseFileMenu[0] = " ### Choose which saved game to load ###";
-            ChooseFileMenu[1] = $"\n # There are currently {numberOfFiles} files";
-            ChooseFileMenu[2] = DashesConstant;
+            MenuViews.ChooseFileMenu = new string[6 + fileNames.Count];
+            MenuViews.ChooseFileMenu[0] = " ### Choose which saved game to load ###";
+            MenuViews.ChooseFileMenu[1] = $"\n # There are currently {numberOfFiles} files";
+            MenuViews.ChooseFileMenu[2] = StringConstants.DashesConstant;
             for (int i = 0; i < fileNames.Count; i++)
             {
-                ChooseFileMenu[i + 3] = " - " + fileNames[i];
+                MenuViews.ChooseFileMenu[i + 3] = " - " + fileNames[i];
             }
 
-            ChooseFileMenu[3 + fileNames.Count] = DashesConstant;
-            ChooseFileMenu[4 + fileNames.Count] = "\n # Choose the number of the file";
-            ChooseFileMenu[5 + fileNames.Count] = "\n # Choice: ";
+            MenuViews.ChooseFileMenu[3 + fileNames.Count] = StringConstants.DashesConstant;
+            MenuViews.ChooseFileMenu[4 + fileNames.Count] = "\n # Choose the number of the file";
+            MenuViews.ChooseFileMenu[5 + fileNames.Count] = "\n # Choice: ";
         }
     }
 }

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GameOfLife
+﻿namespace GameOfLife
 {
     /// <summary>
     /// The StringConstantsModel class stores various string constants that are used across the application.
     /// </summary>
     [Serializable]
-    public static class StringConstantsModel
+    public static class StringConstants
     {
         public const string WrongInputPhrase = " ### Wrong Input! ### ";
 

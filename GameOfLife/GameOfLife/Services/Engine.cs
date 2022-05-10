@@ -1,7 +1,6 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
-using static GameOfLife.StringConstantsModel;
-using static GameOfLife.Views.MenuViews;
+using GameOfLife.Views;
 
 namespace GameOfLife
 {
@@ -66,7 +65,7 @@ namespace GameOfLife
             {
                 if (!GliderGunMode && !MultipleGamesMode)
                 {
-                    _render.MenuRenderer(MainMenu, _inputController.WrongInput, _file.FileReadingError, _file.NoSavedGames);
+                    _render.MenuRenderer(MenuViews.MainMenu, _inputController.WrongInput, _file.FileReadingError, _file.NoSavedGames);
                     _inputController.WrongInput = false;
                     _file.NoSavedGames = false;
                     _file.FileReadingError = false;
@@ -86,7 +85,7 @@ namespace GameOfLife
                 }
                 else if (GliderGunMode)
                 {
-                    _render.MenuRenderer(GliderGunModeMenu, _inputController.WrongInput);
+                    _render.MenuRenderer(MenuViews.GliderGunModeMenu, _inputController.WrongInput);
                     fieldSizeChoice = Console.ReadKey(true).Key;
                     _gameField = _inputController.CheckInputGliderGunMenu(fieldSizeChoice);
                     if (fieldSizeChoice == ConsoleKey.D1 || fieldSizeChoice == ConsoleKey.D2)
@@ -143,7 +142,7 @@ namespace GameOfLife
                 }
             } while (runTimeKeyPress != ConsoleKey.Escape);
 
-            _render.MenuRenderer(ExitMenu, clearScreen: false);
+            _render.MenuRenderer(MenuViews.ExitMenu, clearScreen: false);
             do
             {
                 runTimeKeyPress = Console.ReadKey(true).Key;
@@ -159,7 +158,7 @@ namespace GameOfLife
             Console.Clear();
             _render.RenderField(_gameField);
             _fieldOperations.PopulateField(_gameField, GliderGunMode, GliderGunType);
-            _render.MenuRenderer(BlankUI);
+            _render.MenuRenderer(MenuViews.BlankUI);
             _render.RenderField(_gameField);
             Thread.Sleep(2000);
             Console.Clear();
@@ -193,13 +192,13 @@ namespace GameOfLife
             if (_gameField.AliveCellsNumber == 0)
             {
                 _userInterfaceFiller.GameOverUICreation(_gameField.Generation);
-                _render.MenuRenderer(GameOverUI);
+                _render.MenuRenderer(MenuViews.GameOverUI);
                 _gameOver = true;
             }
             else
             {
                 _userInterfaceFiller.SingleGameRuntimeUICreation(_gameField, Delay);
-                _render.MenuRenderer(SingleGameUI, clearScreen: false);
+                _render.MenuRenderer(MenuViews.SingleGameUI, clearScreen: false);
                 _gameField.Generation++;
             }
 
@@ -245,7 +244,7 @@ namespace GameOfLife
             {
                 for (int yCoordinate = 0; yCoordinate < gameField.Width; yCoordinate++)
                 {
-                    if (gameField.GameField[xCoordinate, yCoordinate] == AliveCellSymbol)
+                    if (gameField.GameField[xCoordinate, yCoordinate] == StringConstants.AliveCellSymbol)
                     {
                         gameField.AliveCellsNumber++;
                     }
@@ -282,7 +281,7 @@ namespace GameOfLife
                 runTimeKeyPress = _inputController.RuntimeKeyReader(multipleGamesMode: true);
             } while (runTimeKeyPress != ConsoleKey.Escape);
 
-            _render.MenuRenderer(ExitMenu, clearScreen: false);
+            _render.MenuRenderer(MenuViews.ExitMenu, clearScreen: false);
             do
             {
                 runTimeKeyPress = Console.ReadKey(true).Key;
@@ -300,15 +299,15 @@ namespace GameOfLife
             if (!MultipleGamesLoaded)
             {
                 MultipleGames = new();
-                _render.MenuRenderer(MultipleGamesModeGamesQuantityMenu, clearScreen: true, newLine: false);
+                _render.MenuRenderer(MenuViews.MultipleGamesModeGamesQuantityMenu, clearScreen: true, newLine: false);
                 _inputController.EnterNumberOfMultipleGames(MultipleGames);
                 MultipleGames = _inputController.MultipleGames;
-                _render.MenuRenderer(MultipleGamesModeFieldSizeChoiceMenu, clearScreen: true);
+                _render.MenuRenderer(MenuViews.MultipleGamesModeFieldSizeChoiceMenu, clearScreen: true);
                 fieldsSizeChoice = Console.ReadKey(true).Key;
                 _inputController.CheckInputMultipleGamesMenuFieldSize(MultipleGames, fieldsSizeChoice);
                 MultipleGames.InitializeGames(_fieldOperations);
                 MultipleGames = _inputController.MultipleGames;
-                _render.MenuRenderer(MultipleGamesModeMenu, clearScreen: true);
+                _render.MenuRenderer(MenuViews.MultipleGamesModeMenu, clearScreen: true);
                 while (true)
                 {
                     numberChoice = Console.ReadKey(true).Key;
@@ -377,7 +376,7 @@ namespace GameOfLife
                 Console.SetCursorPosition(0, 0);
                 CountTotalAliveCells();
                 _userInterfaceFiller.MultiGameRuntimeUICreation(Delay, MultipleGames);
-                _render.MenuRenderer(MultiGameUI, clearScreen: false);
+                _render.MenuRenderer(MenuViews.MultiGameUI, clearScreen: false);
                 MultipleGames.Generation++;
                 _render.RenderGridOfFields(MultipleGames);
                 RemoveDeadFieldsFromRendering();

@@ -1,9 +1,8 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
+using GameOfLife.Views;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using static GameOfLife.StringConstantsModel;
-using static GameOfLife.Views.MenuViews;
 
 namespace GameOfLife
 {
@@ -33,8 +32,8 @@ namespace GameOfLife
         /// </summary>
         public FileIO()
         {
-            FilePath = AppDomain.CurrentDomain.BaseDirectory + SavedGamesFolderName;
-            MultipleGamesModeFilePath = AppDomain.CurrentDomain.BaseDirectory + MultipleGamesModeSavedGamesFolderName;
+            FilePath = AppDomain.CurrentDomain.BaseDirectory + StringConstants.SavedGamesFolderName;
+            MultipleGamesModeFilePath = AppDomain.CurrentDomain.BaseDirectory + StringConstants.MultipleGamesModeSavedGamesFolderName;
         }
 
         /// <summary>
@@ -100,7 +99,7 @@ namespace GameOfLife
                 {
                     if ((xCoordinate < inputList[4].Length / 2) && (yCoordinate < inputList.Count - 4))
                     {
-                        if (character == AliveCellSymbolChar || character == DeadCellSymbolChar)
+                        if (character == StringConstants.AliveCellSymbolChar || character == StringConstants.DeadCellSymbolChar)
                         {
                             gameField.GameField[xCoordinate, yCoordinate] = character.ToString();
                             if (xCoordinate == (inputList[4].Length / 2 - 1))
@@ -262,13 +261,13 @@ namespace GameOfLife
             {
                 Console.CursorVisible = true;
                 CreateListOfFileNames(filePath);
-                _userInterfaceFiller.ChooseFileMenuCreation(NumberOfFiles, FileNames);
+                _userInterfaceFiller.ChooseFileMenuCreation(NumberOfFiles, MenuViews.FileNames);
                 if (_inputController.WrongInput)
                 {
-                    _render.MenuRenderer(WrongInputFileMenu, wrongInput: true);
+                    _render.MenuRenderer(MenuViews.WrongInputFileMenu, wrongInput: true);
                 }
-                _render.MenuRenderer(ChooseFileMenu, newLine: false, clearScreen: !_inputController.WrongInput);
-                FileNames.Clear();
+                _render.MenuRenderer(MenuViews.ChooseFileMenu, newLine: false, clearScreen: !_inputController.WrongInput);
+                MenuViews.FileNames.Clear();
                 _fileNumber = _inputController.CheckInputSavedGameMenu(NumberOfFiles);
                 Console.CursorVisible = false;
             } while (_inputController.WrongInput);
@@ -313,7 +312,7 @@ namespace GameOfLife
         {
             foreach (string file in Directory.GetFiles(filePath))
             {
-                FileNames.Add(Path.GetFileName(file));
+                MenuViews.FileNames.Add(Path.GetFileName(file));
             }
         }
     }

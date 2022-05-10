@@ -1,6 +1,5 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
-using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
@@ -24,7 +23,7 @@ namespace GameOfLife
 
             foreach (string line in menuLines)
             {
-                if (line == WrongInputPhrase)
+                if (line == StringConstants.WrongInputPhrase)
                 {
                     if (wrongInput)
                     {
@@ -32,7 +31,7 @@ namespace GameOfLife
                         wrongInput = false;
                     }
                 }
-                else if (line == FileNotFoundPhrase)
+                else if (line == StringConstants.FileNotFoundPhrase)
                 {
                     if (fileNotFound)
                     {
@@ -40,7 +39,7 @@ namespace GameOfLife
                         fileNotFound = false;
                     }
                 }
-                else if (line == NoSavedGamesPhrase)
+                else if (line == StringConstants.NoSavedGamesPhrase)
                 {
                     if (noSavedGames)
                     {
@@ -48,7 +47,7 @@ namespace GameOfLife
                         noSavedGames = false;
                     }
                 }
-                else if (line == EnterNewGameNumbersPhrase)
+                else if (line == StringConstants.EnterNewGameNumbersPhrase)
                 {
                     if (multipleGames)
                     {
@@ -100,7 +99,7 @@ namespace GameOfLife
                 {
                     for (int xCoordinate = 0; xCoordinate < gameField.Length; xCoordinate++)
                     {
-                        Console.Write(" " + GameOverCellSymbol);
+                        Console.Write(" " + StringConstants.GameOverCellSymbol);
                     }
 
                     Console.WriteLine();
@@ -132,7 +131,7 @@ namespace GameOfLife
                     {
                         if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[fieldNumber + multipleGames.NumberOfHorizontalFields * rowNumber]].AliveCellsNumber == 0)
                         {
-                            Console.Write(" " + GameOverCellSymbol);
+                            Console.Write(" " + StringConstants.GameOverCellSymbol);
                         }
                         else
                         {
@@ -164,12 +163,12 @@ namespace GameOfLife
             {
                 if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber == 0)
                 {
-                    for (int k = 0; k < multipleGames.ListOfGames[0].Length * 2 + 6 - FieldIsDeadPhrase.Length; k++)
+                    for (int k = 0; k < multipleGames.ListOfGames[0].Length * 2 + 6 - StringConstants.FieldIsDeadPhrase.Length; k++)
                     {
                         indentation += " ";
                     }
 
-                    Console.Write(FieldIsDeadPhrase + indentation);
+                    Console.Write(StringConstants.FieldIsDeadPhrase + indentation);
                     indentation = "";
                 }
                 else
