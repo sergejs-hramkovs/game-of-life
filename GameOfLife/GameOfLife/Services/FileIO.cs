@@ -136,7 +136,7 @@ namespace GameOfLife
         public void SaveGameFieldToFile(GameFieldModel gameField)
         {
             EnsureDirectoryExists(FilePath);
-            CountFiles();
+            CountFiles(FilePath);
             StreamWriter writer = new StreamWriter(FilePath + $"game{NumberOfFiles + 1}.txt");
             ConvertGameFieldToArrayOfRows(gameField);
             writer.WriteLine($"Generation: {gameField.Generation}");
@@ -180,9 +180,9 @@ namespace GameOfLife
         /// <summary>
         /// Method to count the number of files in the folder.
         /// </summary>
-        public void CountFiles()
+        private void CountFiles(string path)
         {
-            DirectoryInfo directoryInfo = new(FilePath);
+            DirectoryInfo directoryInfo = new(path);
             NumberOfFiles = directoryInfo.GetFiles().Length;
             if (NumberOfFiles == 0)
             {
@@ -197,7 +197,7 @@ namespace GameOfLife
         {
             int fileNumber;
             EnsureDirectoryExists(FilePath);
-            CountFiles();
+            CountFiles(MultipleGamesModeFilePath);
             if (NoSavedGames)
             {
                 _engine.StartGame(false);
@@ -238,13 +238,61 @@ namespace GameOfLife
         }
 
         /// <summary>
+        /// Method to call file loading methods in the Multiple Games Mode.
+        /// </summary>
+        public void InitiateLoadingMultipleGamesFromFile()
+        {
+            int fileNumber;
+            EnsureDirectoryExists(MultipleGamesModeFilePath);
+            CountFiles(MultipleGamesModeFilePath);
+            if (NoSavedGames)
+            {
+                _engine.StartGame(false);
+                _inputController.CorrectKeyPressed = true;
+            }
+            else
+            {
+                if (NumberOfFiles == 1)
+                {
+                    fileNumber = 1;
+                }
+                else
+                {
+                    do
+                    {
+                        Console.CursorVisible = true;
+                        CreateListOfFileNames(MultipleGamesModeFilePath);
+                        _userInterfaceFiller.ChooseFileMenuCreation(NumberOfFiles, FileNames);
+                        if (_inputController.WrongInput)
+                        {
+                            _render.MenuRenderer(WrongInputFileMenu, wrongInput: true);
+                        }
+                        _render.MenuRenderer(ChooseFileMenu, newLine: false, clearScreen: !_inputController.WrongInput);
+                        FileNames.Clear();
+                        fileNumber = _inputController.CheckInputSavedGameMenu(NumberOfFiles);
+                        Console.CursorVisible = false;
+                    } while (_inputController.WrongInput);
+                }
+
+                _inputController.MultipleGames = LoadMultipleGamesFromFile(fileNumber);
+                if (!FileReadingError)
+                {
+                    FileLoaded = true;
+                    _engine.ReadGeneration = true;
+                    _inputController.CorrectKeyPressed = true;
+                }
+            }
+        }
+
+        /// <summary>
         /// Method to save all the game in the Multiple Games Mode to file.
         /// </summary>
         /// <param name="multipleGames">An object that contains a list of Multiple Games.</param>
         public void SaveMultipleGamesToFile(MultipleGamesModel multipleGames)
         {
             EnsureDirectoryExists(MultipleGamesModeFilePath);
-            using (Stream stream = File.Open(MultipleGamesModeFilePath + "games.bin", FileMode.Create))
+            CountFiles(MultipleGamesModeFilePath);
+            using (Stream stream = File.Open(MultipleGamesModeFilePath + $"games{NumberOfFiles + 1}.bin", FileMode.Create))
             {
                 BinaryFormatter binaryFormatter = new();
                 binaryFormatter.Serialize(stream, multipleGames);
@@ -255,10 +303,10 @@ namespace GameOfLife
         /// Method to load Multiple Games from the file.
         /// </summary>
         /// <returns>Returns an object containing a lsit of Multiple Games.</returns>
-        public MultipleGamesModel LoadMultipleGamesFromFile()
+        public MultipleGamesModel LoadMultipleGamesFromFile(int fileToLoad)
         {
             MultipleGamesModel multipleGames;
-            using (Stream stream = File.Open(MultipleGamesModeFilePath + "games.bin", FileMode.Open))
+            using (Stream stream = File.Open(MultipleGamesModeFilePath + $"games{fileToLoad}.bin", FileMode.Open))
             {
                 BinaryFormatter binaryFormatter = new();
                 multipleGames = (MultipleGamesModel)binaryFormatter.Deserialize(stream);

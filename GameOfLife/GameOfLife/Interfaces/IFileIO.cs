@@ -22,12 +22,12 @@ namespace GameOfLife.Interfaces
 
         GameFieldModel LoadGameFieldFromFile(int fileNumber);
 
-        void CountFiles();
-
         void InitiateLoadingFromFile();
+
+        void InitiateLoadingMultipleGamesFromFile();
 
         void SaveMultipleGamesToFile(MultipleGamesModel multipleGames);
 
-        MultipleGamesModel LoadMultipleGamesFromFile();
+        MultipleGamesModel LoadMultipleGamesFromFile(int fileToLoad);
     }
 }

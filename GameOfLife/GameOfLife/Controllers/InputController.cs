@@ -30,7 +30,7 @@ namespace GameOfLife
         /// <param name="render">Render class parameter.</param>
         /// <param name="operations">FieldOperations class parameter.</param>
         /// <param name="library">Library class parameter.</param>
-        public void Injection(IEngine engine, IUserInterfaceFiller? userInterfaceViews = null, IFileIO? file = null, 
+        public void Injection(IEngine engine, IUserInterfaceFiller? userInterfaceViews = null, IFileIO? file = null,
             IRenderer? render = null, IFieldOperations? operations = null, ILibrary? library = null)
         {
             _engine = engine;
@@ -75,7 +75,7 @@ namespace GameOfLife
                     return EnterFieldDimensions(WrongInput);
 
                 case ConsoleKey.L:
-                    _render.MenuRenderer(LoadGameMenu, clearScreen:true);
+                    _render.MenuRenderer(LoadGameMenu, clearScreen: true);
                     ConsoleKey loadingTypeChoice = Console.ReadKey(true).Key;
                     CheckInputLoadGameMenu(loadingTypeChoice);
                     return GameField;
@@ -347,14 +347,14 @@ namespace GameOfLife
                     {
                         _file.SaveGameFieldToFile(GameField);
                         _userInterfaceViews.SingleGameRuntimeUICreation(GameField, _engine.Delay);
-                        _render.MenuRenderer(SingleGameUI, clearScreen:true);
+                        _render.MenuRenderer(SingleGameUI, clearScreen: true);
                         _render.RenderField(GameField);
                     }
                     else
                     {
                         _file.SaveMultipleGamesToFile(_engine.MultipleGames);
                     }
-                    
+
                     Console.WriteLine(SuccessfullySavedPhrase);
                     Console.ReadKey();
                     Console.Clear();
@@ -396,7 +396,7 @@ namespace GameOfLife
             ConsoleKey pauseMenuKeyPress;
             if (keyPressed == ConsoleKey.Spacebar)
             {
-                _render.MenuRenderer(PauseMenu, multipleGames:multipleGamesMode, clearScreen:false);
+                _render.MenuRenderer(PauseMenu, multipleGames: multipleGamesMode, clearScreen: false);
                 pauseMenuKeyPress = Console.ReadKey(true).Key;
                 CheckInputPauseMenu(pauseMenuKeyPress, multipleGamesMode);
             }
@@ -559,10 +559,12 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.D2:
-                    Random random = new();
                     _engine.MultipleGamesMode = true;
                     _engine.MultipleGamesLoaded = true;
-                    MultipleGames = _file.LoadMultipleGamesFromFile();
+                    _file.InitiateLoadingMultipleGamesFromFile();
+                    break;
+
+                case ConsoleKey.Escape:
                     break;
 
                 default:

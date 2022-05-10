@@ -97,7 +97,7 @@ namespace GameOfLife
                         break;
                     }
                 }
-                else if (MultipleGamesMode)
+                else if (MultipleGamesMode && !_inputController.WrongInput)
                 {
                     RunMultipleGames();
                     break;
