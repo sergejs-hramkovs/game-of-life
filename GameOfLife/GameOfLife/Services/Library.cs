@@ -79,12 +79,6 @@ namespace GameOfLife
                             break;
 
                         case 1:
-                            if (yCoordinate - locationY == 3)
-                            {
-                                gameField.GameField[xCoordinate % gameField.Length, yCoordinate % gameField.Width] = AliveCellSymbol;
-                            }
-
-                            break;
 
                         case 2:
                             if (yCoordinate - locationY == 3)
@@ -217,12 +211,6 @@ namespace GameOfLife
                             break;
 
                         case 2:
-                            if (yCoordinate - locationY == 0 || yCoordinate - locationY == 4)
-                            {
-                                gameField.GameField[xCoordinate % gameField.Length, yCoordinate % gameField.Width] = AliveCellSymbol;
-                            }
-
-                            break;
 
                         case 3:
                             if (yCoordinate - locationY == 0 || yCoordinate - locationY == 4)
@@ -278,12 +266,6 @@ namespace GameOfLife
                     switch (xCoordinate - locationX)
                     {
                         case 1:
-                            if (yCoordinate - locationY == 5 || yCoordinate - locationY == 6)
-                            {
-                                gameField.GameField[xCoordinate % gameField.Length, yCoordinate % gameField.Width] = AliveCellSymbol;
-                            }
-
-                            break;
 
                         case 2:
                             if (yCoordinate - locationY == 5 || yCoordinate - locationY == 6)
@@ -310,12 +292,6 @@ namespace GameOfLife
                             break;
 
                         case 13:
-                            if (yCoordinate - locationY == 3 || yCoordinate - locationY == 9)
-                            {
-                                gameField.GameField[xCoordinate % gameField.Length, yCoordinate % gameField.Width] = AliveCellSymbol;
-                            }
-
-                            break;
 
                         case 14:
                             if (yCoordinate - locationY == 3 || yCoordinate - locationY == 9)
@@ -358,12 +334,6 @@ namespace GameOfLife
                             break;
 
                         case 21:
-                            if (yCoordinate - locationY == 3 || yCoordinate - locationY == 4 || yCoordinate - locationY == 5)
-                            {
-                                gameField.GameField[xCoordinate % gameField.Length, yCoordinate % gameField.Width] = AliveCellSymbol;
-                            }
-
-                            break;
 
                         case 22:
                             if (yCoordinate - locationY == 3 || yCoordinate - locationY == 4 || yCoordinate - locationY == 5)
@@ -390,12 +360,6 @@ namespace GameOfLife
                             break;
 
                         case 35:
-                            if (yCoordinate - locationY == 3 || yCoordinate - locationY == 4)
-                            {
-                                gameField.GameField[xCoordinate % gameField.Length, yCoordinate % gameField.Width] = AliveCellSymbol;
-                            }
-
-                            break;
 
                         case 36:
                             if (yCoordinate - locationY == 3 || yCoordinate - locationY == 4)
@@ -427,12 +391,6 @@ namespace GameOfLife
                     switch (xCoordinate - locationX)
                     {
                         case 2:
-                            if (yCoordinate - locationY == 2 || yCoordinate - locationY == 3)
-                            {
-                                gameField.GameField[xCoordinate % gameField.Length, yCoordinate % gameField.Width] = AliveCellSymbol;
-                            }
-
-                            break;
 
                         case 3:
                             if (yCoordinate - locationY == 2 || yCoordinate - locationY == 3)
@@ -443,12 +401,6 @@ namespace GameOfLife
                             break;
 
                         case 6:
-                            if (yCoordinate - locationY == 5 || yCoordinate - locationY == 6)
-                            {
-                                gameField.GameField[xCoordinate % gameField.Length, yCoordinate % gameField.Width] = AliveCellSymbol;
-                            }
-
-                            break;
 
                         case 7:
                             if (yCoordinate - locationY == 5 || yCoordinate - locationY == 6)
@@ -459,12 +411,6 @@ namespace GameOfLife
                             break;
 
                         case 9:
-                            if (yCoordinate - locationY == 2 || yCoordinate - locationY == 3)
-                            {
-                                gameField.GameField[xCoordinate % gameField.Length, yCoordinate % gameField.Width] = AliveCellSymbol;
-                            }
-
-                            break;
 
                         case 10:
                             if (yCoordinate - locationY == 2 || yCoordinate - locationY == 3)
@@ -539,12 +485,6 @@ namespace GameOfLife
                             break;
 
                         case 33:
-                            if (yCoordinate - locationY == 13 || yCoordinate - locationY == 14)
-                            {
-                                gameField.GameField[xCoordinate % gameField.Length, yCoordinate % gameField.Width] = AliveCellSymbol;
-                            }
-
-                            break;
 
                         case 34:
                             if (yCoordinate - locationY == 13 || yCoordinate - locationY == 14)

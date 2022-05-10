@@ -572,5 +572,17 @@ namespace GameOfLife
                     break;
             }
         }
+
+        /// <summary>
+        /// Method to deal with key presses for pause or delay changing during the runtime.
+        /// </summary>
+        /// <returns>Returns the pressed key.</returns>
+        public ConsoleKey RuntimeKeyReader(bool multipleGamesMode = false)
+        {
+            ConsoleKey keyPressed = Console.ReadKey(true).Key;
+            PauseGame(keyPressed, multipleGamesMode);
+            ChangeDelay(keyPressed);
+            return keyPressed;
+        }
     }
 }

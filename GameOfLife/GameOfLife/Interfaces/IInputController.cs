@@ -43,5 +43,7 @@ namespace GameOfLife.Interfaces
         MultipleGamesModel EnterNumberOfMultipleGames(MultipleGamesModel multipleGames);
 
         MultipleGamesModel CheckInputMultipleGamesMenuFieldSize(MultipleGamesModel multipleGames, ConsoleKey keyPressed);
+
+        ConsoleKey RuntimeKeyReader(bool multipleGamesMode = false);
     }
 }

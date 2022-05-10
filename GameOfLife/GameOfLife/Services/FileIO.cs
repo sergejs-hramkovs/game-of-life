@@ -197,7 +197,7 @@ namespace GameOfLife
         {
             int fileNumber;
             EnsureDirectoryExists(FilePath);
-            CountFiles(MultipleGamesModeFilePath);
+            CountFiles(FilePath);
             if (NoSavedGames)
             {
                 _engine.StartGame(false);

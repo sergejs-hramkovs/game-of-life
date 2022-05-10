@@ -184,7 +184,7 @@ namespace GameOfLife
                 }
 
                 _renderer.RenderField(gameField);
-                _renderer.MenuRenderer(LibraryMenu, _inputController.WrongInput);
+                _renderer.MenuRenderer(LibraryMenu, _inputController.WrongInput, clearScreen: false);
                 _inputController.WrongInput = false;
                 libraryChoice = Console.ReadKey(true).Key;
                 if (_inputController.CheckInputLibraryMenu(libraryChoice))

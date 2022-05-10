@@ -116,47 +116,13 @@ namespace GameOfLife
         /// <returns>Returns the number of how many fields are displayed horizontally.</returns>
         public void RenderMultipleHorizontalFields(MultipleGamesModel multipleGames, int rowNumber)
         {
-            int gameNumber;
             bool titleRendered = false;
-            string indentation = "";
-            string titleString;
             Console.WriteLine();
-            gameNumber = multipleGames.NumberOfHorizontalFields * rowNumber;
             for (int yCoordinate = 0; yCoordinate < multipleGames.ListOfGames[0].Width; yCoordinate++)
             {
                 if (!titleRendered)
                 {
-                    Console.WriteLine();
-                    for (int fieldNumber = 0; fieldNumber < multipleGames.NumberOfHorizontalFields; fieldNumber++)
-                    {
-                        if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber == 0)
-                        {
-                            for (int k = 0; k < multipleGames.ListOfGames[0].Length * 2 + 6 - FieldIsDeadPhrase.Length; k++)
-                            {
-                                indentation += " ";
-                            }
-
-                            Console.Write(FieldIsDeadPhrase + indentation);
-                            indentation = "";
-                        }
-                        else
-                        {
-                            titleString = $"  Game #{multipleGames.GamesToBeDisplayed[gameNumber]}. Alive: {multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber}";
-
-                            for (int k = 0; k < multipleGames.ListOfGames[0].Length * 2 + 6 - titleString.Length; k++)
-                            {
-                                indentation += " ";
-                            }
-
-                            Console.Write(titleString + indentation);
-                            indentation = "";
-                        }
-
-                        gameNumber++;
-                    }
-
-                    Console.WriteLine();
-                    titleRendered = true;
+                    titleRendered = TitleRenderer(multipleGames, rowNumber);
                 }
 
                 for (int fieldNumber = 0; fieldNumber < multipleGames.NumberOfHorizontalFields; fieldNumber++)
@@ -179,6 +145,51 @@ namespace GameOfLife
 
                 Console.WriteLine();
             }
+        }
+
+        /// <summary>
+        /// Method to create and render the titles of the Game Fields in the Multiple Games Mode.
+        /// </summary>
+        /// <param name="multipleGames">An object of the MultiplGamesModel class that contains the list of all Game Fields.</param>
+        /// <param name="rowNumber">The number of the Game Field row currently displayed.</param>
+        /// <returns>Returns true - the fact that the whole row of titles was rendered.</returns>
+        private bool TitleRenderer(MultipleGamesModel multipleGames, int rowNumber)
+        {
+            int gameNumber;
+            string indentation = "";
+            string titleString;
+            gameNumber = multipleGames.NumberOfHorizontalFields * rowNumber;
+            Console.WriteLine();
+            for (int fieldNumber = 0; fieldNumber < multipleGames.NumberOfHorizontalFields; fieldNumber++)
+            {
+                if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber == 0)
+                {
+                    for (int k = 0; k < multipleGames.ListOfGames[0].Length * 2 + 6 - FieldIsDeadPhrase.Length; k++)
+                    {
+                        indentation += " ";
+                    }
+
+                    Console.Write(FieldIsDeadPhrase + indentation);
+                    indentation = "";
+                }
+                else
+                {
+                    titleString = $"  Game #{multipleGames.GamesToBeDisplayed[gameNumber]}. " +
+                        $"Alive: {multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber}";
+                    for (int k = 0; k < multipleGames.ListOfGames[0].Length * 2 + 6 - titleString.Length; k++)
+                    {
+                        indentation += " ";
+                    }
+
+                    Console.Write(titleString + indentation);
+                    indentation = "";
+                }
+
+                gameNumber++;
+            }
+
+            Console.WriteLine();
+            return true;
         }
 
         /// <summary>

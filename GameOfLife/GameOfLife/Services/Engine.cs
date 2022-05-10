@@ -38,6 +38,7 @@ namespace GameOfLife
         /// <param name="library">An object of the Library class.</param>
         /// <param name="rulesApplier">An object of the RulesApplier class.</param>
         /// <param name="inputController">An object of the InputController class.</param>
+        /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
         public void Injection(IRenderer render, IFileIO file, IFieldOperations operations, ILibrary library,
             IRulesApplier rulesApplier, IInputController inputController, IUserInterfaceFiller userInterfaceFiller)
         {
@@ -58,10 +59,7 @@ namespace GameOfLife
             ConsoleKey fieldSizeChoice;
             if (firstLaunch)
             {
-                _inputController.Injection(this, _userInterfaceFiller, _file, _render, _fieldOperations, _library);
-                _file.Injection(_render, _inputController, this, _userInterfaceFiller);
-                Console.CursorVisible = false;
-                Console.SetWindowSize(175, 61);
+                FirstLaunchInitialization();
             }
 
             while (true)
@@ -117,31 +115,26 @@ namespace GameOfLife
             }
             else
             {
-                Console.Clear();
+                Console.Clear(); // To clear the screen after loading from a file. SetCursorPosition leaves a bit of UI.
             }
 
-            // To reset the fact of previous loading to avoid disruption of the game after restart.
-            _file.FileLoaded = false;
+            _file.FileLoaded = false; // To reset the fact of previous loading to avoid disruption of the game after restart.
             do
             {
-                while (Console.KeyAvailable == false)
+                while (!Console.KeyAvailable)
                 {
-                    Console.SetCursorPosition(0, 0);
                     RuntimeCalculations();
                     if (_gameOver)
                     {
                         break;
                     }
 
-                    ReadGeneration = false;
                     Thread.Sleep(Delay);
                 }
 
                 if (!_gameOver)
                 {
-                    runTimeKeyPress = Console.ReadKey(true).Key;
-                    _inputController.PauseGame(runTimeKeyPress);
-                    _inputController.ChangeDelay(runTimeKeyPress);
+                    runTimeKeyPress = _inputController.RuntimeKeyReader(); // Checks for Spacebar or Arrows presses.
                 }
                 else
                 {
@@ -177,18 +170,15 @@ namespace GameOfLife
         /// </summary>
         private void RuntimeCalculations()
         {
-            // Parameter for proper loading from file.
-            int generationsAfterLoading = 1;
-            // ReadGeneration ensures loading of a proper generation number when loading from the file.
-            if (ReadGeneration)
+            int generationsAfterLoading = 1; // Parameter for proper loading from file.
+            Console.SetCursorPosition(0, 0);
+            if (ReadGeneration) // ReadGeneration ensures loading of a proper generation number when loading from the file.
             {
                 generationsAfterLoading = 0;
                 ReadGeneration = false;
             }
 
-            // generationsAfterLoading ensure proper game field rendering.
-            // Helps to avoid loading of the previous or next game state.
-            if (generationsAfterLoading >= 1)
+            if (generationsAfterLoading >= 1) // Helps to avoid loading of the previous or next game state.
             {
                 _rulesApplier.IterateThroughGameFieldCells(_gameField, GliderGunMode);
                 _rulesApplier.FieldRefresh(_gameField);
@@ -286,13 +276,10 @@ namespace GameOfLife
         {
             ConsoleKey runTimeKeyPress;
             MultipleGamesModeInitialCalculations();
-            Console.Clear();
             do
             {
                 MultipleGamesModeCoreLoop();
-                runTimeKeyPress = Console.ReadKey(true).Key;
-                _inputController.PauseGame(runTimeKeyPress, true);
-                _inputController.ChangeDelay(runTimeKeyPress);
+                runTimeKeyPress = _inputController.RuntimeKeyReader(multipleGamesMode: true);
             } while (runTimeKeyPress != ConsoleKey.Escape);
 
             _render.MenuRenderer(ExitMenu, clearScreen: false);
@@ -335,6 +322,8 @@ namespace GameOfLife
             {
                 MultipleGames = _inputController.MultipleGames;
             }
+
+            Console.Clear();
         }
 
         /// <summary>
@@ -395,6 +384,17 @@ namespace GameOfLife
                 MultipleGamesModeRuntimeCalculations();
                 Thread.Sleep(Delay);
             }
+        }
+
+        /// <summary>
+        /// Method to perform object injections and to prepare the console window during the first launch of the games. 
+        /// </summary>
+        private void FirstLaunchInitialization()
+        {
+            _inputController.Injection(this, _userInterfaceFiller, _file, _render, _fieldOperations, _library);
+            _file.Injection(_render, _inputController, this, _userInterfaceFiller);
+            Console.CursorVisible = false;
+            Console.SetWindowSize(175, 61);
         }
     }
 }
