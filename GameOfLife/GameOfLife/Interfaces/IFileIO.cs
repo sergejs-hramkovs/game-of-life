@@ -22,9 +22,7 @@ namespace GameOfLife.Interfaces
 
         GameFieldModel LoadGameFieldFromFile(int fileNumber);
 
-        void InitiateLoadingFromFile();
-
-        void InitiateLoadingMultipleGamesFromFile();
+        void InitiateLoadingFromFile(bool loadMultipleGames = false);
 
         void SaveMultipleGamesToFile(MultipleGamesModel multipleGames);
 

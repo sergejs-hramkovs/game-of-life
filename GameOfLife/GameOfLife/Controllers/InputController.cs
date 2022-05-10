@@ -561,7 +561,7 @@ namespace GameOfLife
                 case ConsoleKey.D2:
                     _engine.MultipleGamesMode = true;
                     _engine.MultipleGamesLoaded = true;
-                    _file.InitiateLoadingMultipleGamesFromFile();
+                    _file.InitiateLoadingFromFile(loadMultipleGames: true);
                     break;
 
                 case ConsoleKey.Escape:

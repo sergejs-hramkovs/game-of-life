@@ -372,7 +372,7 @@ namespace GameOfLife
         /// </summary>
         private void MultipleGamesModeCoreLoop()
         {
-            while (Console.KeyAvailable == false)
+            while (!Console.KeyAvailable)
             {
                 Console.SetCursorPosition(0, 0);
                 CountTotalAliveCells();

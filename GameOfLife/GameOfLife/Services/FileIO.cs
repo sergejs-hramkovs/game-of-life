@@ -19,6 +19,7 @@ namespace GameOfLife
         private IEngine _engine;
         private IUserInterfaceFiller _userInterfaceFiller;
         private string[] _stringField;
+        private int _fileNumber;
         private List<string> _stringList = new List<string>();
         public string FilePath { get; set; }
         public string MultipleGamesModeFilePath { get; set; }
@@ -85,23 +86,14 @@ namespace GameOfLife
         /// <summary>
         /// Method that takes the list of the Game Field cells and converts it into an array of the Game Field.
         /// </summary>
-        /// <param name="inputList">List of the game field cells.</param>
+        /// <param name="inputList">List of the Game Field cell rows</param>
         /// <returns>Returns an instance of the GameFieldModel class.</returns>
         private GameFieldModel ConvertListOfRowsToGameField(List<string> inputList)
         {
             int xCoordinate = 0;
             int yCoordinate = 0;
-            string generationString = "";
             GameFieldModel gameField = new(inputList[4].Length / 2, inputList.Count - 4);
-            foreach (char character in inputList[0])
-            {
-                if (int.TryParse(character.ToString(), out int number))
-                {
-                    generationString += number.ToString();
-                }
-            }
-
-            gameField.Generation = int.Parse(generationString);
+            gameField.Generation = int.Parse(TakeGenerationNumberFromFile(inputList));
             for (int listElementNumber = 4; listElementNumber < inputList.Count; listElementNumber++)
             {
                 foreach (char character in inputList[listElementNumber])
@@ -111,7 +103,7 @@ namespace GameOfLife
                         if (character == AliveCellSymbolChar || character == DeadCellSymbolChar)
                         {
                             gameField.GameField[xCoordinate, yCoordinate] = character.ToString();
-                            if (xCoordinate == inputList[4].Length / 2 - 1)
+                            if (xCoordinate == (inputList[4].Length / 2 - 1))
                             {
                                 xCoordinate = 0;
                                 yCoordinate++;
@@ -127,6 +119,25 @@ namespace GameOfLife
 
             _stringList.Clear();
             return gameField;
+        }
+
+        /// <summary>
+        /// Method to read the generation nubmer from the file.
+        /// </summary>
+        /// <param name="inputList">List of the Game Field cell rows.</param>
+        /// <returns>Returns the generation number in the string form.</returns>
+        private static string TakeGenerationNumberFromFile(List<string> inputList)
+        {
+            string generationString = "";
+            foreach (char character in inputList[0])
+            {
+                if (int.TryParse(character.ToString(), out int number))
+                {
+                    generationString += number.ToString();
+                }
+            }
+
+            return generationString;
         }
 
         /// <summary>
@@ -154,6 +165,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to load the saved field from the file.
         /// </summary>
+        /// <param name="fileToLoad">The number of the saved game to be loaded.</param>
         /// <returns>Returns call to ListToField method, which returns an instance of the GameField class.</returns>
         public GameFieldModel LoadGameFieldFromFile(int fileToLoad)
         {
@@ -193,10 +205,19 @@ namespace GameOfLife
         /// <summary>
         /// Method to call file loading methods.
         /// </summary>
-        public void InitiateLoadingFromFile()
+        public void InitiateLoadingFromFile(bool loadMultipleGames = false)
         {
-            int fileNumber;
-            EnsureDirectoryExists(FilePath);
+            string path = "";
+            if (!loadMultipleGames)
+            {
+                path = FilePath;
+            }
+            else
+            {
+                path = MultipleGamesModeFilePath;
+            }
+
+            EnsureDirectoryExists(path);
             CountFiles(FilePath);
             if (NoSavedGames)
             {
@@ -207,27 +228,22 @@ namespace GameOfLife
             {
                 if (NumberOfFiles == 1)
                 {
-                    fileNumber = 1;
+                    _fileNumber = 1;
                 }
                 else
                 {
-                    do
-                    {
-                        Console.CursorVisible = true;
-                        CreateListOfFileNames(FilePath);
-                        _userInterfaceFiller.ChooseFileMenuCreation(NumberOfFiles, FileNames);
-                        if (_inputController.WrongInput)
-                        {
-                            _render.MenuRenderer(WrongInputFileMenu, wrongInput:true);
-                        }
-                        _render.MenuRenderer(ChooseFileMenu, newLine:false, clearScreen:!_inputController.WrongInput);
-                        FileNames.Clear();
-                        fileNumber = _inputController.CheckInputSavedGameMenu(NumberOfFiles);
-                        Console.CursorVisible = false;
-                    } while (_inputController.WrongInput);
+                    InitiateLoadingFromFileMainLoop(path);
                 }
 
-                _inputController.GameField = LoadGameFieldFromFile(fileNumber);
+                if (!loadMultipleGames)
+                {
+                    _inputController.GameField = LoadGameFieldFromFile(_fileNumber);
+                }
+                else
+                {
+                    _inputController.MultipleGames = LoadMultipleGamesFromFile(_fileNumber);
+                }
+                
                 if (!FileReadingError)
                 {
                     FileLoaded = true;
@@ -238,50 +254,24 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to call file loading methods in the Multiple Games Mode.
+        /// Method that deals with calling methods to render file choosing menu and to process user input.
         /// </summary>
-        public void InitiateLoadingMultipleGamesFromFile()
+        private void InitiateLoadingFromFileMainLoop(string filePath)
         {
-            int fileNumber;
-            EnsureDirectoryExists(MultipleGamesModeFilePath);
-            CountFiles(MultipleGamesModeFilePath);
-            if (NoSavedGames)
+            do
             {
-                _engine.StartGame(false);
-                _inputController.CorrectKeyPressed = true;
-            }
-            else
-            {
-                if (NumberOfFiles == 1)
+                Console.CursorVisible = true;
+                CreateListOfFileNames(filePath);
+                _userInterfaceFiller.ChooseFileMenuCreation(NumberOfFiles, FileNames);
+                if (_inputController.WrongInput)
                 {
-                    fileNumber = 1;
+                    _render.MenuRenderer(WrongInputFileMenu, wrongInput: true);
                 }
-                else
-                {
-                    do
-                    {
-                        Console.CursorVisible = true;
-                        CreateListOfFileNames(MultipleGamesModeFilePath);
-                        _userInterfaceFiller.ChooseFileMenuCreation(NumberOfFiles, FileNames);
-                        if (_inputController.WrongInput)
-                        {
-                            _render.MenuRenderer(WrongInputFileMenu, wrongInput: true);
-                        }
-                        _render.MenuRenderer(ChooseFileMenu, newLine: false, clearScreen: !_inputController.WrongInput);
-                        FileNames.Clear();
-                        fileNumber = _inputController.CheckInputSavedGameMenu(NumberOfFiles);
-                        Console.CursorVisible = false;
-                    } while (_inputController.WrongInput);
-                }
-
-                _inputController.MultipleGames = LoadMultipleGamesFromFile(fileNumber);
-                if (!FileReadingError)
-                {
-                    FileLoaded = true;
-                    _engine.ReadGeneration = true;
-                    _inputController.CorrectKeyPressed = true;
-                }
-            }
+                _render.MenuRenderer(ChooseFileMenu, newLine: false, clearScreen: !_inputController.WrongInput);
+                FileNames.Clear();
+                _fileNumber = _inputController.CheckInputSavedGameMenu(NumberOfFiles);
+                Console.CursorVisible = false;
+            } while (_inputController.WrongInput);
         }
 
         /// <summary>
