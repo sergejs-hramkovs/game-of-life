@@ -18,9 +18,9 @@ namespace GameOfLife.Tests
         public void TestCheckInputMainMenu_PremadeInput(ConsoleKey keyPressed, int length, int width)
         {
             InputController inputController = new();
-            GameFieldModel gameField;
+            GameFieldModel gameField = new(length, width);
 
-            gameField = inputController.CheckInputMainMenu(keyPressed);
+            inputController.CheckInputMainMenu(keyPressed);
 
             Assert.AreEqual(gameField.Length, length);
             Assert.AreEqual(gameField.Width, width);
@@ -31,12 +31,12 @@ namespace GameOfLife.Tests
         [DataRow(ConsoleKey.D2, 37, 40)]
         public void TestCheckGliderGunMenu_D1D2Input(ConsoleKey keyPressed, int length, int width)
         {
-            Engine engine = new();
+            MainEngine engine = new();
             InputController inputController = new();
             inputController.Injection(engine);
             GameFieldModel gameField;
 
-            gameField = inputController.CheckInputGliderGunMenu(keyPressed);
+            //gameField = inputController.CheckInputGliderGunMenu();
 
             Assert.AreEqual(gameField.Length, length);
             Assert.AreEqual(gameField.Width, width);
@@ -51,12 +51,12 @@ namespace GameOfLife.Tests
         [DataRow(ConsoleKey.RightArrow, 2000, 2000)]
         public void TestChangeDelay(ConsoleKey keyPressed, int initialDelay, int newDelay)
         {
-            Engine engine = new();
+            MainEngine engine = new();
             InputController inputController = new();
             inputController.Injection(engine);
             engine.Delay = initialDelay;
 
-            inputController.ChangeDelay(keyPressed);
+            inputController.ChangeDelay();
 
             Assert.AreEqual(newDelay, engine.Delay);
         }

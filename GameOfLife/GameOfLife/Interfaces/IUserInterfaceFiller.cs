@@ -4,9 +4,9 @@ namespace GameOfLife.Interfaces
 {
     public interface IUserInterfaceFiller
     {
-        void SingleGameRuntimeUICreation(GameFieldModel gameField, int delay);
+        void SingleGameRuntimeUICreator(MultipleGamesModel multipleGames, int delay);
 
-        void MultiGameRuntimeUICreation(int delay, MultipleGamesModel multipleGames);
+        void MultiGameRuntimeUICreator(MultipleGamesModel multipleGames, int delay);
 
         void GameOverUICreation(int generation);
 

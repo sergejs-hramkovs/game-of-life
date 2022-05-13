@@ -9,7 +9,6 @@ namespace GameOfLife.Models
     [Serializable]
     public class MultipleGamesModel
     {
-        private IFieldOperations _fieldOperations;
         public int Length { get; set; }
         public int Width { get; set; }
         public int Generation { get; set; }
@@ -21,6 +20,11 @@ namespace GameOfLife.Models
         {
             get
             {
+                if (TotalNumberOfGames == 1)
+                {
+                    return 1;
+                }
+
                 switch (ListOfGames[0].Length)
                 {
                     case 25:
@@ -43,6 +47,11 @@ namespace GameOfLife.Models
         {
             get
             {
+                if (TotalNumberOfGames == 1)
+                {
+                    return 1;
+                }
+
                 switch (ListOfGames[0].Length)
                 {
                     case 25:
@@ -71,14 +80,25 @@ namespace GameOfLife.Models
         /// <param name="fieldOperations">An object of the FieldOperations class.</param>
         public void InitializeGames(IFieldOperations fieldOperations)
         {
-            _fieldOperations = fieldOperations;
             for (int gameNumber = 0; gameNumber < TotalNumberOfGames; gameNumber++)
             {
                 ListOfGames.Add(new(Length, Width));
-                ListOfGames[gameNumber] = _fieldOperations.RandomSeeding(ListOfGames[gameNumber]);
+                fieldOperations.RandomSeeding(ListOfGames[gameNumber]);
             }
 
             NumberOfFieldsAlive = ListOfGames.Count;
+        }
+
+        /// <summary>
+        /// Method to initialize necessary parameters in the single game mode.
+        /// </summary>
+        public void InitializeSingleGameParameters()
+        {
+            Length = ListOfGames[0].Length;
+            Width = ListOfGames[0].Width;
+            TotalNumberOfGames = 1;
+            NumberOfGamesToBeDisplayed = 1;
+            GamesToBeDisplayed.Add(0);
         }
     }
 }

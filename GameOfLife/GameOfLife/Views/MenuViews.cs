@@ -5,11 +5,20 @@
     /// </summary>
     public static class MenuViews
     {
-        public static string[] MainMenu { get; } = {
-            StringConstants.FileNotFoundPhrase,
+        public static string[] MainMenuNew { get; } = {
             StringConstants.WrongInputPhrase,
-            StringConstants.NoSavedGamesPhrase,
             " ### Welcome to the Game of Life! ###",
+            "\n # Choose the game mode:",
+            "\n 1. Single game",
+            " 2. Multiple games",
+            " 3. Load game(s)",
+            " 4. Glider Gun Mode",
+            "\n # Press 'F1' to read the rules and the description of the game"
+        };
+
+        public static string[] SingleGameMenu { get; } = {
+            StringConstants.WrongInputPhrase,
+            " ### Single Game Mode ###",
             "\n # Choose the field size:",
             " 1. 3x3",
             " 2. 5x5",
@@ -17,18 +26,19 @@
             " 4. 20x20",
             " 5. 75x40",
             " 6. Custom",
-            "\n # To load the field from the file press 'L'",
-            " # To load Glider Gun Mode press 'G'",
-            " # To load Multiple Games Mode press 'M'",
-            "\n # Press 'F1' to read the rules and the description of the game"
+            "\n # Press 'Esc' to go back to the main menu"
         };
 
-        public static string[] FieldSeedingChoiceChoiceMenu { get; } = {
+        public static string[] SeedingTypeMenu { get; } = {
+            StringConstants.WrongInputPhrase,
             "\n ### Choose the field seeding type ###",
             "\n 1. Seed the field manually",
             " 2. Seed the field automatically and randomly",
-            " 3. Choose cell patterns from the library"
+            " 3. Choose cell patterns from the library",
+            "\n # Press 'Esc' to go back to the main menu"
         };
+
+
 
         public static string[] LibraryMenu { get; } = {
             StringConstants.WrongInputPhrase,
@@ -46,7 +56,7 @@
             "\n Choose the type of the glider gun:",
             "\n 1. Gosper's glider gun",
             " 2. Simkin's glider gun.",
-            "\n # Press 'G' to turn off the Glider Gun Mode"
+            "\n # Press 'Esc' to go back to the main menu"
         };
 
         public static string[] PauseMenu { get; } = {
@@ -95,30 +105,35 @@
         };
 
         public static string[] MultipleGamesModeMenu { get; } = {
-            "### Multiple Games Mode ###",
+            StringConstants.WrongInputPhrase,
+            " ### Multiple Games Mode ###",
             "\n # 1. Enter numbers manually",
             " # 2. Random numbers"
         };
 
         public static string[] MultipleGamesModeFieldSizeChoiceMenu { get; } = {
+            StringConstants.WrongInputPhrase,
             " ### Multiple Games Mode ###",
             "\n # Choose the field size:",
             "\n 1. 10x10 - 24 fields on the screen",
             " 2. 15x15 - 12 fields on the screen",
             " 3. 20x20 - 6 fields on the screen",
-            " 4. 25x25 - 6 fields on the screen"
+            " 4. 25x25 - 6 fields on the screen",
+            "\n # Press 'Esc' to go back to the main menu"
         };
 
         public static string[] MultipleGamesModeGamesQuantityMenu { get; } = {
             " ### Multiple Games Mode ###",
-            "\n# Enter how many games to run (100-10000): "
+            "\n# Enter how many games to run (24-10000): "
         };
 
         public static string[] LoadGameMenu { get; } = {
+            StringConstants.WrongInputPhrase,
             " ### Game loading menu ###",
             "\n # Choose what kind of games to load",
             "\n 1. Single game",
-            " 2. Multiple games"
+            " 2. Multiple games",
+            "\n # Press 'Esc' to go back to the main menu"
         };
 
         public static string[] GameOverUI { get; set; } = {

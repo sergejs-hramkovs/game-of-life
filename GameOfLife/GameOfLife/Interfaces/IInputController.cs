@@ -10,27 +10,26 @@ namespace GameOfLife.Interfaces
 
         GameFieldModel GameField { get; set; }
 
-        MultipleGamesModel MultipleGames { get; set; }
+        void Injection(IMainEngine engine, IUserInterfaceFiller userInterfaceViews, IFileIO file, IRenderer render, IFieldOperations operations, ILibrary library,
+            IMenuNavigator? menuNavigator = null);
 
-        void Injection(IEngine engine, IUserInterfaceFiller userInterfaceViews, IFileIO file, IRenderer render, IFieldOperations operations, ILibrary library);
+        void MainMenuInputProcessor();
 
-        GameFieldModel CheckInputMainMenu(ConsoleKey keyPressed);
+        void SeedingTypeMenuInputProcessor();
 
-        GameFieldModel CheckInputGliderGunMenu(ConsoleKey keyPressed);
+        void GliderGunMenuInputProcessor();
 
-        GameFieldModel EnterFieldDimensions(bool wrongInput);
+        void EnterFieldDimensions(bool wrongInput);
 
         bool EnterCoordinates();
 
-        void EnterGameNumbers();
+        void EnterGameNumbersToBeDisplayed();
 
-        bool CheckInputPopulateFieldMenu(ConsoleKey keyPressed);
-
-        bool CheckInputLibraryMenu(ConsoleKey keyPressed);
+        bool LibraryMenuInputProcessor();
 
         void CheckInputPauseMenu(ConsoleKey keyPressed, bool multipleGamesMode = false);
 
-        bool CheckInputMultipleGamesMenu(ConsoleKey keyPressed);
+        void ChooseMultipleGameNumbersMenuInputProcessor();
 
         void PauseGame(ConsoleKey keyPressed, bool multipleGamesMode = false);
 
@@ -40,10 +39,14 @@ namespace GameOfLife.Interfaces
 
         void ChangeDelay(ConsoleKey keyPressed);
 
-        MultipleGamesModel EnterNumberOfMultipleGames(MultipleGamesModel multipleGames);
+        void EnterMultipleGamesQuantity();
 
-        MultipleGamesModel CheckInputMultipleGamesMenuFieldSize(MultipleGamesModel multipleGames, ConsoleKey keyPressed);
+        void CheckInputMultipleGamesMenuFieldSize();
 
         ConsoleKey RuntimeKeyReader(bool multipleGamesMode = false);
+
+        void SingleGameMenuInputProcessor();
+
+        void LoadGameMenuInputProcessor();
     }
 }

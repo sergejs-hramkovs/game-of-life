@@ -10,14 +10,12 @@ namespace GameOfLife.Interfaces
 
         bool StopDataInput { get; set; }
 
-        GameFieldModel PopulateField(GameFieldModel gameField, bool gliderGunMode, int gliderGunType);
+        void ManualSeeding(MultipleGamesModel multipleGames);
 
-        GameFieldModel ManualSeeding(GameFieldModel gameField);
+        void RandomSeeding(GameFieldModel gameField);
 
-        GameFieldModel RandomSeeding(GameFieldModel gameField);
+        void LibrarySeeding(MultipleGamesModel multipleGames);
 
-        GameFieldModel LibrarySeeding(GameFieldModel gameField, bool gliderGunMode, int gliderGunType);
-
-        void CallSpawningMethod(GameFieldModel gameField, Func<GameFieldModel, int, int, GameFieldModel> SpawnLibraryObject);
+        void CallSpawningMethod(MultipleGamesModel multipleGames, Action<GameFieldModel, int, int> SpawnLibraryObject);
     }
 }

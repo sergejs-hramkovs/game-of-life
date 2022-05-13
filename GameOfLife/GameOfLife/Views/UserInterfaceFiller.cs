@@ -14,18 +14,18 @@ namespace GameOfLife.Views
         /// </summary>
         /// <param name="gameField">A Game Field object filled with cells.</param>
         /// <param name="delay">Delay in miliseconds between generations.</param>
-        public void SingleGameRuntimeUICreation(GameFieldModel gameField, int delay)
+        public void SingleGameRuntimeUICreator(MultipleGamesModel multipleGames, int delay)
         {
+            GameFieldModel gameField = multipleGames.ListOfGames[0];
             MenuViews.SingleGameUI = new string[]
             {
                 " # Press ESC to stop",
                 " # Press Spacebar to pause",
                 " # Change the delay using left and right arrows",
-                $"\n Generation: {gameField.Generation}",
+                $"\n Generation: {multipleGames.Generation}",
                 $" Alive cells: {gameField.AliveCellsNumber}({(int)Math.Round(gameField.AliveCellsNumber / (double)gameField.Area * 100.0)}%)   ",
                 $" Dead cells: {gameField.DeadCellsNumber}   ",
-                $" Current delay between generations: {delay / 1000.0} seconds  ",
-                $" Number of generations per second: {Math.Round(1 / (delay / 1000.0), 2)}   "
+                $" Current delay between generations: {delay / 1000.0} seconds  "
             };
         }
 
@@ -34,7 +34,7 @@ namespace GameOfLife.Views
         /// </summary>
         /// <param name="delay">Delay in miliseconds between generations.</param>
         /// <param name="multipleGames">An object with a list of Game Fields.</param>
-        public void MultiGameRuntimeUICreation(int delay, MultipleGamesModel multipleGames)
+        public void MultiGameRuntimeUICreator(MultipleGamesModel multipleGames, int delay)
         {
             MenuViews.MultiGameUI = new string[]
             {

@@ -31,61 +31,22 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to initiate the field seeding.
-        /// </summary>
-        /// <param name="gameField">An instance of the GameFieldModel class.</param>
-        /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
-        /// <param name="gliderGunType">Parameter that represents the chosen type of the glider gun.</param>
-        /// <returns>Returns an instance of the GameFieldModel class.</returns>
-        public GameFieldModel PopulateField(GameFieldModel gameField, bool gliderGunMode, int gliderGunType)
-        {
-            ConsoleKey seedingChoice;
-            while (true)
-            {
-                if (_inputController.WrongInput)
-                {
-                    Console.Clear();
-                    _renderer.RenderField(gameField);
-                    Console.WriteLine("\n" + StringConstants.WrongInputPhrase);
-                    _inputController.WrongInput = false;
-                }
-
-                if (gliderGunMode)
-                {
-                    Console.Clear();
-                    LibrarySeeding(gameField, gliderGunMode, gliderGunType);
-                    return gameField;
-                }
-                else
-                {
-                    _renderer.MenuRenderer(MenuViews.FieldSeedingChoiceChoiceMenu, clearScreen:false);
-                    seedingChoice = Console.ReadKey(true).Key;
-                }
-
-                if (_inputController.CheckInputPopulateFieldMenu(seedingChoice))
-                {
-                    return gameField;
-                }
-            }
-        }
-
-        /// <summary>
         /// Cell seeding coordinates are entered manually by the user.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class.</param>
         /// <returns>Returns an instance of the GameFieldModel class with alive cells manually seeded in its field.</returns>
-        public GameFieldModel ManualSeeding(GameFieldModel gameField)
+        public void ManualSeeding(MultipleGamesModel multipleGames)
         {
             while (true)
             {
                 Console.Clear();
                 if (!_inputController.WrongInput)
                 {
-                    _renderer.RenderField(gameField);
+                    _renderer.GridOfFieldsRenderer(multipleGames);
                 }
                 else if (_inputController.WrongInput)
                 {
-                    _renderer.RenderField(gameField);
+                    _renderer.GridOfFieldsRenderer(multipleGames);
                     Console.WriteLine("\n" + StringConstants.WrongInputPhrase);
                     _inputController.WrongInput = false;
                 }
@@ -102,13 +63,13 @@ namespace GameOfLife
 
                 if (!StopDataInput)
                 {
-                    if (gameField.GameField[CoordinateX, CoordinateY] == StringConstants.DeadCellSymbol)
+                    if (multipleGames.ListOfGames[0].GameField[CoordinateX, CoordinateY] == StringConstants.DeadCellSymbol)
                     {
-                        gameField.GameField[CoordinateX, CoordinateY] = StringConstants.AliveCellSymbol;
+                        multipleGames.ListOfGames[0].GameField[CoordinateX, CoordinateY] = StringConstants.AliveCellSymbol;
                     }
                     else
                     {
-                        gameField.GameField[CoordinateX, CoordinateY] = StringConstants.DeadCellSymbol;
+                        multipleGames.ListOfGames[0].GameField[CoordinateX, CoordinateY] = StringConstants.DeadCellSymbol;
                     }
                 }
                 else
@@ -117,8 +78,6 @@ namespace GameOfLife
                     break;
                 }
             }
-
-            return gameField;
         }
 
         /// <summary>
@@ -126,7 +85,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class.</param>
         /// <returns>Returns an instance of the GameFieldModel class with alive cells randomly seeded in its field.</returns>
-        public GameFieldModel RandomSeeding(GameFieldModel gameField)
+        public void RandomSeeding(GameFieldModel gameField)
         {
             Random random = new();
             int aliveCellCount = random.Next(1, gameField.Length * gameField.Width);
@@ -144,53 +103,22 @@ namespace GameOfLife
                     random = new();
                 }
             }
-
-            return gameField;
         }
 
         /// <summary>
         /// Method to choose a cell pattern from the premade library.
         /// </summary
-        /// <param name="gameField">An instance of the GameFieldModel class.</param>
-        /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
-        /// <param name="gliderGunType">Parameter that represents the chosen type of the glider gun.</param>
-        /// <returns>Returns an instance of the GameFieldModel class with a library object seeded in its field.</returns>
-        public GameFieldModel LibrarySeeding(GameFieldModel gameField, bool gliderGunMode, int gliderGunType)
+        public void LibrarySeeding(MultipleGamesModel multipleGames)
         {
             ConsoleKey libraryChoice;
-            while (true)
+            do
             {
-                if (gliderGunMode)
-                {
-                    switch (gliderGunType)
-                    {
-                        case 1:
-                            gameField = _library.SpawnGosperGliderGun(gameField, 1, 1);
-                            break;
-
-                        case 2:
-                            _library.SpawnSimkinGliderGun(gameField, 0, 16);
-                            break;
-                    }
-
-                    Console.Clear();
-                    return gameField;
-                }
-
-                if (_inputController.WrongInput)
-                {
-                    Console.Clear();
-                }
-
-                _renderer.RenderField(gameField);
+                Console.Clear();
+                _renderer.GridOfFieldsRenderer(multipleGames);
                 _renderer.MenuRenderer(MenuViews.LibraryMenu, _inputController.WrongInput, clearScreen: false);
                 _inputController.WrongInput = false;
-                libraryChoice = Console.ReadKey(true).Key;
-                if (_inputController.CheckInputLibraryMenu(libraryChoice))
-                {
-                    return gameField;
-                }
             }
+            while (!_inputController.LibraryMenuInputProcessor());
         }
 
         /// <summary>
@@ -198,13 +126,13 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class.</param>
         /// <param name="SpawnLibraryObject">Parameter that represents the method for spawning an object from the library that will be called.</param>
-        public void CallSpawningMethod(GameFieldModel gameField, Func<GameFieldModel, int, int, GameFieldModel> SpawnLibraryObject)
+        public void CallSpawningMethod(MultipleGamesModel multipleGames, Action<GameFieldModel, int, int> SpawnLibraryObject)
         {
             Console.Clear();
-            _renderer.RenderField(gameField);
+            _renderer.GridOfFieldsRenderer(multipleGames);
             if (_inputController.EnterCoordinates() && !StopDataInput)
             {
-                SpawnLibraryObject(gameField, CoordinateX, CoordinateY);
+                SpawnLibraryObject(multipleGames.ListOfGames[0], CoordinateX, CoordinateY);
             }
             else if (StopDataInput)
             {

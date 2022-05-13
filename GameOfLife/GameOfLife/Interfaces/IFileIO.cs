@@ -16,16 +16,16 @@ namespace GameOfLife.Interfaces
 
         int NumberOfFiles { get; }
 
-        void Injection(IRenderer render, IInputController inputController, IEngine engine, IUserInterfaceFiller userInterfaceFiller);
+        void Injection(IRenderer render, IInputController inputController, IMainEngine engine, IUserInterfaceFiller userInterfaceFiller);
 
         void SaveGameFieldToFile(GameFieldModel gameField);
 
-        GameFieldModel LoadGameFieldFromFile(int fileNumber);
+        void LoadGameFieldFromFile(int fileNumber);
 
         void InitiateLoadingFromFile(bool loadMultipleGames = false);
 
         void SaveMultipleGamesToFile(MultipleGamesModel multipleGames);
 
-        MultipleGamesModel LoadMultipleGamesFromFile(int fileToLoad);
+        void LoadMultipleGamesFromFile(int fileToLoad);
     }
 }

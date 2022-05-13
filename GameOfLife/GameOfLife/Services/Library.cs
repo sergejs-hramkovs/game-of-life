@@ -16,7 +16,7 @@ namespace GameOfLife
         /// <param name="locationX">Horizontal location of the upper left corner of a glider.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a glider.</param>
         /// <returns>Returns an instance of the GameFieldModel class with a glider seeded in it.</returns>
-        public GameFieldModel SpawnGlider(GameFieldModel gameField, int locationX, int locationY)
+        public void SpawnGlider(GameFieldModel gameField, int locationX, int locationY)
         {
             for (int xCoordinate = locationX; xCoordinate < locationX + 3; xCoordinate++)
             {
@@ -50,8 +50,6 @@ namespace GameOfLife
                     }
                 }
             }
-
-            return gameField;
         }
 
         /// <summary>
@@ -61,7 +59,7 @@ namespace GameOfLife
         /// <param name="locationX">Horizontal location of the upper left corner of a light-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a light-weight spaceship.</param>
         /// <returns>Returns an instance of the GameFieldModel class with a light-weight spaceship seeded in it.</returns>
-        public GameFieldModel SpawnLightWeight(GameFieldModel gameField, int locationX, int locationY)
+        public void SpawnLightWeight(GameFieldModel gameField, int locationX, int locationY)
         {
             for (int xCoordinate = locationX; xCoordinate < locationX + 5; xCoordinate++)
             {
@@ -105,8 +103,6 @@ namespace GameOfLife
                     }
                 }
             }
-
-            return gameField;
         }
 
         /// <summary>
@@ -116,7 +112,7 @@ namespace GameOfLife
         /// <param name="locationX">Horizontal location of the upper left corner of a middle-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a middle-weight spaceship.</param>
         /// <returns>Returns an instance of the GameFieldModel class with a middle-weight spaceship seeded in it.</returns>
-        public GameFieldModel SpawnMiddleWeight(GameFieldModel gameField, int locationX, int locationY)
+        public void SpawnMiddleWeight(GameFieldModel gameField, int locationX, int locationY)
         {
             for (int xCoordinate = locationX; xCoordinate < locationX + 6; xCoordinate++)
             {
@@ -174,8 +170,6 @@ namespace GameOfLife
                     }
                 }
             }
-
-            return gameField;
         }
 
         /// <summary>
@@ -185,7 +179,7 @@ namespace GameOfLife
         /// <param name="locationX">Horizontal location of the upper left corner of a heavy-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a heavy-weight spaceship.</param>
         /// <returns>Returns an instance of the GameFieldModel class with a heavy-weight spaceship seeded in it.</returns>
-        public GameFieldModel SpawnHeavyWeight(GameFieldModel gameField, int locationX, int locationY)
+        public void SpawnHeavyWeight(GameFieldModel gameField, int locationX, int locationY)
         {
             for (int xCoordinate = locationX; xCoordinate < locationX + 7; xCoordinate++)
             {
@@ -245,8 +239,6 @@ namespace GameOfLife
                     }
                 }
             }
-
-            return gameField;
         }
 
         /// <summary>
@@ -256,7 +248,7 @@ namespace GameOfLife
         /// <param name="locationX">Horizontal location of the upper left corner of the Gosper's glider gun.</param>
         /// <param name="locationY">Vertical location of the upper left corner of Gosper's glider gun.</param>
         /// <returns>Returns an instance of the GameFieldModel class with the Gosper's glider gun seeded in it.</returns>
-        public GameFieldModel SpawnGosperGliderGun(GameFieldModel gameField, int locationX, int locationY)
+        public void SpawnGosperGliderGun(GameFieldModel gameField, int locationX, int locationY)
         {
             for (int xCoordinate = locationX; xCoordinate < locationX + 37; xCoordinate++)
             {
@@ -370,8 +362,6 @@ namespace GameOfLife
                     }
                 }
             }
-
-            return gameField;
         }
 
         /// <summary>
@@ -381,7 +371,7 @@ namespace GameOfLife
         /// <param name="locationX">Horizontal location of the upper left corner of the Simkin's glider gun.</param>
         /// <param name="locationY">Vertical location of the upper left corner of the Simkin's glider gun.</param>
         /// <returns>Returns an instance of the GameFieldModel class with the Simkin's glider gun seeded in it.</returns>
-        public GameFieldModel SpawnSimkinGliderGun(GameFieldModel gameField, int locationX, int locationY)
+        public void SpawnSimkinGliderGun(GameFieldModel gameField, int locationX, int locationY)
         {
             for (int xCoordinate = locationX; xCoordinate < locationX + 36; xCoordinate++)
             {
@@ -495,8 +485,6 @@ namespace GameOfLife
                     }
                 }
             }
-
-            return gameField;
         }
     }
 }

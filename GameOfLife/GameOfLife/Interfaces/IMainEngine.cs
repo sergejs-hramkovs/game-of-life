@@ -2,7 +2,7 @@
 
 namespace GameOfLife.Interfaces
 {
-    public interface IEngine
+    public interface IMainEngine
     {
         bool ReadGeneration { get; set; }
 
@@ -10,7 +10,9 @@ namespace GameOfLife.Interfaces
 
         bool MultipleGamesMode { get; set; }
 
-        bool MultipleGamesLoaded { get; set; }
+        bool SavedGameLoaded { get; set; }
+
+        bool InitializationFinished { get; set; }
 
         int GliderGunType { get; set; }
 
@@ -19,14 +21,12 @@ namespace GameOfLife.Interfaces
         MultipleGamesModel MultipleGames { get; set; }
 
         void Injection(IRenderer render, IFileIO file, IFieldOperations field, ILibrary library, IRulesApplier rulesApplier, IInputController inputProcessor,
-            IUserInterfaceFiller userInterfaceViews);
+            IUserInterfaceFiller userInterfaceViews, IAuxiliaryEngine auxiliaryEngine, IMenuNavigator menuNavigator);
 
         void StartGame(bool firstLaunch = true);
 
         void RunGame();
 
         void RestartGame();
-
-        int CountAliveCells(GameFieldModel gameField);
     }
 }

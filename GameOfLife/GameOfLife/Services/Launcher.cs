@@ -1,4 +1,5 @@
-﻿using GameOfLife.Views;
+﻿using GameOfLife.Services;
+using GameOfLife.Views;
 
 namespace GameOfLife
 {
@@ -13,7 +14,8 @@ namespace GameOfLife
         /// </summary>
         public void LaunchGame()
         {
-            Engine engine = new();
+            MainEngine engine = new();
+            AuxiliaryEngine auxiliaryEngine = new();
             RulesApplier applier = new();
             Library library = new();
             Renderer render = new();
@@ -21,7 +23,8 @@ namespace GameOfLife
             InputController processor = new();
             FieldOperations field = new(library, render, processor);
             UserInterfaceFiller userInterfaceViews = new();
-            engine.Injection(render, file, field, library, applier, processor, userInterfaceViews);
+            MenuNavigator menuNavigator = new();
+            engine.Injection(render, file, field, library, applier, processor, userInterfaceViews, auxiliaryEngine, menuNavigator);
             engine.StartGame();
         }
     }
