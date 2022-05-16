@@ -1,5 +1,6 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
+using GameOfLife.Views;
 
 namespace GameOfLife
 {
@@ -59,7 +60,7 @@ namespace GameOfLife
         {
             _inputController.Injection(this, _userInterfaceFiller, _file, _renderer, _fieldOperations, _library, _menuNavigator);
             _file.Injection(_renderer, _inputController, this, _userInterfaceFiller);
-            _menuNavigator.Injection(_renderer, _inputController, this, _fieldOperations);
+            _menuNavigator.Inject(_renderer, _inputController, this, _fieldOperations);
             _auxiliaryEngine.Injection(this, _rulesApplier, _renderer, _userInterfaceFiller);
             _renderer.Injection(this);
             Console.CursorVisible = false;
@@ -78,7 +79,7 @@ namespace GameOfLife
                 FirstLaunchInitialization();
             }
 
-            _menuNavigator.MainMenuNavigator();
+            _menuNavigator.NavigateMenu(MenuViews.MainMenu, _inputController.HandleInputMainMenu);
             RunGame();
         }
 
@@ -88,6 +89,7 @@ namespace GameOfLife
         public void RunGame()
         {
             ConsoleKey runTimeKeyPress;
+            Console.Clear();
             InitializationFinished = true;
             do
             {
@@ -101,7 +103,7 @@ namespace GameOfLife
                 runTimeKeyPress = _inputController.RuntimeKeyReader(MultipleGamesMode); // Checks for Spacebar or Arrows presses.
             } while (runTimeKeyPress != ConsoleKey.Escape);
 
-            _menuNavigator.ExitMenuNavigator(runTimeKeyPress);
+            _menuNavigator.NavigateExitMenu(runTimeKeyPress);
         }
 
         /// <summary>

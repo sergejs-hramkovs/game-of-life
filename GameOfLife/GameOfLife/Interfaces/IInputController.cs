@@ -13,11 +13,11 @@ namespace GameOfLife.Interfaces
         void Injection(IMainEngine engine, IUserInterfaceFiller userInterfaceViews, IFileIO file, IRenderer render, IFieldOperations operations, ILibrary library,
             IMenuNavigator? menuNavigator = null);
 
-        void MainMenuInputProcessor();
+        void HandleInputMainMenu();
 
-        void SeedingTypeMenuInputProcessor();
+        void HandleInputSeedingTypeMenu();
 
-        void GliderGunMenuInputProcessor();
+        void HandleInputGliderGunMenu();
 
         void EnterFieldDimensions(bool wrongInput);
 
@@ -41,11 +41,11 @@ namespace GameOfLife.Interfaces
 
         void EnterMultipleGamesQuantity();
 
-        void CheckInputMultipleGamesMenuFieldSize();
+        void HandleInputMultipleGamesMenuFieldSize();
 
         ConsoleKey RuntimeKeyReader(bool multipleGamesMode = false);
 
-        void SingleGameMenuInputProcessor();
+        void HandleInputSingleGameMenu();
 
         void LoadGameMenuInputProcessor();
     }

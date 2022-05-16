@@ -1,21 +1,15 @@
-﻿namespace GameOfLife.Interfaces
+﻿using GameOfLife.Models;
+
+namespace GameOfLife.Interfaces
 {
     public interface IMenuNavigator
     {
-        void Injection(IRenderer renderer, IInputController inputController, IMainEngine engine, IFieldOperations fieldOperations);
+        void Inject(IRenderer renderer, IInputController inputController, IMainEngine engine, IFieldOperations fieldOperations);
 
-        void MainMenuNavigator();
+        public void NavigateMenu(string[] menu, Action HandleInput, bool clearScr = true, Action<MultipleGamesModel, bool>? Render = null);
 
-        void SeedingTypeMenuNavigator();
+        void NavigateMultipleGamesMenu();
 
-        void SingleGameMenuNavigator();
-
-        void MultipleGamesMenuNavigator();
-
-        void LoadGameMenuNavigator();
-
-        void GliderGunModeMenuNavigator();
-
-        void ExitMenuNavigator(ConsoleKey runTimeKeyPress);
+        void NavigateExitMenu(ConsoleKey runTimeKeyPress);
     }
 }

@@ -44,32 +44,37 @@ namespace GameOfLife
         /// <summary>
         /// Method to take and process user's input in the main menu.
         /// </summary>
-        public void MainMenuInputProcessor()
+        public void HandleInputMainMenu()
         {
             WrongInput = false;
             switch (Console.ReadKey(true).Key)
             {
                 // Single game.
                 case ConsoleKey.D1:
-                    _menuNavigator.SingleGameMenuNavigator();
+                    _menuNavigator.NavigateMenu(MenuViews.SingleGameMenu, HandleInputSingleGameMenu, clearScr: true);
+                    _engine.MultipleGames.InitializeSingleGameParameters();
+                    if (!_engine.MultipleGamesMode && !_engine.SavedGameLoaded && !_engine.GliderGunMode)
+                    {
+                        _menuNavigator.NavigateMenu(MenuViews.SeedingTypeMenu, HandleInputSeedingTypeMenu, clearScr: false, _renderer.GridOfFieldsRenderer);
+                    }
                     break;
 
                 // Multiple games.
                 case ConsoleKey.D2:
                     _engine.MultipleGamesMode = true;
-                    _menuNavigator.MultipleGamesMenuNavigator();
+                    _menuNavigator.NavigateMultipleGamesMenu();
                     break;
 
                 // Load game(s)
                 case ConsoleKey.D3:
                     _engine.SavedGameLoaded = true;
-                    _menuNavigator.LoadGameMenuNavigator();
+                    _menuNavigator.NavigateMenu(MenuViews.LoadGameMenu, LoadGameMenuInputProcessor);
                     break;
 
                 // Glider Gun Mode
                 case ConsoleKey.D4:
                     _engine.GliderGunMode = true;
-                    _menuNavigator.GliderGunModeMenuNavigator();
+                    _menuNavigator.NavigateMenu(MenuViews.GliderGunModeMenu, HandleInputGliderGunMenu);
                     _engine.MultipleGames.InitializeSingleGameParameters();
                     break;
 
@@ -89,7 +94,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to to take process user's input in the single game menu.
         /// </summary>
-        public void SingleGameMenuInputProcessor()
+        public void HandleInputSingleGameMenu()
         {
             WrongInput = false;
             switch (Console.ReadKey(true).Key)
@@ -138,7 +143,7 @@ namespace GameOfLife
         /// Method to take and process user's input in the Field Seeding Menu.
         /// </summary>
         /// <returns>Returns 'true' if the correct key is pressed, otherwise 'false'</returns>
-        public void SeedingTypeMenuInputProcessor()
+        public void HandleInputSeedingTypeMenu()
         {
             WrongInput = false;
             switch (Console.ReadKey(true).Key)
@@ -168,7 +173,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to take and process user's input in the Glider Gun Menu.
         /// </summary>
-        public void GliderGunMenuInputProcessor()
+        public void HandleInputGliderGunMenu()
         {
             WrongInput = false;
             switch (Console.ReadKey(true).Key)
@@ -493,7 +498,6 @@ namespace GameOfLife
         /// </summary>
         public void ChooseMultipleGameNumbersMenuInputProcessor()
         {
-            Random random = new();
             WrongInput = false;
             switch (Console.ReadKey(true).Key)
             {
@@ -508,7 +512,7 @@ namespace GameOfLife
                 case ConsoleKey.D2:
                     for (int gameNumbersEntered = 0; gameNumbersEntered < _engine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
                     {
-                        _engine.MultipleGames.GamesToBeDisplayed.Add(random.Next(0, _engine.MultipleGames.ListOfGames.Count));
+                        _engine.MultipleGames.GamesToBeDisplayed.Add(gameNumbersEntered);
                     }
 
                     break;
@@ -526,7 +530,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to take and process user's input in the Multiple Games Mode field size choosing Menu.
         /// </summary>
-        public void CheckInputMultipleGamesMenuFieldSize()
+        public void HandleInputMultipleGamesMenuFieldSize()
         {
             WrongInput = false;
             switch (Console.ReadKey(true).Key)

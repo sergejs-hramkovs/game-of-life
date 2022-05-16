@@ -73,6 +73,7 @@ namespace GameOfLife.Models
         public List<GameFieldModel> ListOfGames { get; set; } = new();
         public List<int> GamesToBeDisplayed { get; set; } = new();
         public List<int> DeadFields { get; set; } = new();
+        public List<int> AliveFields { get; set; } = new();
 
         /// <summary>
         /// Method to create a list of Game Fields.

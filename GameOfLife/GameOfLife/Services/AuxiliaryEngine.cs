@@ -1,5 +1,5 @@
-﻿using GameOfLife.Models;
-using GameOfLife.Interfaces;
+﻿using GameOfLife.Interfaces;
+using GameOfLife.Models;
 using GameOfLife.Views;
 
 namespace GameOfLife.Services
@@ -69,14 +69,20 @@ namespace GameOfLife.Services
         /// </summary>
         public void RemoveDeadFieldsFromRendering(MultipleGamesModel multipleGames)
         {
-            Random random = new();
             for (int rowNumber = 0; rowNumber < multipleGames.NumberOfRows; rowNumber++)
             {
                 for (int i = rowNumber * multipleGames.NumberOfHorizontalFields; i < multipleGames.NumberOfHorizontalFields + rowNumber * multipleGames.NumberOfHorizontalFields; i++)
                 {
                     if ((multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[i]].AliveCellsNumber == 0) && (multipleGames.NumberOfFieldsAlive >= multipleGames.NumberOfGamesToBeDisplayed))
                     {
-                        multipleGames.GamesToBeDisplayed[i] = random.Next(0, multipleGames.TotalNumberOfGames);
+                        foreach (int aliveFieldNumber in _engine.MultipleGames.AliveFields)
+                        {
+                            if (!multipleGames.GamesToBeDisplayed.Contains(aliveFieldNumber))
+                            {
+                                multipleGames.GamesToBeDisplayed[i] = aliveFieldNumber;
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -96,6 +102,14 @@ namespace GameOfLife.Services
                 {
                     _engine.MultipleGames.NumberOfFieldsAlive--;
                     _engine.MultipleGames.DeadFields.Add(gameNumber);
+                    if (_engine.MultipleGames.AliveFields.Contains(gameNumber))
+                    {
+                        _engine.MultipleGames.AliveFields.Remove(gameNumber);
+                    }
+                }
+                else if (_engine.MultipleGames.ListOfGames[gameNumber].AliveCellsNumber > 0 && !_engine.MultipleGames.AliveFields.Contains(gameNumber))
+                {
+                    _engine.MultipleGames.AliveFields.Add(gameNumber);
                 }
             }
         }

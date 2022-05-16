@@ -1,4 +1,5 @@
 ﻿using GameOfLife.Interfaces;
+using GameOfLife.Models;
 using GameOfLife.Views;
 
 namespace GameOfLife.Services
@@ -13,7 +14,14 @@ namespace GameOfLife.Services
         private IMainEngine _engine;
         private IFieldOperations _fieldOperations;
 
-        public void Injection(IRenderer renderer, IInputController inputController, IMainEngine engine, IFieldOperations fieldOperations)
+        /// <summary>
+        /// Method to inject the required objects into the MenuNavigator class.
+        /// </summary>
+        /// <param name="renderer">An object of the Renderer class.</param>
+        /// <param name="inputController">An object of the InputController class.</param>
+        /// <param name="engine">An object of the Engine class.</param>
+        /// <param name="fieldOperations">An object of the FieldOperations class.</param>
+        public void Inject(IRenderer renderer, IInputController inputController, IMainEngine engine, IFieldOperations fieldOperations)
         {
             _renderer = renderer;
             _inputController = inputController;
@@ -21,83 +29,46 @@ namespace GameOfLife.Services
             _fieldOperations = fieldOperations;
         }
 
-        public void MainMenuNavigator()
+        /// <summary>
+        /// General method to navigate through the menus.
+        /// </summary>
+        /// <param name="menu">An instance of a menu to be displayed.</param>
+        /// <param name="HandleInput">Method to handle the user's input in the menu.</param>
+        public void NavigateMenu(string[] menu, Action HandleInput, bool clearScr = true, Action<MultipleGamesModel, bool>? Render = null)
         {
             do
             {
-                _renderer.MenuRenderer(MenuViews.MainMenuNew, wrongInput: _inputController.WrongInput);
-                _inputController.MainMenuInputProcessor();
-            } while (_inputController.WrongInput);
-            Console.Clear();
-        }
-
-        public void SingleGameMenuNavigator()
-        {
-            do
-            {
-                _renderer.MenuRenderer(MenuViews.SingleGameMenu, wrongInput: _inputController.WrongInput);
-                _inputController.SingleGameMenuInputProcessor();
-            } while (_inputController.WrongInput);
-
-            _engine.MultipleGames.InitializeSingleGameParameters();
-            SeedingTypeMenuNavigator();
-        }
-
-        public void SeedingTypeMenuNavigator()
-        {
-            do
-            {
-                if (!_engine.MultipleGamesMode && !_engine.SavedGameLoaded && !_engine.GliderGunMode)
-                {
-                    _renderer.GridOfFieldsRenderer(_engine.MultipleGames, clearScreen: true);
-                    _renderer.MenuRenderer(MenuViews.SeedingTypeMenu, clearScreen: false, wrongInput: _inputController.WrongInput);
-                    _inputController.SeedingTypeMenuInputProcessor();
-                }
+                Render?.Invoke(_engine.MultipleGames, !clearScr);
+                _renderer.MenuRenderer(menu, wrongInput: _inputController.WrongInput, clearScreen: clearScr);
+                HandleInput();
             } while (_inputController.WrongInput);
         }
 
-        public void MultipleGamesMenuNavigator()
+        /// <summary>
+        /// Method to navigate through all the Multiple Games Mode menus.
+        /// </summary>
+        public void NavigateMultipleGamesMenu()
         {
-            MultipleGamesQuantityMenuNavigator();
-            MultipleGamesFieldSizeMenuNavigator();
+            NavigateMultipleGamesQuantityMenu();
+            NavigateMenu(MenuViews.MultipleGamesModeFieldSizeChoiceMenu, _inputController.HandleInputMultipleGamesMenuFieldSize);
             _engine.MultipleGames.InitializeGames(_fieldOperations);
-            MultipleGamesNumbersMenuNavigator();
+            NavigateMenu(MenuViews.MultipleGamesModeMenu, _inputController.ChooseMultipleGameNumbersMenuInputProcessor);
         }
 
-        private void MultipleGamesQuantityMenuNavigator()
+        /// <summary>
+        /// Method to navigate through the 'Enter the quantity of games' Menu.
+        /// </summary>
+        private void NavigateMultipleGamesQuantityMenu()
         {
             _renderer.MenuRenderer(MenuViews.MultipleGamesModeGamesQuantityMenu, newLine: false);
             _inputController.EnterMultipleGamesQuantity();
         }
 
-        public void GliderGunModeMenuNavigator()
-        {
-            do
-            {
-                _renderer.MenuRenderer(MenuViews.GliderGunModeMenu, wrongInput: _inputController.WrongInput);
-                _inputController.GliderGunMenuInputProcessor();
-            } while (_inputController.WrongInput);
-        }
-
-        private void MultipleGamesFieldSizeMenuNavigator()
-        {
-            do
-            {
-                _renderer.MenuRenderer(MenuViews.MultipleGamesModeFieldSizeChoiceMenu, wrongInput: _inputController.WrongInput);
-                _inputController.CheckInputMultipleGamesMenuFieldSize();
-            } while (_inputController.WrongInput);
-        }
-
-        private void MultipleGamesNumbersMenuNavigator()
-        {
-            do
-            {
-                _renderer.MenuRenderer(MenuViews.MultipleGamesModeMenu, wrongInput: _inputController.WrongInput);
-                _inputController.ChooseMultipleGameNumbersMenuInputProcessor();
-            } while (_inputController.WrongInput);
-        }
-
-        public void ExitMenuNavigator(ConsoleKey runTimeKeyPress)
+        /// <summary>
+        /// Method to navigate through the Exit Menu.
+        /// </summary>
+        /// <param name="runTimeKeyPress">Parameter that stores the user's input in the Exit Menu.</param>
+        public void NavigateExitMenu(ConsoleKey runTimeKeyPress)
         {
             _renderer.MenuRenderer(MenuViews.ExitMenu, clearScreen: false);
             do
@@ -105,15 +76,6 @@ namespace GameOfLife.Services
                 runTimeKeyPress = Console.ReadKey(true).Key;
                 _inputController.CheckInputExitMenu(runTimeKeyPress);
             } while (runTimeKeyPress != ConsoleKey.Escape || runTimeKeyPress != ConsoleKey.R);
-        }
-
-        public void LoadGameMenuNavigator()
-        {
-            do
-            {
-                _renderer.MenuRenderer(MenuViews.LoadGameMenu, clearScreen: true, wrongInput: _inputController.WrongInput);
-                _inputController.LoadGameMenuInputProcessor();
-            } while (_inputController.WrongInput);
         }
     }
 }

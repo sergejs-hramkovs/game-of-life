@@ -5,7 +5,7 @@
     /// </summary>
     public static class MenuViews
     {
-        public static string[] MainMenuNew { get; } = {
+        public static string[] MainMenu { get; } = {
             StringConstants.WrongInputPhrase,
             " ### Welcome to the Game of Life! ###",
             "\n # Choose the game mode:",
@@ -108,7 +108,7 @@
             StringConstants.WrongInputPhrase,
             " ### Multiple Games Mode ###",
             "\n # 1. Enter numbers manually",
-            " # 2. Random numbers"
+            " # 2. First 'n' fields"
         };
 
         public static string[] MultipleGamesModeFieldSizeChoiceMenu { get; } = {
