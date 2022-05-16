@@ -49,19 +49,11 @@ namespace GameOfLife.Services
         /// </summary>
         public void NavigateMultipleGamesMenu()
         {
-            NavigateMultipleGamesQuantityMenu();
+            _renderer.MenuRenderer(MenuViews.MultipleGamesModeGamesQuantityMenu, newLine: false);
+            _inputController.EnterMultipleGamesQuantity();
             NavigateMenu(MenuViews.MultipleGamesModeFieldSizeChoiceMenu, _inputController.HandleInputMultipleGamesMenuFieldSize);
             _engine.MultipleGames.InitializeGames(_fieldOperations);
             NavigateMenu(MenuViews.MultipleGamesModeMenu, _inputController.ChooseMultipleGameNumbersMenuInputProcessor);
-        }
-
-        /// <summary>
-        /// Method to navigate through the 'Enter the quantity of games' Menu.
-        /// </summary>
-        private void NavigateMultipleGamesQuantityMenu()
-        {
-            _renderer.MenuRenderer(MenuViews.MultipleGamesModeGamesQuantityMenu, newLine: false);
-            _inputController.EnterMultipleGamesQuantity();
         }
 
         /// <summary>

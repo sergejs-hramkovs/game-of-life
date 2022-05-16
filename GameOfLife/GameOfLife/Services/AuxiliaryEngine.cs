@@ -98,6 +98,7 @@ namespace GameOfLife.Services
                 _rulesApplier.IterateThroughGameFieldCells(_engine.MultipleGames.ListOfGames[gameNumber], _engine.GliderGunMode);
                 _rulesApplier.FieldRefresh(_engine.MultipleGames.ListOfGames[gameNumber]);
                 CountAliveCells(_engine.MultipleGames.ListOfGames[gameNumber]);
+                _engine.MultipleGames.Generation++;
                 if (_engine.MultipleGames.ListOfGames[gameNumber].AliveCellsNumber == 0 && !_engine.MultipleGames.DeadFields.Contains(gameNumber))
                 {
                     _engine.MultipleGames.NumberOfFieldsAlive--;
@@ -121,7 +122,6 @@ namespace GameOfLife.Services
         {
             Console.SetCursorPosition(0, 0);
             CountTotalAliveCells(_engine.MultipleGames);
-            _engine.MultipleGames.Generation++;
             if (!_engine.MultipleGamesMode)
             {
                 _userInterfaceFiller.SingleGameRuntimeUICreator(_engine.MultipleGames, _engine.Delay);

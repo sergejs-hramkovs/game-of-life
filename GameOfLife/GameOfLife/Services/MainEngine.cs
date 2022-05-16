@@ -89,14 +89,22 @@ namespace GameOfLife
         public void RunGame()
         {
             ConsoleKey runTimeKeyPress;
+            bool firstTimeRendering = true;
             Console.Clear();
             InitializationFinished = true;
             do
             {
                 while (!Console.KeyAvailable)
                 {
-                    _auxiliaryEngine.RuntimeViewCreator();
+                    if (firstTimeRendering) // To load proper state, when loading from a file.
+                    {
+                        _auxiliaryEngine.RuntimeViewCreator();
+                        firstTimeRendering = false;
+                        Thread.Sleep(Delay);
+                    }
+
                     _auxiliaryEngine.RuntimeCalculations();
+                    _auxiliaryEngine.RuntimeViewCreator();
                     Thread.Sleep(Delay);
                 }
 
@@ -118,6 +126,7 @@ namespace GameOfLife
                 MultipleGames.GamesToBeDisplayed.Clear();
                 MultipleGamesMode = false;
                 MultipleGames.ListOfGames.Clear();
+                MultipleGames.AliveFields.Clear();
             }
 
             SavedGameLoaded = false;

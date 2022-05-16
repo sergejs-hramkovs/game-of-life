@@ -33,7 +33,7 @@ namespace GameOfLife.Interfaces
 
         void PauseGame(ConsoleKey keyPressed, bool multipleGamesMode = false);
 
-        int CheckInputSavedGameMenu(int numberOfFiles);
+        int HandleInputSavedGameMenu(int numberOfFiles);
 
         void CheckInputExitMenu(ConsoleKey keyPressed);
 

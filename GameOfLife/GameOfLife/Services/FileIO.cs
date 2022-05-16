@@ -92,7 +92,7 @@ namespace GameOfLife
             int xCoordinate = 0;
             int yCoordinate = 0;
             _engine.MultipleGames.ListOfGames.Add(new(inputList[4].Length / 2, inputList.Count - 4));
-            _engine.MultipleGames.ListOfGames[0].Generation = int.Parse(TakeGenerationNumberFromFile(inputList));
+            _engine.MultipleGames.Generation = int.Parse(TakeGenerationNumberFromFile(inputList));
             for (int listElementNumber = 4; listElementNumber < inputList.Count; listElementNumber++)
             {
                 foreach (char character in inputList[listElementNumber])
@@ -215,7 +215,7 @@ namespace GameOfLife
             }
 
             EnsureDirectoryExists(path);
-            CountFiles(FilePath);
+            CountFiles(path);
             if (NoSavedGames)
             {
                 _engine.StartGame(false);
@@ -266,7 +266,7 @@ namespace GameOfLife
                 }
                 _render.MenuRenderer(MenuViews.ChooseFileMenu, newLine: false, clearScreen: !_inputController.WrongInput);
                 MenuViews.FileNames.Clear();
-                _fileNumber = _inputController.CheckInputSavedGameMenu(NumberOfFiles);
+                _fileNumber = _inputController.HandleInputSavedGameMenu(NumberOfFiles);
                 Console.CursorVisible = false;
             } while (_inputController.WrongInput);
         }

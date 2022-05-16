@@ -5,17 +5,17 @@ using GameOfLife.Views;
 namespace GameOfLife
 {
     /// <summary>
-    /// InputController class takes input from the user and deals with it accordingly.
+    /// InputController class takes and processes user's input.
     /// </summary>
     [Serializable]
     public class InputController : IInputController
     {
-        private IMainEngine _engine;
+        private IMainEngine _mainEngine;
         private IFileIO _file;
         private IRenderer _renderer;
         private IFieldOperations _fieldOperations;
         private ILibrary _library;
-        private IUserInterfaceFiller _userInterfaceViews;
+        private IUserInterfaceFiller _userInterfaceFiller;
         private IMenuNavigator _menuNavigator;
         public bool WrongInput { get; set; }
         public bool CorrectKeyPressed { get; set; }
@@ -24,25 +24,27 @@ namespace GameOfLife
         /// <summary>
         /// Method to inject objects in the InputController class.
         /// </summary>
-        /// <param name="engine">Engine class parameter.</param>
-        /// <param name="file">File class parameter.</param>
-        /// <param name="renderer">Render class parameter.</param>
-        /// <param name="operations">FieldOperations class parameter.</param>
-        /// <param name="library">Library class parameter.</param>
-        public void Injection(IMainEngine engine, IUserInterfaceFiller? userInterfaceViews = null, IFileIO? file = null,
+        /// <param name="mainEngine">An object of the MainEngine class.</param>
+        /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
+        /// <param name="file">An object of the FileIO class.</param>
+        /// <param name="renderer">An object of the Renderer class.</param>
+        /// <param name="operations">An object of the FieldOperations class.</param>
+        /// <param name="library">An object of the Library class.</param>
+        /// <param name="menuNavigator">An object of the MenuNavigator class.</param>
+        public void Injection(IMainEngine mainEngine, IUserInterfaceFiller? userInterfaceFiller = null, IFileIO? file = null,
             IRenderer? renderer = null, IFieldOperations? operations = null, ILibrary? library = null, IMenuNavigator? menuNavigator = null)
         {
-            _engine = engine;
+            _mainEngine = mainEngine;
             _file = file;
             _renderer = renderer;
             _fieldOperations = operations;
             _library = library;
-            _userInterfaceViews = userInterfaceViews;
+            _userInterfaceFiller = userInterfaceFiller;
             _menuNavigator = menuNavigator;
         }
 
         /// <summary>
-        /// Method to take and process user's input in the main menu.
+        /// Method to take and process user's input in the Main Menu.
         /// </summary>
         public void HandleInputMainMenu()
         {
@@ -52,8 +54,8 @@ namespace GameOfLife
                 // Single game.
                 case ConsoleKey.D1:
                     _menuNavigator.NavigateMenu(MenuViews.SingleGameMenu, HandleInputSingleGameMenu, clearScr: true);
-                    _engine.MultipleGames.InitializeSingleGameParameters();
-                    if (!_engine.MultipleGamesMode && !_engine.SavedGameLoaded && !_engine.GliderGunMode)
+                    _mainEngine.MultipleGames.InitializeSingleGameParameters();
+                    if (!_mainEngine.MultipleGamesMode && !_mainEngine.SavedGameLoaded && !_mainEngine.GliderGunMode)
                     {
                         _menuNavigator.NavigateMenu(MenuViews.SeedingTypeMenu, HandleInputSeedingTypeMenu, clearScr: false, _renderer.GridOfFieldsRenderer);
                     }
@@ -61,28 +63,28 @@ namespace GameOfLife
 
                 // Multiple games.
                 case ConsoleKey.D2:
-                    _engine.MultipleGamesMode = true;
+                    _mainEngine.MultipleGamesMode = true;
                     _menuNavigator.NavigateMultipleGamesMenu();
                     break;
 
                 // Load game(s)
                 case ConsoleKey.D3:
-                    _engine.SavedGameLoaded = true;
+                    _mainEngine.SavedGameLoaded = true;
                     _menuNavigator.NavigateMenu(MenuViews.LoadGameMenu, LoadGameMenuInputProcessor);
                     break;
 
                 // Glider Gun Mode
                 case ConsoleKey.D4:
-                    _engine.GliderGunMode = true;
+                    _mainEngine.GliderGunMode = true;
                     _menuNavigator.NavigateMenu(MenuViews.GliderGunModeMenu, HandleInputGliderGunMenu);
-                    _engine.MultipleGames.InitializeSingleGameParameters();
+                    _mainEngine.MultipleGames.InitializeSingleGameParameters();
                     break;
 
                 // Rules and description page.
                 case ConsoleKey.F1:
                     _renderer.MenuRenderer(MenuViews.RulesPage);
                     Console.ReadKey();
-                    _engine.StartGame(false);
+                    _mainEngine.StartGame(false);
                     break;
 
                 default:
@@ -92,7 +94,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to to take process user's input in the single game menu.
+        /// Method to take and process user's input in the Single Game Menu.
         /// </summary>
         public void HandleInputSingleGameMenu()
         {
@@ -101,36 +103,36 @@ namespace GameOfLife
             {
                 case ConsoleKey.D1:
                     GameField = new(3, 3);
-                    _engine.MultipleGames.ListOfGames.Add(GameField);
+                    _mainEngine.MultipleGames.ListOfGames.Add(GameField);
                     break;
 
                 case ConsoleKey.D2:
                     GameField = new(5, 5);
-                    _engine.MultipleGames.ListOfGames.Add(GameField);
+                    _mainEngine.MultipleGames.ListOfGames.Add(GameField);
                     break;
 
                 case ConsoleKey.D3:
                     GameField = new(10, 10);
-                    _engine.MultipleGames.ListOfGames.Add(GameField);
+                    _mainEngine.MultipleGames.ListOfGames.Add(GameField);
                     break;
 
                 case ConsoleKey.D4:
                     GameField = new(20, 20);
-                    _engine.MultipleGames.ListOfGames.Add(GameField);
+                    _mainEngine.MultipleGames.ListOfGames.Add(GameField);
                     break;
 
                 case ConsoleKey.D5:
                     GameField = new(75, 40);
-                    _engine.MultipleGames.ListOfGames.Add(GameField);
+                    _mainEngine.MultipleGames.ListOfGames.Add(GameField);
                     break;
 
                 case ConsoleKey.D6:
                     EnterFieldDimensions(WrongInput);
-                    _engine.MultipleGames.ListOfGames.Add(GameField);
+                    _mainEngine.MultipleGames.ListOfGames.Add(GameField);
                     break;
 
                 case ConsoleKey.Escape:
-                    _engine.StartGame(false);
+                    _mainEngine.StartGame(false);
                     break;
 
                 default:
@@ -142,14 +144,13 @@ namespace GameOfLife
         /// <summary>
         /// Method to take and process user's input in the Field Seeding Menu.
         /// </summary>
-        /// <returns>Returns 'true' if the correct key is pressed, otherwise 'false'</returns>
         public void HandleInputSeedingTypeMenu()
         {
             WrongInput = false;
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
-                    _fieldOperations.ManualSeeding(_engine.MultipleGames);
+                    _fieldOperations.ManualSeeding(_mainEngine.MultipleGames);
                     break;
 
                 case ConsoleKey.D2:
@@ -157,11 +158,11 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.D3:
-                    _fieldOperations.LibrarySeeding(_engine.MultipleGames);
+                    _fieldOperations.LibrarySeeding(_mainEngine.MultipleGames);
                     break;
 
                 case ConsoleKey.Escape:
-                    _engine.StartGame(false);
+                    _mainEngine.StartGame(false);
                     break;
 
                 default:
@@ -179,22 +180,22 @@ namespace GameOfLife
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
-                    _engine.GliderGunType = 1;
+                    _mainEngine.GliderGunType = 1;
                     GameField = new(40, 30);
-                    _engine.MultipleGames.ListOfGames.Add(GameField);
-                    _library.SpawnGosperGliderGun(_engine.MultipleGames.ListOfGames[0], 1, 1);
+                    _mainEngine.MultipleGames.ListOfGames.Add(GameField);
+                    _library.SpawnGosperGliderGun(_mainEngine.MultipleGames.ListOfGames[0], 1, 1);
                     break;
 
 
                 case ConsoleKey.D2:
-                    _engine.GliderGunType = 2;
+                    _mainEngine.GliderGunType = 2;
                     GameField = new(37, 40);
-                    _engine.MultipleGames.ListOfGames.Add(GameField);
-                    _library.SpawnSimkinGliderGun(_engine.MultipleGames.ListOfGames[0], 0, 16);
+                    _mainEngine.MultipleGames.ListOfGames.Add(GameField);
+                    _library.SpawnSimkinGliderGun(_mainEngine.MultipleGames.ListOfGames[0], 0, 16);
                     break;
 
                 case ConsoleKey.Escape:
-                    _engine.StartGame(false);
+                    _mainEngine.StartGame(false);
                     break;
 
                 default:
@@ -207,7 +208,6 @@ namespace GameOfLife
         /// Method to take and process the Game Field dimensions entered by the user.
         /// </summary>
         /// <param name="wrongInput">Parameter that represents if there was wrong input.</param>
-        /// <returns>Returns an instance of the GameFieldModel class.</returns>
         public void EnterFieldDimensions(bool wrongInput)
         {
             Console.CursorVisible = true;
@@ -292,24 +292,24 @@ namespace GameOfLife
         {
             switch (Console.ReadKey(true).Key)
             {
-                case ConsoleKey.Escape:
-                    return true;
-
                 case ConsoleKey.D1:
-                    _fieldOperations.CallSpawningMethod(_engine.MultipleGames, _library.SpawnGlider);
+                    _fieldOperations.CallSpawningMethod(_mainEngine.MultipleGames, _library.SpawnGlider);
                     return false;
 
                 case ConsoleKey.D2:
-                    _fieldOperations.CallSpawningMethod(_engine.MultipleGames, _library.SpawnLightWeight);
+                    _fieldOperations.CallSpawningMethod(_mainEngine.MultipleGames, _library.SpawnLightWeight);
                     return false;
 
                 case ConsoleKey.D3:
-                    _fieldOperations.CallSpawningMethod(_engine.MultipleGames, _library.SpawnMiddleWeight);
+                    _fieldOperations.CallSpawningMethod(_mainEngine.MultipleGames, _library.SpawnMiddleWeight);
                     return false;
 
                 case ConsoleKey.D4:
-                    _fieldOperations.CallSpawningMethod(_engine.MultipleGames, _library.SpawnHeavyWeight);
+                    _fieldOperations.CallSpawningMethod(_mainEngine.MultipleGames, _library.SpawnHeavyWeight);
                     return false;
+
+                case ConsoleKey.Escape:
+                    return true;
 
                 default:
                     WrongInput = true;
@@ -318,11 +318,11 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to take and process the user's choice of the saved game file.
+        /// Method to take and process the user's choice of the Saved Game file.
         /// </summary>
         /// <param name="numberOfFiles">The number of saved game files currently in the folder.</param>
-        /// <returns>Returns the number of the saved game file to load.</returns>
-        public int CheckInputSavedGameMenu(int numberOfFiles)
+        /// <returns>Returns the number of the Saved Game file to load.</returns>
+        public int HandleInputSavedGameMenu(int numberOfFiles)
         {
             string userInput;
             int chosenFile = -1;
@@ -341,7 +341,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to change the time delay if LeftArrow or RightArrow keys are pressed.
+        /// Method to change the time delay between generations if LeftArrow or RightArrow keys are pressed.
         /// </summary>
         /// <param name="keyPressed">Parameters which stores Left and Right Arrow key presses.</param>
         public void ChangeDelay(ConsoleKey keyPressed)
@@ -349,27 +349,27 @@ namespace GameOfLife
             switch (keyPressed)
             {
                 case ConsoleKey.LeftArrow:
-                    if (_engine.Delay <= 100 && _engine.Delay > 10)
+                    if (_mainEngine.Delay <= 100 && _mainEngine.Delay > 10)
                     {
-                        _engine.Delay -= 10;
+                        _mainEngine.Delay -= 10;
                     }
-                    else if (_engine.Delay > 100)
+                    else if (_mainEngine.Delay > 100)
                     {
-                        _engine.Delay -= 100;
+                        _mainEngine.Delay -= 100;
                     }
 
                     break;
 
                 case ConsoleKey.RightArrow:
-                    if (_engine.Delay < 2000)
+                    if (_mainEngine.Delay < 2000)
                     {
-                        if (_engine.Delay < 100)
+                        if (_mainEngine.Delay < 100)
                         {
-                            _engine.Delay += 10;
+                            _mainEngine.Delay += 10;
                         }
                         else
                         {
-                            _engine.Delay += 100;
+                            _mainEngine.Delay += 100;
                         }
                     }
 
@@ -381,21 +381,23 @@ namespace GameOfLife
         /// Method to take and process user's input in the Pause Menu.
         /// </summary>
         /// <param name="keyPressed">Parameter which stores the key pressed in the Pause Menu.</param>
+        /// <param name="multipleGamesMode">Parameter that represents if the Multiple Games Mode is enabled, 'false' by default.</param>
         public void CheckInputPauseMenu(ConsoleKey keyPressed, bool multipleGamesMode = false)
         {
             switch (keyPressed)
             {
                 case ConsoleKey.S:
-                    if (!_engine.MultipleGamesMode)
+                    if (!_mainEngine.MultipleGamesMode)
                     {
-                        _file.SaveGameFieldToFile(GameField);
-                        _userInterfaceViews.SingleGameRuntimeUICreator(_engine.MultipleGames, _engine.Delay);
+                        _mainEngine.MultipleGames.ListOfGames[0].Generation = _mainEngine.MultipleGames.Generation;
+                        _file.SaveGameFieldToFile(_mainEngine.MultipleGames.ListOfGames[0]);
+                        _userInterfaceFiller.SingleGameRuntimeUICreator(_mainEngine.MultipleGames, _mainEngine.Delay);
                         _renderer.MenuRenderer(MenuViews.SingleGameUI, clearScreen: true);
-                        _renderer.GridOfFieldsRenderer(_engine.MultipleGames);
+                        _renderer.GridOfFieldsRenderer(_mainEngine.MultipleGames);
                     }
                     else
                     {
-                        _file.SaveMultipleGamesToFile(_engine.MultipleGames);
+                        _file.SaveMultipleGamesToFile(_mainEngine.MultipleGames);
                     }
 
                     Console.WriteLine(StringConstants.SuccessfullySavedPhrase);
@@ -408,14 +410,14 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.R:
-                    _engine.RestartGame();
+                    _mainEngine.RestartGame();
                     break;
 
                 case ConsoleKey.N:
                     if (multipleGamesMode)
                     {
-                        _engine.MultipleGames.GamesToBeDisplayed.Clear();
-                        for (int gameNumbersEntered = 0; gameNumbersEntered < _engine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
+                        _mainEngine.MultipleGames.GamesToBeDisplayed.Clear();
+                        for (int gameNumbersEntered = 0; gameNumbersEntered < _mainEngine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
                         {
                             EnterGameNumbersToBeDisplayed();
                         }
@@ -434,6 +436,7 @@ namespace GameOfLife
         /// Method to pause the game by pressing the Spacebar.
         /// </summary>
         /// <param name="keyPressed">Parameter which stores Spacebar key press.</param>
+        /// <param name="multipleGamesMode">Parameter that represents if the Multiple Games Mode is enabled, 'false' by default.</param>
         public void PauseGame(ConsoleKey keyPressed, bool multipleGamesMode = false)
         {
             ConsoleKey pauseMenuKeyPress;
@@ -453,7 +456,7 @@ namespace GameOfLife
         {
             if (keyPressed == ConsoleKey.R)
             {
-                _engine.RestartGame();
+                _mainEngine.RestartGame();
             }
             else if (keyPressed == ConsoleKey.Escape)
             {
@@ -473,11 +476,11 @@ namespace GameOfLife
                 Console.WriteLine(StringConstants.DashesConstant);
                 Console.Write(StringConstants.EnterGameNumberPhrase);
                 gameNumber = Console.ReadLine();
-                if (int.TryParse(gameNumber, out var number) && number >= 0 && number < _engine.MultipleGames.TotalNumberOfGames)
+                if (int.TryParse(gameNumber, out var number) && number >= 0 && (number < _mainEngine.MultipleGames.TotalNumberOfGames))
                 {
-                    if (!_engine.MultipleGames.GamesToBeDisplayed.Contains(number))
+                    if (!_mainEngine.MultipleGames.GamesToBeDisplayed.Contains(number))
                     {
-                        _engine.MultipleGames.GamesToBeDisplayed.Add(number);
+                        _mainEngine.MultipleGames.GamesToBeDisplayed.Add(number);
                         Console.CursorVisible = false;
                         break;
                     }
@@ -502,7 +505,7 @@ namespace GameOfLife
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
-                    for (int gameNumbersEntered = 0; gameNumbersEntered < _engine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
+                    for (int gameNumbersEntered = 0; gameNumbersEntered < _mainEngine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
                     {
                         EnterGameNumbersToBeDisplayed();
                     }
@@ -510,15 +513,15 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.D2:
-                    for (int gameNumbersEntered = 0; gameNumbersEntered < _engine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
+                    for (int gameNumbersEntered = 0; gameNumbersEntered < _mainEngine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
                     {
-                        _engine.MultipleGames.GamesToBeDisplayed.Add(gameNumbersEntered);
+                        _mainEngine.MultipleGames.GamesToBeDisplayed.Add(gameNumbersEntered);
                     }
 
                     break;
 
                 case ConsoleKey.Escape:
-                    _engine.StartGame(false);
+                    _mainEngine.StartGame(false);
                     break;
 
                 default:
@@ -536,31 +539,31 @@ namespace GameOfLife
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
-                    _engine.MultipleGames.Length = 10;
-                    _engine.MultipleGames.Width = 10;
-                    _engine.MultipleGames.NumberOfGamesToBeDisplayed = 24;
+                    _mainEngine.MultipleGames.Length = 10;
+                    _mainEngine.MultipleGames.Width = 10;
+                    _mainEngine.MultipleGames.NumberOfGamesToBeDisplayed = 24;
                     break;
 
                 case ConsoleKey.D2:
-                    _engine.MultipleGames.Length = 15;
-                    _engine.MultipleGames.Width = 15;
-                    _engine.MultipleGames.NumberOfGamesToBeDisplayed = 12;
+                    _mainEngine.MultipleGames.Length = 15;
+                    _mainEngine.MultipleGames.Width = 15;
+                    _mainEngine.MultipleGames.NumberOfGamesToBeDisplayed = 12;
                     break;
 
                 case ConsoleKey.D3:
-                    _engine.MultipleGames.Length = 20;
-                    _engine.MultipleGames.Width = 20;
-                    _engine.MultipleGames.NumberOfGamesToBeDisplayed = 6;
+                    _mainEngine.MultipleGames.Length = 20;
+                    _mainEngine.MultipleGames.Width = 20;
+                    _mainEngine.MultipleGames.NumberOfGamesToBeDisplayed = 6;
                     break;
 
                 case ConsoleKey.D4:
-                    _engine.MultipleGames.Length = 25;
-                    _engine.MultipleGames.Width = 25;
-                    _engine.MultipleGames.NumberOfGamesToBeDisplayed = 6;
+                    _mainEngine.MultipleGames.Length = 25;
+                    _mainEngine.MultipleGames.Width = 25;
+                    _mainEngine.MultipleGames.NumberOfGamesToBeDisplayed = 6;
                     break;
 
                 case ConsoleKey.Escape:
-                    _engine.StartGame(false);
+                    _mainEngine.StartGame(false);
                     break;
 
                 default:
@@ -579,7 +582,7 @@ namespace GameOfLife
             {
                 if (int.TryParse(Console.ReadLine(), out var totalNumberOfGames) && totalNumberOfGames >= 24 && totalNumberOfGames <= 10000)
                 {
-                    _engine.MultipleGames.TotalNumberOfGames = totalNumberOfGames;
+                    _mainEngine.MultipleGames.TotalNumberOfGames = totalNumberOfGames;
                     break;
                 }
                 else
@@ -601,17 +604,17 @@ namespace GameOfLife
             {
                 case ConsoleKey.D1:
                     _file.InitiateLoadingFromFile();
-                    _engine.MultipleGames.InitializeSingleGameParameters();
+                    _mainEngine.MultipleGames.InitializeSingleGameParameters();
                     break;
 
                 case ConsoleKey.D2:
-                    _engine.MultipleGamesMode = true;
-                    _engine.SavedGameLoaded = true;
+                    _mainEngine.MultipleGamesMode = true;
+                    _mainEngine.SavedGameLoaded = true;
                     _file.InitiateLoadingFromFile(loadMultipleGames: true);
                     break;
 
                 case ConsoleKey.Escape:
-                    _engine.StartGame(false);
+                    _mainEngine.StartGame(false);
                     break;
 
                 default:
@@ -623,6 +626,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to deal with key presses for pause or delay changing during the runtime.
         /// </summary>
+        /// <param name="multipleGamesMode">Parameter that represents if the Multiple Games Mode is enabled, 'false' by default.</param>
         /// <returns>Returns the pressed key.</returns>
         public ConsoleKey RuntimeKeyReader(bool multipleGamesMode = false)
         {
