@@ -60,9 +60,10 @@ namespace GameOfLife.Services
         /// Method to navigate through the Exit Menu.
         /// </summary>
         /// <param name="runTimeKeyPress">Parameter that stores the user's input in the Exit Menu.</param>
-        public void NavigateExitMenu(ConsoleKey runTimeKeyPress)
+        public void NavigateExitMenu(bool gameIsOver)
         {
-            _renderer.MenuRenderer(MenuViews.ExitMenu, clearScreen: false);
+            ConsoleKey runTimeKeyPress;
+            _renderer.MenuRenderer(MenuViews.ExitMenu, clearScreen: false, gameOver: gameIsOver);
             do
             {
                 runTimeKeyPress = Console.ReadKey(true).Key;

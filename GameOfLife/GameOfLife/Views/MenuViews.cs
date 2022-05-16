@@ -68,6 +68,7 @@
         };
 
         public static string[] ExitMenu { get; } = {
+            StringConstants.GameOverPhrase,
             "\n # Press 'R' to restart",
             " # Press 'Esc' to exit"
         };
@@ -134,16 +135,6 @@
             "\n 1. Single game",
             " 2. Multiple games",
             "\n # Press 'Esc' to go back to the main menu"
-        };
-
-        public static string[] GameOverUI { get; set; } = {
-            StringConstants.DashesConstant,
-            StringConstants.DashesConstant,
-            StringConstants.DashesConstant,
-            StringConstants.DashesConstant,
-            StringConstants.DashesConstant,
-            StringConstants.WholeFieldDeadPhrase,
-            ""
         };
 
         public static string[] WrongInputFileMenu { get; } = {

@@ -14,6 +14,8 @@ namespace GameOfLife.Interfaces
 
         bool InitializationFinished { get; set; }
 
+        bool GameOver { get; set; }
+
         int GliderGunType { get; set; }
 
         int Delay { get; set; }

@@ -46,15 +46,6 @@ namespace GameOfLife.Views
         }
 
         /// <summary>
-        /// Method to fill the Game Over UI with the number of survived generations.
-        /// </summary>
-        /// <param name="generation">The number of survived generations.</param>
-        public void GameOverUICreation(int generation)
-        {
-            MenuViews.GameOverUI[MenuViews.GameOverUI.Length - 1] = $"\n Generations survived: {generation}";
-        }
-
-        /// <summary>
         /// Method to fill the Choose File Menu with the list of file names.
         /// </summary>
         /// <param name="numberOfFiles">The number of saved games files.</param>

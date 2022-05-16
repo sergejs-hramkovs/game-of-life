@@ -10,6 +10,6 @@ namespace GameOfLife.Interfaces
 
         void NavigateMultipleGamesMenu();
 
-        void NavigateExitMenu(ConsoleKey runTimeKeyPress);
+        void NavigateExitMenu(bool gameIsOver);
     }
 }

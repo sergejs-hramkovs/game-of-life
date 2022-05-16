@@ -8,8 +8,6 @@ namespace GameOfLife.Interfaces
 
         void MultiGameRuntimeUICreator(MultipleGamesModel multipleGames, int delay);
 
-        void GameOverUICreation(int generation);
-
         void ChooseFileMenuCreation(int numberOfFiles, List<string> fileNames);
     }
 }

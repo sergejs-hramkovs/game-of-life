@@ -27,6 +27,7 @@ namespace GameOfLife
         public bool InitializationFinished { get; set; }
         public int GliderGunType { get; set; }
         public int Delay { get; set; } = 1000;
+        public bool GameOver { get; set; }
 
         /// <summary>
         /// Method to inject objects into the Engine class.
@@ -73,6 +74,7 @@ namespace GameOfLife
         /// <param name="firstLaunch">Parameter that shows if it is the first time launching the game or not.</param>
         public void StartGame(bool firstLaunch = true)
         {
+            Console.Clear();
             MultipleGames = new();
             if (firstLaunch)
             {
@@ -88,8 +90,9 @@ namespace GameOfLife
         /// </summary>
         public void RunGame()
         {
-            ConsoleKey runTimeKeyPress;
+            ConsoleKey runTimeKeyPress = 0;
             bool firstTimeRendering = true;
+            GameOver = false;
             Console.Clear();
             InitializationFinished = true;
             do
@@ -105,13 +108,24 @@ namespace GameOfLife
 
                     _auxiliaryEngine.RuntimeCalculations();
                     _auxiliaryEngine.RuntimeViewCreator();
+                    if (!MultipleGamesMode && MultipleGames.ListOfGames[0].AliveCellsNumber == 0)
+                    {
+                        GameOver = true;
+                        break;
+                    }
+
                     Thread.Sleep(Delay);
+                }
+
+                if (GameOver)
+                {
+                    break;
                 }
 
                 runTimeKeyPress = _inputController.RuntimeKeyReader(MultipleGamesMode); // Checks for Spacebar or Arrows presses.
             } while (runTimeKeyPress != ConsoleKey.Escape);
 
-            _menuNavigator.NavigateExitMenu(runTimeKeyPress);
+            _menuNavigator.NavigateExitMenu(GameOver);
         }
 
         /// <summary>

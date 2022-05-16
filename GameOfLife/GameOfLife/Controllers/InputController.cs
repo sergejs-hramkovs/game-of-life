@@ -69,7 +69,6 @@ namespace GameOfLife
 
                 // Load game(s)
                 case ConsoleKey.D3:
-                    _mainEngine.SavedGameLoaded = true;
                     _menuNavigator.NavigateMenu(MenuViews.LoadGameMenu, LoadGameMenuInputProcessor);
                     break;
 
@@ -603,6 +602,7 @@ namespace GameOfLife
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
+                    _mainEngine.SavedGameLoaded = true;
                     _file.InitiateLoadingFromFile();
                     _mainEngine.MultipleGames.InitializeSingleGameParameters();
                     break;

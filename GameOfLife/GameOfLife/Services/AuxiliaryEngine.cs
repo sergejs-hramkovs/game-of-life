@@ -98,7 +98,7 @@ namespace GameOfLife.Services
                 _rulesApplier.IterateThroughGameFieldCells(_engine.MultipleGames.ListOfGames[gameNumber], _engine.GliderGunMode);
                 _rulesApplier.FieldRefresh(_engine.MultipleGames.ListOfGames[gameNumber]);
                 CountAliveCells(_engine.MultipleGames.ListOfGames[gameNumber]);
-                _engine.MultipleGames.Generation++;
+                
                 if (_engine.MultipleGames.ListOfGames[gameNumber].AliveCellsNumber == 0 && !_engine.MultipleGames.DeadFields.Contains(gameNumber))
                 {
                     _engine.MultipleGames.NumberOfFieldsAlive--;
@@ -113,6 +113,8 @@ namespace GameOfLife.Services
                     _engine.MultipleGames.AliveFields.Add(gameNumber);
                 }
             }
+
+            _engine.MultipleGames.Generation++;
         }
 
         /// <summary>

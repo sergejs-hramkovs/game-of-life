@@ -25,7 +25,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="menuLines">An array of UI menu lines.</param>
         public void MenuRenderer(string[] menuLines, bool wrongInput = false, bool fileNotFound = false,
-            bool noSavedGames = false, bool clearScreen = false, bool multipleGames = false, bool newLine = true)
+            bool noSavedGames = false, bool clearScreen = false, bool multipleGames = false, bool newLine = true, bool gameOver = false)
         {
             if (clearScreen)
             {
@@ -40,6 +40,18 @@ namespace GameOfLife
                     {
                         Console.WriteLine(line);
                         wrongInput = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                    }
+                }
+                else if (line == StringConstants.GameOverPhrase)
+                {
+                    if (gameOver)
+                    {
+                        Console.WriteLine(line);
+                        gameOver = false;
                     }
                     else
                     {
