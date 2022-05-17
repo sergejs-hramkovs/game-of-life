@@ -10,5 +10,7 @@ namespace GameOfLife.Interfaces
             bool clearScreen = true, bool multipleGames = false, bool newLine = true, bool gameOver = false);
 
         void RenderGridOfFields(MultipleGamesModel multipleGames, bool clearScreen = false);
+
+        public void ChangeColorWrite(string textToWrite);
     }
 }

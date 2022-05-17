@@ -44,10 +44,8 @@ namespace GameOfLife
                 {
                     if (wrongInput)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(line);
+                        ChangeColorWrite(line);
                         wrongInput = false;
-                        Console.ForegroundColor = ConsoleColor.Black;
                     }
                     else
                     {
@@ -58,10 +56,8 @@ namespace GameOfLife
                 {
                     if (gameOver)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(line);
+                        ChangeColorWrite(line);
                         gameOver = false;
-                        Console.ForegroundColor = ConsoleColor.Black;
                     }
                     else
                     {
@@ -99,6 +95,13 @@ namespace GameOfLife
                     Console.WriteLine(line);
                 }
             }
+        }
+
+        public void ChangeColorWrite(string textToWrite)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(textToWrite);
+            Console.ForegroundColor = ConsoleColor.Black;
         }
 
         /// <summary>

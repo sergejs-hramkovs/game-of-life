@@ -13,7 +13,8 @@
             " 2. Multiple games",
             " 3. Load game(s)",
             " 4. Glider Gun Mode",
-            "\n # Press 'F1' to read the rules and the description of the game"
+            "\n # Press 'F1' to read the rules and the description of the game",
+            " # Press 'Esc' to quit"
         };
 
         public static string[] SingleGameMenu { get; } = {
@@ -118,8 +119,9 @@
         };
 
         public static string[] MultipleGamesModeGamesQuantityMenu { get; } = {
+            StringConstants.WrongInputPhrase,
             " ### Multiple Games Mode ###",
-            "\n# Enter how many games to run (24-1000): "
+            "\n # Enter how many games to run (24-1000): "
         };
 
         public static string[] LoadGameMenu { get; } = {

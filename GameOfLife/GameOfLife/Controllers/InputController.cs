@@ -86,6 +86,10 @@ namespace GameOfLife
                     _mainEngine.StartGame(false);
                     break;
 
+                case ConsoleKey.Escape:
+                    Environment.Exit(0);
+                    break;
+
                 default:
                     WrongInput = true;
                     break;
@@ -216,7 +220,7 @@ namespace GameOfLife
                 if (wrongInput)
                 {
                     Console.Clear();
-                    Console.WriteLine(StringConstants.WrongInputPhrase);
+                    _renderer.ChangeColorWrite(StringConstants.WrongInputPhrase);
                 }
 
                 Console.Write(StringConstants.EnterLengthPhrase);
@@ -576,9 +580,11 @@ namespace GameOfLife
         /// </summary>
         public void EnterMultipleGamesQuantity()
         {
+            
             Console.CursorVisible = true;
             while (true)
             {
+                _renderer.RenderMenu(MenuViews.MultipleGamesModeGamesQuantityMenu, newLine: false, wrongInput: WrongInput);
                 if (int.TryParse(Console.ReadLine(), out var totalNumberOfGames) && totalNumberOfGames >= 24 && totalNumberOfGames <= 1000)
                 {
                     _mainEngine.MultipleGames.TotalNumberOfGames = totalNumberOfGames;
@@ -586,10 +592,11 @@ namespace GameOfLife
                 }
                 else
                 {
-                    Console.WriteLine(StringConstants.WrongInputPhrase);
+                    WrongInput = true;
                 }
             }
 
+            WrongInput = false;
             Console.CursorVisible = false;
         }
 
