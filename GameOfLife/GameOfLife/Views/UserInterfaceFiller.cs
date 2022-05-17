@@ -12,9 +12,9 @@ namespace GameOfLife.Views
         /// <summary>
         /// Method to fill the runtime UI with relevant and current information about the Game Field.
         /// </summary>
-        /// <param name="gameField">A Game Field object filled with cells.</param>
+        /// <param name="multipleGames">A MultipleGamesModel object that stores the list of Game Fields.</param>
         /// <param name="delay">Delay in miliseconds between generations.</param>
-        public void SingleGameRuntimeUICreator(MultipleGamesModel multipleGames, int delay)
+        public void CreateSingleGameRuntimeUI(MultipleGamesModel multipleGames, int delay)
         {
             GameFieldModel gameField = multipleGames.ListOfGames[0];
             MenuViews.SingleGameUI = new string[]
@@ -32,9 +32,9 @@ namespace GameOfLife.Views
         /// <summary>
         /// Method to fill the runtime UI in the Multiple Games Mode with relevant information about the Game Fields.
         /// </summary>
+        /// <param name="multipleGames">A MultipleGamesModel object that stores the list of Game Fields.</param>
         /// <param name="delay">Delay in miliseconds between generations.</param>
-        /// <param name="multipleGames">An object with a list of Game Fields.</param>
-        public void MultiGameRuntimeUICreator(MultipleGamesModel multipleGames, int delay)
+        public void CreateMultiGameRuntimeUI(MultipleGamesModel multipleGames, int delay)
         {
             MenuViews.MultiGameUI = new string[]
             {
@@ -50,7 +50,7 @@ namespace GameOfLife.Views
         /// </summary>
         /// <param name="numberOfFiles">The number of saved games files.</param>
         /// <param name="fileNames">The list of names of saved games files.</param>
-        public void ChooseFileMenuCreation(int numberOfFiles, List<string> fileNames)
+        public void CreateFileChoosingMenu(int numberOfFiles, List<string> fileNames)
         {
             MenuViews.ChooseFileMenu = new string[6 + fileNames.Count];
             MenuViews.ChooseFileMenu[0] = " ### Choose which saved game to load ###";

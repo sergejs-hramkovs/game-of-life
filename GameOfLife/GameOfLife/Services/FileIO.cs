@@ -9,23 +9,23 @@ namespace GameOfLife
     /// <summary>
     /// The FileIO class deals with writing to the file and reading from it.
     /// It saves the state of the Game Field to the text file and then reads and restores data from it, if needed.
+    /// It also saves\loads the states of all the Game Fields in the Mupltiple Games Mode.
     /// </summary>
     [Serializable]
     public class FileIO : IFileIO
     {
-        private IRenderer _render;
         private IInputController _inputController;
         private IMainEngine _engine;
-        private IUserInterfaceFiller _userInterfaceFiller;
-        private string[] _stringField;
-        private int _fileNumber;
+        private IMenuNavigator _menuNavigator;
         private List<string> _stringList = new List<string>();
+        private string[] _stringField;
         public string FilePath { get; set; }
         public string MultipleGamesModeFilePath { get; set; }
         public bool FileReadingError { get; set; }
         public bool FileLoaded { get; set; }
         public bool NoSavedGames { get; set; }
         public int NumberOfFiles { get; private set; }
+        public int FileNumber { get; set; }
 
         /// <summary>
         /// Constructor that creates a path to the folder that stores the saved games files.
@@ -39,15 +39,13 @@ namespace GameOfLife
         /// <summary>
         /// Method to inject required objects into the class.
         /// </summary>
-        /// <param name="render">An instance of the Render class.</param>
         /// <param name="inputController">An instance of the InputController class.</param>
         /// <param name="engine">An instance of the Engine class.</param>
-        public void Injection(IRenderer render, IInputController inputController, IMainEngine engine, IUserInterfaceFiller userInterfaceFiller)
+        public void Inject(IInputController inputController, IMainEngine engine, IMenuNavigator menuNavigator)
         {
-            _render = render;
             _inputController = inputController;
             _engine = engine;
-            _userInterfaceFiller = userInterfaceFiller;
+            _menuNavigator = menuNavigator;
         }
 
         /// <summary>
@@ -67,7 +65,7 @@ namespace GameOfLife
         /// Method which converts 2-dimensional array to a 1-dimensional one in order to minimize the number of 'write' operations to a file.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
-        /// <returns>Returns new 1-dimensional array of game field rows.</returns>
+        /// <returns>Returns new 1-dimensional array of Game Field rows.</returns>
         private string[] ConvertGameFieldToArrayOfRows(GameFieldModel gameField)
         {
             _stringField = new string[gameField.Width];
@@ -83,10 +81,9 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method that takes the list of the Game Field cells and converts it into an array of the Game Field.
+        /// Method that takes the list of the Game Field cell rows and converts it into an array of the Game Field.
         /// </summary>
         /// <param name="inputList">List of the Game Field cell rows</param>
-        /// <returns>Returns an instance of the GameFieldModel class.</returns>
         private void ConvertListOfRowsToGameField(List<string> inputList)
         {
             int xCoordinate = 0;
@@ -120,7 +117,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to read the generation nubmer from the file.
+        /// Method to read the generation number from the file.
         /// </summary>
         /// <param name="inputList">List of the Game Field cell rows.</param>
         /// <returns>Returns the generation number in the string form.</returns>
@@ -139,7 +136,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method to save the current games state to a text file.
+        /// Method to save the Single Game Field state to a text file.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         public void SaveGameFieldToFile(GameFieldModel gameField)
@@ -164,7 +161,6 @@ namespace GameOfLife
         /// Method to load the saved field from the file.
         /// </summary>
         /// <param name="fileToLoad">The number of the saved game to be loaded.</param>
-        /// <returns>Returns call to ListToField method, which returns an instance of the GameField class.</returns>
         public void LoadGameFieldFromFile(int fileToLoad)
         {
             string line;
@@ -189,6 +185,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to count the number of files in the folder.
         /// </summary>
+        /// <param name="path">Parameter that stores the path to the folder.</param>
         private void CountFiles(string path)
         {
             DirectoryInfo directoryInfo = new(path);
@@ -202,9 +199,10 @@ namespace GameOfLife
         /// <summary>
         /// Method to call file loading methods.
         /// </summary>
+        /// <param name="loadMultipleGames">Parameter that represent whether Single Game or Multiple Games are loaded.</param>
         public void InitiateLoadingFromFile(bool loadMultipleGames = false)
         {
-            string path = "";
+            string path;
             if (!loadMultipleGames)
             {
                 path = FilePath;
@@ -225,22 +223,22 @@ namespace GameOfLife
             {
                 if (NumberOfFiles == 1)
                 {
-                    _fileNumber = 1;
+                    FileNumber = 1;
                 }
                 else
                 {
-                    InitiateLoadingFromFileMainLoop(path);
+                    _menuNavigator.NavigateSavedGameMenu(path);
                 }
 
                 if (!loadMultipleGames)
                 {
-                    LoadGameFieldFromFile(_fileNumber);
+                    LoadGameFieldFromFile(FileNumber);
                 }
                 else
                 {
-                    LoadMultipleGamesFromFile(_fileNumber);
+                    LoadMultipleGamesFromFile(FileNumber);
                 }
-                
+
                 if (!FileReadingError)
                 {
                     FileLoaded = true;
@@ -251,28 +249,7 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Method that deals with calling methods to render file choosing menu and to process user input.
-        /// </summary>
-        private void InitiateLoadingFromFileMainLoop(string filePath)
-        {
-            do
-            {
-                Console.CursorVisible = true;
-                CreateListOfFileNames(filePath);
-                _userInterfaceFiller.ChooseFileMenuCreation(NumberOfFiles, MenuViews.FileNames);
-                if (_inputController.WrongInput)
-                {
-                    _render.MenuRenderer(MenuViews.WrongInputFileMenu, wrongInput: true);
-                }
-                _render.MenuRenderer(MenuViews.ChooseFileMenu, newLine: false, clearScreen: !_inputController.WrongInput);
-                MenuViews.FileNames.Clear();
-                _fileNumber = _inputController.HandleInputSavedGameMenu(NumberOfFiles);
-                Console.CursorVisible = false;
-            } while (_inputController.WrongInput);
-        }
-
-        /// <summary>
-        /// Method to save all the game in the Multiple Games Mode to file.
+        /// Method to save all the games in the Multiple Games Mode to a file.
         /// </summary>
         /// <param name="multipleGames">An object that contains a list of Multiple Games.</param>
         public void SaveMultipleGamesToFile(MultipleGamesModel multipleGames)
@@ -289,7 +266,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to load Multiple Games from the file.
         /// </summary>
-        /// <returns>Returns an object containing a lsit of Multiple Games.</returns>
+        /// <param name="fileToLoad">The number of file to be loaded.</param>
         public void LoadMultipleGamesFromFile(int fileToLoad)
         {
             using (Stream stream = File.Open(MultipleGamesModeFilePath + $"games{fileToLoad}.bin", FileMode.Open))
@@ -303,7 +280,7 @@ namespace GameOfLife
         /// Method to create a list of names of the saved games files.
         /// </summary>
         /// <param name="filePath">The location of the folder.</param>
-        private void CreateListOfFileNames(string filePath)
+        public void CreateListOfFileNames(string filePath)
         {
             foreach (string file in Directory.GetFiles(filePath))
             {

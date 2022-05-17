@@ -84,7 +84,7 @@ namespace GameOfLife.Models
             for (int gameNumber = 0; gameNumber < TotalNumberOfGames; gameNumber++)
             {
                 ListOfGames.Add(new(Length, Width));
-                fieldOperations.RandomSeeding(ListOfGames[gameNumber]);
+                fieldOperations.PopulateFieldRandomly(ListOfGames[gameNumber]);
             }
 
             NumberOfFieldsAlive = ListOfGames.Count;

@@ -15,7 +15,7 @@ namespace GameOfLife
         /// Method to inject the Engine class into the Renderer class.
         /// </summary>
         /// <param name="engine"></param>
-        public void Injection(IMainEngine engine)
+        public void Inject(IMainEngine engine)
         {
             _engine = engine;
         }
@@ -24,8 +24,14 @@ namespace GameOfLife
         /// Method to iterate through an array of UI menu lines and to dispaly them.
         /// </summary>
         /// <param name="menuLines">An array of UI menu lines.</param>
-        public void MenuRenderer(string[] menuLines, bool wrongInput = false, bool fileNotFound = false,
-            bool noSavedGames = false, bool clearScreen = false, bool multipleGames = false, bool newLine = true, bool gameOver = false)
+        /// <param name="wrongInput">Parameter that shows if the was wrong input attempt, 'false' by default.</param>
+        /// <param name="noSavedGames">Parameter that shows if the Saved Games files are missing, ''false' by default.</param>
+        /// <param name="clearScreen">Parameter that states if the screen is to be cleared, 'false' by default.</param>
+        /// <param name="multipleGames">Parameter that shows if the Multiple Games Mode is enabled, 'false' by default.</param>
+        /// <param name="newLine">Parameter to disable jumping to a new line during input, 'true' by default.</param>
+        /// <param name="gameOver">Parameter that represents if the 'Game Over' state has been reached, 'false' by default.</param>
+        public void RenderMenu(string[] menuLines, bool wrongInput = false, bool noSavedGames = false,
+            bool clearScreen = false, bool multipleGames = false, bool newLine = true, bool gameOver = false)
         {
             if (clearScreen)
             {
@@ -56,14 +62,6 @@ namespace GameOfLife
                     else
                     {
                         Console.WriteLine();
-                    }
-                }
-                else if (line == StringConstants.FileNotFoundPhrase)
-                {
-                    if (fileNotFound)
-                    {
-                        Console.WriteLine(line);
-                        fileNotFound = false;
                     }
                 }
                 else if (line == StringConstants.NoSavedGamesPhrase)
@@ -103,7 +101,8 @@ namespace GameOfLife
         /// Method to render several rows of Game Fields.
         /// </summary>
         /// <param name="multipleGames">An object that contains a list of Game Fields.</param>
-        public void GridOfFieldsRenderer(MultipleGamesModel multipleGames, bool clearScreen = false)
+        /// <param name="clearScreen">Parameter that states if the screen is to be cleared, 'false' by default.</param>
+        public void RenderGridOfFields(MultipleGamesModel multipleGames, bool clearScreen = false)
         {
             if (clearScreen)
             {
@@ -112,7 +111,7 @@ namespace GameOfLife
 
             for (int rowNumber = 0; rowNumber < multipleGames.NumberOfRows; rowNumber++)
             {
-                RowOfFieldsRenderer(multipleGames, rowNumber);
+                RenderRowOfFields(multipleGames, rowNumber);
             }
         }
 
@@ -122,7 +121,7 @@ namespace GameOfLife
         /// <param name="multipleGames">An object of the MultiplGamesModel class that contains the list of all Game Fields.</param>
         /// <param name="rowNumber">The number of the Game Field row currently displayed.</param>
         /// <returns>Returns true - the fact that the whole row of titles was rendered.</returns>
-        private static bool TitleRenderer(MultipleGamesModel multipleGames, int rowNumber)
+        private static bool RenderTitle(MultipleGamesModel multipleGames, int rowNumber)
         {
             int gameNumber;
             string indentation = "";
@@ -166,8 +165,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="multipleGames">An instance of the MultipleGamesModel class.</param>
         /// <param name="rowNumber">The number of the Game Field row currently displayed.</param>
-        /// <returns>Returns the number of how many fields are displayed horizontally.</returns>
-        private void RowOfFieldsRenderer(MultipleGamesModel multipleGames, int rowNumber)
+        private void RenderRowOfFields(MultipleGamesModel multipleGames, int rowNumber)
         {
             bool titleRendered = false;
             Console.WriteLine();
@@ -175,7 +173,7 @@ namespace GameOfLife
             {
                 if (!titleRendered && _engine.MultipleGamesMode)
                 {
-                    titleRendered = TitleRenderer(multipleGames, rowNumber);
+                    titleRendered = RenderTitle(multipleGames, rowNumber);
                 }
 
                 for (int fieldNumber = 0; fieldNumber < multipleGames.NumberOfHorizontalFields; fieldNumber++)

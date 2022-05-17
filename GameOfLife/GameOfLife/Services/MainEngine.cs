@@ -39,7 +39,7 @@ namespace GameOfLife
         /// <param name="rulesApplier">An object of the RulesApplier class.</param>
         /// <param name="inputController">An object of the InputController class.</param>
         /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
-        public void Injection(IRenderer render, IFileIO file, IFieldOperations operations, ILibrary library,
+        public void Inject(IRenderer render, IFileIO file, IFieldOperations operations, ILibrary library,
             IRulesApplier rulesApplier, IInputController inputController, IUserInterfaceFiller userInterfaceFiller,
             IAuxiliaryEngine auxiliaryEngine, IMenuNavigator menuNavigator)
         {
@@ -57,13 +57,13 @@ namespace GameOfLife
         /// <summary>
         /// Method to perform object injections and to prepare the console window during the first launch of the game.
         /// </summary>
-        private void FirstLaunchInitialization()
+        private void InitializeParameters()
         {
-            _inputController.Injection(this, _userInterfaceFiller, _file, _renderer, _fieldOperations, _library, _menuNavigator);
-            _file.Injection(_renderer, _inputController, this, _userInterfaceFiller);
-            _menuNavigator.Inject(_renderer, _inputController, this, _fieldOperations);
-            _auxiliaryEngine.Injection(this, _rulesApplier, _renderer, _userInterfaceFiller);
-            _renderer.Injection(this);
+            _inputController.Inject(this, _userInterfaceFiller, _file, _renderer, _fieldOperations, _library, _menuNavigator);
+            _file.Inject(_inputController, this, _menuNavigator);
+            _menuNavigator.Inject(_renderer, _inputController, this, _fieldOperations, _file, _userInterfaceFiller);
+            _auxiliaryEngine.Inject(this, _rulesApplier, _renderer, _userInterfaceFiller);
+            _renderer.Inject(this);
             Console.CursorVisible = false;
             Console.SetWindowSize(175, 61);
         }
@@ -78,7 +78,7 @@ namespace GameOfLife
             MultipleGames = new();
             if (firstLaunch)
             {
-                FirstLaunchInitialization();
+                InitializeParameters();
             }
 
             _menuNavigator.NavigateMenu(MenuViews.MainMenu, _inputController.HandleInputMainMenu);
@@ -90,7 +90,7 @@ namespace GameOfLife
         /// </summary>
         public void RunGame()
         {
-            ConsoleKey runTimeKeyPress = 0;
+            ConsoleKey runTimeKeyPress;
             bool firstTimeRendering = true;
             GameOver = false;
             Console.Clear();
@@ -101,13 +101,13 @@ namespace GameOfLife
                 {
                     if (firstTimeRendering) // To load proper state, when loading from a file.
                     {
-                        _auxiliaryEngine.RuntimeViewCreator();
+                        _auxiliaryEngine.CreateRuntimeView();
                         firstTimeRendering = false;
                         Thread.Sleep(Delay);
                     }
 
-                    _auxiliaryEngine.RuntimeCalculations();
-                    _auxiliaryEngine.RuntimeViewCreator();
+                    _auxiliaryEngine.PerformRuntimeCalculations();
+                    _auxiliaryEngine.CreateRuntimeView();
                     if (!MultipleGamesMode && MultipleGames.ListOfGames[0].AliveCellsNumber == 0)
                     {
                         GameOver = true;
@@ -122,7 +122,7 @@ namespace GameOfLife
                     break;
                 }
 
-                runTimeKeyPress = _inputController.RuntimeKeyReader(MultipleGamesMode); // Checks for Spacebar or Arrows presses.
+                runTimeKeyPress = _inputController.ReadKeyRuntime(MultipleGamesMode); // Checks for Spacebar or Arrows presses.
             } while (runTimeKeyPress != ConsoleKey.Escape);
 
             _menuNavigator.NavigateExitMenu(GameOver);

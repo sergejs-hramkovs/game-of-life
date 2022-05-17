@@ -10,11 +10,11 @@ namespace GameOfLife.Interfaces
 
         bool StopDataInput { get; set; }
 
-        void ManualSeeding(MultipleGamesModel multipleGames);
+        void PopulateFieldManually(MultipleGamesModel multipleGames);
 
-        void RandomSeeding(GameFieldModel gameField);
+        void PopulateFieldRandomly(GameFieldModel gameField);
 
-        void LibrarySeeding(MultipleGamesModel multipleGames);
+        void PopulateFieldFromLibrary(MultipleGamesModel multipleGames);
 
         void CallSpawningMethod(MultipleGamesModel multipleGames, Action<GameFieldModel, int, int> SpawnLibraryObject);
     }

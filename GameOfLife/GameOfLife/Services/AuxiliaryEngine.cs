@@ -21,7 +21,7 @@ namespace GameOfLife.Services
         /// <param name="rulesApplier">An object of the RulesApplier class.</param>
         ///<param name="renderer">An object of the Renderer class.</param>
         /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
-        public void Injection(IMainEngine engine, IRulesApplier rulesApplier, IRenderer renderer, IUserInterfaceFiller userInterfaceFiller)
+        public void Inject(IMainEngine engine, IRulesApplier rulesApplier, IRenderer renderer, IUserInterfaceFiller userInterfaceFiller)
         {
             _engine = engine;
             _rulesApplier = rulesApplier;
@@ -30,10 +30,9 @@ namespace GameOfLife.Services
         }
 
         /// <summary>
-        /// Method to count the current number of alive cells on the field.
+        /// Method to count the number of alive cells on one field.
         /// </summary>
-        /// <param name="gameField">An instance of the GameFieldModel class.</param>
-        /// <returns>Returns the number of alive cells on the field.</returns>
+        /// <param name="gameField">A GameFieldModel object that contains the Game Field.</param>
         public void CountAliveCells(GameFieldModel gameField)
         {
             gameField.AliveCellsNumber = 0;
@@ -50,8 +49,9 @@ namespace GameOfLife.Services
         }
 
         /// <summary>
-        /// Method to count total alive cells number across all the fields in the Multiple Games Mode.
+        /// Method to count total alive cells number on all the fields in the Multiple Games Mode.
         /// </summary>
+        /// <param name="multipleGames">A MultipleGamesModel object that contains the list of Game Fields.</param>
         public void CountTotalAliveCells(MultipleGamesModel multipleGames)
         {
             GameFieldModel gameField;
@@ -67,6 +67,7 @@ namespace GameOfLife.Services
         /// <summary>
         /// Method to replace rendered dead fields with alive ones in the list of fields to be displayed.
         /// </summary>
+        /// <param name="multipleGames">A MultipleGamesModel object that contains the list of Game Fields.</param>
         public void RemoveDeadFieldsFromRendering(MultipleGamesModel multipleGames)
         {
             for (int rowNumber = 0; rowNumber < multipleGames.NumberOfRows; rowNumber++)
@@ -91,12 +92,12 @@ namespace GameOfLife.Services
         /// <summary>
         /// Method to perform the required runtime actions, like applying game rules and counting alive cells of each field.
         /// </summary>
-        public void RuntimeCalculations()
+        public void PerformRuntimeCalculations()
         {
             for (int gameNumber = 0; gameNumber < _engine.MultipleGames.TotalNumberOfGames; gameNumber++)
             {
                 _rulesApplier.IterateThroughGameFieldCells(_engine.MultipleGames.ListOfGames[gameNumber], _engine.GliderGunMode);
-                _rulesApplier.FieldRefresh(_engine.MultipleGames.ListOfGames[gameNumber]);
+                _rulesApplier.RefreshField(_engine.MultipleGames.ListOfGames[gameNumber]);
                 CountAliveCells(_engine.MultipleGames.ListOfGames[gameNumber]);
                 
                 if (_engine.MultipleGames.ListOfGames[gameNumber].AliveCellsNumber == 0 && !_engine.MultipleGames.DeadFields.Contains(gameNumber))
@@ -120,22 +121,22 @@ namespace GameOfLife.Services
         /// <summary>
         /// Method that is responsible for creation and displaying of the runtime UI and the Game Field(s).
         /// </summary>
-        public void RuntimeViewCreator()
+        public void CreateRuntimeView()
         {
             Console.SetCursorPosition(0, 0);
             CountTotalAliveCells(_engine.MultipleGames);
             if (!_engine.MultipleGamesMode)
             {
-                _userInterfaceFiller.SingleGameRuntimeUICreator(_engine.MultipleGames, _engine.Delay);
-                _renderer.MenuRenderer(MenuViews.SingleGameUI, clearScreen: false);
+                _userInterfaceFiller.CreateSingleGameRuntimeUI(_engine.MultipleGames, _engine.Delay);
+                _renderer.RenderMenu(MenuViews.SingleGameUI, clearScreen: false);
             }
             else
             {
-                _userInterfaceFiller.MultiGameRuntimeUICreator(_engine.MultipleGames, _engine.Delay);
-                _renderer.MenuRenderer(MenuViews.MultiGameUI, clearScreen: false);
+                _userInterfaceFiller.CreateMultiGameRuntimeUI(_engine.MultipleGames, _engine.Delay);
+                _renderer.RenderMenu(MenuViews.MultiGameUI, clearScreen: false);
             }
 
-            _renderer.GridOfFieldsRenderer(_engine.MultipleGames);
+            _renderer.RenderGridOfFields(_engine.MultipleGames);
             RemoveDeadFieldsFromRendering(_engine.MultipleGames);
         }
     }

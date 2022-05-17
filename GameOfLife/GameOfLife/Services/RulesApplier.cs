@@ -156,7 +156,7 @@ namespace GameOfLife
         /// Removes or creates new cells according to the rules.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
-        public void FieldRefresh(GameFieldModel gameField)
+        public void RefreshField(GameFieldModel gameField)
         {
             foreach ((int xCoordinate, int yCoordinate) cell in _cellsToDie)
             {

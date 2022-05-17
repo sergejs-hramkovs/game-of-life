@@ -16,7 +16,9 @@ namespace GameOfLife.Interfaces
 
         int NumberOfFiles { get; }
 
-        void Injection(IRenderer render, IInputController inputController, IMainEngine engine, IUserInterfaceFiller userInterfaceFiller);
+        int FileNumber { get; set; }
+
+        void Inject(IInputController inputController, IMainEngine engine, IMenuNavigator menuNavigator);
 
         void SaveGameFieldToFile(GameFieldModel gameField);
 
@@ -27,5 +29,7 @@ namespace GameOfLife.Interfaces
         void SaveMultipleGamesToFile(MultipleGamesModel multipleGames);
 
         void LoadMultipleGamesFromFile(int fileToLoad);
+
+        void CreateListOfFileNames(string filePath);
     }
 }

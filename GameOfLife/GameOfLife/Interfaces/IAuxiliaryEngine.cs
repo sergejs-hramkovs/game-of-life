@@ -4,11 +4,11 @@ namespace GameOfLife.Interfaces
 {
     public interface IAuxiliaryEngine
     {
-        void Injection(IMainEngine engine, IRulesApplier rulesApplier, IRenderer renderer, IUserInterfaceFiller userInterfaceFiller);
+        void Inject(IMainEngine engine, IRulesApplier rulesApplier, IRenderer renderer, IUserInterfaceFiller userInterfaceFiller);
 
-        void RuntimeCalculations();
+        void PerformRuntimeCalculations();
 
-        void RuntimeViewCreator();
+        void CreateRuntimeView();
 
         void CountAliveCells(GameFieldModel gameField);
 

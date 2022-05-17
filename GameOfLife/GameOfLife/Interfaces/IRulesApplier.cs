@@ -6,6 +6,6 @@ namespace GameOfLife.Interfaces
     {
         void IterateThroughGameFieldCells(GameFieldModel gameField, bool disableWrappingAroundField = false);
 
-        void FieldRefresh(GameFieldModel gameField);
+        void RefreshField(GameFieldModel gameField);
     }
 }

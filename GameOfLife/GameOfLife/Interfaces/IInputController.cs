@@ -10,8 +10,8 @@ namespace GameOfLife.Interfaces
 
         GameFieldModel GameField { get; set; }
 
-        void Injection(IMainEngine engine, IUserInterfaceFiller userInterfaceViews, IFileIO file, IRenderer render, IFieldOperations operations, ILibrary library,
-            IMenuNavigator? menuNavigator = null);
+        void Inject(IMainEngine engine, IUserInterfaceFiller userInterfaceViews, IFileIO file, IRenderer render,
+            IFieldOperations operations, ILibrary library, IMenuNavigator? menuNavigator = null);
 
         void HandleInputMainMenu();
 
@@ -25,17 +25,17 @@ namespace GameOfLife.Interfaces
 
         void EnterGameNumbersToBeDisplayed();
 
-        bool LibraryMenuInputProcessor();
+        bool HandleInputLibraryMenu();
 
-        void CheckInputPauseMenu(ConsoleKey keyPressed, bool multipleGamesMode = false);
+        void HandleInputPauseMenu(ConsoleKey keyPressed, bool multipleGamesMode = false);
 
-        void ChooseMultipleGameNumbersMenuInputProcessor();
+        void HandleInputMultipleGameNumbersMenu();
 
         void PauseGame(ConsoleKey keyPressed, bool multipleGamesMode = false);
 
         int HandleInputSavedGameMenu(int numberOfFiles);
 
-        void CheckInputExitMenu(ConsoleKey keyPressed);
+        void HandleInputExitMenu(ConsoleKey keyPressed);
 
         void ChangeDelay(ConsoleKey keyPressed);
 
@@ -43,10 +43,10 @@ namespace GameOfLife.Interfaces
 
         void HandleInputMultipleGamesMenuFieldSize();
 
-        ConsoleKey RuntimeKeyReader(bool multipleGamesMode = false);
+        ConsoleKey ReadKeyRuntime(bool multipleGamesMode = false);
 
         void HandleInputSingleGameMenu();
 
-        void LoadGameMenuInputProcessor();
+        void HandleInputLoadGameMenu();
     }
 }

@@ -11,7 +11,6 @@ namespace GameOfLife
     public class FieldOperations : IFieldOperations
     {
         private IRenderer _renderer;
-        private ILibrary _library;
         private IInputController _inputController;
         public int CoordinateX { get; set; }
         public int CoordinateY { get; set; }
@@ -20,33 +19,30 @@ namespace GameOfLife
         /// <summary>
         /// Constructor to inject required onjects in the class.
         /// </summary>
-        /// <param name="library">An instance of the Library class.</param>
         /// <param name="render">An instance of the Render class.</param>
         /// <param name="controller">An instance of the InputController class.</param>
-        public FieldOperations(ILibrary library, IRenderer render, IInputController controller)
+        public FieldOperations(IRenderer render, IInputController controller)
         {
-            _library = library;
             _renderer = render;
             _inputController = controller;
         }
 
         /// <summary>
-        /// Cell seeding coordinates are entered manually by the user.
+        /// Method to populate a field manually by entering cell cordinates manually.
         /// </summary>
-        /// <param name="gameField">An instance of the GameFieldModel class.</param>
-        /// <returns>Returns an instance of the GameFieldModel class with alive cells manually seeded in its field.</returns>
-        public void ManualSeeding(MultipleGamesModel multipleGames)
+        /// <param name="multipleGames">A MultipleGamesModel object that contains the list of Game Fields.</param>
+        public void PopulateFieldManually(MultipleGamesModel multipleGames)
         {
             while (true)
             {
                 Console.Clear();
                 if (!_inputController.WrongInput)
                 {
-                    _renderer.GridOfFieldsRenderer(multipleGames);
+                    _renderer.RenderGridOfFields(multipleGames);
                 }
                 else if (_inputController.WrongInput)
                 {
-                    _renderer.GridOfFieldsRenderer(multipleGames);
+                    _renderer.RenderGridOfFields(multipleGames);
                     Console.WriteLine("\n" + StringConstants.WrongInputPhrase);
                     _inputController.WrongInput = false;
                 }
@@ -81,11 +77,10 @@ namespace GameOfLife
         }
 
         /// <summary>
-        /// Cells amount and coordinates are generated automatically and randomly.
+        /// Method to populate a field with randomly generated cell coordinates.
         /// </summary>
-        /// <param name="gameField">An instance of the GameFieldModel class.</param>
-        /// <returns>Returns an instance of the GameFieldModel class with alive cells randomly seeded in its field.</returns>
-        public void RandomSeeding(GameFieldModel gameField)
+        /// <param name="gameField">A GameFieldModel object that contains the Game Field.</param>
+        public void PopulateFieldRandomly(GameFieldModel gameField)
         {
             Random random = new();
             int aliveCellCount = random.Next(1, gameField.Length * gameField.Width);
@@ -107,29 +102,29 @@ namespace GameOfLife
 
         /// <summary>
         /// Method to choose a cell pattern from the premade library.
-        /// </summary
-        public void LibrarySeeding(MultipleGamesModel multipleGames)
+        /// </summary>
+        /// <param name="multipleGames">A MultipleGamesModel object that containts the list of Game Fields.</param>
+        public void PopulateFieldFromLibrary(MultipleGamesModel multipleGames)
         {
-            ConsoleKey libraryChoice;
             do
             {
                 Console.Clear();
-                _renderer.GridOfFieldsRenderer(multipleGames);
-                _renderer.MenuRenderer(MenuViews.LibraryMenu, _inputController.WrongInput, clearScreen: false);
+                _renderer.RenderGridOfFields(multipleGames);
+                _renderer.RenderMenu(MenuViews.LibraryMenu, _inputController.WrongInput, clearScreen: false);
                 _inputController.WrongInput = false;
             }
-            while (!_inputController.LibraryMenuInputProcessor());
+            while (!_inputController.HandleInputLibraryMenu());
         }
 
         /// <summary>
-        /// Method to call one of the methods for spawning an object from the library.
+        /// Method to call one of the methods for spawning cell patterns from the library.
         /// </summary>
-        /// <param name="gameField">An instance of the GameFieldModel class.</param>
-        /// <param name="SpawnLibraryObject">Parameter that represents the method for spawning an object from the library that will be called.</param>
+        /// <param name="multipleGames">A MultipleGamesModel object that contains the list of Game Fields.</param>
+        /// <param name="SpawnLibraryObject">Parameter that represents the method for spawning a cell pattern from the library which is called.</param>
         public void CallSpawningMethod(MultipleGamesModel multipleGames, Action<GameFieldModel, int, int> SpawnLibraryObject)
         {
             Console.Clear();
-            _renderer.GridOfFieldsRenderer(multipleGames);
+            _renderer.RenderGridOfFields(multipleGames);
             if (_inputController.EnterCoordinates() && !StopDataInput)
             {
                 SpawnLibraryObject(multipleGames.ListOfGames[0], CoordinateX, CoordinateY);

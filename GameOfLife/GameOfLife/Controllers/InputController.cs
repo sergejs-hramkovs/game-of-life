@@ -31,7 +31,7 @@ namespace GameOfLife
         /// <param name="operations">An object of the FieldOperations class.</param>
         /// <param name="library">An object of the Library class.</param>
         /// <param name="menuNavigator">An object of the MenuNavigator class.</param>
-        public void Injection(IMainEngine mainEngine, IUserInterfaceFiller? userInterfaceFiller = null, IFileIO? file = null,
+        public void Inject(IMainEngine mainEngine, IUserInterfaceFiller? userInterfaceFiller = null, IFileIO? file = null,
             IRenderer? renderer = null, IFieldOperations? operations = null, ILibrary? library = null, IMenuNavigator? menuNavigator = null)
         {
             _mainEngine = mainEngine;
@@ -57,7 +57,7 @@ namespace GameOfLife
                     _mainEngine.MultipleGames.InitializeSingleGameParameters();
                     if (!_mainEngine.MultipleGamesMode && !_mainEngine.SavedGameLoaded && !_mainEngine.GliderGunMode)
                     {
-                        _menuNavigator.NavigateMenu(MenuViews.SeedingTypeMenu, HandleInputSeedingTypeMenu, clearScr: false, _renderer.GridOfFieldsRenderer);
+                        _menuNavigator.NavigateMenu(MenuViews.SeedingTypeMenu, HandleInputSeedingTypeMenu, clearScr: false, _renderer.RenderGridOfFields);
                     }
                     break;
 
@@ -69,7 +69,7 @@ namespace GameOfLife
 
                 // Load game(s)
                 case ConsoleKey.D3:
-                    _menuNavigator.NavigateMenu(MenuViews.LoadGameMenu, LoadGameMenuInputProcessor);
+                    _menuNavigator.NavigateMenu(MenuViews.LoadGameMenu, HandleInputLoadGameMenu);
                     break;
 
                 // Glider Gun Mode
@@ -81,7 +81,7 @@ namespace GameOfLife
 
                 // Rules and description page.
                 case ConsoleKey.F1:
-                    _renderer.MenuRenderer(MenuViews.RulesPage);
+                    _renderer.RenderMenu(MenuViews.RulesPage);
                     Console.ReadKey();
                     _mainEngine.StartGame(false);
                     break;
@@ -149,15 +149,15 @@ namespace GameOfLife
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
-                    _fieldOperations.ManualSeeding(_mainEngine.MultipleGames);
+                    _fieldOperations.PopulateFieldManually(_mainEngine.MultipleGames);
                     break;
 
                 case ConsoleKey.D2:
-                    _fieldOperations.RandomSeeding(GameField);
+                    _fieldOperations.PopulateFieldRandomly(GameField);
                     break;
 
                 case ConsoleKey.D3:
-                    _fieldOperations.LibrarySeeding(_mainEngine.MultipleGames);
+                    _fieldOperations.PopulateFieldFromLibrary(_mainEngine.MultipleGames);
                     break;
 
                 case ConsoleKey.Escape:
@@ -287,7 +287,7 @@ namespace GameOfLife
         /// Method to take and process user's input in the Library Menu.
         /// </summary>
         /// <returns>Returns 'true' if the 'Escape' key is pressed, otherwise 'false'</returns>
-        public bool LibraryMenuInputProcessor()
+        public bool HandleInputLibraryMenu()
         {
             switch (Console.ReadKey(true).Key)
             {
@@ -381,7 +381,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="keyPressed">Parameter which stores the key pressed in the Pause Menu.</param>
         /// <param name="multipleGamesMode">Parameter that represents if the Multiple Games Mode is enabled, 'false' by default.</param>
-        public void CheckInputPauseMenu(ConsoleKey keyPressed, bool multipleGamesMode = false)
+        public void HandleInputPauseMenu(ConsoleKey keyPressed, bool multipleGamesMode = false)
         {
             switch (keyPressed)
             {
@@ -390,9 +390,9 @@ namespace GameOfLife
                     {
                         _mainEngine.MultipleGames.ListOfGames[0].Generation = _mainEngine.MultipleGames.Generation;
                         _file.SaveGameFieldToFile(_mainEngine.MultipleGames.ListOfGames[0]);
-                        _userInterfaceFiller.SingleGameRuntimeUICreator(_mainEngine.MultipleGames, _mainEngine.Delay);
-                        _renderer.MenuRenderer(MenuViews.SingleGameUI, clearScreen: true);
-                        _renderer.GridOfFieldsRenderer(_mainEngine.MultipleGames);
+                        _userInterfaceFiller.CreateSingleGameRuntimeUI(_mainEngine.MultipleGames, _mainEngine.Delay);
+                        _renderer.RenderMenu(MenuViews.SingleGameUI, clearScreen: true);
+                        _renderer.RenderGridOfFields(_mainEngine.MultipleGames);
                     }
                     else
                     {
@@ -441,9 +441,9 @@ namespace GameOfLife
             ConsoleKey pauseMenuKeyPress;
             if (keyPressed == ConsoleKey.Spacebar)
             {
-                _renderer.MenuRenderer(MenuViews.PauseMenu, multipleGames: multipleGamesMode, clearScreen: false);
+                _renderer.RenderMenu(MenuViews.PauseMenu, multipleGames: multipleGamesMode, clearScreen: false);
                 pauseMenuKeyPress = Console.ReadKey(true).Key;
-                CheckInputPauseMenu(pauseMenuKeyPress, multipleGamesMode);
+                HandleInputPauseMenu(pauseMenuKeyPress, multipleGamesMode);
             }
         }
 
@@ -451,7 +451,7 @@ namespace GameOfLife
         /// Method to take and process user's input in the Exit Menu.
         /// </summary>
         /// <param name="keyPressed">Parameter which stores the key pressed in the Exit Menu.</param>
-        public void CheckInputExitMenu(ConsoleKey keyPressed)
+        public void HandleInputExitMenu(ConsoleKey keyPressed)
         {
             if (keyPressed == ConsoleKey.R)
             {
@@ -498,7 +498,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to take and process user's input in the Multiple Games Mode Menu.
         /// </summary>
-        public void ChooseMultipleGameNumbersMenuInputProcessor()
+        public void HandleInputMultipleGameNumbersMenu()
         {
             WrongInput = false;
             switch (Console.ReadKey(true).Key)
@@ -596,7 +596,7 @@ namespace GameOfLife
         /// <summary>
         /// Method to take and process user's input in the Load Game Menu.
         /// </summary>
-        public void LoadGameMenuInputProcessor()
+        public void HandleInputLoadGameMenu()
         {
             WrongInput = false;
             switch (Console.ReadKey(true).Key)
@@ -628,7 +628,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="multipleGamesMode">Parameter that represents if the Multiple Games Mode is enabled, 'false' by default.</param>
         /// <returns>Returns the pressed key.</returns>
-        public ConsoleKey RuntimeKeyReader(bool multipleGamesMode = false)
+        public ConsoleKey ReadKeyRuntime(bool multipleGamesMode = false)
         {
             ConsoleKey keyPressed = Console.ReadKey(true).Key;
             PauseGame(keyPressed, multipleGamesMode);

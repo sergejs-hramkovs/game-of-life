@@ -73,12 +73,6 @@
             " # Press 'Esc' to exit"
         };
 
-        public static string[] BlankUI { get; } = {
-            " Loading...",
-            "\n\n\n Generation: 0",
-            "\n\n\n"
-        };
-
         public static string[] RulesPage { get; } = {
             "\n ### Game of Life ###",
             "\n The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970.",

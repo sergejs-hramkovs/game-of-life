@@ -21,10 +21,10 @@ namespace GameOfLife
             Renderer render = new();
             FileIO file = new();
             InputController processor = new();
-            FieldOperations field = new(library, render, processor);
+            FieldOperations field = new(render, processor);
             UserInterfaceFiller userInterfaceViews = new();
             MenuNavigator menuNavigator = new();
-            engine.Injection(render, file, field, library, applier, processor, userInterfaceViews, auxiliaryEngine, menuNavigator);
+            engine.Inject(render, file, field, library, applier, processor, userInterfaceViews, auxiliaryEngine, menuNavigator);
             engine.StartGame();
         }
     }
