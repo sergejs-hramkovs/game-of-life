@@ -44,8 +44,10 @@ namespace GameOfLife
                 {
                     if (wrongInput)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine(line);
                         wrongInput = false;
+                        Console.ForegroundColor = ConsoleColor.Black;
                     }
                     else
                     {
@@ -56,8 +58,10 @@ namespace GameOfLife
                 {
                     if (gameOver)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine(line);
                         gameOver = false;
+                        Console.ForegroundColor = ConsoleColor.Black;
                     }
                     else
                     {
@@ -128,6 +132,7 @@ namespace GameOfLife
             string titleString;
             gameNumber = multipleGames.NumberOfHorizontalFields * rowNumber;
             Console.WriteLine();
+            
             for (int fieldNumber = 0; fieldNumber < multipleGames.NumberOfHorizontalFields; fieldNumber++)
             {
                 if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber == 0)
@@ -136,20 +141,24 @@ namespace GameOfLife
                     {
                         indentation += " ";
                     }
-
-                    Console.Write(StringConstants.FieldIsDeadPhrase + indentation);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(StringConstants.FieldIsDeadPhrase);
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.Write(indentation);
                     indentation = "";
                 }
                 else
                 {
-                    titleString = $"  Game #{multipleGames.GamesToBeDisplayed[gameNumber]}. " +
+                    titleString = $" Game #{multipleGames.GamesToBeDisplayed[gameNumber]}. " +
                         $"Alive: {multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber}";
                     for (int k = 0; k < multipleGames.ListOfGames[0].Length * 2 + 6 - titleString.Length; k++)
                     {
                         indentation += " ";
                     }
-
-                    Console.Write(titleString + indentation);
+                    Console.BackgroundColor = ConsoleColor.White;
+                    Console.Write(titleString);
+                    Console.BackgroundColor = ConsoleColor.Gray;
+                    Console.Write(indentation);
                     indentation = "";
                 }
 
@@ -157,6 +166,7 @@ namespace GameOfLife
             }
 
             Console.WriteLine();
+            
             return true;
         }
 
@@ -183,7 +193,9 @@ namespace GameOfLife
                     {
                         if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[fieldNumber + multipleGames.NumberOfHorizontalFields * rowNumber]].AliveCellsNumber == 0 && _engine.InitializationFinished)
                         {
+                            Console.BackgroundColor = ConsoleColor.Red;
                             Console.Write(" " + StringConstants.GameOverCellSymbol);
+                            Console.BackgroundColor = ConsoleColor.Gray;
                         }
                         else
                         {
