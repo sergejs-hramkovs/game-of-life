@@ -83,7 +83,7 @@ namespace GameOfLife
                 InitializeParameters();
             }
 
-            _menuNavigator.NavigateMenu(MenuViews.MainMenu, _inputController.HandleInputMainMenu);
+            _menuNavigator.NavigateMenu(MenuViews.MainMenu, _inputController.HandleInputMainMenu, fileMissing: _file.NoSavedGames);
             RunGame();
         }
 

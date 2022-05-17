@@ -43,12 +43,12 @@ namespace GameOfLife.Services
         /// <param name="HandleInput">Method to handle the user's input in the menu.</param>
         /// <param name="clearScr">Parameter that defines if the screen is cleared, 'true' by default.</param>
         /// <param name="Render">Optional parameter to pass the field rendering method.</param>
-        public void NavigateMenu(string[] menu, Action HandleInput, bool clearScr = true, Action<MultipleGamesModel, bool>? Render = null)
+        public void NavigateMenu(string[] menu, Action HandleInput, bool clearScr = true, Action<MultipleGamesModel, bool>? Render = null, bool fileMissing = false)
         {
             do
             {
                 Render?.Invoke(_engine.MultipleGames, !clearScr);
-                _renderer.RenderMenu(menu, wrongInput: _inputController.WrongInput, clearScreen: clearScr);
+                _renderer.RenderMenu(menu, wrongInput: _inputController.WrongInput, clearScreen: clearScr, noSavedGames: fileMissing);
                 HandleInput();
             } while (_inputController.WrongInput);
         }
@@ -90,11 +90,11 @@ namespace GameOfLife.Services
                 Console.CursorVisible = true;
                 _file.CreateListOfFileNames(filePath);
                 _userInterfaceFiller.CreateFileChoosingMenu(_file.NumberOfFiles, MenuViews.FileNames);
-                if (_inputController.WrongInput)
-                {
-                    _renderer.RenderMenu(MenuViews.WrongInputFileMenu, wrongInput: true);
-                }
-                _renderer.RenderMenu(MenuViews.ChooseFileMenu, newLine: false, clearScreen: !_inputController.WrongInput);
+                //if (_inputController.WrongInput)
+                //{
+                //    _renderer.RenderMenu(MenuViews.WrongInputFileMenu, wrongInput: true);
+                //}
+                _renderer.RenderMenu(MenuViews.ChooseFileMenu, newLine: false, clearScreen: true, wrongInput: _inputController.WrongInput);
                 MenuViews.FileNames.Clear();
                 _file.FileNumber = _inputController.HandleInputSavedGameMenu(_file.NumberOfFiles);
                 Console.CursorVisible = false;

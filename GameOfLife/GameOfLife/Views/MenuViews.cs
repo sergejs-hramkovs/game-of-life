@@ -7,6 +7,7 @@
     {
         public static string[] MainMenu { get; } = {
             StringConstants.WrongInputPhrase,
+            StringConstants.NoSavedGamesPhrase,
             " ### Welcome to the Game of Life! ###",
             "\n # Choose the game mode:",
             "\n 1. Single game",

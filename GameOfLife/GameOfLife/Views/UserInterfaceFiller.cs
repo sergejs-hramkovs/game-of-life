@@ -52,18 +52,19 @@ namespace GameOfLife.Views
         /// <param name="fileNames">The list of names of saved games files.</param>
         public void CreateFileChoosingMenu(int numberOfFiles, List<string> fileNames)
         {
-            MenuViews.ChooseFileMenu = new string[6 + fileNames.Count];
-            MenuViews.ChooseFileMenu[0] = " ### Choose which saved game to load ###";
-            MenuViews.ChooseFileMenu[1] = $"\n # There are currently {numberOfFiles} files";
-            MenuViews.ChooseFileMenu[2] = StringConstants.DashesConstant;
+            MenuViews.ChooseFileMenu = new string[7 + fileNames.Count];
+            MenuViews.ChooseFileMenu[0] = StringConstants.WrongInputPhrase;
+            MenuViews.ChooseFileMenu[1] = " ### Choose which saved game to load ###";
+            MenuViews.ChooseFileMenu[2] = $"\n # There are currently {numberOfFiles} files";
+            MenuViews.ChooseFileMenu[3] = StringConstants.DashesConstant;
             for (int i = 0; i < fileNames.Count; i++)
             {
-                MenuViews.ChooseFileMenu[i + 3] = " - " + fileNames[i];
+                MenuViews.ChooseFileMenu[i + 4] = " - " + fileNames[i];
             }
 
-            MenuViews.ChooseFileMenu[3 + fileNames.Count] = StringConstants.DashesConstant;
-            MenuViews.ChooseFileMenu[4 + fileNames.Count] = "\n # Choose the number of the file";
-            MenuViews.ChooseFileMenu[5 + fileNames.Count] = "\n # Choice: ";
+            MenuViews.ChooseFileMenu[4 + fileNames.Count] = StringConstants.DashesConstant;
+            MenuViews.ChooseFileMenu[5 + fileNames.Count] = "\n # Choose the number of the file";
+            MenuViews.ChooseFileMenu[6 + fileNames.Count] = "\n # Choice: ";
         }
     }
 }

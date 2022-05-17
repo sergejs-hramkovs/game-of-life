@@ -68,7 +68,7 @@ namespace GameOfLife
                 {
                     if (noSavedGames)
                     {
-                        Console.WriteLine(line);
+                        ChangeColorWrite(line);
                         noSavedGames = false;
                     }
                 }

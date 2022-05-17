@@ -49,6 +49,7 @@ namespace GameOfLife
         public void HandleInputMainMenu()
         {
             WrongInput = false;
+            _file.NoSavedGames = false;
             switch (Console.ReadKey(true).Key)
             {
                 // Single game.
@@ -580,7 +581,7 @@ namespace GameOfLife
         /// </summary>
         public void EnterMultipleGamesQuantity()
         {
-            
+
             Console.CursorVisible = true;
             while (true)
             {
@@ -609,14 +610,11 @@ namespace GameOfLife
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
-                    _mainEngine.SavedGameLoaded = true;
                     _file.InitiateLoadingFromFile();
                     _mainEngine.MultipleGames.InitializeSingleGameParameters();
                     break;
 
                 case ConsoleKey.D2:
-                    _mainEngine.MultipleGamesMode = true;
-                    _mainEngine.SavedGameLoaded = true;
                     _file.InitiateLoadingFromFile(loadMultipleGames: true);
                     break;
 

@@ -15,7 +15,7 @@ namespace GameOfLife
     public class FileIO : IFileIO
     {
         private IInputController _inputController;
-        private IMainEngine _engine;
+        private IMainEngine _mainEngine;
         private IMenuNavigator _menuNavigator;
         private List<string> _stringList = new List<string>();
         private string[] _stringField;
@@ -44,7 +44,7 @@ namespace GameOfLife
         public void Inject(IInputController inputController, IMainEngine engine, IMenuNavigator menuNavigator)
         {
             _inputController = inputController;
-            _engine = engine;
+            _mainEngine = engine;
             _menuNavigator = menuNavigator;
         }
 
@@ -75,12 +75,12 @@ namespace GameOfLife
                 {
                     if (gameField.GameField[xCoordinate, yCoordinate] == StringConstants.AliveCellSymbol)
                     {
-                        _stringField[yCoordinate] += "X ";
+                        _stringField[yCoordinate] = _stringField[yCoordinate] + StringConstants.AliveCellSymbolChar.ToString() + " ";
                     }
                     else
                     {
-                        _stringField[yCoordinate] += ". ";
-                    }                  
+                        _stringField[yCoordinate] = _stringField[yCoordinate] + StringConstants.DeadCellSymbolChar.ToString() + " ";
+                    }
                 }
             }
 
@@ -95,8 +95,8 @@ namespace GameOfLife
         {
             int xCoordinate = 0;
             int yCoordinate = 0;
-            _engine.MultipleGames.ListOfGames.Add(new(inputList[4].Length / 2, inputList.Count - 4));
-            _engine.MultipleGames.Generation = int.Parse(TakeGenerationNumberFromFile(inputList));
+            _mainEngine.MultipleGames.ListOfGames.Add(new(inputList[4].Length / 2, inputList.Count - 4));
+            _mainEngine.MultipleGames.Generation = int.Parse(TakeGenerationNumberFromFile(inputList));
             for (int listElementNumber = 4; listElementNumber < inputList.Count; listElementNumber++)
             {
                 foreach (char character in inputList[listElementNumber])
@@ -107,11 +107,11 @@ namespace GameOfLife
                         {
                             if (character == StringConstants.AliveCellSymbolChar)
                             {
-                                _engine.MultipleGames.ListOfGames[0].GameField[xCoordinate, yCoordinate] = StringConstants.AliveCellSymbol;
+                                _mainEngine.MultipleGames.ListOfGames[0].GameField[xCoordinate, yCoordinate] = StringConstants.AliveCellSymbol;
                             }
                             else if (character == StringConstants.DeadCellSymbolChar)
                             {
-                                _engine.MultipleGames.ListOfGames[0].GameField[xCoordinate, yCoordinate] = StringConstants.DeadCellSymbol;
+                                _mainEngine.MultipleGames.ListOfGames[0].GameField[xCoordinate, yCoordinate] = StringConstants.DeadCellSymbol;
                             }
 
                             if (xCoordinate == (inputList[4].Length / 2 - 1))
@@ -128,6 +128,7 @@ namespace GameOfLife
                 }
             }
 
+            _mainEngine.SavedGameLoaded = true;
             _stringList.Clear();
         }
 
@@ -231,7 +232,7 @@ namespace GameOfLife
             CountFiles(path);
             if (NoSavedGames)
             {
-                _engine.StartGame(false);
+                _mainEngine.StartGame(false);
                 _inputController.CorrectKeyPressed = true;
             }
             else
@@ -257,7 +258,7 @@ namespace GameOfLife
                 if (!FileReadingError)
                 {
                     FileLoaded = true;
-                    _engine.ReadGeneration = true;
+                    _mainEngine.ReadGeneration = true;
                     _inputController.CorrectKeyPressed = true;
                 }
             }
@@ -287,8 +288,11 @@ namespace GameOfLife
             using (Stream stream = File.Open(MultipleGamesModeFilePath + $"games{fileToLoad}.bin", FileMode.Open))
             {
                 BinaryFormatter binaryFormatter = new();
-                _engine.MultipleGames = (MultipleGamesModel)binaryFormatter.Deserialize(stream);
+                _mainEngine.MultipleGames = (MultipleGamesModel)binaryFormatter.Deserialize(stream);
             }
+
+            _mainEngine.MultipleGamesMode = true;
+            _mainEngine.SavedGameLoaded = true;
         }
 
         /// <summary>

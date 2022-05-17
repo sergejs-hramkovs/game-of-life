@@ -7,7 +7,7 @@ namespace GameOfLife.Interfaces
         void Inject(IRenderer renderer, IInputController inputController, IMainEngine engine, IFieldOperations fieldOperations,
             IFileIO file, IUserInterfaceFiller userInterfaceFiller);
 
-        public void NavigateMenu(string[] menu, Action HandleInput, bool clearScr = true, Action<MultipleGamesModel, bool>? Render = null);
+        public void NavigateMenu(string[] menu, Action HandleInput, bool clearScr = true, Action<MultipleGamesModel, bool>? Render = null, bool fileMissing = false);
 
         void NavigateMultipleGamesMenu();
 
