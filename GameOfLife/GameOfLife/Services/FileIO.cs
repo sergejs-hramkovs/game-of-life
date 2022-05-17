@@ -73,7 +73,14 @@ namespace GameOfLife
             {
                 for (int yCoordinate = 0; yCoordinate < gameField.Width; yCoordinate++)
                 {
-                    _stringField[yCoordinate] = _stringField[yCoordinate] + gameField.GameField[xCoordinate, yCoordinate] + " ";
+                    if (gameField.GameField[xCoordinate, yCoordinate] == StringConstants.AliveCellSymbol)
+                    {
+                        _stringField[yCoordinate] += "X ";
+                    }
+                    else
+                    {
+                        _stringField[yCoordinate] += ". ";
+                    }                  
                 }
             }
 
@@ -98,7 +105,15 @@ namespace GameOfLife
                     {
                         if (character == StringConstants.AliveCellSymbolChar || character == StringConstants.DeadCellSymbolChar)
                         {
-                            _engine.MultipleGames.ListOfGames[0].GameField[xCoordinate, yCoordinate] = character.ToString();
+                            if (character == StringConstants.AliveCellSymbolChar)
+                            {
+                                _engine.MultipleGames.ListOfGames[0].GameField[xCoordinate, yCoordinate] = StringConstants.AliveCellSymbol;
+                            }
+                            else if (character == StringConstants.DeadCellSymbolChar)
+                            {
+                                _engine.MultipleGames.ListOfGames[0].GameField[xCoordinate, yCoordinate] = StringConstants.DeadCellSymbol;
+                            }
+
                             if (xCoordinate == (inputList[4].Length / 2 - 1))
                             {
                                 xCoordinate = 0;

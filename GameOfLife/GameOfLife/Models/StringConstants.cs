@@ -16,11 +16,11 @@
 
         public const string SuccessfullySavedPhrase = "\n ### The current game state has been successfully saved! Press any key to continue ###";
 
-        public const string AliveCellSymbol = "X";
+        public const string AliveCellSymbol = "██";
 
         public const char AliveCellSymbolChar = 'X';
 
-        public const string DeadCellSymbol = ".";
+        public const string DeadCellSymbol = "..";
 
         public const char DeadCellSymbolChar = '.';
 

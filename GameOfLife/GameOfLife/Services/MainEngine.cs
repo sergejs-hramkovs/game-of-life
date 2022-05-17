@@ -66,6 +66,8 @@ namespace GameOfLife
             _renderer.Inject(this);
             Console.CursorVisible = false;
             Console.SetWindowSize(175, 61);
+            Console.BackgroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.Black;
         }
 
         /// <summary>
