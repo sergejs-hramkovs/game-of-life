@@ -119,7 +119,7 @@
 
         public static string[] MultipleGamesModeGamesQuantityMenu { get; } = {
             " ### Multiple Games Mode ###",
-            "\n# Enter how many games to run (24-10000): "
+            "\n# Enter how many games to run (24-1000): "
         };
 
         public static string[] LoadGameMenu { get; } = {

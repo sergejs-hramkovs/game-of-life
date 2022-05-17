@@ -579,7 +579,7 @@ namespace GameOfLife
             Console.CursorVisible = true;
             while (true)
             {
-                if (int.TryParse(Console.ReadLine(), out var totalNumberOfGames) && totalNumberOfGames >= 24 && totalNumberOfGames <= 10000)
+                if (int.TryParse(Console.ReadLine(), out var totalNumberOfGames) && totalNumberOfGames >= 24 && totalNumberOfGames <= 1000)
                 {
                     _mainEngine.MultipleGames.TotalNumberOfGames = totalNumberOfGames;
                     break;
