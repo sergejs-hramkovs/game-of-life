@@ -97,6 +97,10 @@ namespace GameOfLife
             }
         }
 
+        /// <summary>
+        /// Method to change text color, write text and change the color back.
+        /// </summary>
+        /// <param name="textToWrite">Parameter that represents a string to be written.</param>
         public void ChangeColorWrite(string textToWrite)
         {
             Console.ForegroundColor = ConsoleColor.Red;

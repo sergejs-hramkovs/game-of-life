@@ -19,11 +19,11 @@ namespace GameOfLife
         /// <summary>
         /// Constructor to inject required onjects in the class.
         /// </summary>
-        /// <param name="render">An instance of the Render class.</param>
+        /// <param name="renderer">An instance of the Render class.</param>
         /// <param name="controller">An instance of the InputController class.</param>
-        public FieldOperations(IRenderer render, IInputController controller)
+        public FieldOperations(IRenderer renderer, IInputController controller)
         {
-            _renderer = render;
+            _renderer = renderer;
             _inputController = controller;
         }
 

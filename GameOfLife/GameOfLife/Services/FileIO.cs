@@ -137,7 +137,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="inputList">List of the Game Field cell rows.</param>
         /// <returns>Returns the generation number in the string form.</returns>
-        private static string TakeGenerationNumberFromFile(List<string> inputList)
+        private string TakeGenerationNumberFromFile(List<string> inputList)
         {
             string generationString = "";
             foreach (char character in inputList[0])
@@ -159,7 +159,7 @@ namespace GameOfLife
         {
             EnsureDirectoryExists(FilePath);
             CountFiles(FilePath);
-            StreamWriter writer = new StreamWriter(FilePath + $"game{NumberOfFiles + 1}.txt");
+            StreamWriter writer = new(FilePath + $"game{NumberOfFiles + 1}.txt");
             ConvertGameFieldToArrayOfRows(gameField);
             writer.WriteLine($"Generation: {gameField.Generation}");
             writer.WriteLine($"Alive cells: {gameField.AliveCellsNumber}({(int)Math.Round(gameField.AliveCellsNumber / (double)gameField.Area * 100.0)}%)");
@@ -182,7 +182,7 @@ namespace GameOfLife
             string line;
             try
             {
-                StreamReader reader = new StreamReader(FilePath + $"game{fileToLoad}.txt");
+                StreamReader reader = new(FilePath + $"game{fileToLoad}.txt");
                 while ((line = reader.ReadLine()) != null)
                 {
                     _stringList.Add(line);

@@ -57,7 +57,7 @@ namespace GameOfLife.Services
         /// Method to navigate through all the Multiple Games Mode menus.
         /// </summary>
         public void NavigateMultipleGamesMenu()
-        {         
+        {
             _inputController.EnterMultipleGamesQuantity();
             NavigateMenu(MenuViews.MultipleGamesModeFieldSizeChoiceMenu, _inputController.HandleInputMultipleGamesMenuFieldSize);
             _engine.MultipleGames.InitializeGames(_fieldOperations);
