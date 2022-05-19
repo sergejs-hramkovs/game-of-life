@@ -14,18 +14,18 @@ namespace GameOfLife
         /// </summary>
         public void LaunchGame()
         {
-            MainEngine engine = new();
-            AuxiliaryEngine auxiliaryEngine = new();
-            RulesApplier applier = new();
-            Library library = new();
-            Renderer render = new();
-            FileIO file = new();
-            InputController processor = new();
-            FieldOperations field = new(render, processor);
-            UserInterfaceFiller userInterfaceViews = new();
-            MenuNavigator menuNavigator = new();
-            engine.Inject(render, file, field, library, applier, processor, userInterfaceViews, auxiliaryEngine, menuNavigator);
-            engine.StartGame();
+            MainEngine mainEngine = new MainEngine();
+            AuxiliaryEngine auxiliaryEngine = new AuxiliaryEngine();
+            RulesApplier applier = new RulesApplier();
+            Library library = new Library();
+            Renderer renderer = new Renderer();
+            FileIO file = new FileIO();
+            InputController inputController = new InputController();
+            FieldOperations fieldOperations = new FieldOperations(renderer, inputController);
+            UserInterfaceFiller userInterfaceFiller = new UserInterfaceFiller();
+            MenuNavigator menuNavigator = new MenuNavigator();
+            mainEngine.Inject(renderer, file, fieldOperations, library, applier, inputController, userInterfaceFiller, auxiliaryEngine, menuNavigator);
+            mainEngine.StartGame();
         }
     }
 }

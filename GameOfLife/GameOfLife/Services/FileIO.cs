@@ -54,7 +54,7 @@ namespace GameOfLife
         /// <param name="filePath">The location of the folder.</param>
         private void EnsureDirectoryExists(string filePath)
         {
-            FileInfo fileInfo = new(filePath);
+            FileInfo fileInfo = new FileInfo(filePath);
             if (!fileInfo.Directory.Exists)
             {
                 Directory.CreateDirectory(fileInfo.DirectoryName);
@@ -182,7 +182,7 @@ namespace GameOfLife
             string line;
             try
             {
-                StreamReader reader = new(FilePath + $"game{fileToLoad}.txt");
+                StreamReader reader = new StreamReader(FilePath + $"game{fileToLoad}.txt");
                 while ((line = reader.ReadLine()) != null)
                 {
                     _stringList.Add(line);
@@ -204,7 +204,7 @@ namespace GameOfLife
         /// <param name="path">Parameter that stores the path to the folder.</param>
         private void CountFiles(string path)
         {
-            DirectoryInfo directoryInfo = new(path);
+            DirectoryInfo directoryInfo = new DirectoryInfo(path);
             NumberOfFiles = directoryInfo.GetFiles().Length;
             if (NumberOfFiles == 0)
             {
@@ -274,7 +274,7 @@ namespace GameOfLife
             CountFiles(MultipleGamesModeFilePath);
             using (Stream stream = File.Open(MultipleGamesModeFilePath + $"games{NumberOfFiles + 1}.bin", FileMode.Create))
             {
-                BinaryFormatter binaryFormatter = new();
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
                 binaryFormatter.Serialize(stream, multipleGames);
             }
         }
@@ -287,7 +287,7 @@ namespace GameOfLife
         {
             using (Stream stream = File.Open(MultipleGamesModeFilePath + $"games{fileToLoad}.bin", FileMode.Open))
             {
-                BinaryFormatter binaryFormatter = new();
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
                 _mainEngine.MultipleGames = (MultipleGamesModel)binaryFormatter.Deserialize(stream);
             }
 

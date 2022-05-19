@@ -146,6 +146,6 @@
 
         public static string[] ChooseFileMenu { get; set; }
 
-        public static List<string> FileNames { get; set; } = new();
+        public static List<string> FileNames { get; set; } = new List<string>();
     }
 }

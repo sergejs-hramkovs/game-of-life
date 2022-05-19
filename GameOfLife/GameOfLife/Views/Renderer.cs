@@ -44,7 +44,7 @@ namespace GameOfLife
                 {
                     if (wrongInput)
                     {
-                        ChangeColorWrite(line);
+                        ChangeColorWrite(line, newLine: false);
                         wrongInput = false;
                     }
                     else
@@ -56,7 +56,7 @@ namespace GameOfLife
                 {
                     if (gameOver)
                     {
-                        ChangeColorWrite(line);
+                        ChangeColorWrite(line, newLine: false);
                         gameOver = false;
                     }
                     else
@@ -68,7 +68,7 @@ namespace GameOfLife
                 {
                     if (noSavedGames)
                     {
-                        ChangeColorWrite(line);
+                        ChangeColorWrite(line, newLine: false);
                         noSavedGames = false;
                     }
                 }
@@ -101,10 +101,18 @@ namespace GameOfLife
         /// Method to change text color, write text and change the color back.
         /// </summary>
         /// <param name="textToWrite">Parameter that represents a string to be written.</param>
-        public void ChangeColorWrite(string textToWrite)
+        public void ChangeColorWrite(string textToWrite, bool newLine)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(textToWrite);
+            if (newLine)
+            {
+                Console.WriteLine(textToWrite);
+            }
+            else
+            {
+                Console.Write(textToWrite);
+            }
+
             Console.ForegroundColor = ConsoleColor.Black;
         }
 
@@ -132,14 +140,14 @@ namespace GameOfLife
         /// <param name="multipleGames">An object of the MultiplGamesModel class that contains the list of all Game Fields.</param>
         /// <param name="rowNumber">The number of the Game Field row currently displayed.</param>
         /// <returns>Returns true - the fact that the whole row of titles was rendered.</returns>
-        private static bool RenderTitle(MultipleGamesModel multipleGames, int rowNumber)
+        private bool RenderTitle(MultipleGamesModel multipleGames, int rowNumber)
         {
             int gameNumber;
             string indentation = "";
             string titleString;
             gameNumber = multipleGames.NumberOfHorizontalFields * rowNumber;
             Console.WriteLine();
-            
+
             for (int fieldNumber = 0; fieldNumber < multipleGames.NumberOfHorizontalFields; fieldNumber++)
             {
                 if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[gameNumber]].AliveCellsNumber == 0)
@@ -148,9 +156,8 @@ namespace GameOfLife
                     {
                         indentation += " ";
                     }
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write(StringConstants.FieldIsDeadPhrase);
-                    Console.ForegroundColor = ConsoleColor.Black;
+
+                    ChangeColorWrite(StringConstants.FieldIsDeadPhrase, true);
                     Console.Write(indentation);
                     indentation = "";
                 }
@@ -162,6 +169,7 @@ namespace GameOfLife
                     {
                         indentation += " ";
                     }
+
                     Console.BackgroundColor = ConsoleColor.White;
                     Console.Write(titleString);
                     Console.BackgroundColor = ConsoleColor.Gray;
@@ -173,7 +181,6 @@ namespace GameOfLife
             }
 
             Console.WriteLine();
-            
             return true;
         }
 

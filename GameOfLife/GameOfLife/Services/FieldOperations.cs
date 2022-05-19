@@ -82,7 +82,7 @@ namespace GameOfLife
         /// <param name="gameField">A GameFieldModel object that contains the Game Field.</param>
         public void PopulateFieldRandomly(GameFieldModel gameField)
         {
-            Random random = new();
+            Random random = new Random();
             int aliveCellCount = random.Next(1, gameField.Length * gameField.Width);
             int randomX, randomY;
             for (int cellNumber = 1; cellNumber <= aliveCellCount; cellNumber++)
@@ -95,7 +95,7 @@ namespace GameOfLife
                 }
                 else
                 {
-                    random = new();
+                    random = new Random();
                 }
             }
         }

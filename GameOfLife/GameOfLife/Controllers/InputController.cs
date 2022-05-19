@@ -221,7 +221,7 @@ namespace GameOfLife
                 if (wrongInput)
                 {
                     Console.Clear();
-                    _renderer.ChangeColorWrite(StringConstants.WrongInputPhrase);
+                    _renderer.ChangeColorWrite(StringConstants.WrongInputPhrase, newLine: false);
                 }
 
                 Console.Write(StringConstants.EnterLengthPhrase);

@@ -37,6 +37,6 @@ namespace GameOfLife.Interfaces
         /// Method to change text color, write text and change the color back.
         /// </summary>
         /// <param name="textToWrite">Parameter that represents a string to be written.</param>
-        public void ChangeColorWrite(string textToWrite);
+        public void ChangeColorWrite(string textToWrite, bool newLine);
     }
 }

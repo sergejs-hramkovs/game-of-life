@@ -90,10 +90,6 @@ namespace GameOfLife.Services
                 Console.CursorVisible = true;
                 _file.CreateListOfFileNames(filePath);
                 _userInterfaceFiller.CreateFileChoosingMenu(_file.NumberOfFiles, MenuViews.FileNames);
-                //if (_inputController.WrongInput)
-                //{
-                //    _renderer.RenderMenu(MenuViews.WrongInputFileMenu, wrongInput: true);
-                //}
                 _renderer.RenderMenu(MenuViews.ChooseFileMenu, newLine: false, clearScreen: true, wrongInput: _inputController.WrongInput);
                 MenuViews.FileNames.Clear();
                 _file.FileNumber = _inputController.HandleInputSavedGameMenu(_file.NumberOfFiles);

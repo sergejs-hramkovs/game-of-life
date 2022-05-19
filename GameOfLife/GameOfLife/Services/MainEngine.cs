@@ -77,7 +77,7 @@ namespace GameOfLife
         public void StartGame(bool firstLaunch = true)
         {
             Console.Clear();
-            MultipleGames = new();
+            MultipleGames = new MultipleGamesModel();
             if (firstLaunch)
             {
                 InitializeParameters();
