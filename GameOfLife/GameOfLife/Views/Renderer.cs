@@ -157,7 +157,7 @@ namespace GameOfLife
                         indentation += " ";
                     }
 
-                    ChangeColorWrite(StringConstants.FieldIsDeadPhrase, true);
+                    ChangeColorWrite(StringConstants.FieldIsDeadPhrase, false);
                     Console.Write(indentation);
                     indentation = "";
                 }
