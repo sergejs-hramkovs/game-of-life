@@ -24,9 +24,9 @@ namespace GameOfLife.Interfaces
         /// </summary>
         /// <param name="menu">An instance of a menu to be displayed.</param>
         /// <param name="HandleInput">Method to handle the user's input in the menu.</param>
-        /// <param name="clearScr">Parameter that defines if the screen is cleared, 'true' by default.</param>
+        /// <param name="clearScreen">Parameter that defines if the screen is cleared, 'true' by default.</param>
         /// <param name="Render">Optional parameter to pass the field rendering method.</param>
-        public void NavigateMenu(string[] menu, Action HandleInput, bool clearScr = true, Action<MultipleGamesModel, bool>? Render = null, bool fileMissing = false);
+        public void NavigateMenu(string[] menu, Action HandleInput, bool clearScreen = true, Action<MultipleGamesModel, bool>? Render = null, bool fileMissing = false);
 
         /// <summary>
         /// Method to navigate through all the Multiple Games Mode menus.
