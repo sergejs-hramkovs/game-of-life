@@ -54,11 +54,11 @@ namespace GameOfLife
             {
                 // Single game.
                 case ConsoleKey.D1:
-                    _menuNavigator.NavigateMenu(MenuViews.SingleGameMenu, HandleInputSingleGameMenu, clearScreen: true);
+                    _menuNavigator.NavigateMenu(MenuViews.SingleGameMenu, HandleInputSingleGameMenu);
                     _mainEngine.MultipleGames.InitializeSingleGameParameters();
                     if (!_mainEngine.MultipleGamesMode && !_mainEngine.SavedGameLoaded && !_mainEngine.GliderGunMode)
                     {
-                        _menuNavigator.NavigateMenu(MenuViews.SeedingTypeMenu, HandleInputSeedingTypeMenu, clearScreen: false, _renderer.RenderGridOfFields);
+                        _menuNavigator.NavigateMenu(MenuViews.SeedingTypeMenu, HandleInputSeedingTypeMenu, clearMenuFromScreen: false, _renderer.RenderGridOfFields);
                     }
                     break;
 
