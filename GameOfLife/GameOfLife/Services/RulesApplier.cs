@@ -1,12 +1,12 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
-using static GameOfLife.StringConstantsModel;
 
 namespace GameOfLife
 {
     /// <summary>
     /// The RulesApplier class deals with the apllication of the rules of the game to cells.
     /// </summary>
+    [Serializable]
     public class RulesApplier : IRulesApplier
     {
         private List<(int xCoordinate, int yCoordinate)> _cellsToDie = new List<(int xCoordinate, int yCoordinate)>();
@@ -18,13 +18,13 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="disableWrappingAroundField">Parameter that shows if field's wrapping around is disabled.</param>
-        public void IterateThroughGameFieldCells(GameFieldModel gameField, bool disableWrappingAroundField)
+        public void IterateThroughGameFieldCells(GameFieldModel gameField, bool disableWrappingAroundField = false)
         {
             for (int xCoordinate = 0; xCoordinate < gameField.Length; xCoordinate++)
             {
                 for (int yCoordinate = 0; yCoordinate < gameField.Width; yCoordinate++)
                 {
-                    if (gameField.GameField[xCoordinate, yCoordinate] == AliveCellSymbol)
+                    if (gameField.GameField[xCoordinate, yCoordinate] == StringConstants.AliveCellSymbol)
                     {
                         ActOnAliveCell(gameField, xCoordinate, yCoordinate, disableWrappingAroundField);
                     }
@@ -125,7 +125,7 @@ namespace GameOfLife
                         wrappedY = true;
                     }
 
-                    if (gameField.GameField[neighbourX % gameField.Length, neighbourY % gameField.Width] == AliveCellSymbol)
+                    if (gameField.GameField[neighbourX % gameField.Length, neighbourY % gameField.Width] == StringConstants.AliveCellSymbol)
                     {
                         neighboursCount++;
                     }
@@ -156,17 +156,16 @@ namespace GameOfLife
         /// Removes or creates new cells according to the rules.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
-        /// <returns>Returns an array of a gamefield after applying the rules of the game.</returns>
-        public void FieldRefresh(GameFieldModel gameField)
+        public void RefreshField(GameFieldModel gameField)
         {
             foreach ((int xCoordinate, int yCoordinate) cell in _cellsToDie)
             {
-                gameField.GameField[cell.xCoordinate, cell.yCoordinate] = DeadCellSymbol;
+                gameField.GameField[cell.xCoordinate, cell.yCoordinate] = StringConstants.DeadCellSymbol;
             }
 
             foreach ((int xCoordinate, int yCoordinate) cell in _cellsToBeBorn)
             {
-                gameField.GameField[cell.xCoordinate, cell.yCoordinate] = AliveCellSymbol;
+                gameField.GameField[cell.xCoordinate, cell.yCoordinate] = StringConstants.AliveCellSymbol;
             }
 
             _cellsToBeBorn.Clear();

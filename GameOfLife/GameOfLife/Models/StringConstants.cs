@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GameOfLife
+﻿namespace GameOfLife
 {
     /// <summary>
     /// The StringConstantsModel class stores various string constants that are used across the application.
     /// </summary>
-    public static class StringConstantsModel
+    [Serializable]
+    public static class StringConstants
     {
         public const string WrongInputPhrase = " ### Wrong Input! ### ";
 
@@ -21,11 +16,11 @@ namespace GameOfLife
 
         public const string SuccessfullySavedPhrase = "\n ### The current game state has been successfully saved! Press any key to continue ###";
 
-        public const string AliveCellSymbol = "X";
+        public const string AliveCellSymbol = "██";
 
         public const char AliveCellSymbolChar = 'X';
 
-        public const string DeadCellSymbol = ".";
+        public const string DeadCellSymbol = "..";
 
         public const char DeadCellSymbolChar = '.';
 
@@ -43,20 +38,18 @@ namespace GameOfLife
 
         public const string EnterGameNumberPhrase = " # Enter the number of a game: ";
 
-        public const string FieldDeadPhrase = "\n ### THE WHOLE FIELD IS DEAD! ###";
+        public const string GameOverPhrase = "\n ### GAME OVER! THE WHOLE FIELD IS DEAD! ###";
+
+        public const string FieldIsDeadPhrase = "  THE FIELD IS DEAD ";
 
         public const string DashesConstant = "---------------------------------";
-
-        public const string EnterTotalGamesNumberPhrase = "\n # Enter the number of games to be created (2-2000): ";
-
-        public const string EnterLengthMultipleGamesPhrase = "\n # Enter the horizontal dimension of the field (3-30): ";
-
-        public const string EnterWidthMultipleGamesPhrase = "\n # Enter the vertical dimension of the field (3-10): ";
-
-        public const string EnterNumberOfGamesDisplayedPhrase = "\n # Enter the number of how many game will be displayed (2-4): ";
 
         public const string GameAlreadyChosenPhrase = "\n ### This number has already been chosen! ###";
 
         public const string SavedGamesFolderName = "SavedGames\\";
+
+        public const string MultipleGamesModeSavedGamesFolderName = "SavedGames\\MultipleGamesMode\\";
+
+        public const string EnterNewGameNumbersPhrase = " # To change the displayed games press 'N'";
     }
 }

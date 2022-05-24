@@ -1,16 +1,16 @@
 ﻿using GameOfLife.Interfaces;
 using GameOfLife.Models;
-using static GameOfLife.StringConstantsModel;
+using GameOfLife.Views;
 
 namespace GameOfLife
 {
     /// <summary>
     /// The FieldOperations class deals with populating game fields with alive cells or cell patterns from the library.
     /// </summary>
+    [Serializable]
     public class FieldOperations : IFieldOperations
     {
-        private IRender _render;
-        private ILibrary _library;
+        private IRenderer _renderer;
         private IInputController _inputController;
         public int CoordinateX { get; set; }
         public int CoordinateY { get; set; }
@@ -19,73 +19,31 @@ namespace GameOfLife
         /// <summary>
         /// Constructor to inject required onjects in the class.
         /// </summary>
-        /// <param name="library">An instance of the Library class.</param>
-        /// <param name="render">An instance of the Render class.</param>
+        /// <param name="renderer">An instance of the Render class.</param>
         /// <param name="controller">An instance of the InputController class.</param>
-        public FieldOperations(ILibrary library, IRender render, IInputController controller)
+        public FieldOperations(IRenderer renderer, IInputController controller)
         {
-            _library = library;
-            _render = render;
+            _renderer = renderer;
             _inputController = controller;
         }
 
         /// <summary>
-        /// Method to initiate the field seeding.
+        /// Method to populate a field manually by entering cell cordinates manually.
         /// </summary>
-        /// <param name="gameField">An instance of the GameFieldModel class.</param>
-        /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
-        /// <param name="gliderGunType">Parameter that represents the chosen type of the glider gun.</param>
-        /// <returns>Returns an instance of the GameFieldModel class.</returns>
-        public GameFieldModel PopulateField(GameFieldModel gameField, bool gliderGunMode, int gliderGunType)
-        {
-            ConsoleKey seedingChoice;
-            while (true)
-            {
-                if (_inputController.WrongInput)
-                {
-                    Console.Clear();
-                    _render.RenderField(gameField);
-                    Console.WriteLine("\n" + WrongInputPhrase);
-                    _inputController.WrongInput = false;
-                }
-
-                if (gliderGunMode)
-                {
-                    Console.Clear();
-                    LibrarySeeding(gameField, gliderGunMode, gliderGunType);
-                    return gameField;
-                }
-                else
-                {
-                    _render.SeedFieldMenuRender();
-                    seedingChoice = Console.ReadKey(true).Key;
-                }
-
-                if (_inputController.CheckInputPopulateFieldMenu(seedingChoice))
-                {
-                    return gameField;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Cell seeding coordinates are entered manually by the user.
-        /// </summary>
-        /// <param name="gameField">An instance of the GameFieldModel class.</param>
-        /// <returns>Returns an instance of the GameFieldModel class with alive cells manually seeded in its field.</returns>
-        public GameFieldModel ManualSeeding(GameFieldModel gameField)
+        /// <param name="multipleGames">A MultipleGamesModel object that contains the list of Game Fields.</param>
+        public void PopulateFieldManually(MultipleGamesModel multipleGames)
         {
             while (true)
             {
                 Console.Clear();
                 if (!_inputController.WrongInput)
                 {
-                    _render.RenderField(gameField);
+                    _renderer.RenderGridOfFields(multipleGames);
                 }
                 else if (_inputController.WrongInput)
                 {
-                    _render.RenderField(gameField);
-                    Console.WriteLine("\n" + WrongInputPhrase);
+                    _renderer.RenderGridOfFields(multipleGames);
+                    Console.WriteLine("\n" + StringConstants.WrongInputPhrase);
                     _inputController.WrongInput = false;
                 }
 
@@ -101,13 +59,13 @@ namespace GameOfLife
 
                 if (!StopDataInput)
                 {
-                    if (gameField.GameField[CoordinateX, CoordinateY] == DeadCellSymbol)
+                    if (multipleGames.ListOfGames[0].GameField[CoordinateX, CoordinateY] == StringConstants.DeadCellSymbol)
                     {
-                        gameField.GameField[CoordinateX, CoordinateY] = AliveCellSymbol;
+                        multipleGames.ListOfGames[0].GameField[CoordinateX, CoordinateY] = StringConstants.AliveCellSymbol;
                     }
                     else
                     {
-                        gameField.GameField[CoordinateX, CoordinateY] = DeadCellSymbol;
+                        multipleGames.ListOfGames[0].GameField[CoordinateX, CoordinateY] = StringConstants.DeadCellSymbol;
                     }
                 }
                 else
@@ -116,94 +74,60 @@ namespace GameOfLife
                     break;
                 }
             }
-
-            return gameField;
         }
 
         /// <summary>
-        /// Cells amount and coordinates are generated automatically and randomly.
+        /// Method to populate a field with randomly generated cell coordinates.
         /// </summary>
-        /// <param name="gameField">An instance of the GameFieldModel class.</param>
-        /// <returns>Returns an instance of the GameFieldModel class with alive cells randomly seeded in its field.</returns>
-        public GameFieldModel RandomSeeding(GameFieldModel gameField)
+        /// <param name="gameField">A GameFieldModel object that contains the Game Field.</param>
+        public void PopulateFieldRandomly(GameFieldModel gameField)
         {
-            Random random = new();
+            Random random = new Random();
             int aliveCellCount = random.Next(1, gameField.Length * gameField.Width);
             int randomX, randomY;
             for (int cellNumber = 1; cellNumber <= aliveCellCount; cellNumber++)
             {
                 randomX = random.Next(0, gameField.Length);
                 randomY = random.Next(0, gameField.Width);
-                if (gameField.GameField[randomX, randomY] != AliveCellSymbol)
+                if (gameField.GameField[randomX, randomY] != StringConstants.AliveCellSymbol)
                 {
-                    gameField.GameField[randomX, randomY] = AliveCellSymbol;
+                    gameField.GameField[randomX, randomY] = StringConstants.AliveCellSymbol;
                 }
                 else
                 {
-                    random = new();
+                    random = new Random();
                 }
             }
-
-            return gameField;
         }
 
         /// <summary>
         /// Method to choose a cell pattern from the premade library.
-        /// </summary
-        /// <param name="gameField">An instance of the GameFieldModel class.</param>
-        /// <param name="gliderGunMode">Parameter to show whether the glider gun mode is on.</param>
-        /// <param name="gliderGunType">Parameter that represents the chosen type of the glider gun.</param>
-        /// <returns>Returns an instance of the GameFieldModel class with a library object seeded in its field.</returns>
-        public GameFieldModel LibrarySeeding(GameFieldModel gameField, bool gliderGunMode, int gliderGunType)
+        /// </summary>
+        /// <param name="multipleGames">A MultipleGamesModel object that containts the list of Game Fields.</param>
+        public void PopulateFieldFromLibrary(MultipleGamesModel multipleGames)
         {
-            ConsoleKey libraryChoice;
-            while (true)
+            do
             {
-                if (gliderGunMode)
-                {
-                    switch (gliderGunType)
-                    {
-                        case 1:
-                            gameField = _library.SpawnGosperGliderGun(gameField, 1, 1);
-                            break;
-
-                        case 2:
-                            _library.SpawnSimkinGliderGun(gameField, 0, 16);
-                            break;
-                    }
-
-                    Console.Clear();
-                    return gameField;
-                }
-
-                if (_inputController.WrongInput)
-                {
-                    Console.Clear();
-                }
-
-                _render.RenderField(gameField);
-                _render.LibraryMenuRender(_inputController.WrongInput);
+                Console.Clear();
+                _renderer.RenderGridOfFields(multipleGames);
+                _renderer.RenderMenu(MenuViews.LibraryMenu, _inputController.WrongInput, clearScreen: false);
                 _inputController.WrongInput = false;
-                libraryChoice = Console.ReadKey(true).Key;
-                if (_inputController.CheckInputLibraryMenu(libraryChoice))
-                {
-                    return gameField;
-                }
             }
+            while (!_inputController.HandleInputLibraryMenu());
         }
 
         /// <summary>
-        /// Method to call one of the methods for spawning an object from the library.
+        /// Method to call one of the methods for spawning cell patterns from the library.
         /// </summary>
-        /// <param name="gameField">An instance of the GameFieldModel class.</param>
-        /// <param name="SpawnLibraryObject">Parameter that represents the method for spawning an object from the library that will be called.</param>
-        public void CallSpawningMethod(GameFieldModel gameField, Func<GameFieldModel, int, int, GameFieldModel> SpawnLibraryObject)
+        /// <param name="multipleGames">A MultipleGamesModel object that contains the list of Game Fields.</param>
+        /// <param name="SpawnLibraryObject">Parameter that represents the method for spawning a cell pattern from the library which is called.</param>
+        public void CallSpawningMethod(MultipleGamesModel multipleGames, Action<GameFieldModel, int, int> SpawnLibraryObject)
         {
             Console.Clear();
-            _render.RenderField(gameField);
+            _renderer.RenderGridOfFields(multipleGames);
             if (_inputController.EnterCoordinates() && !StopDataInput)
             {
-                SpawnLibraryObject(gameField, CoordinateX, CoordinateY);
+                SpawnLibraryObject(multipleGames.ListOfGames[0], CoordinateX, CoordinateY);
             }
             else if (StopDataInput)
             {
