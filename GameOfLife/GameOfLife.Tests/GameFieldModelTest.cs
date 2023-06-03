@@ -16,7 +16,7 @@ namespace GameOfLife.Tests
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    if (gameField.GameField[i, j] != ".")
+                    if (gameField.GameField[i, j] != StringConstants.DeadCellSymbol)
                     {
                         checkDeadCellError = true;
                     }
