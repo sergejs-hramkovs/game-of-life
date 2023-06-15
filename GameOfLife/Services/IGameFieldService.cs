@@ -5,7 +5,7 @@ namespace GameOfLife.Interfaces
     /// <summary>
     /// The RulesApplier class deals with the apllication of the rules of the game to cells.
     /// </summary>
-    public interface IRulesApplier
+    public interface IGameFieldService
     {
         /// <summary>
         /// Method to go through all the field cells and call the corresponding method if the cell is alive or dead.

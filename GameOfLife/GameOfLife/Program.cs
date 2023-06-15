@@ -11,11 +11,11 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddScoped<IAuxiliaryEngine, AuxiliaryEngine>();
         services.AddScoped<IFieldOperations, FieldOperations>();
         services.AddScoped<IFileIO, FileIO>();
-        services.AddScoped<IInputController, InputController>();
+        services.AddScoped<IInputProcessorService, InputProcessorService>();
         services.AddScoped<ILibrary, Library>();
         services.AddScoped<IMenuNavigator, MenuNavigator>();
-        services.AddScoped<IRenderer, Renderer>();
-        services.AddScoped<IRulesApplier, RulesApplier>();
+        services.AddScoped<IConsoleApplicationRenderingService, ConsoleApplicationRenderingService>();
+        services.AddScoped<IGameFieldService, GameFieldService>();
         services.AddScoped<IUserInterfaceFiller, UserInterfaceFiller>();
         services.AddScoped<IMainEngine, MainEngine>();
     })

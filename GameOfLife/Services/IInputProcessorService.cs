@@ -5,7 +5,7 @@ namespace GameOfLife.Interfaces
     /// <summary>
     /// InputController class takes and processes user's input.
     /// </summary>
-    public interface IInputController
+    public interface IInputProcessorService
     {
         bool WrongInput { get; set; }
 

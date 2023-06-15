@@ -16,7 +16,7 @@ namespace GameOfLife.Tests
         public void TestChangeDelay(ConsoleKey keyPressed, int initialDelay, int newDelay)
         {
             MainEngine engine = new();
-            InputController inputController = new();
+            InputProcessorService inputController = new();
             inputController.Inject(engine);
             engine.Delay = initialDelay;
 

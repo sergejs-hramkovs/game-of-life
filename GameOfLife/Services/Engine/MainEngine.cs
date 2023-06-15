@@ -2,7 +2,7 @@
 using GameOfLife.Models;
 using GameOfLife.Views;
 
-namespace GameOfLife
+namespace Services.Engine
 {
     /// <summary>
     /// The Engine class starts, runs and restarts the game.
@@ -10,8 +10,6 @@ namespace GameOfLife
     [Serializable]
     public class MainEngine : IMainEngine
     {
-        private readonly IFileIO _file;
-        private readonly IInputController _inputController;
         private readonly IAuxiliaryEngine _auxiliaryEngine;
         private readonly IMenuNavigator _menuNavigator;
 
@@ -26,13 +24,9 @@ namespace GameOfLife
         public bool GameOver { get; set; }
 
         public MainEngine(
-            IFileIO file,
-            IInputController inputController,
             IMenuNavigator menuNavigator,
             IAuxiliaryEngine auxiliaryEngine)
         {
-            _file = file;
-            _inputController = inputController;
             _menuNavigator = menuNavigator;
             _auxiliaryEngine = auxiliaryEngine;
         }
@@ -54,13 +48,13 @@ namespace GameOfLife
         public void StartGame(bool firstLaunch = true)
         {
             Console.Clear();
-            //MultipleGames = new MultipleGamesModel();
+            MultipleGames = new MultipleGamesModel();
             if (firstLaunch)
             {
                 InitializeParameters();
             }
 
-            _menuNavigator.NavigateMenu(MenuViews.MainMenu, _inputController.HandleInputMainMenu, fileMissing: _file.NoSavedGames);
+            _menuNavigator.NavigateMenu(MenuViews.MainMenu);
             RunGame();
         }
 
@@ -101,8 +95,8 @@ namespace GameOfLife
                     break;
                 }
 
-                runTimeKeyPress = _inputController.ReadKeyRuntime(MultipleGamesMode); // Checks for Spacebar or Arrows presses.
-            } while (runTimeKeyPress != ConsoleKey.Escape);
+                //runTimeKeyPress = _inputController.ReadKeyRuntime(MultipleGamesMode); // Checks for Spacebar or Arrows presses.
+            } while (true/*runTimeKeyPress != ConsoleKey.Escape*/);
 
             _menuNavigator.NavigateExitMenu(GameOver);
         }

@@ -14,7 +14,7 @@ namespace GameOfLife
     [Serializable]
     public class FileIO : IFileIO
     {
-        private readonly IInputController _inputController;
+        private readonly IInputProcessorService _inputController;
         private readonly IMainEngine _mainEngine;
         private readonly IMenuNavigator _menuNavigator;
 
@@ -31,7 +31,7 @@ namespace GameOfLife
         /// <summary>
         /// Constructor that creates a path to the folder that stores the saved games files.
         /// </summary>
-        public FileIO(IInputController inputController, IMainEngine mainEngine, IMenuNavigator menuNavigator)
+        public FileIO(IInputProcessorService inputController, IMainEngine mainEngine, IMenuNavigator menuNavigator)
         {
             _inputController = inputController;
             _mainEngine = mainEngine;

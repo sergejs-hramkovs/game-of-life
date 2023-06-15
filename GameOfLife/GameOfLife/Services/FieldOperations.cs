@@ -10,14 +10,14 @@ namespace GameOfLife
     [Serializable]
     public class FieldOperations : IFieldOperations
     {
-        private readonly IRenderer _renderer;
-        private readonly IInputController _inputController;
+        private readonly IConsoleApplicationRenderingService _renderer;
+        private readonly IInputProcessorService _inputController;
 
         public int CoordinateX { get; set; }
         public int CoordinateY { get; set; }
         public bool StopDataInput { get; set; }
 
-        public FieldOperations(IRenderer renderer, IInputController controller)
+        public FieldOperations(IConsoleApplicationRenderingService renderer, IInputProcessorService controller)
         {
             _renderer = renderer;
             _inputController = controller;

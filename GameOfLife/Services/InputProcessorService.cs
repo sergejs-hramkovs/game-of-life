@@ -8,7 +8,7 @@ namespace GameOfLife
     /// InputController class takes and processes user's input.
     /// </summary>
     [Serializable]
-    public class InputController : IInputController
+    public class InputProcessorService : IInputProcessorService
     {
         private readonly IMainEngine _mainEngine;
         private readonly IFileIO _file;
@@ -17,11 +17,12 @@ namespace GameOfLife
         private readonly ILibrary _library;
         private readonly IUserInterfaceFiller _userInterfaceFiller;
         private readonly IMenuNavigator _menuNavigator;
+
         public bool WrongInput { get; set; }
         public bool CorrectKeyPressed { get; set; }
         public GameFieldModel GameField { get; set; }
 
-        public InputController(IMainEngine mainEngine, IFileIO file, IRenderer renderer, IFieldOperations fieldOperations, ILibrary library, IUserInterfaceFiller userInterfaceFiller, IMenuNavigator menuNavigator)
+        public InputProcessorService(IMainEngine mainEngine, IFileIO file, IRenderer renderer, IFieldOperations fieldOperations, ILibrary library, IUserInterfaceFiller userInterfaceFiller, IMenuNavigator menuNavigator)
         {
             _mainEngine = mainEngine;
             _file = file;
@@ -43,11 +44,11 @@ namespace GameOfLife
             {
                 // Single game.
                 case ConsoleKey.D1:
-                    _menuNavigator.NavigateMenu(MenuViews.SingleGameMenu, HandleInputSingleGameMenu);
+                    _menuNavigator.NavigateMenu(MenuViews.SingleGameMenu);
                     _mainEngine.MultipleGames.InitializeSingleGameParameters();
                     if (!_mainEngine.MultipleGamesMode && !_mainEngine.SavedGameLoaded && !_mainEngine.GliderGunMode)
                     {
-                        _menuNavigator.NavigateMenu(MenuViews.SeedingTypeMenu, HandleInputSeedingTypeMenu, clearMenuFromScreen: false, _renderer.RenderGridOfFields);
+                        _menuNavigator.NavigateMenu(MenuViews.SeedingTypeMenu, clearMenuFromScreen: false, _renderer.RenderGridOfFields);
                     }
                     break;
 
@@ -59,13 +60,13 @@ namespace GameOfLife
 
                 // Load game(s)
                 case ConsoleKey.D3:
-                    _menuNavigator.NavigateMenu(MenuViews.LoadGameMenu, HandleInputLoadGameMenu);
+                    _menuNavigator.NavigateMenu(MenuViews.LoadGameMenu);
                     break;
 
                 // Glider Gun Mode
                 case ConsoleKey.D4:
                     _mainEngine.GliderGunMode = true;
-                    _menuNavigator.NavigateMenu(MenuViews.GliderGunModeMenu, HandleInputGliderGunMenu);
+                    _menuNavigator.NavigateMenu(MenuViews.GliderGunModeMenu);
                     _mainEngine.MultipleGames.InitializeSingleGameParameters();
                     break;
 

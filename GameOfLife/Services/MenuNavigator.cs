@@ -10,7 +10,7 @@ namespace GameOfLife.Services
     public class MenuNavigator : IMenuNavigator
     {
         private IRenderer _renderer;
-        private IInputController _inputController;
+        private IInputProcessorService _inputController;
         private IMainEngine _engine;
         private IFieldOperations _fieldOperations;
         private IFileIO _file;
@@ -25,7 +25,7 @@ namespace GameOfLife.Services
         /// <param name="fieldOperations">An object of the FieldOperations class.</param>
         /// <param name="file">An object of the FileIO class.</param>
         /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
-        public MenuNavigator(IRenderer renderer, IInputController inputController, IMainEngine engine, IFieldOperations fieldOperations,
+        public MenuNavigator(IRenderer renderer, IInputProcessorService inputController, IMainEngine engine, IFieldOperations fieldOperations,
             IFileIO file, IUserInterfaceFiller userInterfaceFiller)
         {
             _renderer = renderer;
@@ -40,16 +40,15 @@ namespace GameOfLife.Services
         /// General method to navigate through the menus.
         /// </summary>
         /// <param name="menu">An instance of a menu to be displayed.</param>
-        /// <param name="HandleInput">Method to handle the user's input in the menu.</param>
         /// <param name="clearMenuFromScreen">Parameter that defines if the screen is cleared, 'true' by default.</param>
         /// <param name="Render">Optional parameter to pass the field rendering method.</param>
-        public void NavigateMenu(string[] menu, Action HandleInput, bool clearMenuFromScreen = true, Action<MultipleGamesModel, bool>? Render = null, bool fileMissing = false)
+        public void NavigateMenu(string[] menu, bool clearMenuFromScreen = true, Action<MultipleGamesModel, bool>? Render = null, bool fileMissing = false)
         {
             do
             {
                 Render?.Invoke(_engine.MultipleGames, !clearMenuFromScreen);
                 _renderer.RenderMenu(menu, wrongInput: _inputController.WrongInput, clearScreen: clearMenuFromScreen, noSavedGames: fileMissing);
-                HandleInput();
+                _inputController.HandleInputMainMenu();
             } while (_inputController.WrongInput);
         }
 
@@ -59,9 +58,9 @@ namespace GameOfLife.Services
         public void NavigateMultipleGamesMenu()
         {
             _inputController.EnterMultipleGamesQuantity();
-            NavigateMenu(MenuViews.MultipleGamesModeFieldSizeChoiceMenu, _inputController.HandleInputMultipleGamesMenuFieldSize);
+            NavigateMenu(MenuViews.MultipleGamesModeFieldSizeChoiceMenu);
             _engine.MultipleGames.InitializeGames(_fieldOperations);
-            NavigateMenu(MenuViews.MultipleGamesModeMenu, _inputController.HandleInputMultipleGameNumbersMenu);
+            NavigateMenu(MenuViews.MultipleGamesModeMenu);
         }
 
         /// <summary>
