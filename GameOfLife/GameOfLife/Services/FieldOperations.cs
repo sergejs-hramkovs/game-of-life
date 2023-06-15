@@ -10,17 +10,13 @@ namespace GameOfLife
     [Serializable]
     public class FieldOperations : IFieldOperations
     {
-        private IRenderer _renderer;
-        private IInputController _inputController;
+        private readonly IRenderer _renderer;
+        private readonly IInputController _inputController;
+
         public int CoordinateX { get; set; }
         public int CoordinateY { get; set; }
         public bool StopDataInput { get; set; }
 
-        /// <summary>
-        /// Constructor to inject required onjects in the class.
-        /// </summary>
-        /// <param name="renderer">An instance of the Render class.</param>
-        /// <param name="controller">An instance of the InputController class.</param>
         public FieldOperations(IRenderer renderer, IInputController controller)
         {
             _renderer = renderer;

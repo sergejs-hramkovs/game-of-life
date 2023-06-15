@@ -25,7 +25,7 @@ namespace GameOfLife.Services
         /// <param name="fieldOperations">An object of the FieldOperations class.</param>
         /// <param name="file">An object of the FileIO class.</param>
         /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
-        public void Inject(IRenderer renderer, IInputController inputController, IMainEngine engine, IFieldOperations fieldOperations,
+        public MenuNavigator(IRenderer renderer, IInputController inputController, IMainEngine engine, IFieldOperations fieldOperations,
             IFileIO file, IUserInterfaceFiller userInterfaceFiller)
         {
             _renderer = renderer;

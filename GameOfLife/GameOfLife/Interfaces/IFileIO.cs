@@ -24,13 +24,6 @@ namespace GameOfLife.Interfaces
         int FileNumber { get; set; }
 
         /// <summary>
-        /// Method to inject required objects into the class.
-        /// </summary>
-        /// <param name="inputController">An instance of the InputController class.</param>
-        /// <param name="engine">An instance of the Engine class.</param>
-        void Inject(IInputController inputController, IMainEngine engine, IMenuNavigator menuNavigator);
-
-        /// <summary>
         /// Method to save the Single Game Field state to a text file.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>

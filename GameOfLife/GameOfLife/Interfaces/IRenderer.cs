@@ -8,12 +8,6 @@ namespace GameOfLife.Interfaces
     public interface IRenderer
     {
         /// <summary>
-        /// Method to inject the Engine class into the Renderer class.
-        /// </summary>
-        /// <param name="engine"></param>
-        void Inject(IMainEngine engine);
-
-        /// <summary>
         /// Method to iterate through an array of UI menu lines and to dispaly them.
         /// </summary>
         /// <param name="menuLines">An array of UI menu lines.</param>

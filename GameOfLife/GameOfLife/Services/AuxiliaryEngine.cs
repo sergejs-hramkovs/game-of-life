@@ -9,10 +9,22 @@ namespace GameOfLife.Services
     /// </summary>
     public class AuxiliaryEngine : IAuxiliaryEngine
     {
-        private IMainEngine _engine;
-        private IRulesApplier _rulesApplier;
-        private IRenderer _renderer;
-        private IUserInterfaceFiller _userInterfaceFiller;
+        private readonly IMainEngine _engine;
+        private readonly IRulesApplier _rulesApplier;
+        private readonly IRenderer _renderer;
+        private readonly IUserInterfaceFiller _userInterfaceFiller;
+
+        public AuxiliaryEngine(
+            IMainEngine engine,
+            IRulesApplier rulesApplier,
+            IRenderer renderer,
+            IUserInterfaceFiller userInterfaceFiller)
+        {
+            _engine = engine;
+            _rulesApplier = rulesApplier;
+            _renderer = renderer;
+            _userInterfaceFiller = userInterfaceFiller;
+        }
 
         /// <summary>
         /// Method to count the number of alive cells on one field.

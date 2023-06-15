@@ -8,18 +8,6 @@ namespace GameOfLife.Interfaces
     public interface IMenuNavigator
     {
         /// <summary>
-        /// Method to inject the required objects into the MenuNavigator class.
-        /// </summary>
-        /// <param name="renderer">An object of the Renderer class.</param>
-        /// <param name="inputController">An object of the InputController class.</param>
-        /// <param name="engine">An object of the Engine class.</param>
-        /// <param name="fieldOperations">An object of the FieldOperations class.</param>
-        /// <param name="file">An object of the FileIO class.</param>
-        /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
-        void Inject(IRenderer renderer, IInputController inputController, IMainEngine engine, IFieldOperations fieldOperations,
-            IFileIO file, IUserInterfaceFiller userInterfaceFiller);
-
-        /// <summary>
         /// General method to navigate through the menus.
         /// </summary>
         /// <param name="menu">An instance of a menu to be displayed.</param>

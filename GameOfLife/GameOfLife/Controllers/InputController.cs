@@ -10,34 +10,23 @@ namespace GameOfLife
     [Serializable]
     public class InputController : IInputController
     {
-        private IMainEngine _mainEngine;
-        private IFileIO _file;
-        private IRenderer _renderer;
-        private IFieldOperations _fieldOperations;
-        private ILibrary _library;
-        private IUserInterfaceFiller _userInterfaceFiller;
-        private IMenuNavigator _menuNavigator;
+        private readonly IMainEngine _mainEngine;
+        private readonly IFileIO _file;
+        private readonly IRenderer _renderer;
+        private readonly IFieldOperations _fieldOperations;
+        private readonly ILibrary _library;
+        private readonly IUserInterfaceFiller _userInterfaceFiller;
+        private readonly IMenuNavigator _menuNavigator;
         public bool WrongInput { get; set; }
         public bool CorrectKeyPressed { get; set; }
         public GameFieldModel GameField { get; set; }
 
-        /// <summary>
-        /// Method to inject objects in the InputController class.
-        /// </summary>
-        /// <param name="mainEngine">An object of the MainEngine class.</param>
-        /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
-        /// <param name="file">An object of the FileIO class.</param>
-        /// <param name="renderer">An object of the Renderer class.</param>
-        /// <param name="operations">An object of the FieldOperations class.</param>
-        /// <param name="library">An object of the Library class.</param>
-        /// <param name="menuNavigator">An object of the MenuNavigator class.</param>
-        public void Inject(IMainEngine mainEngine, IUserInterfaceFiller? userInterfaceFiller = null, IFileIO? file = null,
-            IRenderer? renderer = null, IFieldOperations? operations = null, ILibrary? library = null, IMenuNavigator? menuNavigator = null)
+        public InputController(IMainEngine mainEngine, IFileIO file, IRenderer renderer, IFieldOperations fieldOperations, ILibrary library, IUserInterfaceFiller userInterfaceFiller, IMenuNavigator menuNavigator)
         {
             _mainEngine = mainEngine;
             _file = file;
             _renderer = renderer;
-            _fieldOperations = operations;
+            _fieldOperations = fieldOperations;
             _library = library;
             _userInterfaceFiller = userInterfaceFiller;
             _menuNavigator = menuNavigator;

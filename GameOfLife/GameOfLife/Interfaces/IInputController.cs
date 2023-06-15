@@ -14,19 +14,6 @@ namespace GameOfLife.Interfaces
         GameFieldModel GameField { get; set; }
 
         /// <summary>
-        /// Method to inject objects in the InputController class.
-        /// </summary>
-        /// <param name="mainEngine">An object of the MainEngine class.</param>
-        /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
-        /// <param name="file">An object of the FileIO class.</param>
-        /// <param name="renderer">An object of the Renderer class.</param>
-        /// <param name="operations">An object of the FieldOperations class.</param>
-        /// <param name="library">An object of the Library class.</param>
-        /// <param name="menuNavigator">An object of the MenuNavigator class.</param>
-        void Inject(IMainEngine mainEngine, IUserInterfaceFiller userInterfaceFiller, IFileIO file, IRenderer renderer,
-            IFieldOperations operations, ILibrary library, IMenuNavigator? menuNavigator = null);
-
-        /// <summary>
         /// Method to take and process user's input in the Main Menu.
         /// </summary>
         void HandleInputMainMenu();

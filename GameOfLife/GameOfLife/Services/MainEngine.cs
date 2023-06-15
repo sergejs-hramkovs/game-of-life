@@ -10,16 +10,12 @@ namespace GameOfLife
     [Serializable]
     public class MainEngine : IMainEngine
     {
-        private IFileIO _file;
-        private IRenderer _renderer;
-        private IFieldOperations _fieldOperations;
-        private ILibrary _library;
-        private IRulesApplier _rulesApplier;
-        private IInputController _inputController;
-        private IUserInterfaceFiller _userInterfaceFiller;
-        private IAuxiliaryEngine _auxiliaryEngine;
-        private IMenuNavigator _menuNavigator;
-        public MultipleGamesModel MultipleGames { get; set; }
+        private readonly IFileIO _file;
+        private readonly IInputController _inputController;
+        private readonly IAuxiliaryEngine _auxiliaryEngine;
+        private readonly IMenuNavigator _menuNavigator;
+
+        public MultipleGamesModel MultipleGames { get; set; } = new MultipleGamesModel();
         public bool ReadGeneration { get; set; }
         public bool GliderGunMode { get; set; }
         public bool MultipleGamesMode { get; set; }
@@ -29,27 +25,16 @@ namespace GameOfLife
         public int Delay { get; set; } = 1000;
         public bool GameOver { get; set; }
 
-        /// <summary>
-        /// Method to inject objects into the Engine class.
-        /// </summary>
-        /// <param name="render">An object of the Render class.</param>
-        /// <param name="file">An object of the FileIO class.</param>
-        /// <param name="operations">An object of the FieldOperations class.</param>
-        /// <param name="library">An object of the Library class.</param>
-        /// <param name="rulesApplier">An object of the RulesApplier class.</param>
-        /// <param name="inputController">An object of the InputController class.</param>
-        /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
-        public void Inject(IRenderer render, IFileIO file, IFieldOperations operations, ILibrary library,
-            IRulesApplier rulesApplier, IInputController inputController, IUserInterfaceFiller userInterfaceFiller, IMenuNavigator menuNavigator)
+        public MainEngine(
+            IFileIO file,
+            IInputController inputController,
+            IMenuNavigator menuNavigator,
+            IAuxiliaryEngine auxiliaryEngine)
         {
-            _renderer = render;
             _file = file;
-            _fieldOperations = operations;
-            _library = library;
-            _rulesApplier = rulesApplier;
             _inputController = inputController;
-            _userInterfaceFiller = userInterfaceFiller;
             _menuNavigator = menuNavigator;
+            _auxiliaryEngine = auxiliaryEngine;
         }
 
         /// <summary>
@@ -57,10 +42,6 @@ namespace GameOfLife
         /// </summary>
         private void InitializeParameters()
         {
-            _inputController.Inject(this, _userInterfaceFiller, _file, _renderer, _fieldOperations, _library, _menuNavigator);
-            _file.Inject(_inputController, this, _menuNavigator);
-            _menuNavigator.Inject(_renderer, _inputController, this, _fieldOperations, _file, _userInterfaceFiller);
-            _renderer.Inject(this);
             Console.CursorVisible = false;
             Console.BackgroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.Black;
@@ -73,7 +54,7 @@ namespace GameOfLife
         public void StartGame(bool firstLaunch = true)
         {
             Console.Clear();
-            MultipleGames = new MultipleGamesModel();
+            //MultipleGames = new MultipleGamesModel();
             if (firstLaunch)
             {
                 InitializeParameters();

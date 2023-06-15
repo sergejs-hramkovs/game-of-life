@@ -14,9 +14,10 @@ namespace GameOfLife
     [Serializable]
     public class FileIO : IFileIO
     {
-        private IInputController _inputController;
-        private IMainEngine _mainEngine;
-        private IMenuNavigator _menuNavigator;
+        private readonly IInputController _inputController;
+        private readonly IMainEngine _mainEngine;
+        private readonly IMenuNavigator _menuNavigator;
+
         private List<string> _stringList = new List<string>();
         private string[] _stringField;
         public string FilePath { get; set; }
@@ -30,22 +31,13 @@ namespace GameOfLife
         /// <summary>
         /// Constructor that creates a path to the folder that stores the saved games files.
         /// </summary>
-        public FileIO()
-        {
-            FilePath = AppDomain.CurrentDomain.BaseDirectory + StringConstants.SavedGamesFolderName;
-            MultipleGamesModeFilePath = AppDomain.CurrentDomain.BaseDirectory + StringConstants.MultipleGamesModeSavedGamesFolderName;
-        }
-
-        /// <summary>
-        /// Method to inject required objects into the class.
-        /// </summary>
-        /// <param name="inputController">An instance of the InputController class.</param>
-        /// <param name="engine">An instance of the Engine class.</param>
-        public void Inject(IInputController inputController, IMainEngine engine, IMenuNavigator menuNavigator)
+        public FileIO(IInputController inputController, IMainEngine mainEngine, IMenuNavigator menuNavigator)
         {
             _inputController = inputController;
-            _mainEngine = engine;
+            _mainEngine = mainEngine;
             _menuNavigator = menuNavigator;
+            FilePath = AppDomain.CurrentDomain.BaseDirectory + StringConstants.SavedGamesFolderName;
+            MultipleGamesModeFilePath = AppDomain.CurrentDomain.BaseDirectory + StringConstants.MultipleGamesModeSavedGamesFolderName;
         }
 
         /// <summary>

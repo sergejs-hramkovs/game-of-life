@@ -11,11 +11,7 @@ namespace GameOfLife
     {
         private IMainEngine _engine;
 
-        /// <summary>
-        /// Method to inject the Engine class into the Renderer class.
-        /// </summary>
-        /// <param name="engine"></param>
-        public void Inject(IMainEngine engine)
+        public Renderer(IMainEngine engine)
         {
             _engine = engine;
         }
