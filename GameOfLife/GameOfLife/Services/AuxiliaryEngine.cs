@@ -15,21 +15,6 @@ namespace GameOfLife.Services
         private IUserInterfaceFiller _userInterfaceFiller;
 
         /// <summary>
-        /// Method to inject objects into the AuxillaryEngine class.
-        /// </summary>
-        /// <param name="engine">An object of the MainEngine class.</param>
-        /// <param name="rulesApplier">An object of the RulesApplier class.</param>
-        ///<param name="renderer">An object of the Renderer class.</param>
-        /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
-        public void Inject(IMainEngine engine, IRulesApplier rulesApplier, IRenderer renderer, IUserInterfaceFiller userInterfaceFiller)
-        {
-            _engine = engine;
-            _rulesApplier = rulesApplier;
-            _renderer = renderer;
-            _userInterfaceFiller = userInterfaceFiller;
-        }
-
-        /// <summary>
         /// Method to count the number of alive cells on one field.
         /// </summary>
         /// <param name="gameField">A GameFieldModel object that contains the Game Field.</param>

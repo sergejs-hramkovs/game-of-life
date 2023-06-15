@@ -36,7 +36,7 @@ namespace GameOfLife.Interfaces
         /// <param name="inputController">An object of the InputController class.</param>
         /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
         void Inject(IRenderer render, IFileIO file, IFieldOperations operations, ILibrary library, IRulesApplier rulesApplier, IInputController inputController,
-            IUserInterfaceFiller userInterfaceFiller, IAuxiliaryEngine auxiliaryEngine, IMenuNavigator menuNavigator);
+            IUserInterfaceFiller userInterfaceFiller, IMenuNavigator menuNavigator);
 
         /// <summary>
         /// Method to start first launch initializations, menu rendering/processing and the main game process.

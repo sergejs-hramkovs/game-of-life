@@ -5,15 +5,6 @@ namespace GameOfLife.Interfaces
     public interface IAuxiliaryEngine
     {
         /// <summary>
-        /// Method to inject objects into the AuxillaryEngine class.
-        /// </summary>
-        /// <param name="engine">An object of the MainEngine class.</param>
-        /// <param name="rulesApplier">An object of the RulesApplier class.</param>
-        ///<param name="renderer">An object of the Renderer class.</param>
-        /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
-        void Inject(IMainEngine engine, IRulesApplier rulesApplier, IRenderer renderer, IUserInterfaceFiller userInterfaceFiller);
-
-        /// <summary>
         /// Method to perform the required runtime actions, like applying game rules and counting alive cells of each field.
         /// </summary>
         void PerformRuntimeCalculations();

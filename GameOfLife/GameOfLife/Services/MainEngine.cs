@@ -40,8 +40,7 @@ namespace GameOfLife
         /// <param name="inputController">An object of the InputController class.</param>
         /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
         public void Inject(IRenderer render, IFileIO file, IFieldOperations operations, ILibrary library,
-            IRulesApplier rulesApplier, IInputController inputController, IUserInterfaceFiller userInterfaceFiller,
-            IAuxiliaryEngine auxiliaryEngine, IMenuNavigator menuNavigator)
+            IRulesApplier rulesApplier, IInputController inputController, IUserInterfaceFiller userInterfaceFiller, IMenuNavigator menuNavigator)
         {
             _renderer = render;
             _file = file;
@@ -50,7 +49,6 @@ namespace GameOfLife
             _rulesApplier = rulesApplier;
             _inputController = inputController;
             _userInterfaceFiller = userInterfaceFiller;
-            _auxiliaryEngine = auxiliaryEngine;
             _menuNavigator = menuNavigator;
         }
 
@@ -62,10 +60,8 @@ namespace GameOfLife
             _inputController.Inject(this, _userInterfaceFiller, _file, _renderer, _fieldOperations, _library, _menuNavigator);
             _file.Inject(_inputController, this, _menuNavigator);
             _menuNavigator.Inject(_renderer, _inputController, this, _fieldOperations, _file, _userInterfaceFiller);
-            _auxiliaryEngine.Inject(this, _rulesApplier, _renderer, _userInterfaceFiller);
             _renderer.Inject(this);
             Console.CursorVisible = false;
-            Console.SetWindowSize(175, 61);
             Console.BackgroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.Black;
         }
