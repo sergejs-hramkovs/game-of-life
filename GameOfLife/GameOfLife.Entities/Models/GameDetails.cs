@@ -1,4 +1,6 @@
-﻿namespace GameOfLife.Entities.Models
+﻿using GameOfLife.Entities.Enums;
+
+namespace GameOfLife.Entities.Models
 {
     public class GameDetails
     {
@@ -11,5 +13,6 @@
         public int Delay { get; set; } = 1000;
         public bool IsGameOver { get; set; }
         public bool InvalidMenuInput { get; set; }
+        public MenuTypes MenuType { get; set; }
     }
 }

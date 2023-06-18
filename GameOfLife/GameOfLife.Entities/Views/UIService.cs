@@ -1,4 +1,5 @@
-﻿using GameOfLife.Interfaces;
+﻿using GameOfLife.Entities.Models;
+using GameOfLife.Interfaces;
 using GameOfLife.Models;
 
 namespace GameOfLife.Views
@@ -9,6 +10,33 @@ namespace GameOfLife.Views
     [Serializable]
     public class UIService : IUIService
     {
+        public UIService()
+        {
+
+        }
+
+        /// <summary>
+        /// Method that is responsible for creation and displaying of the runtime UI and the Game Field(s).
+        /// </summary>
+        public void CreateRuntimeView(GameModel game)
+        {
+            Console.SetCursorPosition(0, 0);
+            CountTotalAliveCells(game.MultipleGamesField);
+            if (!game.GameDetails.IsMultipleGamesMode)
+            {
+                _userInterfaceService.CreateSingleGameRuntimeUI(game.MultipleGamesField, game.GameDetails.Delay);
+                _renderer.RenderMenu(MenuViews.SingleGameUI, clearScreen: false);
+            }
+            else
+            {
+                _userInterfaceService.CreateMultiGameRuntimeUI(game.MultipleGamesField, game.GameDetails.Delay);
+                _renderer.RenderMenu(MenuViews.MultiGameUI, clearScreen: false);
+            }
+
+            _renderer.RenderGridOfFields(game.MultipleGamesField);
+            RemoveDeadFieldsFromRendering(game.MultipleGamesField, game.MultipleGamesField.AliveFields);
+        }
+
         /// <summary>
         /// Method to fill the runtime UI with relevant and current information about the Game Field.
         /// </summary>

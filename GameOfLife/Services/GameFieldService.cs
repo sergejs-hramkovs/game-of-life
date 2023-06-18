@@ -1,4 +1,5 @@
-﻿using GameOfLife.Interfaces;
+﻿using GameOfLife.Entities.Models;
+using GameOfLife.Interfaces;
 using GameOfLife.Models;
 
 namespace GameOfLife
@@ -170,6 +171,93 @@ namespace GameOfLife
 
             _cellsToBeBorn.Clear();
             _cellsToDie.Clear();
+        }
+
+        /// <summary>
+        /// Method to count the number of alive cells on one field.
+        /// </summary>
+        /// <param name="gameField">A GameFieldModel object that contains the Game Field.</param>
+        private static void CountAliveCells(SingleGameField gameField)
+        {
+            gameField.AliveCellsNumber = 0;
+            for (int xCoordinate = 0; xCoordinate < gameField.Length; xCoordinate++)
+            {
+                for (int yCoordinate = 0; yCoordinate < gameField.Width; yCoordinate++)
+                {
+                    if (gameField.GameField[xCoordinate, yCoordinate] == StringConstants.AliveCellSymbol)
+                    {
+                        gameField.AliveCellsNumber++;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method to count total alive cells number on all the fields in the Multiple Games Mode.
+        /// </summary>
+        /// <param name="multipleGamesField">A MultipleGamesModel object that contains the list of Game Fields.</param>
+        private static void CountTotalAliveCells(MultipleGamesField multipleGamesField)
+        {
+            multipleGamesField.TotalCellsAlive = 0;
+            foreach (var field in multipleGamesField.ListOfGames)
+            {
+                CountAliveCells(field);
+                multipleGamesField.TotalCellsAlive += field.AliveCellsNumber;
+            }
+        }
+
+        /// <summary>
+        /// Method to replace rendered dead fields with alive ones in the list of fields to be displayed.
+        /// </summary>
+        /// <param name="multipleGames">A MultipleGamesModel object that contains the list of Game Fields.</param>
+        private static void RemoveDeadFieldsFromRendering(MultipleGamesField multipleGames, List<int> aliveFields)
+        {
+            for (int rowNumber = 0; rowNumber < multipleGames.NumberOfRows; rowNumber++)
+            {
+                for (int i = rowNumber * multipleGames.NumberOfHorizontalFields; i < multipleGames.NumberOfHorizontalFields + rowNumber * multipleGames.NumberOfHorizontalFields; i++)
+                {
+                    if ((multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[i]].AliveCellsNumber == 0) && (multipleGames.NumberOfFieldsAlive >= multipleGames.NumberOfGamesToBeDisplayed))
+                    {
+                        foreach (int aliveField in aliveFields)
+                        {
+                            if (!multipleGames.GamesToBeDisplayed.Contains(aliveField))
+                            {
+                                multipleGames.GamesToBeDisplayed[i] = aliveField;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method to perform the required runtime actions, like applying game rules and counting alive cells of each field.
+        /// </summary>
+        public void PerformRuntimeCalculations(GameModel game)
+        {
+            for (int gameNumber = 0; gameNumber < game.MultipleGamesField.TotalNumberOfGames; gameNumber++)
+            {
+                _gameFieldService.IterateThroughGameFieldCells(game.MultipleGamesField.ListOfGames[gameNumber], game.GameDetails.IsGliderGunMode);
+                _gameFieldService.RefreshField(_engine.MultipleGames.ListOfGames[gameNumber]);
+                CountAliveCells(_engine.MultipleGames.ListOfGames[gameNumber]);
+
+                if (_engine.MultipleGames.ListOfGames[gameNumber].AliveCellsNumber == 0 && !_engine.MultipleGames.DeadFields.Contains(gameNumber))
+                {
+                    _engine.MultipleGames.NumberOfFieldsAlive--;
+                    _engine.MultipleGames.DeadFields.Add(gameNumber);
+                    if (_engine.MultipleGames.AliveFields.Contains(gameNumber))
+                    {
+                        _engine.MultipleGames.AliveFields.Remove(gameNumber);
+                    }
+                }
+                else if (_engine.MultipleGames.ListOfGames[gameNumber].AliveCellsNumber > 0 && !_engine.MultipleGames.AliveFields.Contains(gameNumber))
+                {
+                    _engine.MultipleGames.AliveFields.Add(gameNumber);
+                }
+            }
+
+            _engine.MultipleGames.Generation++;
         }
     }
 }
