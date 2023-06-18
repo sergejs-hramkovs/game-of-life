@@ -27,7 +27,7 @@ namespace GameOfLife.Interfaces
         /// Method to save the Single Game Field state to a text file.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
-        void SaveGameFieldToFile(GameFieldModel gameField);
+        void SaveGameFieldToFile(SingleGameField gameField);
 
         /// <summary>
         /// Method to load the saved field from the file.
@@ -45,7 +45,7 @@ namespace GameOfLife.Interfaces
         /// Method to save all the games in the Multiple Games Mode to a file.
         /// </summary>
         /// <param name="multipleGames">An object that contains a list of Multiple Games.</param>
-        void SaveMultipleGamesToFile(MultipleGamesModel multipleGames);
+        void SaveMultipleGamesToFile(MultipleGamesField multipleGames);
 
         /// <summary>
         /// Method to load Multiple Games from the file.

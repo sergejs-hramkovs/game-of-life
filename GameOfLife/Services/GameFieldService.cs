@@ -18,7 +18,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="disableWrappingAroundField">Parameter that shows if field's wrapping around is disabled.</param>
-        public void IterateThroughGameFieldCells(GameFieldModel gameField, bool disableWrappingAroundField = false)
+        public void IterateThroughGameFieldCells(SingleGameField gameField, bool disableWrappingAroundField = false)
         {
             for (int xCoordinate = 0; xCoordinate < gameField.Length; xCoordinate++)
             {
@@ -43,7 +43,7 @@ namespace GameOfLife
         /// <param name="xCoordinate">Horizontal coordinate of a cell which neighbours are being counted.</param>
         /// <param name="yCoordinate">Vertical coordinate of a cell which neighbours are being counted</param>
         /// <param name="disableWrappingAroundField">Parameter that shows if field's wrapping around is disabled.</param>
-        private void ActOnAliveCell(GameFieldModel gameField, int xCoordinate, int yCoordinate, bool disableWrappingAroundField)
+        private void ActOnAliveCell(SingleGameField gameField, int xCoordinate, int yCoordinate, bool disableWrappingAroundField)
         {
             neighboursCount = CountNeighbourCells(gameField, xCoordinate, yCoordinate, false);
             switch (disableWrappingAroundField)
@@ -73,7 +73,7 @@ namespace GameOfLife
         /// <param name="xCoordinate">Horizontal coordinate of a cell which neighbours are being counted.</param>
         /// <param name="yCoordinate">Vertical coordinate of a cell which neighbours are being counted</param>
         /// <param name="disableWrappingAroundField">Parameter that shows if field's wrapping around is disabled.</param>
-        private void ActOnDeadCell(GameFieldModel gameField, int xCoordinate, int yCoordinate, bool disableWrappingAroundField)
+        private void ActOnDeadCell(SingleGameField gameField, int xCoordinate, int yCoordinate, bool disableWrappingAroundField)
         {
             neighboursCount = CountNeighbourCells(gameField, xCoordinate, yCoordinate, true);
             switch (disableWrappingAroundField)
@@ -104,7 +104,7 @@ namespace GameOfLife
         /// <param name="yCoordinate">Vertical coordinate of a cell which neighbours are being counted</param>
         /// <param name="checkDeadCell">Parameter which shows whether the cell, which neighbours are being counted, is alive or dead.</param>
         /// <returns>Returns the number of cell's neighbours.</returns>
-        private int CountNeighbourCells(GameFieldModel gameField, int xCoordinate, int yCoordinate, bool checkDeadCell)
+        private int CountNeighbourCells(SingleGameField gameField, int xCoordinate, int yCoordinate, bool checkDeadCell)
         {
             bool wrappedX = false;
             bool wrappedY = false;
@@ -156,7 +156,7 @@ namespace GameOfLife
         /// Removes or creates new cells according to the rules.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
-        public void RefreshField(GameFieldModel gameField)
+        public void RefreshField(SingleGameField gameField)
         {
             foreach ((int xCoordinate, int yCoordinate) cell in _cellsToDie)
             {

@@ -5,7 +5,7 @@
     /// field dimensions and the number of generation.
     /// </summary>
     [Serializable]
-    public class GameFieldModel
+    public class SingleGameField
     {
         public string[,] GameField { get; set; }
         public int Length { get; }
@@ -24,7 +24,7 @@
         /// </summary>
         /// <param name="length">The horizontal dimension of the field.</param>
         /// <param name="width">THe vertical dimension of the field.</param>
-        public GameFieldModel(int length, int width)
+        public SingleGameField(int length, int width)
         {
             GameField = new string[length, width];
             Length = GameField.GetLength(0);

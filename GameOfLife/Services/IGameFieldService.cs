@@ -12,12 +12,12 @@ namespace GameOfLife.Interfaces
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="disableWrappingAroundField">Parameter that shows if field's wrapping around is disabled.</param>
-        void IterateThroughGameFieldCells(GameFieldModel gameField, bool disableWrappingAroundField = false);
+        void IterateThroughGameFieldCells(SingleGameField gameField, bool disableWrappingAroundField = false);
 
         /// <summary>
         /// Removes or creates new cells according to the rules.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
-        void RefreshField(GameFieldModel gameField);
+        void RefreshField(SingleGameField gameField);
     }
 }

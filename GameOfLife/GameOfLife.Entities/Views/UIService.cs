@@ -7,16 +7,16 @@ namespace GameOfLife.Views
     /// The UserInterfaceFiller class fills the UI with necessary parameters.
     /// </summary>
     [Serializable]
-    public class UserInterfaceFiller : IUserInterfaceFiller
+    public class UIService : IUIService
     {
         /// <summary>
         /// Method to fill the runtime UI with relevant and current information about the Game Field.
         /// </summary>
         /// <param name="multipleGames">A MultipleGamesModel object that stores the list of Game Fields.</param>
         /// <param name="delay">Delay in miliseconds between generations.</param>
-        public void CreateSingleGameRuntimeUI(MultipleGamesModel multipleGames, int delay)
+        public void CreateSingleGameUI(MultipleGamesField multipleGames, int delay)
         {
-            GameFieldModel gameField = multipleGames.ListOfGames[0];
+            SingleGameField gameField = multipleGames.ListOfGames[0];
             MenuViews.SingleGameUI = new string[]
             {
                 " # Press ESC to stop",
@@ -34,7 +34,7 @@ namespace GameOfLife.Views
         /// </summary>
         /// <param name="multipleGames">A MultipleGamesModel object that stores the list of Game Fields.</param>
         /// <param name="delay">Delay in miliseconds between generations.</param>
-        public void CreateMultiGameRuntimeUI(MultipleGamesModel multipleGames, int delay)
+        public void CreateMultipleGamesUI(MultipleGamesField multipleGames, int delay)
         {
             MenuViews.MultiGameUI = new string[]
             {
@@ -50,7 +50,7 @@ namespace GameOfLife.Views
         /// </summary>
         /// <param name="numberOfFiles">The number of saved games files.</param>
         /// <param name="fileNames">The list of names of saved games files.</param>
-        public void CreateFileChoosingMenu(int numberOfFiles, List<string> fileNames)
+        public void CreateFileLoadingMenu(int numberOfFiles, List<string> fileNames)
         {
             MenuViews.ChooseFileMenu = new string[7 + fileNames.Count];
             MenuViews.ChooseFileMenu[0] = StringConstants.WrongInputPhrase;

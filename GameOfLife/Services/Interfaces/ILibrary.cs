@@ -13,7 +13,7 @@ namespace GameOfLife.Interfaces
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a glider.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a glider.</param>
-        void SpawnGlider(GameFieldModel gameField, int locationX, int locationY);
+        void SpawnGlider(SingleGameField gameField, int locationX, int locationY);
 
         /// <summary>
         /// Method to spawn a Light-Weight Spaceship pattern.
@@ -21,7 +21,7 @@ namespace GameOfLife.Interfaces
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a light-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a light-weight spaceship.</param>
-        void SpawnLightWeight(GameFieldModel gameField, int locationX, int locationY);
+        void SpawnLightWeight(SingleGameField gameField, int locationX, int locationY);
 
         /// <summary>
         /// Method to spawn a Middle-Weight Spaceship pattern.
@@ -29,7 +29,7 @@ namespace GameOfLife.Interfaces
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a middle-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a middle-weight spaceship.</param>
-        void SpawnMiddleWeight(GameFieldModel gameField, int locationX, int locationY);
+        void SpawnMiddleWeight(SingleGameField gameField, int locationX, int locationY);
 
         /// <summary>
         /// Method to spawn a Heavy-Weight Spaceship pattern.
@@ -37,7 +37,7 @@ namespace GameOfLife.Interfaces
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a heavy-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a heavy-weight spaceship.</param>
-        void SpawnHeavyWeight(GameFieldModel gameField, int locationX, int locationY);
+        void SpawnHeavyWeight(SingleGameField gameField, int locationX, int locationY);
 
         /// <summary>
         /// Method to spawn Gosper's Glider Gun.
@@ -45,7 +45,7 @@ namespace GameOfLife.Interfaces
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of the Gosper's glider gun.</param>
         /// <param name="locationY">Vertical location of the upper left corner of Gosper's glider gun.</param>
-        void SpawnGosperGliderGun(GameFieldModel gameField, int locationX, int locationY);
+        void SpawnGosperGliderGun(SingleGameField gameField, int locationX, int locationY);
 
         /// <summary>
         /// Method to spawn Simkin's Glider Gun.
@@ -53,6 +53,6 @@ namespace GameOfLife.Interfaces
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of the Simkin's glider gun.</param>
         /// <param name="locationY">Vertical location of the upper left corner of the Simkin's glider gun.</param>
-        void SpawnSimkinGliderGun(GameFieldModel gameField, int locationX, int locationY);
+        void SpawnSimkinGliderGun(SingleGameField gameField, int locationX, int locationY);
     }
 }

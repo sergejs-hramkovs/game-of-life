@@ -1,4 +1,5 @@
-﻿using GameOfLife.Interfaces;
+﻿using GameOfLife.Entities.Models;
+using GameOfLife.Interfaces;
 using GameOfLife.Models;
 using GameOfLife.Views;
 
@@ -10,27 +11,27 @@ namespace GameOfLife.Services
     public class AuxiliaryEngine : IAuxiliaryEngine
     {
         private readonly IMainEngine _engine;
-        private readonly IRulesApplier _rulesApplier;
-        private readonly IRenderer _renderer;
-        private readonly IUserInterfaceFiller _userInterfaceFiller;
+        private readonly IGameFieldService _gameFieldService;
+        private readonly IRenderingService _renderer;
+        private readonly IUIService _userInterfaceService;
 
         public AuxiliaryEngine(
             IMainEngine engine,
-            IRulesApplier rulesApplier,
-            IRenderer renderer,
-            IUserInterfaceFiller userInterfaceFiller)
+            IGameFieldService gameFieldService,
+            IRenderingService renderer,
+            IUIService userInterfaceService)
         {
             _engine = engine;
-            _rulesApplier = rulesApplier;
+            _gameFieldService = gameFieldService;
             _renderer = renderer;
-            _userInterfaceFiller = userInterfaceFiller;
+            _userInterfaceService = userInterfaceService;
         }
 
         /// <summary>
         /// Method to count the number of alive cells on one field.
         /// </summary>
         /// <param name="gameField">A GameFieldModel object that contains the Game Field.</param>
-        public void CountAliveCells(GameFieldModel gameField)
+        public void CountAliveCells(SingleGameField gameField)
         {
             gameField.AliveCellsNumber = 0;
             for (int xCoordinate = 0; xCoordinate < gameField.Length; xCoordinate++)
@@ -49,15 +50,13 @@ namespace GameOfLife.Services
         /// Method to count total alive cells number on all the fields in the Multiple Games Mode.
         /// </summary>
         /// <param name="multipleGames">A MultipleGamesModel object that contains the list of Game Fields.</param>
-        public void CountTotalAliveCells(MultipleGamesModel multipleGames)
+        public void CountTotalAliveCells(MultipleGamesField multipleGames)
         {
-            GameFieldModel gameField;
             multipleGames.TotalCellsAlive = 0;
             foreach (var field in multipleGames.ListOfGames)
             {
-                gameField = field;
-                CountAliveCells(gameField);
-                multipleGames.TotalCellsAlive += gameField.AliveCellsNumber;
+                CountAliveCells(field);
+                multipleGames.TotalCellsAlive += field.AliveCellsNumber;
             }
         }
 
@@ -65,7 +64,7 @@ namespace GameOfLife.Services
         /// Method to replace rendered dead fields with alive ones in the list of fields to be displayed.
         /// </summary>
         /// <param name="multipleGames">A MultipleGamesModel object that contains the list of Game Fields.</param>
-        public void RemoveDeadFieldsFromRendering(MultipleGamesModel multipleGames)
+        public void RemoveDeadFieldsFromRendering(MultipleGamesField multipleGames)
         {
             for (int rowNumber = 0; rowNumber < multipleGames.NumberOfRows; rowNumber++)
             {
@@ -93,10 +92,10 @@ namespace GameOfLife.Services
         {
             for (int gameNumber = 0; gameNumber < _engine.MultipleGames.TotalNumberOfGames; gameNumber++)
             {
-                _rulesApplier.IterateThroughGameFieldCells(_engine.MultipleGames.ListOfGames[gameNumber], _engine.GliderGunMode);
-                _rulesApplier.RefreshField(_engine.MultipleGames.ListOfGames[gameNumber]);
+                _gameFieldService.IterateThroughGameFieldCells(_engine.MultipleGames.ListOfGames[gameNumber], _engine.GliderGunMode);
+                _gameFieldService.RefreshField(_engine.MultipleGames.ListOfGames[gameNumber]);
                 CountAliveCells(_engine.MultipleGames.ListOfGames[gameNumber]);
-                
+
                 if (_engine.MultipleGames.ListOfGames[gameNumber].AliveCellsNumber == 0 && !_engine.MultipleGames.DeadFields.Contains(gameNumber))
                 {
                     _engine.MultipleGames.NumberOfFieldsAlive--;
@@ -118,23 +117,23 @@ namespace GameOfLife.Services
         /// <summary>
         /// Method that is responsible for creation and displaying of the runtime UI and the Game Field(s).
         /// </summary>
-        public void CreateRuntimeView()
+        public void CreateRuntimeView(GameModel game)
         {
             Console.SetCursorPosition(0, 0);
-            CountTotalAliveCells(_engine.MultipleGames);
-            if (!_engine.MultipleGamesMode)
+            CountTotalAliveCells(game.MultipleGamesField);
+            if (!game.GameDetails.IsMultipleGamesMode)
             {
-                _userInterfaceFiller.CreateSingleGameRuntimeUI(_engine.MultipleGames, _engine.Delay);
+                _userInterfaceService.CreateSingleGameRuntimeUI(game.MultipleGamesField, game.GameDetails.Delay);
                 _renderer.RenderMenu(MenuViews.SingleGameUI, clearScreen: false);
             }
             else
             {
-                _userInterfaceFiller.CreateMultiGameRuntimeUI(_engine.MultipleGames, _engine.Delay);
+                _userInterfaceService.CreateMultiGameRuntimeUI(game.MultipleGamesField, game.GameDetails.Delay);
                 _renderer.RenderMenu(MenuViews.MultiGameUI, clearScreen: false);
             }
 
-            _renderer.RenderGridOfFields(_engine.MultipleGames);
-            RemoveDeadFieldsFromRendering(_engine.MultipleGames);
+            _renderer.RenderGridOfFields(game.MultipleGamesField);
+            RemoveDeadFieldsFromRendering(game.MultipleGamesField);
         }
     }
 }

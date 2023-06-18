@@ -1,5 +1,4 @@
 ﻿using GameOfLife.Interfaces;
-using GameOfLife.Models;
 using GameOfLife.Views;
 
 namespace GameOfLife.Services
@@ -9,12 +8,12 @@ namespace GameOfLife.Services
     /// </summary>
     public class MenuNavigator : IMenuNavigator
     {
-        private IRenderer _renderer;
-        private IInputProcessorService _inputController;
-        private IMainEngine _engine;
-        private IFieldOperations _fieldOperations;
-        private IFileIO _file;
-        private IUserInterfaceFiller _userInterfaceFiller;
+        private readonly IRenderingService _renderingService;
+        private readonly IInputProcessorService _inputProcessorService;
+        private readonly IMainEngine _engine;
+        private readonly IFieldOperations _fieldOperations;
+        private readonly IFileIO _file;
+        private readonly IUIService _userInterfaceService;
 
         /// <summary>
         /// Method to inject the required objects into the MenuNavigator class.
@@ -24,16 +23,21 @@ namespace GameOfLife.Services
         /// <param name="engine">An object of the Engine class.</param>
         /// <param name="fieldOperations">An object of the FieldOperations class.</param>
         /// <param name="file">An object of the FileIO class.</param>
-        /// <param name="userInterfaceFiller">An object of the UserInterfaceFiller class.</param>
-        public MenuNavigator(IRenderer renderer, IInputProcessorService inputController, IMainEngine engine, IFieldOperations fieldOperations,
-            IFileIO file, IUserInterfaceFiller userInterfaceFiller)
+        /// <param name="userInterfaceService">An object of the UserInterfaceFiller class.</param>
+        public MenuNavigator(
+            IRenderingService renderer,
+            IInputProcessorService inputController,
+            IMainEngine engine,
+            IFieldOperations fieldOperations,
+            IFileIO file,
+            IUIService userInterfaceService)
         {
-            _renderer = renderer;
-            _inputController = inputController;
+            _renderingService = renderer;
+            _inputProcessorService = inputController;
             _engine = engine;
             _fieldOperations = fieldOperations;
             _file = file;
-            _userInterfaceFiller = userInterfaceFiller;
+            _userInterfaceService = userInterfaceService;
         }
 
         /// <summary>
@@ -42,14 +46,13 @@ namespace GameOfLife.Services
         /// <param name="menu">An instance of a menu to be displayed.</param>
         /// <param name="clearMenuFromScreen">Parameter that defines if the screen is cleared, 'true' by default.</param>
         /// <param name="Render">Optional parameter to pass the field rendering method.</param>
-        public void NavigateMenu(string[] menu, bool clearMenuFromScreen = true, Action<MultipleGamesModel, bool>? Render = null, bool fileMissing = false)
+        public void NavigateMenu(string[] menu, bool clearMenuFromScreen = true, bool fileMissing = false)
         {
             do
             {
-                Render?.Invoke(_engine.MultipleGames, !clearMenuFromScreen);
-                _renderer.RenderMenu(menu, wrongInput: _inputController.WrongInput, clearScreen: clearMenuFromScreen, noSavedGames: fileMissing);
-                _inputController.HandleInputMainMenu();
-            } while (_inputController.WrongInput);
+                _renderingService.RenderMenu(menu, wrongInput: _inputProcessorService.WrongInput, clearScreen: clearMenuFromScreen, noSavedGames: fileMissing);
+                _inputProcessorService.HandleInputMainMenu();
+            } while (_inputProcessorService.WrongInput);
         }
 
         /// <summary>
@@ -57,7 +60,7 @@ namespace GameOfLife.Services
         /// </summary>
         public void NavigateMultipleGamesMenu()
         {
-            _inputController.EnterMultipleGamesQuantity();
+            _inputProcessorService.EnterMultipleGamesQuantity();
             NavigateMenu(MenuViews.MultipleGamesModeFieldSizeChoiceMenu);
             _engine.MultipleGames.InitializeGames(_fieldOperations);
             NavigateMenu(MenuViews.MultipleGamesModeMenu);
@@ -70,11 +73,11 @@ namespace GameOfLife.Services
         public void NavigateExitMenu(bool gameIsOver)
         {
             ConsoleKey runTimeKeyPress;
-            _renderer.RenderMenu(MenuViews.ExitMenu, clearScreen: false, gameOver: gameIsOver);
+            _renderingService.RenderMenu(MenuViews.ExitMenu, clearScreen: false, gameOver: gameIsOver);
             do
             {
                 runTimeKeyPress = Console.ReadKey(true).Key;
-                _inputController.HandleInputExitMenu(runTimeKeyPress);
+                _inputProcessorService.HandleInputExitMenu(runTimeKeyPress);
             } while (runTimeKeyPress != ConsoleKey.Escape || runTimeKeyPress != ConsoleKey.R);
         }
 
@@ -88,12 +91,12 @@ namespace GameOfLife.Services
             {
                 Console.CursorVisible = true;
                 _file.CreateListOfFileNames(filePath);
-                _userInterfaceFiller.CreateFileChoosingMenu(_file.NumberOfFiles, MenuViews.FileNames);
-                _renderer.RenderMenu(MenuViews.ChooseFileMenu, newLine: false, clearScreen: true, wrongInput: _inputController.WrongInput);
+                _userInterfaceService.CreateFileChoosingMenu(_file.NumberOfFiles, MenuViews.FileNames);
+                _renderingService.RenderMenu(MenuViews.ChooseFileMenu, newLine: false, clearScreen: true, wrongInput: _inputProcessorService.WrongInput);
                 MenuViews.FileNames.Clear();
-                _file.FileNumber = _inputController.HandleInputSavedGameMenu(_file.NumberOfFiles);
+                _file.FileNumber = _inputProcessorService.HandleInputSavedGameMenu(_file.NumberOfFiles);
                 Console.CursorVisible = false;
-            } while (_inputController.WrongInput);
+            } while (_inputProcessorService.WrongInput);
         }
     }
 }

@@ -58,7 +58,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <returns>Returns new 1-dimensional array of Game Field rows.</returns>
-        private string[] ConvertGameFieldToArrayOfRows(GameFieldModel gameField)
+        private string[] ConvertGameFieldToArrayOfRows(SingleGameField gameField)
         {
             _stringField = new string[gameField.Width];
             for (int xCoordinate = 0; xCoordinate < gameField.Length; xCoordinate++)
@@ -147,7 +147,7 @@ namespace GameOfLife
         /// Method to save the Single Game Field state to a text file.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
-        public void SaveGameFieldToFile(GameFieldModel gameField)
+        public void SaveGameFieldToFile(SingleGameField gameField)
         {
             EnsureDirectoryExists(FilePath);
             CountFiles(FilePath);
@@ -260,7 +260,7 @@ namespace GameOfLife
         /// Method to save all the games in the Multiple Games Mode to a file.
         /// </summary>
         /// <param name="multipleGames">An object that contains a list of Multiple Games.</param>
-        public void SaveMultipleGamesToFile(MultipleGamesModel multipleGames)
+        public void SaveMultipleGamesToFile(MultipleGamesField multipleGames)
         {
             EnsureDirectoryExists(MultipleGamesModeFilePath);
             CountFiles(MultipleGamesModeFilePath);
@@ -280,7 +280,7 @@ namespace GameOfLife
             using (Stream stream = File.Open(MultipleGamesModeFilePath + $"games{fileToLoad}.bin", FileMode.Open))
             {
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
-                _mainEngine.MultipleGames = (MultipleGamesModel)binaryFormatter.Deserialize(stream);
+                _mainEngine.MultipleGames = (MultipleGamesField)binaryFormatter.Deserialize(stream);
             }
 
             _mainEngine.MultipleGamesMode = true;

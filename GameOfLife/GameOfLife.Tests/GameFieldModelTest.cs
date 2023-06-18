@@ -9,7 +9,7 @@ namespace GameOfLife.Tests
         [TestMethod]
         public void TestGameFieldCreation()
         {
-            GameFieldModel gameField = new(10, 8);
+            SingleGameField gameField = new(10, 8);
             bool checkDeadCellError = false;
 
             for (int i = 0; i < 10; i++)

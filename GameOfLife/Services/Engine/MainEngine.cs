@@ -1,125 +1,102 @@
-﻿using GameOfLife.Interfaces;
-using GameOfLife.Models;
+﻿using GameOfLife.Entities.Models;
+using GameOfLife.Interfaces;
 using GameOfLife.Views;
 
 namespace Services.Engine
 {
-    /// <summary>
-    /// The Engine class starts, runs and restarts the game.
-    /// </summary>
     [Serializable]
     public class MainEngine : IMainEngine
     {
         private readonly IAuxiliaryEngine _auxiliaryEngine;
         private readonly IMenuNavigator _menuNavigator;
-
-        public MultipleGamesModel MultipleGames { get; set; } = new MultipleGamesModel();
-        public bool ReadGeneration { get; set; }
-        public bool GliderGunMode { get; set; }
-        public bool MultipleGamesMode { get; set; }
-        public bool SavedGameLoaded { get; set; }
-        public bool InitializationFinished { get; set; }
-        public int GliderGunType { get; set; }
-        public int Delay { get; set; } = 1000;
-        public bool GameOver { get; set; }
+        private readonly IInputProcessorService _inputProcessorService;
+        private GameModel _game;
 
         public MainEngine(
             IMenuNavigator menuNavigator,
-            IAuxiliaryEngine auxiliaryEngine)
+            IAuxiliaryEngine auxiliaryEngine,
+            IInputProcessorService inputProcessorService)
         {
             _menuNavigator = menuNavigator;
             _auxiliaryEngine = auxiliaryEngine;
+            _inputProcessorService = inputProcessorService;
+            _game = new GameModel();
         }
 
-        /// <summary>
-        /// Method to perform object injections and to prepare the console window during the first launch of the game.
-        /// </summary>
-        private void InitializeParameters()
-        {
-            Console.CursorVisible = false;
-            Console.BackgroundColor = ConsoleColor.Gray;
-            Console.ForegroundColor = ConsoleColor.Black;
-        }
-
-        /// <summary>
-        /// Method to start first launch initializations, menu rendering/processing and the main game process.
-        /// </summary>
-        /// <param name="firstLaunch">Parameter that shows if it is the first time launching the game or not.</param>
         public void StartGame(bool firstLaunch = true)
         {
             Console.Clear();
-            MultipleGames = new MultipleGamesModel();
+            _game = new GameModel();
+
             if (firstLaunch)
             {
-                InitializeParameters();
+                Console.CursorVisible = false;
+                Console.BackgroundColor = ConsoleColor.Gray;
+                Console.ForegroundColor = ConsoleColor.Black;
             }
 
             _menuNavigator.NavigateMenu(MenuViews.MainMenu);
             RunGame();
         }
 
-        /// <summary>
-        /// Method that performs runtime processes of the game.
-        /// </summary>
         public void RunGame()
         {
-            ConsoleKey runTimeKeyPress;
-            bool firstTimeRendering = true;
-            GameOver = false;
             Console.Clear();
-            InitializationFinished = true;
+
+            ConsoleKey runTimeKeyPress;
+            var firstTimeRendering = true;
+            _game.GameDetails.IsGameOver = false;
+            _game.GameDetails.InitializationFinished = true;
+
             do
             {
                 while (!Console.KeyAvailable)
                 {
-                    if (firstTimeRendering) // To load proper state, when loading from a file.
+                    if (firstTimeRendering)
                     {
-                        _auxiliaryEngine.CreateRuntimeView();
+                        _auxiliaryEngine.CreateRuntimeView(_game);
                         firstTimeRendering = false;
-                        Thread.Sleep(Delay);
+                        Thread.Sleep(_game.GameDetails.Delay);
                     }
 
                     _auxiliaryEngine.PerformRuntimeCalculations();
-                    _auxiliaryEngine.CreateRuntimeView();
-                    if (!MultipleGamesMode && MultipleGames.ListOfGames[0].AliveCellsNumber == 0)
+                    _auxiliaryEngine.CreateRuntimeView(_game);
+                    if (!_game.GameDetails.IsMultipleGamesMode && _game.MultipleGamesField.ListOfGames[0].AliveCellsNumber == 0)
                     {
-                        GameOver = true;
+                        _game.GameDetails.IsGameOver = true;
                         break;
                     }
 
-                    Thread.Sleep(Delay);
+                    Thread.Sleep(_game.GameDetails.Delay);
                 }
 
-                if (GameOver)
+                if (_game.GameDetails.IsGameOver)
                 {
                     break;
                 }
 
-                //runTimeKeyPress = _inputController.ReadKeyRuntime(MultipleGamesMode); // Checks for Spacebar or Arrows presses.
-            } while (true/*runTimeKeyPress != ConsoleKey.Escape*/);
+                runTimeKeyPress = _inputProcessorService.ProcessRuntimeKeypress(_game);
+            } while (runTimeKeyPress != ConsoleKey.Escape);
 
-            _menuNavigator.NavigateExitMenu(GameOver);
+            _menuNavigator.NavigateExitMenu(_game.GameDetails.IsGameOver);
         }
 
-        /// <summary>
-        /// Method to restart the game without rerunning the application.
-        /// </summary>
-        public void RestartGame()
-        {
-            GliderGunMode = false;
-            InitializationFinished = false;
-            if (MultipleGamesMode)
-            {
-                MultipleGames.GamesToBeDisplayed.Clear();
-                MultipleGamesMode = false;
-                MultipleGames.ListOfGames.Clear();
-                MultipleGames.AliveFields.Clear();
-            }
+        //public void RestartGame()
+        //{
+        //    GliderGunMode = false;
+        //    InitializationFinished = false;
+        //    if (MultipleGamesMode)
+        //    {
+        //        MultipleGames.GamesToBeDisplayed.Clear();
+        //        MultipleGamesMode = false;
+        //        MultipleGames.ListOfGames.Clear();
+        //        MultipleGames.AliveFields.Clear();
+        //    }
 
-            SavedGameLoaded = false;
-            Delay = 1000;
-            Console.Clear();
-            StartGame(false);
-        }
+        //    SavedGameLoaded = false;
+        //    Delay = 1000;
+        //    Console.Clear();
+        //    StartGame(false);
+        //}
     }
 }

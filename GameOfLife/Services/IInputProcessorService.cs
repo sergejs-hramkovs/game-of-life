@@ -1,4 +1,5 @@
-﻿using GameOfLife.Models;
+﻿using GameOfLife.Entities.Models;
+using GameOfLife.Models;
 
 namespace GameOfLife.Interfaces
 {
@@ -11,7 +12,7 @@ namespace GameOfLife.Interfaces
 
         bool CorrectKeyPressed { get; set; }
 
-        GameFieldModel GameField { get; set; }
+        SingleGameField GameField { get; set; }
 
         /// <summary>
         /// Method to take and process user's input in the Main Menu.
@@ -64,13 +65,6 @@ namespace GameOfLife.Interfaces
         void HandleInputMultipleGameNumbersMenu();
 
         /// <summary>
-        /// Method to pause the game by pressing the Spacebar.
-        /// </summary>
-        /// <param name="keyPressed">Parameter which stores Spacebar key press.</param>
-        /// <param name="multipleGamesMode">Parameter that represents if the Multiple Games Mode is enabled, 'false' by default.</param>
-        void PauseGame(ConsoleKey keyPressed, bool multipleGamesMode = false);
-
-        /// <summary>
         /// Method to take and process the user's choice of the Saved Game file.
         /// </summary>
         /// <param name="numberOfFiles">The number of saved game files currently in the folder.</param>
@@ -99,12 +93,7 @@ namespace GameOfLife.Interfaces
         /// </summary>
         void HandleInputMultipleGamesMenuFieldSize();
 
-        /// <summary>
-        /// Method to deal with key presses for pause or delay changing during the runtime.
-        /// </summary>
-        /// <param name="multipleGamesMode">Parameter that represents if the Multiple Games Mode is enabled, 'false' by default.</param>
-        /// <returns>Returns the pressed key.</returns>
-        ConsoleKey ReadKeyRuntime(bool multipleGamesMode = false);
+        ConsoleKey ProcessRuntimeKeypress(GameModel game);
 
         /// <summary>
         /// Method to take and process user's input in the Single Game Menu.

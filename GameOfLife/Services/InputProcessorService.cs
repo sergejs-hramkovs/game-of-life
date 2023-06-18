@@ -1,4 +1,5 @@
-﻿using GameOfLife.Interfaces;
+﻿using GameOfLife.Entities.Models;
+using GameOfLife.Interfaces;
 using GameOfLife.Models;
 using GameOfLife.Views;
 
@@ -12,24 +13,31 @@ namespace GameOfLife
     {
         private readonly IMainEngine _mainEngine;
         private readonly IFileIO _file;
-        private readonly IRenderer _renderer;
+        private readonly IRenderingService _renderer;
         private readonly IFieldOperations _fieldOperations;
         private readonly ILibrary _library;
-        private readonly IUserInterfaceFiller _userInterfaceFiller;
+        private readonly IUIService _userInterfaceService;
         private readonly IMenuNavigator _menuNavigator;
 
         public bool WrongInput { get; set; }
         public bool CorrectKeyPressed { get; set; }
-        public GameFieldModel GameField { get; set; }
+        public SingleGameField GameField { get; set; }
 
-        public InputProcessorService(IMainEngine mainEngine, IFileIO file, IRenderer renderer, IFieldOperations fieldOperations, ILibrary library, IUserInterfaceFiller userInterfaceFiller, IMenuNavigator menuNavigator)
+        public InputProcessorService(
+            IMainEngine mainEngine,
+            IFileIO file,
+            IRenderingService renderer,
+            IFieldOperations fieldOperations,
+            ILibrary library,
+            IUIService userInterfaceService,
+            IMenuNavigator menuNavigator)
         {
             _mainEngine = mainEngine;
             _file = file;
             _renderer = renderer;
             _fieldOperations = fieldOperations;
             _library = library;
-            _userInterfaceFiller = userInterfaceFiller;
+            _userInterfaceService = userInterfaceService;
             _menuNavigator = menuNavigator;
         }
 
@@ -242,11 +250,11 @@ namespace GameOfLife
         /// <returns>Returns "stop = true" if the process of entering coordinates was stopped. Returns false if there was wrong input.</returns>
         public bool EnterCoordinates()
         {
-            string inputCoordinate;
             Console.CursorVisible = true;
             Console.WriteLine(StringConstants.StopSeedingPhrase);
             Console.Write(StringConstants.EnterXPhrase);
-            inputCoordinate = Console.ReadLine();
+
+            var inputCoordinate = Console.ReadLine();
             if (inputCoordinate == StringConstants.StopWord)
             {
                 _fieldOperations.StopDataInput = true;
@@ -338,32 +346,32 @@ namespace GameOfLife
         /// Method to change the time delay between generations if LeftArrow or RightArrow keys are pressed.
         /// </summary>
         /// <param name="keyPressed">Parameters which stores Left and Right Arrow key presses.</param>
-        public void ChangeDelay(ConsoleKey keyPressed)
+        private static void ChangeDelay(GameModel game, ConsoleKey keyPressed)
         {
             switch (keyPressed)
             {
                 case ConsoleKey.LeftArrow:
-                    if (_mainEngine.Delay <= 100 && _mainEngine.Delay > 10)
+                    if (game.GameDetails.Delay <= 100 && game.GameDetails.Delay > 10)
                     {
-                        _mainEngine.Delay -= 10;
+                        game.GameDetails.Delay -= 10;
                     }
-                    else if (_mainEngine.Delay > 100)
+                    else if (game.GameDetails.Delay > 100)
                     {
-                        _mainEngine.Delay -= 100;
+                        game.GameDetails.Delay -= 100;
                     }
 
                     break;
 
                 case ConsoleKey.RightArrow:
-                    if (_mainEngine.Delay < 2000)
+                    if (game.GameDetails.Delay < 2000)
                     {
-                        if (_mainEngine.Delay < 100)
+                        if (game.GameDetails.Delay < 100)
                         {
-                            _mainEngine.Delay += 10;
+                            game.GameDetails.Delay += 10;
                         }
                         else
                         {
-                            _mainEngine.Delay += 100;
+                            game.GameDetails.Delay += 100;
                         }
                     }
 
@@ -380,45 +388,45 @@ namespace GameOfLife
         {
             switch (keyPressed)
             {
-                case ConsoleKey.S:
-                    if (!_mainEngine.MultipleGamesMode)
-                    {
-                        _mainEngine.MultipleGames.ListOfGames[0].Generation = _mainEngine.MultipleGames.Generation;
-                        _file.SaveGameFieldToFile(_mainEngine.MultipleGames.ListOfGames[0]);
-                        _userInterfaceFiller.CreateSingleGameRuntimeUI(_mainEngine.MultipleGames, _mainEngine.Delay);
-                        _renderer.RenderMenu(MenuViews.SingleGameUI, clearScreen: true);
-                        _renderer.RenderGridOfFields(_mainEngine.MultipleGames);
-                    }
-                    else
-                    {
-                        _file.SaveMultipleGamesToFile(_mainEngine.MultipleGames);
-                    }
+                //case ConsoleKey.S:
+                //    if (!_mainEngine.MultipleGamesMode)
+                //    {
+                //        _mainEngine.MultipleGames.ListOfGames[0].Generation = _mainEngine.MultipleGames.Generation;
+                //        _file.SaveGameFieldToFile(_mainEngine.MultipleGames.ListOfGames[0]);
+                //        _userInterfaceService.CreateSingleGameRuntimeUI(_mainEngine.MultipleGames, _mainEngine.Delay);
+                //        _renderer.RenderMenu(MenuViews.SingleGameUI, clearScreen: true);
+                //        _renderer.RenderGridOfFields(_mainEngine.MultipleGames);
+                //    }
+                //    else
+                //    {
+                //        _file.SaveMultipleGamesToFile(_mainEngine.MultipleGames);
+                //    }
 
-                    Console.WriteLine(StringConstants.SuccessfullySavedPhrase);
-                    Console.ReadKey();
-                    Console.Clear();
-                    break;
+                //    Console.WriteLine(StringConstants.SuccessfullySavedPhrase);
+                //    Console.ReadKey();
+                //    Console.Clear();
+                //    break;
 
                 case ConsoleKey.Escape:
                     Environment.Exit(0);
                     break;
 
-                case ConsoleKey.R:
-                    _mainEngine.RestartGame();
-                    break;
+                //case ConsoleKey.R:
+                //    _mainEngine.RestartGame();
+                //    break;
 
-                case ConsoleKey.N:
-                    if (multipleGamesMode)
-                    {
-                        _mainEngine.MultipleGames.GamesToBeDisplayed.Clear();
-                        for (int gameNumbersEntered = 0; gameNumbersEntered < _mainEngine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
-                        {
-                            EnterGameNumbersToBeDisplayed();
-                        }
-                    }
+                //case ConsoleKey.N:
+                //    if (multipleGamesMode)
+                //    {
+                //        _mainEngine.MultipleGames.GamesToBeDisplayed.Clear();
+                //        for (int gameNumbersEntered = 0; gameNumbersEntered < _mainEngine.MultipleGames.NumberOfGamesToBeDisplayed; gameNumbersEntered++)
+                //        {
+                //            EnterGameNumbersToBeDisplayed();
+                //        }
+                //    }
 
-                    Console.Clear();
-                    break;
+                //    Console.Clear();
+                //    break;
 
                 default:
                     Console.Clear();
@@ -431,13 +439,12 @@ namespace GameOfLife
         /// </summary>
         /// <param name="keyPressed">Parameter which stores Spacebar key press.</param>
         /// <param name="multipleGamesMode">Parameter that represents if the Multiple Games Mode is enabled, 'false' by default.</param>
-        public void PauseGame(ConsoleKey keyPressed, bool multipleGamesMode = false)
+        private void PauseGame(ConsoleKey keyPressed, bool multipleGamesMode = false)
         {
-            ConsoleKey pauseMenuKeyPress;
             if (keyPressed == ConsoleKey.Spacebar)
             {
-                _renderer.RenderMenu(MenuViews.PauseMenu, multipleGames: multipleGamesMode, clearScreen: false);
-                pauseMenuKeyPress = Console.ReadKey(true).Key;
+                _renderer.RenderMenu(MenuViews.PauseMenu, isMultipleGamesMode: multipleGamesMode);
+                var pauseMenuKeyPress = Console.ReadKey(true).Key;
                 HandleInputPauseMenu(pauseMenuKeyPress, multipleGamesMode);
             }
         }
@@ -618,16 +625,11 @@ namespace GameOfLife
             }
         }
 
-        /// <summary>
-        /// Method to deal with key presses for pause or delay changing during the runtime.
-        /// </summary>
-        /// <param name="multipleGamesMode">Parameter that represents if the Multiple Games Mode is enabled, 'false' by default.</param>
-        /// <returns>Returns the pressed key.</returns>
-        public ConsoleKey ReadKeyRuntime(bool multipleGamesMode = false)
+        public ConsoleKey ProcessRuntimeKeypress(GameModel game)
         {
-            ConsoleKey keyPressed = Console.ReadKey(true).Key;
-            PauseGame(keyPressed, multipleGamesMode);
-            ChangeDelay(keyPressed);
+            var keyPressed = Console.ReadKey(true).Key;
+            PauseGame(keyPressed, game.GameDetails.IsMultipleGamesMode);
+            ChangeDelay(game, keyPressed);
             return keyPressed;
         }
     }

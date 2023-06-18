@@ -7,11 +7,11 @@ namespace GameOfLife
     /// The Render class deals with the rendering of the User Interface.
     /// </summary>
     [Serializable]
-    public class Renderer : IRenderer
+    public class RenderingService : IRenderingService
     {
-        private IMainEngine _engine;
+        private readonly IMainEngine _engine;
 
-        public Renderer(IMainEngine engine)
+        public RenderingService(IMainEngine engine)
         {
             _engine = engine;
         }
@@ -23,11 +23,17 @@ namespace GameOfLife
         /// <param name="wrongInput">Parameter that shows if the was wrong input attempt, 'false' by default.</param>
         /// <param name="noSavedGames">Parameter that shows if the Saved Games files are missing, ''false' by default.</param>
         /// <param name="clearScreen">Parameter that states if the screen is to be cleared, 'false' by default.</param>
-        /// <param name="multipleGames">Parameter that shows if the Multiple Games Mode is enabled, 'false' by default.</param>
+        /// <param name="isMultipleGamesMode">Parameter that shows if the Multiple Games Mode is enabled, 'false' by default.</param>
         /// <param name="newLine">Parameter to disable jumping to a new line during input, 'true' by default.</param>
         /// <param name="gameOver">Parameter that represents if the 'Game Over' state has been reached, 'false' by default.</param>
-        public void RenderMenu(string[] menuLines, bool wrongInput = false, bool noSavedGames = false,
-            bool clearScreen = false, bool multipleGames = false, bool newLine = true, bool gameOver = false)
+        public void RenderMenu(
+            string[] menuLines,
+            bool wrongInput = false,
+            bool noSavedGames = false,
+            bool clearScreen = false,
+            bool isMultipleGamesMode = false,
+            bool newLine = true,
+            bool gameOver = false)
         {
             if (clearScreen)
             {
@@ -70,7 +76,7 @@ namespace GameOfLife
                 }
                 else if (line == StringConstants.EnterNewGameNumbersPhrase)
                 {
-                    if (multipleGames)
+                    if (isMultipleGamesMode)
                     {
                         Console.WriteLine(line);
                     }
@@ -117,7 +123,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="multipleGames">An object that contains a list of Game Fields.</param>
         /// <param name="clearScreen">Parameter that states if the screen is to be cleared, 'false' by default.</param>
-        public void RenderGridOfFields(MultipleGamesModel multipleGames, bool clearScreen = false)
+        public void RenderGridOfFields(MultipleGamesField multipleGames, bool clearScreen = false)
         {
             if (clearScreen)
             {
@@ -136,7 +142,7 @@ namespace GameOfLife
         /// <param name="multipleGames">An object of the MultiplGamesModel class that contains the list of all Game Fields.</param>
         /// <param name="rowNumber">The number of the Game Field row currently displayed.</param>
         /// <returns>Returns true - the fact that the whole row of titles was rendered.</returns>
-        private bool RenderTitle(MultipleGamesModel multipleGames, int rowNumber)
+        private bool RenderTitle(MultipleGamesField multipleGames, int rowNumber)
         {
             int gameNumber;
             string indentation = "";
@@ -185,7 +191,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="multipleGames">An instance of the MultipleGamesModel class.</param>
         /// <param name="rowNumber">The number of the Game Field row currently displayed.</param>
-        private void RenderRowOfFields(MultipleGamesModel multipleGames, int rowNumber)
+        private void RenderRowOfFields(MultipleGamesField multipleGames, int rowNumber)
         {
             bool titleRendered = false;
             Console.WriteLine();

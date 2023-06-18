@@ -2,12 +2,8 @@
 
 namespace GameOfLife.Models
 {
-    /// <summary>
-    /// The MultipleGamesModel class represents the list of GameFieldModel class objects - the list of Game Fields for the Multiple Games Mode.
-    /// It stores the list of fields and different its various parameters.
-    /// </summary>
     [Serializable]
-    public class MultipleGamesModel
+    public class MultipleGamesField
     {
         public int Length { get; set; }
         public int Width { get; set; }
@@ -25,22 +21,13 @@ namespace GameOfLife.Models
                     return 1;
                 }
 
-                switch (ListOfGames[0].Length)
+                return ListOfGames[0].Length switch
                 {
-                    case 25:
-
-                    case 20:
-                        return 2;
-
-                    case 15:
-                        return 3;
-
-                    case 10:
-                        return 4;
-
-                    default:
-                        return 2;
-                }
+                    25 or 20 => 2,
+                    15 => 3,
+                    10 => 4,
+                    _ => 2,
+                };
             }
         }
         public int NumberOfHorizontalFields
@@ -52,25 +39,16 @@ namespace GameOfLife.Models
                     return 1;
                 }
 
-                switch (ListOfGames[0].Length)
+                return ListOfGames[0].Length switch
                 {
-                    case 25:
-
-                    case 20:
-                        return 3;
-
-                    case 15:
-                        return 4;
-
-                    case 10:
-                        return 6;
-
-                    default:
-                        return 3;
-                }
+                    25 or 20 => 3,
+                    15 => 4,
+                    10 => 6,
+                    _ => 3,
+                };
             }
         }
-        public List<GameFieldModel> ListOfGames { get; set; } = new List<GameFieldModel>();
+        public List<SingleGameField> ListOfGames { get; set; } = new List<SingleGameField>();
         public List<int> GamesToBeDisplayed { get; set; } = new List<int>();
         public List<int> DeadFields { get; set; } = new List<int>();
         public List<int> AliveFields { get; set; } = new List<int>();

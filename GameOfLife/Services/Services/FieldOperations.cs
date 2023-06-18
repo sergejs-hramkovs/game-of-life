@@ -27,7 +27,7 @@ namespace GameOfLife
         /// Method to populate a field manually by entering cell cordinates manually.
         /// </summary>
         /// <param name="multipleGames">A MultipleGamesModel object that contains the list of Game Fields.</param>
-        public void PopulateFieldManually(MultipleGamesModel multipleGames)
+        public void PopulateFieldManually(MultipleGamesField multipleGames)
         {
             while (true)
             {
@@ -76,7 +76,7 @@ namespace GameOfLife
         /// Method to populate a field with randomly generated cell coordinates.
         /// </summary>
         /// <param name="gameField">A GameFieldModel object that contains the Game Field.</param>
-        public void PopulateFieldRandomly(GameFieldModel gameField)
+        public void PopulateFieldRandomly(SingleGameField gameField)
         {
             Random random = new Random();
             int aliveCellCount = random.Next(1, gameField.Length * gameField.Width);
@@ -100,7 +100,7 @@ namespace GameOfLife
         /// Method to choose a cell pattern from the premade library.
         /// </summary>
         /// <param name="multipleGames">A MultipleGamesModel object that containts the list of Game Fields.</param>
-        public void PopulateFieldFromLibrary(MultipleGamesModel multipleGames)
+        public void PopulateFieldFromLibrary(MultipleGamesField multipleGames)
         {
             do
             {
@@ -117,7 +117,7 @@ namespace GameOfLife
         /// </summary>
         /// <param name="multipleGames">A MultipleGamesModel object that contains the list of Game Fields.</param>
         /// <param name="SpawnLibraryObject">Parameter that represents the method for spawning a cell pattern from the library which is called.</param>
-        public void CallSpawningMethod(MultipleGamesModel multipleGames, Action<GameFieldModel, int, int> SpawnLibraryObject)
+        public void CallSpawningMethod(MultipleGamesField multipleGames, Action<SingleGameField, int, int> SpawnLibraryObject)
         {
             Console.Clear();
             _renderer.RenderGridOfFields(multipleGames);

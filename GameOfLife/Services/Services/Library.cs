@@ -15,7 +15,7 @@ namespace GameOfLife
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a glider.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a glider.</param>
-        public void SpawnGlider(GameFieldModel gameField, int locationX, int locationY)
+        public void SpawnGlider(SingleGameField gameField, int locationX, int locationY)
         {
             for (int xCoordinate = locationX; xCoordinate < locationX + 3; xCoordinate++)
             {
@@ -57,7 +57,7 @@ namespace GameOfLife
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a light-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a light-weight spaceship.</param>
-        public void SpawnLightWeight(GameFieldModel gameField, int locationX, int locationY)
+        public void SpawnLightWeight(SingleGameField gameField, int locationX, int locationY)
         {
             for (int xCoordinate = locationX; xCoordinate < locationX + 5; xCoordinate++)
             {
@@ -109,7 +109,7 @@ namespace GameOfLife
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a middle-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a middle-weight spaceship.</param>
-        public void SpawnMiddleWeight(GameFieldModel gameField, int locationX, int locationY)
+        public void SpawnMiddleWeight(SingleGameField gameField, int locationX, int locationY)
         {
             for (int xCoordinate = locationX; xCoordinate < locationX + 6; xCoordinate++)
             {
@@ -175,7 +175,7 @@ namespace GameOfLife
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of a heavy-weight spaceship.</param>
         /// <param name="locationY">Vertical location of the upper left corner of a heavy-weight spaceship.</param>
-        public void SpawnHeavyWeight(GameFieldModel gameField, int locationX, int locationY)
+        public void SpawnHeavyWeight(SingleGameField gameField, int locationX, int locationY)
         {
             for (int xCoordinate = locationX; xCoordinate < locationX + 7; xCoordinate++)
             {
@@ -243,7 +243,7 @@ namespace GameOfLife
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of the Gosper's glider gun.</param>
         /// <param name="locationY">Vertical location of the upper left corner of Gosper's glider gun.</param>
-        public void SpawnGosperGliderGun(GameFieldModel gameField, int locationX, int locationY)
+        public void SpawnGosperGliderGun(SingleGameField gameField, int locationX, int locationY)
         {
             for (int xCoordinate = locationX; xCoordinate < locationX + 37; xCoordinate++)
             {
@@ -365,7 +365,7 @@ namespace GameOfLife
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         /// <param name="locationX">Horizontal location of the upper left corner of the Simkin's glider gun.</param>
         /// <param name="locationY">Vertical location of the upper left corner of the Simkin's glider gun.</param>
-        public void SpawnSimkinGliderGun(GameFieldModel gameField, int locationX, int locationY)
+        public void SpawnSimkinGliderGun(SingleGameField gameField, int locationX, int locationY)
         {
             for (int xCoordinate = locationX; xCoordinate < locationX + 36; xCoordinate++)
             {
