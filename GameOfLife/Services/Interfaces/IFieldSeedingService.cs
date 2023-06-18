@@ -2,7 +2,7 @@
 
 namespace GameOfLife.Interfaces
 {
-    public interface IFieldOperations
+    public interface IFieldSeedingService
     {
         int CoordinateX { get; set; }
 

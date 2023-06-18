@@ -196,7 +196,7 @@ namespace GameOfLife
         /// Method to count total alive cells number on all the fields in the Multiple Games Mode.
         /// </summary>
         /// <param name="multipleGamesField">A MultipleGamesModel object that contains the list of Game Fields.</param>
-        private static void CountTotalAliveCells(MultipleGamesField multipleGamesField)
+        public void CountTotalAliveCells(MultipleGamesField multipleGamesField)
         {
             multipleGamesField.TotalCellsAlive = 0;
             foreach (var field in multipleGamesField.ListOfGames)
@@ -238,26 +238,41 @@ namespace GameOfLife
         {
             for (int gameNumber = 0; gameNumber < game.MultipleGamesField.TotalNumberOfGames; gameNumber++)
             {
-                _gameFieldService.IterateThroughGameFieldCells(game.MultipleGamesField.ListOfGames[gameNumber], game.GameDetails.IsGliderGunMode);
-                _gameFieldService.RefreshField(_engine.MultipleGames.ListOfGames[gameNumber]);
-                CountAliveCells(_engine.MultipleGames.ListOfGames[gameNumber]);
+                IterateThroughGameFieldCells(game.MultipleGamesField.ListOfGames[gameNumber], game.GameDetails.IsGliderGunMode);
+                RefreshField(game.MultipleGamesField.ListOfGames[gameNumber]);
+                CountAliveCells(game.MultipleGamesField.ListOfGames[gameNumber]);
 
-                if (_engine.MultipleGames.ListOfGames[gameNumber].AliveCellsNumber == 0 && !_engine.MultipleGames.DeadFields.Contains(gameNumber))
+                if (game.MultipleGamesField.ListOfGames[gameNumber].AliveCellsNumber == 0 && !game.MultipleGamesField.DeadFields.Contains(gameNumber))
                 {
-                    _engine.MultipleGames.NumberOfFieldsAlive--;
-                    _engine.MultipleGames.DeadFields.Add(gameNumber);
-                    if (_engine.MultipleGames.AliveFields.Contains(gameNumber))
+                    game.MultipleGamesField.NumberOfFieldsAlive--;
+                    game.MultipleGamesField.DeadFields.Add(gameNumber);
+                    if (game.MultipleGamesField.AliveFields.Contains(gameNumber))
                     {
-                        _engine.MultipleGames.AliveFields.Remove(gameNumber);
+                        game.MultipleGamesField.AliveFields.Remove(gameNumber);
                     }
                 }
-                else if (_engine.MultipleGames.ListOfGames[gameNumber].AliveCellsNumber > 0 && !_engine.MultipleGames.AliveFields.Contains(gameNumber))
+                else if (game.MultipleGamesField.ListOfGames[gameNumber].AliveCellsNumber > 0 && !game.MultipleGamesField.AliveFields.Contains(gameNumber))
                 {
-                    _engine.MultipleGames.AliveFields.Add(gameNumber);
+                    game.MultipleGamesField.AliveFields.Add(gameNumber);
                 }
             }
 
-            _engine.MultipleGames.Generation++;
+            game.MultipleGamesField.Generation++;
+        }
+
+        /// <summary>
+        /// Method to create a list of Game Fields.
+        /// </summary>
+        /// <param name="fieldOperations">An object of the FieldOperations class.</param>
+        public void InitializeGames(IFieldOperations fieldOperations)
+        {
+            for (int gameNumber = 0; gameNumber < TotalNumberOfGames; gameNumber++)
+            {
+                ListOfGames.Add(new(Length, Width));
+                fieldOperations.PopulateFieldRandomly(ListOfGames[gameNumber]);
+            }
+
+            NumberOfFieldsAlive = ListOfGames.Count;
         }
     }
 }

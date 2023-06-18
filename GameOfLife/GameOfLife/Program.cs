@@ -10,7 +10,7 @@ var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddScoped<IAuxiliaryEngine, AuxiliaryEngine>();
-        services.AddScoped<IFieldOperations, FieldOperations>();
+        services.AddScoped<IFieldSeedingService, FieldSeedingService>();
         services.AddScoped<IFileIO, FileIO>();
         services.AddScoped<IInputProcessorService, InputProcessorService>();
         services.AddScoped<ILibrary, Library>();

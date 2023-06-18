@@ -8,19 +8,19 @@ namespace GameOfLife
     /// The FieldOperations class deals with populating game fields with alive cells or cell patterns from the library.
     /// </summary>
     [Serializable]
-    public class FieldOperations : IFieldOperations
+    public class FieldSeedingService : IFieldSeedingService
     {
-        private readonly IConsoleApplicationRenderingService _renderer;
-        private readonly IInputProcessorService _inputController;
+        private readonly IRenderingService _renderingService;
+        private readonly IInputProcessorService _inputProcessorService;
 
         public int CoordinateX { get; set; }
         public int CoordinateY { get; set; }
         public bool StopDataInput { get; set; }
 
-        public FieldOperations(IConsoleApplicationRenderingService renderer, IInputProcessorService controller)
+        public FieldSeedingService(IRenderingService renderingService, IInputProcessorService inputProcessorService)
         {
-            _renderer = renderer;
-            _inputController = controller;
+            _renderingService = renderingService;
+            _inputProcessorService = inputProcessorService;
         }
 
         /// <summary>
@@ -32,25 +32,25 @@ namespace GameOfLife
             while (true)
             {
                 Console.Clear();
-                if (!_inputController.WrongInput)
+                if (!_inputProcessorService.WrongInput)
                 {
-                    _renderer.RenderGridOfFields(multipleGames);
+                    _renderingService.RenderGridOfFields(multipleGames);
                 }
-                else if (_inputController.WrongInput)
+                else if (_inputProcessorService.WrongInput)
                 {
-                    _renderer.RenderGridOfFields(multipleGames);
+                    _renderingService.RenderGridOfFields(multipleGames);
                     Console.WriteLine("\n" + StringConstants.WrongInputPhrase);
-                    _inputController.WrongInput = false;
+                    _inputProcessorService.WrongInput = false;
                 }
 
-                if (!_inputController.EnterCoordinates())
+                if (!_inputProcessorService.EnterCoordinates())
                 {
-                    _inputController.WrongInput = true;
+                    _inputProcessorService.WrongInput = true;
                     continue;
                 }
                 else
                 {
-                    _inputController.WrongInput = false;
+                    _inputProcessorService.WrongInput = false;
                 }
 
                 if (!StopDataInput)
@@ -78,13 +78,16 @@ namespace GameOfLife
         /// <param name="gameField">A GameFieldModel object that contains the Game Field.</param>
         public void PopulateFieldRandomly(SingleGameField gameField)
         {
-            Random random = new Random();
-            int aliveCellCount = random.Next(1, gameField.Length * gameField.Width);
-            int randomX, randomY;
-            for (int cellNumber = 1; cellNumber <= aliveCellCount; cellNumber++)
+            var random = new Random();
+            var aliveCellCount = random.Next(1, gameField.Length * gameField.Width);
+            int randomX;
+            int randomY;
+
+            for (var cellNumber = 1; cellNumber <= aliveCellCount; cellNumber++)
             {
                 randomX = random.Next(0, gameField.Length);
                 randomY = random.Next(0, gameField.Width);
+
                 if (gameField.GameField[randomX, randomY] != StringConstants.AliveCellSymbol)
                 {
                     gameField.GameField[randomX, randomY] = StringConstants.AliveCellSymbol;
@@ -105,11 +108,11 @@ namespace GameOfLife
             do
             {
                 Console.Clear();
-                _renderer.RenderGridOfFields(multipleGames);
-                _renderer.RenderMenu(MenuViews.LibraryMenu, _inputController.WrongInput, clearScreen: false);
-                _inputController.WrongInput = false;
+                _renderingService.RenderGridOfFields(multipleGames);
+                _renderingService.RenderMenu(MenuViews.LibraryMenu, _inputProcessorService.WrongInput, clearScreen: false);
+                _inputProcessorService.WrongInput = false;
             }
-            while (!_inputController.HandleInputLibraryMenu());
+            while (!_inputProcessorService.HandleInputLibraryMenu());
         }
 
         /// <summary>
@@ -120,8 +123,8 @@ namespace GameOfLife
         public void CallSpawningMethod(MultipleGamesField multipleGames, Action<SingleGameField, int, int> SpawnLibraryObject)
         {
             Console.Clear();
-            _renderer.RenderGridOfFields(multipleGames);
-            if (_inputController.EnterCoordinates() && !StopDataInput)
+            _renderingService.RenderGridOfFields(multipleGames);
+            if (_inputProcessorService.EnterCoordinates() && !StopDataInput)
             {
                 SpawnLibraryObject(multipleGames.ListOfGames[0], CoordinateX, CoordinateY);
             }
@@ -131,7 +134,7 @@ namespace GameOfLife
             }
             else
             {
-                _inputController.WrongInput = true;
+                _inputProcessorService.WrongInput = true;
             }
 
             Console.Clear();

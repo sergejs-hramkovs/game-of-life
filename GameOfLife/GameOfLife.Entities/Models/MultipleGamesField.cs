@@ -1,6 +1,4 @@
-﻿using GameOfLife.Interfaces;
-
-namespace GameOfLife.Models
+﻿namespace GameOfLife.Models
 {
     [Serializable]
     public class MultipleGamesField
@@ -52,32 +50,5 @@ namespace GameOfLife.Models
         public List<int> GamesToBeDisplayed { get; set; } = new List<int>();
         public List<int> DeadFields { get; set; } = new List<int>();
         public List<int> AliveFields { get; set; } = new List<int>();
-
-        /// <summary>
-        /// Method to create a list of Game Fields.
-        /// </summary>
-        /// <param name="fieldOperations">An object of the FieldOperations class.</param>
-        public void InitializeGames(IFieldOperations fieldOperations)
-        {
-            for (int gameNumber = 0; gameNumber < TotalNumberOfGames; gameNumber++)
-            {
-                ListOfGames.Add(new(Length, Width));
-                fieldOperations.PopulateFieldRandomly(ListOfGames[gameNumber]);
-            }
-
-            NumberOfFieldsAlive = ListOfGames.Count;
-        }
-
-        /// <summary>
-        /// Method to initialize necessary parameters in the single game mode.
-        /// </summary>
-        public void InitializeSingleGameParameters()
-        {
-            Length = ListOfGames[0].Length;
-            Width = ListOfGames[0].Width;
-            TotalNumberOfGames = 1;
-            NumberOfGamesToBeDisplayed = 1;
-            GamesToBeDisplayed.Add(0);
-        }
     }
 }

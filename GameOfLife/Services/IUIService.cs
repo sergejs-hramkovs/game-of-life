@@ -1,4 +1,5 @@
-﻿using GameOfLife.Models;
+﻿using GameOfLife.Entities.Models;
+using GameOfLife.Models;
 
 namespace GameOfLife.Interfaces
 {
@@ -7,6 +8,8 @@ namespace GameOfLife.Interfaces
     /// </summary>
     public interface IUIService
     {
+        void CreateRuntimeView(GameModel game);
+
         /// <summary>
         /// Method to fill the runtime UI with relevant and current information about the Game Field.
         /// </summary>

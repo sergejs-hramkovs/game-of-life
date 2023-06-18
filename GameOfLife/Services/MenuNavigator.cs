@@ -1,4 +1,5 @@
-﻿using GameOfLife.Interfaces;
+﻿using GameOfLife.Entities.Models;
+using GameOfLife.Interfaces;
 using GameOfLife.Views;
 
 namespace GameOfLife.Services
@@ -10,8 +11,7 @@ namespace GameOfLife.Services
     {
         private readonly IRenderingService _renderingService;
         private readonly IInputProcessorService _inputProcessorService;
-        private readonly IMainEngine _engine;
-        private readonly IFieldOperations _fieldOperations;
+        private readonly IFieldSeedingService _fieldSeedingService;
         private readonly IFileIO _file;
         private readonly IUIService _userInterfaceService;
 
@@ -27,15 +27,13 @@ namespace GameOfLife.Services
         public MenuNavigator(
             IRenderingService renderer,
             IInputProcessorService inputController,
-            IMainEngine engine,
-            IFieldOperations fieldOperations,
+            IFieldSeedingService fieldOperations,
             IFileIO file,
             IUIService userInterfaceService)
         {
             _renderingService = renderer;
             _inputProcessorService = inputController;
-            _engine = engine;
-            _fieldOperations = fieldOperations;
+            _fieldSeedingService = fieldOperations;
             _file = file;
             _userInterfaceService = userInterfaceService;
         }
@@ -46,24 +44,33 @@ namespace GameOfLife.Services
         /// <param name="menu">An instance of a menu to be displayed.</param>
         /// <param name="clearMenuFromScreen">Parameter that defines if the screen is cleared, 'true' by default.</param>
         /// <param name="Render">Optional parameter to pass the field rendering method.</param>
-        public void NavigateMenu(string[] menu, bool clearMenuFromScreen = true, bool fileMissing = false)
+        public void NavigateMenu(GameModel game, string[] menu, bool clearMenuFromScreen = true, bool fileMissing = false)
         {
             do
             {
                 _renderingService.RenderMenu(menu, wrongInput: _inputProcessorService.WrongInput, clearScreen: clearMenuFromScreen, noSavedGames: fileMissing);
-                _inputProcessorService.HandleInputMainMenu();
+                _inputProcessorService.HandleInputMainMenu(game);
             } while (_inputProcessorService.WrongInput);
         }
 
         /// <summary>
         /// Method to navigate through all the Multiple Games Mode menus.
         /// </summary>
-        public void NavigateMultipleGamesMenu()
+        public void NavigateMultipleGamesMenu(GameModel game)
         {
-            _inputProcessorService.EnterMultipleGamesQuantity();
-            NavigateMenu(MenuViews.MultipleGamesModeFieldSizeChoiceMenu);
-            _engine.MultipleGames.InitializeGames(_fieldOperations);
-            NavigateMenu(MenuViews.MultipleGamesModeMenu);
+            _inputProcessorService.EnterMultipleGamesQuantity(game);
+            NavigateMenu(game, MenuViews.MultipleGamesModeFieldSizeChoiceMenu);
+
+            // Move this somewhere later.
+            for (int gameNumber = 0; gameNumber < game.MultipleGamesField.TotalNumberOfGames; gameNumber++)
+            {
+                game.MultipleGamesField.ListOfGames.Add(new(game.MultipleGamesField.Length, game.MultipleGamesField.Width));
+                _fieldSeedingService.PopulateFieldRandomly(game.MultipleGamesField.ListOfGames[gameNumber]);
+            }
+
+            game.MultipleGamesField.NumberOfFieldsAlive = game.MultipleGamesField.ListOfGames.Count;
+
+            NavigateMenu(game, MenuViews.MultipleGamesModeMenu);
         }
 
         /// <summary>

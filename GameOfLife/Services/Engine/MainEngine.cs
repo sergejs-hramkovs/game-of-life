@@ -7,20 +7,23 @@ namespace Services.Engine
     [Serializable]
     public class MainEngine : IMainEngine
     {
-        private readonly IAuxiliaryEngine _auxiliaryEngine;
         private readonly IMenuNavigator _menuNavigator;
         private readonly IInputProcessorService _inputProcessorService;
+        private readonly IGameFieldService _gameFieldService;
+        private readonly IUIService _userInterfaceService;
         private GameModel _game;
 
         public MainEngine(
             IMenuNavigator menuNavigator,
-            IAuxiliaryEngine auxiliaryEngine,
-            IInputProcessorService inputProcessorService)
+            IInputProcessorService inputProcessorService,
+            IGameFieldService gameFieldService,
+            IUIService userInterfaceService)
         {
             _menuNavigator = menuNavigator;
-            _auxiliaryEngine = auxiliaryEngine;
             _inputProcessorService = inputProcessorService;
             _game = new GameModel();
+            _gameFieldService = gameFieldService;
+            _userInterfaceService = userInterfaceService;
         }
 
         public void StartGame(bool firstLaunch = true)
@@ -54,13 +57,13 @@ namespace Services.Engine
                 {
                     if (firstTimeRendering)
                     {
-                        _auxiliaryEngine.CreateRuntimeView(_game);
+                        _userInterfaceService.CreateRuntimeView(_game);
                         firstTimeRendering = false;
                         Thread.Sleep(_game.GameDetails.Delay);
                     }
 
-                    _auxiliaryEngine.PerformRuntimeCalculations();
-                    _auxiliaryEngine.CreateRuntimeView(_game);
+                    _gameFieldService.PerformRuntimeCalculations(_game);
+                    _userInterfaceService.CreateRuntimeView(_game);
                     if (!_game.GameDetails.IsMultipleGamesMode && _game.MultipleGamesField.ListOfGames[0].AliveCellsNumber == 0)
                     {
                         _game.GameDetails.IsGameOver = true;

@@ -1,4 +1,5 @@
-﻿using GameOfLife.Models;
+﻿using GameOfLife.Entities.Models;
+using GameOfLife.Models;
 
 namespace GameOfLife.Interfaces
 {
@@ -19,5 +20,9 @@ namespace GameOfLife.Interfaces
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
         void RefreshField(SingleGameField gameField);
+
+        void PerformRuntimeCalculations(GameModel game);
+
+        void CountTotalAliveCells(MultipleGamesField multipleGamesField);
     }
 }
