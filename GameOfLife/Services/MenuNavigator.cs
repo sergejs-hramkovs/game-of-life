@@ -13,7 +13,7 @@ namespace GameOfLife.Services
         private readonly IInputProcessorService _inputProcessorService;
         private readonly IFieldSeedingService _fieldSeedingService;
         private readonly IFileIO _file;
-        private readonly IUIService _userInterfaceService;
+        private readonly IUserInterfaceService _userInterfaceService;
 
         /// <summary>
         /// Method to inject the required objects into the MenuNavigator class.
@@ -29,7 +29,7 @@ namespace GameOfLife.Services
             IInputProcessorService inputController,
             IFieldSeedingService fieldOperations,
             IFileIO file,
-            IUIService userInterfaceService)
+            IUserInterfaceService userInterfaceService)
         {
             _renderingService = renderer;
             _inputProcessorService = inputController;
@@ -98,7 +98,7 @@ namespace GameOfLife.Services
             {
                 Console.CursorVisible = true;
                 _file.CreateListOfFileNames(filePath);
-                _userInterfaceService.CreateFileChoosingMenu(_file.NumberOfFiles, MenuViews.FileNames);
+                _userInterfaceService.CreateFileLoadingMenu(_file.NumberOfFiles, MenuViews.FileNames);
                 _renderingService.RenderMenu(MenuViews.ChooseFileMenu, newLine: false, clearScreen: true, wrongInput: _inputProcessorService.WrongInput);
                 MenuViews.FileNames.Clear();
                 _file.FileNumber = _inputProcessorService.HandleInputSavedGameMenu(_file.NumberOfFiles);

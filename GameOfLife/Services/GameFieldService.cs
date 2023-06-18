@@ -210,7 +210,7 @@ namespace GameOfLife
         /// Method to replace rendered dead fields with alive ones in the list of fields to be displayed.
         /// </summary>
         /// <param name="multipleGames">A MultipleGamesModel object that contains the list of Game Fields.</param>
-        private static void RemoveDeadFieldsFromRendering(MultipleGamesField multipleGames, List<int> aliveFields)
+        public void RemoveDeadFieldsFromRendering(MultipleGamesField multipleGames, List<int> aliveFields)
         {
             for (int rowNumber = 0; rowNumber < multipleGames.NumberOfRows; rowNumber++)
             {
@@ -258,21 +258,6 @@ namespace GameOfLife
             }
 
             game.MultipleGamesField.Generation++;
-        }
-
-        /// <summary>
-        /// Method to create a list of Game Fields.
-        /// </summary>
-        /// <param name="fieldOperations">An object of the FieldOperations class.</param>
-        public void InitializeGames(IFieldOperations fieldOperations)
-        {
-            for (int gameNumber = 0; gameNumber < TotalNumberOfGames; gameNumber++)
-            {
-                ListOfGames.Add(new(Length, Width));
-                fieldOperations.PopulateFieldRandomly(ListOfGames[gameNumber]);
-            }
-
-            NumberOfFieldsAlive = ListOfGames.Count;
         }
     }
 }

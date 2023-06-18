@@ -24,5 +24,7 @@ namespace GameOfLife.Interfaces
         void PerformRuntimeCalculations(GameModel game);
 
         void CountTotalAliveCells(MultipleGamesField multipleGamesField);
+
+        void RemoveDeadFieldsFromRendering(MultipleGamesField multipleGames, List<int> aliveFields);
     }
 }

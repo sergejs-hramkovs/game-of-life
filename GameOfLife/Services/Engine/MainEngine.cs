@@ -10,14 +10,14 @@ namespace Services.Engine
         private readonly IMenuNavigator _menuNavigator;
         private readonly IInputProcessorService _inputProcessorService;
         private readonly IGameFieldService _gameFieldService;
-        private readonly IUIService _userInterfaceService;
+        private readonly IUserInterfaceService _userInterfaceService;
         private GameModel _game;
 
         public MainEngine(
             IMenuNavigator menuNavigator,
             IInputProcessorService inputProcessorService,
             IGameFieldService gameFieldService,
-            IUIService userInterfaceService)
+            IUserInterfaceService userInterfaceService)
         {
             _menuNavigator = menuNavigator;
             _inputProcessorService = inputProcessorService;
@@ -38,7 +38,7 @@ namespace Services.Engine
                 Console.ForegroundColor = ConsoleColor.Black;
             }
 
-            _menuNavigator.NavigateMenu(MenuViews.MainMenu);
+            _menuNavigator.NavigateMenu(_game, MenuViews.MainMenu);
             RunGame();
         }
 

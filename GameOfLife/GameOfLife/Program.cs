@@ -17,7 +17,7 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddScoped<IMenuNavigator, MenuNavigator>();
         services.AddScoped<IConsoleApplicationRenderingService, ConsoleApplicationRenderingService>();
         services.AddScoped<IGameFieldService, GameFieldService>();
-        services.AddScoped<IUserInterfaceFiller, UIService>();
+        services.AddScoped<IUserInterfaceFiller, UserInterfaceService>();
         services.AddScoped<IMainEngine, MainEngine>();
     })
     .Build();

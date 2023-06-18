@@ -8,11 +8,15 @@ namespace GameOfLife.Views
     /// The UserInterfaceFiller class fills the UI with necessary parameters.
     /// </summary>
     [Serializable]
-    public class UIService : IUIService
+    public class UserInterfaceService : IUserInterfaceService
     {
-        public UIService()
-        {
+        private readonly IGameFieldService _gameFieldService;
+        private readonly IRenderingService _renderingService;
 
+        public UserInterfaceService(IGameFieldService gameFieldService, IRenderingService renderingService)
+        {
+            _gameFieldService = gameFieldService;
+            _renderingService = renderingService;
         }
 
         /// <summary>
@@ -21,20 +25,20 @@ namespace GameOfLife.Views
         public void CreateRuntimeView(GameModel game)
         {
             Console.SetCursorPosition(0, 0);
-            CountTotalAliveCells(game.MultipleGamesField);
+            _gameFieldService.CountTotalAliveCells(game.MultipleGamesField);
             if (!game.GameDetails.IsMultipleGamesMode)
             {
-                _userInterfaceService.CreateSingleGameRuntimeUI(game.MultipleGamesField, game.GameDetails.Delay);
-                _renderer.RenderMenu(MenuViews.SingleGameUI, clearScreen: false);
+                CreateSingleGameUI(game.MultipleGamesField, game.GameDetails.Delay);
+                _renderingService.RenderMenu(MenuViews.SingleGameUI, clearScreen: false);
             }
             else
             {
-                _userInterfaceService.CreateMultiGameRuntimeUI(game.MultipleGamesField, game.GameDetails.Delay);
-                _renderer.RenderMenu(MenuViews.MultiGameUI, clearScreen: false);
+                CreateMultipleGamesUI(game.MultipleGamesField, game.GameDetails.Delay);
+                _renderingService.RenderMenu(MenuViews.MultiGameUI, clearScreen: false);
             }
 
-            _renderer.RenderGridOfFields(game.MultipleGamesField);
-            RemoveDeadFieldsFromRendering(game.MultipleGamesField, game.MultipleGamesField.AliveFields);
+            _renderingService.RenderGridOfFields(game.MultipleGamesField);
+            _gameFieldService.RemoveDeadFieldsFromRendering(game.MultipleGamesField, game.MultipleGamesField.AliveFields);
         }
 
         /// <summary>

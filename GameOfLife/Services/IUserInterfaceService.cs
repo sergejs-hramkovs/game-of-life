@@ -6,7 +6,7 @@ namespace GameOfLife.Interfaces
     /// <summary>
     /// The UserInterfaceFiller class fills the UI with necessary parameters.
     /// </summary>
-    public interface IUIService
+    public interface IUserInterfaceService
     {
         void CreateRuntimeView(GameModel game);
 
