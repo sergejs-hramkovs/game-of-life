@@ -7,23 +7,23 @@ namespace Services.Engine
     [Serializable]
     public class MainEngine : IMainEngine
     {
-        private readonly IMenuNavigator _menuNavigator;
         private readonly IInputProcessorService _inputProcessorService;
         private readonly IGameFieldService _gameFieldService;
         private readonly IUserInterfaceService _userInterfaceService;
+        private readonly IRenderingService _renderingService;
         private GameModel _game;
 
         public MainEngine(
-            IMenuNavigator menuNavigator,
             IInputProcessorService inputProcessorService,
             IGameFieldService gameFieldService,
-            IUserInterfaceService userInterfaceService)
+            IUserInterfaceService userInterfaceService,
+            IRenderingService renderingService)
         {
-            _menuNavigator = menuNavigator;
             _inputProcessorService = inputProcessorService;
-            _game = new GameModel();
             _gameFieldService = gameFieldService;
             _userInterfaceService = userInterfaceService;
+            _renderingService = renderingService;
+            _game = new GameModel();
         }
 
         public void StartGame(bool firstLaunch = true)
@@ -38,7 +38,13 @@ namespace Services.Engine
                 Console.ForegroundColor = ConsoleColor.Black;
             }
 
-            _menuNavigator.NavigateMenu(_game, MenuViews.MainMenu);
+            // Move this somewhere later.
+            do
+            {
+                _renderingService.RenderMenu(MenuViews.MainMenu, wrongInput: _inputProcessorService.WrongInput, clearScreen: true, noSavedGames: false);
+                _inputProcessorService.HandleInputMainMenu(_game);
+            } while (_inputProcessorService.WrongInput);
+
             RunGame();
         }
 
@@ -81,7 +87,13 @@ namespace Services.Engine
                 runTimeKeyPress = _inputProcessorService.ProcessRuntimeKeypress(_game);
             } while (runTimeKeyPress != ConsoleKey.Escape);
 
-            _menuNavigator.NavigateExitMenu(_game.GameDetails.IsGameOver);
+            // Move this somewhere later.
+            _renderingService.RenderMenu(MenuViews.ExitMenu, clearScreen: false, gameOver: _game.GameDetails.IsGameOver);
+            do
+            {
+                runTimeKeyPress = Console.ReadKey(true).Key;
+                _inputProcessorService.HandleInputExitMenu(runTimeKeyPress);
+            } while (runTimeKeyPress != ConsoleKey.Escape || runTimeKeyPress != ConsoleKey.R);
         }
 
         //public void RestartGame()

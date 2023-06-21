@@ -1,7 +1,7 @@
-﻿using GameOfLife.Interfaces;
+﻿using GameOfLife.Entities.Models;
+using GameOfLife.Interfaces;
 using GameOfLife.Models;
 using GameOfLife.Views;
-using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace GameOfLife
@@ -14,9 +14,7 @@ namespace GameOfLife
     [Serializable]
     public class FileIO : IFileIO
     {
-        private readonly IInputProcessorService _inputController;
         private readonly IMainEngine _mainEngine;
-        private readonly IMenuNavigator _menuNavigator;
 
         private List<string> _stringList = new List<string>();
         private string[] _stringField;
@@ -31,11 +29,9 @@ namespace GameOfLife
         /// <summary>
         /// Constructor that creates a path to the folder that stores the saved games files.
         /// </summary>
-        public FileIO(IInputProcessorService inputController, IMainEngine mainEngine, IMenuNavigator menuNavigator)
+        public FileIO(IMainEngine mainEngine, IUserInterfaceService userInterfaceService, IRenderingService renderingService)
         {
-            _inputController = inputController;
             _mainEngine = mainEngine;
-            _menuNavigator = menuNavigator;
             FilePath = AppDomain.CurrentDomain.BaseDirectory + StringConstants.SavedGamesFolderName;
             MultipleGamesModeFilePath = AppDomain.CurrentDomain.BaseDirectory + StringConstants.MultipleGamesModeSavedGamesFolderName;
         }
@@ -83,12 +79,12 @@ namespace GameOfLife
         /// Method that takes the list of the Game Field cell rows and converts it into an array of the Game Field.
         /// </summary>
         /// <param name="inputList">List of the Game Field cell rows</param>
-        private void ConvertListOfRowsToGameField(List<string> inputList)
+        private void ConvertListOfRowsToGameField(GameModel game, List<string> inputList)
         {
             int xCoordinate = 0;
             int yCoordinate = 0;
-            _mainEngine.MultipleGames.ListOfGames.Add(new(inputList[4].Length / 2, inputList.Count - 4));
-            _mainEngine.MultipleGames.Generation = int.Parse(TakeGenerationNumberFromFile(inputList));
+            game.MultipleGamesField.ListOfGames.Add(new(inputList[4].Length / 2, inputList.Count - 4));
+            game.MultipleGamesField.Generation = int.Parse(TakeGenerationNumberFromFile(inputList));
             for (int listElementNumber = 4; listElementNumber < inputList.Count; listElementNumber++)
             {
                 foreach (char character in inputList[listElementNumber])
@@ -99,11 +95,11 @@ namespace GameOfLife
                         {
                             if (character == StringConstants.AliveCellSymbolChar)
                             {
-                                _mainEngine.MultipleGames.ListOfGames[0].GameField[xCoordinate, yCoordinate] = StringConstants.AliveCellSymbol;
+                                game.MultipleGamesField.ListOfGames[0].GameField[xCoordinate, yCoordinate] = StringConstants.AliveCellSymbol;
                             }
                             else if (character == StringConstants.DeadCellSymbolChar)
                             {
-                                _mainEngine.MultipleGames.ListOfGames[0].GameField[xCoordinate, yCoordinate] = StringConstants.DeadCellSymbol;
+                                game.MultipleGamesField.ListOfGames[0].GameField[xCoordinate, yCoordinate] = StringConstants.DeadCellSymbol;
                             }
 
                             if (xCoordinate == (inputList[4].Length / 2 - 1))
@@ -120,7 +116,7 @@ namespace GameOfLife
                 }
             }
 
-            _mainEngine.SavedGameLoaded = true;
+            game.GameDetails.IsSavedGameLoaded = true;
             _stringList.Clear();
         }
 
@@ -169,7 +165,7 @@ namespace GameOfLife
         /// Method to load the saved field from the file.
         /// </summary>
         /// <param name="fileToLoad">The number of the saved game to be loaded.</param>
-        public void LoadGameFieldFromFile(int fileToLoad)
+        public void LoadGameFieldFromFile(GameModel game, int fileToLoad)
         {
             string line;
             try
@@ -187,7 +183,7 @@ namespace GameOfLife
                 FileReadingError = true;
             }
 
-            ConvertListOfRowsToGameField(_stringList);
+            ConvertListOfRowsToGameField(game, _stringList);
         }
 
         /// <summary>
@@ -208,7 +204,7 @@ namespace GameOfLife
         /// Method to call file loading methods.
         /// </summary>
         /// <param name="loadMultipleGames">Parameter that represent whether Single Game or Multiple Games are loaded.</param>
-        public void InitiateLoadingFromFile(bool loadMultipleGames = false)
+        public void InitiateLoadingFromFile(GameModel game, bool loadMultipleGames = false)
         {
             string path;
             if (!loadMultipleGames)
@@ -225,7 +221,7 @@ namespace GameOfLife
             if (NoSavedGames)
             {
                 _mainEngine.StartGame(false);
-                _inputController.CorrectKeyPressed = true;
+                //_inputController.CorrectKeyPressed = true;
             }
             else
             {
@@ -235,23 +231,32 @@ namespace GameOfLife
                 }
                 else
                 {
-                    _menuNavigator.NavigateSavedGameMenu(path);
+                    //do
+                    //{
+                    //    Console.CursorVisible = true;
+                    //    CreateListOfFileNames(path);
+                    //    _userInterfaceService.CreateFileLoadingMenu(_file.NumberOfFiles, MenuViews.FileNames);
+                    //    _renderingService.RenderMenu(MenuViews.ChooseFileMenu, newLine: false, clearScreen: true, wrongInput: _inputProcessorService.WrongInput);
+                    //    MenuViews.FileNames.Clear();
+                    //    _file.FileNumber = _inputProcessorService.HandleInputSavedGameMenu(_file.NumberOfFiles);
+                    //    Console.CursorVisible = false;
+                    //} while (_inputProcessorService.WrongInput);
                 }
 
                 if (!loadMultipleGames)
                 {
-                    LoadGameFieldFromFile(FileNumber);
+                    LoadGameFieldFromFile(game, FileNumber);
                 }
                 else
                 {
-                    LoadMultipleGamesFromFile(FileNumber);
+                    LoadMultipleGamesFromFile(game, FileNumber);
                 }
 
                 if (!FileReadingError)
                 {
                     FileLoaded = true;
-                    _mainEngine.ReadGeneration = true;
-                    _inputController.CorrectKeyPressed = true;
+                    game.GameDetails.ReadGeneration = true;
+                    //_inputController.CorrectKeyPressed = true;
                 }
             }
         }
@@ -275,16 +280,16 @@ namespace GameOfLife
         /// Method to load Multiple Games from the file.
         /// </summary>
         /// <param name="fileToLoad">The number of file to be loaded.</param>
-        public void LoadMultipleGamesFromFile(int fileToLoad)
+        public void LoadMultipleGamesFromFile(GameModel game, int fileToLoad)
         {
             using (Stream stream = File.Open(MultipleGamesModeFilePath + $"games{fileToLoad}.bin", FileMode.Open))
             {
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
-                _mainEngine.MultipleGames = (MultipleGamesField)binaryFormatter.Deserialize(stream);
+                game.MultipleGamesField = (MultipleGamesField)binaryFormatter.Deserialize(stream);
             }
 
-            _mainEngine.MultipleGamesMode = true;
-            _mainEngine.SavedGameLoaded = true;
+            game.GameDetails.IsMultipleGamesMode = true;
+            game.GameDetails.IsSavedGameLoaded = true;
         }
 
         /// <summary>

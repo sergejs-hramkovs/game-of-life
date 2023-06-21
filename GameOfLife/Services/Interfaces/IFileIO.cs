@@ -1,4 +1,5 @@
-﻿using GameOfLife.Models;
+﻿using GameOfLife.Entities.Models;
+using GameOfLife.Models;
 
 namespace GameOfLife.Interfaces
 {
@@ -33,13 +34,13 @@ namespace GameOfLife.Interfaces
         /// Method to load the saved field from the file.
         /// </summary>
         /// <param name="fileToLoad">The number of the saved game to be loaded.</param>
-        void LoadGameFieldFromFile(int fileToLoad);
+        void LoadGameFieldFromFile(GameModel game, int fileToLoad);
 
         /// <summary>
         /// Method to call file loading methods.
         /// </summary>
         /// <param name="loadMultipleGames">Parameter that represent whether Single Game or Multiple Games are loaded.</param>
-        void InitiateLoadingFromFile(bool loadMultipleGames = false);
+        void InitiateLoadingFromFile(GameModel game, bool loadMultipleGames = false);
 
         /// <summary>
         /// Method to save all the games in the Multiple Games Mode to a file.
@@ -51,7 +52,7 @@ namespace GameOfLife.Interfaces
         /// Method to load Multiple Games from the file.
         /// </summary>
         /// <param name="fileToLoad">The number of file to be loaded.</param>
-        void LoadMultipleGamesFromFile(int fileToLoad);
+        void LoadMultipleGamesFromFile(GameModel game, int fileToLoad);
 
         /// <summary>
         /// Method to create a list of names of the saved games files.

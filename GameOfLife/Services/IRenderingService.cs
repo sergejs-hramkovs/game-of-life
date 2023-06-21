@@ -1,4 +1,4 @@
-﻿using GameOfLife.Models;
+﻿using GameOfLife.Entities.Models;
 
 namespace GameOfLife.Interfaces
 {
@@ -31,7 +31,7 @@ namespace GameOfLife.Interfaces
         /// </summary>
         /// <param name="multipleGames">An object that contains a list of Game Fields.</param>
         /// <param name="clearScreen">Parameter that states if the screen is to be cleared, 'false' by default.</param>
-        void RenderGridOfFields(MultipleGamesField multipleGames, bool clearScreen = false);
+        void RenderGridOfFields(GameModel game, bool clearScreen = false);
 
         /// <summary>
         /// Method to change text color, write text and change the color back.

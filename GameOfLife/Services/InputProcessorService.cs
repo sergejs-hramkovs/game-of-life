@@ -10,27 +10,21 @@ namespace GameOfLife
     [Serializable]
     public class InputProcessorService : IInputProcessorService
     {
-        private readonly IFileIO _file;
         private readonly IRenderingService _renderingService;
-        private readonly IFieldSeedingService _fieldOperations;
+        private readonly IFieldSeedingService _fieldSeedingService;
         private readonly ILibrary _library;
-        private readonly IMenuNavigator _menuNavigator;
 
         public bool WrongInput { get; set; }
         public bool CorrectKeyPressed { get; set; }
 
         public InputProcessorService(
-            IFileIO file,
             IRenderingService renderer,
             IFieldSeedingService fieldOperations,
-            ILibrary library,
-            IMenuNavigator menuNavigator)
+            ILibrary library)
         {
-            _file = file;
             _renderingService = renderer;
-            _fieldOperations = fieldOperations;
+            _fieldSeedingService = fieldOperations;
             _library = library;
-            _menuNavigator = menuNavigator;
         }
 
         /// <summary>
@@ -39,12 +33,18 @@ namespace GameOfLife
         public void HandleInputMainMenu(GameModel game)
         {
             WrongInput = false;
-            _file.NoSavedGames = false;
+            //_file.NoSavedGames = false;
             switch (Console.ReadKey(true).Key)
             {
                 // Single game.
                 case ConsoleKey.D1:
-                    _menuNavigator.NavigateMenu(MenuViews.SingleGameMenu);
+
+                    // Move this somewhere later.
+                    do
+                    {
+                        _renderingService.RenderMenu(MenuViews.SingleGameMenu, wrongInput: WrongInput, clearScreen: true, noSavedGames: false);
+                        HandleInputMainMenu(game);
+                    } while (WrongInput);
 
                     // Move this somewhere later.
                     game.MultipleGamesField.Length = game.MultipleGamesField.ListOfGames[0].Length;
@@ -55,26 +55,70 @@ namespace GameOfLife
 
                     if (!game.GameDetails.IsMultipleGamesMode && !game.GameDetails.IsSavedGameLoaded && !game.GameDetails.IsGliderGunMode)
                     {
-                        _menuNavigator.NavigateMenu(MenuViews.SeedingTypeMenu, clearMenuFromScreen: false);
-                        _renderingService.RenderGridOfFields(game.MultipleGamesField);
+                        // Move this somewhere later.
+                        do
+                        {
+                            _renderingService.RenderMenu(MenuViews.SeedingTypeMenu, wrongInput: WrongInput, clearScreen: false, noSavedGames: false);
+                            HandleInputMainMenu(game);
+                        } while (WrongInput);
+
+                        _renderingService.RenderGridOfFields(game);
                     }
                     break;
 
                 // Multiple games.
                 case ConsoleKey.D2:
                     game.GameDetails.IsMultipleGamesMode = true;
-                    _menuNavigator.NavigateMultipleGamesMenu();
+
+                    EnterMultipleGamesQuantity(game);
+
+                    // Move this somewhere later.
+                    do
+                    {
+                        _renderingService.RenderMenu(MenuViews.MultipleGamesModeFieldSizeChoiceMenu, wrongInput: WrongInput, clearScreen: true, noSavedGames: false);
+                        HandleInputMainMenu(game);
+                    } while (WrongInput);
+
+                    // Move this somewhere later.
+                    for (int gameNumber = 0; gameNumber < game.MultipleGamesField.TotalNumberOfGames; gameNumber++)
+                    {
+                        game.MultipleGamesField.ListOfGames.Add(new(game.MultipleGamesField.Length, game.MultipleGamesField.Width));
+                        _fieldSeedingService.PopulateFieldRandomly(game.MultipleGamesField.ListOfGames[gameNumber]);
+                    }
+
+                    game.MultipleGamesField.NumberOfFieldsAlive = game.MultipleGamesField.ListOfGames.Count;
+                    ;
+
+                    // Move this somewhere later.
+                    do
+                    {
+                        _renderingService.RenderMenu(MenuViews.MultipleGamesModeMenu, wrongInput: WrongInput, clearScreen: true, noSavedGames: false);
+                        HandleInputMainMenu(game);
+                    } while (WrongInput);
+
                     break;
 
                 // Load game(s)
                 case ConsoleKey.D3:
-                    _menuNavigator.NavigateMenu(MenuViews.LoadGameMenu);
+
+                    // Move this somewhere later.
+                    do
+                    {
+                        _renderingService.RenderMenu(MenuViews.LoadGameMenu, wrongInput: WrongInput, clearScreen: true, noSavedGames: false);
+                        HandleInputMainMenu(game);
+                    } while (WrongInput);
                     break;
 
                 // Glider Gun Mode
                 case ConsoleKey.D4:
                     game.GameDetails.IsGliderGunMode = true;
-                    _menuNavigator.NavigateMenu(MenuViews.GliderGunModeMenu);
+
+                    // Move this somewhere later.
+                    do
+                    {
+                        _renderingService.RenderMenu(MenuViews.GliderGunModeMenu, wrongInput: WrongInput, clearScreen: true, noSavedGames: false);
+                        HandleInputMainMenu(game);
+                    } while (WrongInput);
 
                     // Move this somewhere later.
                     game.MultipleGamesField.Length = game.MultipleGamesField.ListOfGames[0].Length;
@@ -159,15 +203,15 @@ namespace GameOfLife
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
-                    _fieldOperations.PopulateFieldManually(game.MultipleGamesField);
+                    _fieldSeedingService.PopulateFieldManually(game);
                     break;
 
                 case ConsoleKey.D2:
-                    _fieldOperations.PopulateFieldRandomly(game.SingleGame); // ???
+                    _fieldSeedingService.PopulateFieldRandomly(game.SingleGame); // ???
                     break;
 
                 case ConsoleKey.D3:
-                    _fieldOperations.PopulateFieldFromLibrary(game.MultipleGamesField);
+                    _fieldSeedingService.PopulateFieldFromLibrary(game);
                     break;
 
                 case ConsoleKey.Escape:
@@ -264,20 +308,20 @@ namespace GameOfLife
             var inputCoordinate = Console.ReadLine();
             if (inputCoordinate == StringConstants.StopWord)
             {
-                _fieldOperations.StopDataInput = true;
+                _fieldSeedingService.StopDataInput = true;
             }
             else if (int.TryParse(inputCoordinate, out var resultX) && resultX >= 0 && resultX < game.SingleGame.Length)
             {
-                _fieldOperations.CoordinateX = resultX;
+                _fieldSeedingService.CoordinateX = resultX;
                 Console.Write(StringConstants.EnterYPhrase);
                 inputCoordinate = Console.ReadLine();
                 if (inputCoordinate == StringConstants.StopWord)
                 {
-                    _fieldOperations.StopDataInput = true;
+                    _fieldSeedingService.StopDataInput = true;
                 }
                 else if (int.TryParse(inputCoordinate, out var resultY) && resultY >= 0 && resultY < game.SingleGame.Width)
                 {
-                    _fieldOperations.CoordinateY = resultY;
+                    _fieldSeedingService.CoordinateY = resultY;
                 }
                 else
                 {
@@ -302,19 +346,19 @@ namespace GameOfLife
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
-                    _fieldOperations.CallSpawningMethod(game.MultipleGamesField, _library.SpawnGlider);
+                    _fieldSeedingService.CallSpawningMethod(game, _library.SpawnGlider);
                     return false;
 
                 case ConsoleKey.D2:
-                    _fieldOperations.CallSpawningMethod(game.MultipleGamesField, _library.SpawnLightWeight);
+                    _fieldSeedingService.CallSpawningMethod(game, _library.SpawnLightWeight);
                     return false;
 
                 case ConsoleKey.D3:
-                    _fieldOperations.CallSpawningMethod(game.MultipleGamesField, _library.SpawnMiddleWeight);
+                    _fieldSeedingService.CallSpawningMethod(game, _library.SpawnMiddleWeight);
                     return false;
 
                 case ConsoleKey.D4:
-                    _fieldOperations.CallSpawningMethod(game.MultipleGamesField, _library.SpawnHeavyWeight);
+                    _fieldSeedingService.CallSpawningMethod(game, _library.SpawnHeavyWeight);
                     return false;
 
                 case ConsoleKey.Escape:
@@ -608,36 +652,36 @@ namespace GameOfLife
         /// <summary>
         /// Method to take and process user's input in the Load Game Menu.
         /// </summary>
-        public void HandleInputLoadGameMenu(GameModel game)
-        {
-            WrongInput = false;
-            switch (Console.ReadKey(true).Key)
-            {
-                case ConsoleKey.D1:
-                    _file.InitiateLoadingFromFile();
+        //public void HandleInputLoadGameMenu(GameModel game)
+        //{
+        //    WrongInput = false;
+        //    switch (Console.ReadKey(true).Key)
+        //    {
+        //        case ConsoleKey.D1:
+        //            _file.InitiateLoadingFromFile(game);
 
-                    // Move this somewhere later.
-                    game.MultipleGamesField.Length = game.MultipleGamesField.ListOfGames[0].Length;
-                    game.MultipleGamesField.Width = game.MultipleGamesField.ListOfGames[0].Width;
-                    game.MultipleGamesField.TotalNumberOfGames = 1;
-                    game.MultipleGamesField.NumberOfGamesToBeDisplayed = 1;
-                    game.MultipleGamesField.GamesToBeDisplayed.Add(0);
+        //            // Move this somewhere later.
+        //            game.MultipleGamesField.Length = game.MultipleGamesField.ListOfGames[0].Length;
+        //            game.MultipleGamesField.Width = game.MultipleGamesField.ListOfGames[0].Width;
+        //            game.MultipleGamesField.TotalNumberOfGames = 1;
+        //            game.MultipleGamesField.NumberOfGamesToBeDisplayed = 1;
+        //            game.MultipleGamesField.GamesToBeDisplayed.Add(0);
 
-                    break;
+        //            break;
 
-                case ConsoleKey.D2:
-                    _file.InitiateLoadingFromFile(loadMultipleGames: true);
-                    break;
+        //        case ConsoleKey.D2:
+        //            _file.InitiateLoadingFromFile(game, loadMultipleGames: true);
+        //            break;
 
-                case ConsoleKey.Escape:
-                    //_mainEngine.StartGame(false);
-                    break;
+        //        case ConsoleKey.Escape:
+        //            //_mainEngine.StartGame(false);
+        //            break;
 
-                default:
-                    WrongInput = true;
-                    break;
-            }
-        }
+        //        default:
+        //            WrongInput = true;
+        //            break;
+        //    }
+        //}
 
         public ConsoleKey ProcessRuntimeKeypress(GameModel game)
         {

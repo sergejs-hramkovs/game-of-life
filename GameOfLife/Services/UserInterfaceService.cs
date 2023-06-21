@@ -37,7 +37,7 @@ namespace GameOfLife.Views
                 _renderingService.RenderMenu(MenuViews.MultiGameUI, clearScreen: false);
             }
 
-            _renderingService.RenderGridOfFields(game.MultipleGamesField);
+            _renderingService.RenderGridOfFields(game);
             _gameFieldService.RemoveDeadFieldsFromRendering(game.MultipleGamesField, game.MultipleGamesField.AliveFields);
         }
 

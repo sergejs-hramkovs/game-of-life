@@ -1,4 +1,5 @@
-﻿using GameOfLife.Interfaces;
+﻿using GameOfLife.Entities.Models;
+using GameOfLife.Interfaces;
 using GameOfLife.Models;
 
 namespace GameOfLife
@@ -9,11 +10,9 @@ namespace GameOfLife
     [Serializable]
     public class RenderingService : IRenderingService
     {
-        private readonly IMainEngine _engine;
-
-        public RenderingService(IMainEngine engine)
+        public RenderingService()
         {
-            _engine = engine;
+
         }
 
         /// <summary>
@@ -123,16 +122,16 @@ namespace GameOfLife
         /// </summary>
         /// <param name="multipleGames">An object that contains a list of Game Fields.</param>
         /// <param name="clearScreen">Parameter that states if the screen is to be cleared, 'false' by default.</param>
-        public void RenderGridOfFields(MultipleGamesField multipleGames, bool clearScreen = false)
+        public void RenderGridOfFields(GameModel game, bool clearScreen = false)
         {
             if (clearScreen)
             {
                 Console.Clear();
             }
 
-            for (int rowNumber = 0; rowNumber < multipleGames.NumberOfRows; rowNumber++)
+            for (int rowNumber = 0; rowNumber < game.MultipleGamesField.NumberOfRows; rowNumber++)
             {
-                RenderRowOfFields(multipleGames, rowNumber);
+                RenderRowOfFields(game, rowNumber);
             }
         }
 
@@ -191,23 +190,23 @@ namespace GameOfLife
         /// </summary>
         /// <param name="multipleGames">An instance of the MultipleGamesModel class.</param>
         /// <param name="rowNumber">The number of the Game Field row currently displayed.</param>
-        private void RenderRowOfFields(MultipleGamesField multipleGames, int rowNumber)
+        private void RenderRowOfFields(GameModel game, int rowNumber)
         {
             bool titleRendered = false;
             Console.WriteLine();
-            for (int yCoordinate = 0; yCoordinate < multipleGames.ListOfGames[0].Width; yCoordinate++)
+            for (int yCoordinate = 0; yCoordinate < game.MultipleGamesField.ListOfGames[0].Width; yCoordinate++)
             {
-                if (!titleRendered && _engine.MultipleGamesMode)
+                if (!titleRendered && game.GameDetails.IsMultipleGamesMode)
                 {
-                    titleRendered = RenderTitle(multipleGames, rowNumber);
+                    titleRendered = RenderTitle(game.MultipleGamesField, rowNumber);
                 }
 
-                for (int fieldNumber = 0; fieldNumber < multipleGames.NumberOfHorizontalFields; fieldNumber++)
+                for (int fieldNumber = 0; fieldNumber < game.MultipleGamesField.NumberOfHorizontalFields; fieldNumber++)
                 {
                     Console.Write(" ");
-                    for (int xCoordinate = 0; xCoordinate < multipleGames.ListOfGames[0].Length; xCoordinate++)
+                    for (int xCoordinate = 0; xCoordinate < game.MultipleGamesField.ListOfGames[0].Length; xCoordinate++)
                     {
-                        if (multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[fieldNumber + multipleGames.NumberOfHorizontalFields * rowNumber]].AliveCellsNumber == 0 && _engine.InitializationFinished)
+                        if (game.MultipleGamesField.ListOfGames[game.MultipleGamesField.GamesToBeDisplayed[fieldNumber + game.MultipleGamesField.NumberOfHorizontalFields * rowNumber]].AliveCellsNumber == 0 && game.GameDetails.InitializationFinished)
                         {
                             Console.BackgroundColor = ConsoleColor.Red;
                             Console.Write(" " + StringConstants.GameOverCellSymbol);
@@ -215,7 +214,7 @@ namespace GameOfLife
                         }
                         else
                         {
-                            Console.Write(/*" " + */multipleGames.ListOfGames[multipleGames.GamesToBeDisplayed[fieldNumber + multipleGames.NumberOfHorizontalFields * rowNumber]].GameField[xCoordinate, yCoordinate]);
+                            Console.Write(game.MultipleGamesField.ListOfGames[game.MultipleGamesField.GamesToBeDisplayed[fieldNumber + game.MultipleGamesField.NumberOfHorizontalFields * rowNumber]].GameField[xCoordinate, yCoordinate]);
                         }
                     }
 
