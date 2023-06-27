@@ -10,10 +10,16 @@ namespace GameOfLife.Entities.Models
 
         public GameDetails GameDetails { get; set; }
 
+        public InputDetails InputDetails { get; set; }
+
+        public FileDetails FileDetails { get; set; }
+
         public GameModel()
         {
             MultipleGamesField = new MultipleGamesField();
             GameDetails = new GameDetails();
+            InputDetails = new InputDetails();
+            FileDetails = new FileDetails();
         }
     }
 }

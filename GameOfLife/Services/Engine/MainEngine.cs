@@ -29,7 +29,9 @@ namespace Services.Engine
         public void StartGame(bool firstLaunch = true)
         {
             Console.Clear();
+
             _game = new GameModel();
+            var inputDetails = _game.InputDetails;
 
             if (firstLaunch)
             {
@@ -41,9 +43,9 @@ namespace Services.Engine
             // Move this somewhere later.
             do
             {
-                _renderingService.RenderMenu(MenuViews.MainMenu, wrongInput: _inputProcessorService.WrongInput, clearScreen: true, noSavedGames: false);
+                _renderingService.RenderMenu(MenuViews.MainMenu, wrongInput: inputDetails.WrongInput, clearScreen: true, noSavedGames: false);
                 _inputProcessorService.HandleInputMainMenu(_game);
-            } while (_inputProcessorService.WrongInput);
+            } while (inputDetails.WrongInput);
 
             RunGame();
         }
@@ -54,8 +56,9 @@ namespace Services.Engine
 
             ConsoleKey runTimeKeyPress;
             var firstTimeRendering = true;
-            _game.GameDetails.IsGameOver = false;
-            _game.GameDetails.InitializationFinished = true;
+            var gameDetails = _game.GameDetails;
+            gameDetails.IsGameOver = false;
+            gameDetails.InitializationFinished = true;
 
             do
             {
@@ -65,21 +68,21 @@ namespace Services.Engine
                     {
                         _userInterfaceService.CreateRuntimeView(_game);
                         firstTimeRendering = false;
-                        Thread.Sleep(_game.GameDetails.Delay);
+                        Thread.Sleep(gameDetails.Delay);
                     }
 
                     _gameFieldService.PerformRuntimeCalculations(_game);
                     _userInterfaceService.CreateRuntimeView(_game);
-                    if (!_game.GameDetails.IsMultipleGamesMode && _game.MultipleGamesField.ListOfGames[0].AliveCellsNumber == 0)
+                    if (!gameDetails.IsMultipleGamesMode && _game.MultipleGamesField.ListOfGames[0].AliveCellsNumber == 0)
                     {
-                        _game.GameDetails.IsGameOver = true;
+                        gameDetails.IsGameOver = true;
                         break;
                     }
 
-                    Thread.Sleep(_game.GameDetails.Delay);
+                    Thread.Sleep(gameDetails.Delay);
                 }
 
-                if (_game.GameDetails.IsGameOver)
+                if (gameDetails.IsGameOver)
                 {
                     break;
                 }
@@ -88,7 +91,7 @@ namespace Services.Engine
             } while (runTimeKeyPress != ConsoleKey.Escape);
 
             // Move this somewhere later.
-            _renderingService.RenderMenu(MenuViews.ExitMenu, clearScreen: false, gameOver: _game.GameDetails.IsGameOver);
+            _renderingService.RenderMenu(MenuViews.ExitMenu, clearScreen: false, gameOver: gameDetails.IsGameOver);
             do
             {
                 runTimeKeyPress = Console.ReadKey(true).Key;

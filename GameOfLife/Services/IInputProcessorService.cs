@@ -7,10 +7,6 @@ namespace GameOfLife.Interfaces
     /// </summary>
     public interface IInputProcessorService
     {
-        bool WrongInput { get; set; }
-
-        bool CorrectKeyPressed { get; set; }
-
         /// <summary>
         /// Method to take and process user's input in the Main Menu.
         /// </summary>

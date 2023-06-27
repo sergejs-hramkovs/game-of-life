@@ -14,9 +14,6 @@ namespace GameOfLife
         private readonly IFieldSeedingService _fieldSeedingService;
         private readonly ILibrary _library;
 
-        public bool WrongInput { get; set; }
-        public bool CorrectKeyPressed { get; set; }
-
         public InputProcessorService(
             IRenderingService renderer,
             IFieldSeedingService fieldOperations,
@@ -32,8 +29,12 @@ namespace GameOfLife
         /// </summary>
         public void HandleInputMainMenu(GameModel game)
         {
-            WrongInput = false;
-            //_file.NoSavedGames = false;
+            var inputDetails = game.InputDetails;
+            var fileDetails = game.FileDetails;
+
+            inputDetails.WrongInput = false;
+            fileDetails.NoSavedGames = false;
+
             switch (Console.ReadKey(true).Key)
             {
                 // Single game.
@@ -42,9 +43,9 @@ namespace GameOfLife
                     // Move this somewhere later.
                     do
                     {
-                        _renderingService.RenderMenu(MenuViews.SingleGameMenu, wrongInput: WrongInput, clearScreen: true, noSavedGames: false);
-                        HandleInputMainMenu(game);
-                    } while (WrongInput);
+                        _renderingService.RenderMenu(MenuViews.SingleGameMenu, wrongInput: inputDetails.WrongInput, clearScreen: true, noSavedGames: false);
+                        HandleInputSingleGameMenu(game);
+                    } while (inputDetails.WrongInput);
 
                     // Move this somewhere later.
                     game.MultipleGamesField.Length = game.MultipleGamesField.ListOfGames[0].Length;
@@ -58,9 +59,9 @@ namespace GameOfLife
                         // Move this somewhere later.
                         do
                         {
-                            _renderingService.RenderMenu(MenuViews.SeedingTypeMenu, wrongInput: WrongInput, clearScreen: false, noSavedGames: false);
-                            HandleInputMainMenu(game);
-                        } while (WrongInput);
+                            _renderingService.RenderMenu(MenuViews.SeedingTypeMenu, wrongInput: inputDetails.WrongInput, clearScreen: false, noSavedGames: false);
+                            HandleInputSeedingTypeMenu(game);
+                        } while (inputDetails.WrongInput);
 
                         _renderingService.RenderGridOfFields(game);
                     }
@@ -75,9 +76,9 @@ namespace GameOfLife
                     // Move this somewhere later.
                     do
                     {
-                        _renderingService.RenderMenu(MenuViews.MultipleGamesModeFieldSizeChoiceMenu, wrongInput: WrongInput, clearScreen: true, noSavedGames: false);
-                        HandleInputMainMenu(game);
-                    } while (WrongInput);
+                        _renderingService.RenderMenu(MenuViews.MultipleGamesModeFieldSizeChoiceMenu, wrongInput: inputDetails.WrongInput, clearScreen: true, noSavedGames: false);
+                        HandleInputMultipleGamesMenuFieldSize(game);
+                    } while (inputDetails.WrongInput);
 
                     // Move this somewhere later.
                     for (int gameNumber = 0; gameNumber < game.MultipleGamesField.TotalNumberOfGames; gameNumber++)
@@ -87,14 +88,13 @@ namespace GameOfLife
                     }
 
                     game.MultipleGamesField.NumberOfFieldsAlive = game.MultipleGamesField.ListOfGames.Count;
-                    ;
 
                     // Move this somewhere later.
                     do
                     {
-                        _renderingService.RenderMenu(MenuViews.MultipleGamesModeMenu, wrongInput: WrongInput, clearScreen: true, noSavedGames: false);
-                        HandleInputMainMenu(game);
-                    } while (WrongInput);
+                        _renderingService.RenderMenu(MenuViews.MultipleGamesModeMenu, wrongInput: inputDetails.WrongInput, clearScreen: true, noSavedGames: false);
+                        HandleInputMultipleGameNumbersMenu(game);
+                    } while (inputDetails.WrongInput);
 
                     break;
 
@@ -104,9 +104,9 @@ namespace GameOfLife
                     // Move this somewhere later.
                     do
                     {
-                        _renderingService.RenderMenu(MenuViews.LoadGameMenu, wrongInput: WrongInput, clearScreen: true, noSavedGames: false);
+                        _renderingService.RenderMenu(MenuViews.LoadGameMenu, wrongInput: inputDetails.WrongInput, clearScreen: true, noSavedGames: false);
                         HandleInputMainMenu(game);
-                    } while (WrongInput);
+                    } while (inputDetails.WrongInput);
                     break;
 
                 // Glider Gun Mode
@@ -116,9 +116,9 @@ namespace GameOfLife
                     // Move this somewhere later.
                     do
                     {
-                        _renderingService.RenderMenu(MenuViews.GliderGunModeMenu, wrongInput: WrongInput, clearScreen: true, noSavedGames: false);
+                        _renderingService.RenderMenu(MenuViews.GliderGunModeMenu, wrongInput: inputDetails.WrongInput, clearScreen: true, noSavedGames: false);
                         HandleInputMainMenu(game);
-                    } while (WrongInput);
+                    } while (inputDetails.WrongInput);
 
                     // Move this somewhere later.
                     game.MultipleGamesField.Length = game.MultipleGamesField.ListOfGames[0].Length;
@@ -141,7 +141,7 @@ namespace GameOfLife
                     break;
 
                 default:
-                    WrongInput = true;
+                    inputDetails.WrongInput = true;
                     break;
             }
         }
@@ -151,7 +151,9 @@ namespace GameOfLife
         /// </summary>
         public void HandleInputSingleGameMenu(GameModel game)
         {
-            WrongInput = false;
+            var inputDetails = game.InputDetails;
+
+            inputDetails.WrongInput = false;
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
@@ -180,7 +182,7 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.D6:
-                    EnterFieldDimensions(game, WrongInput);
+                    EnterFieldDimensions(game, inputDetails.WrongInput);
                     game.MultipleGamesField.ListOfGames.Add(game.SingleGame);
                     break;
 
@@ -189,7 +191,7 @@ namespace GameOfLife
                     break;
 
                 default:
-                    WrongInput = true;
+                    inputDetails.WrongInput = true;
                     break;
             }
         }
@@ -199,7 +201,9 @@ namespace GameOfLife
         /// </summary>
         public void HandleInputSeedingTypeMenu(GameModel game)
         {
-            WrongInput = false;
+            var inputDetails = game.InputDetails;
+            inputDetails.WrongInput = false;
+
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
@@ -219,7 +223,7 @@ namespace GameOfLife
                     break;
 
                 default:
-                    WrongInput = true;
+                    inputDetails.WrongInput = true;
                     break;
             }
         }
@@ -229,7 +233,9 @@ namespace GameOfLife
         /// </summary>
         public void HandleInputGliderGunMenu(GameModel game)
         {
-            WrongInput = false;
+            var inputDetails = game.InputDetails;
+            inputDetails.WrongInput = false;
+
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
@@ -252,7 +258,7 @@ namespace GameOfLife
                     break;
 
                 default:
-                    WrongInput = true;
+                    inputDetails.WrongInput = true;
                     break;
             }
         }
@@ -343,6 +349,8 @@ namespace GameOfLife
         /// <returns>Returns 'true' if the 'Escape' key is pressed, otherwise 'false'</returns>
         public bool HandleInputLibraryMenu(GameModel game)
         {
+            var inputDetails = game.InputDetails;
+
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
@@ -365,7 +373,7 @@ namespace GameOfLife
                     return true;
 
                 default:
-                    WrongInput = true;
+                    inputDetails.WrongInput = true;
                     return false;
             }
         }

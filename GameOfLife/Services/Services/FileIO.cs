@@ -16,15 +16,10 @@ namespace GameOfLife
     {
         private readonly IMainEngine _mainEngine;
 
-        private List<string> _stringList = new List<string>();
+        private readonly List<string> _stringList;
         private string[] _stringField;
         public string FilePath { get; set; }
         public string MultipleGamesModeFilePath { get; set; }
-        public bool FileReadingError { get; set; }
-        public bool FileLoaded { get; set; }
-        public bool NoSavedGames { get; set; }
-        public int NumberOfFiles { get; private set; }
-        public int FileNumber { get; set; }
 
         /// <summary>
         /// Constructor that creates a path to the folder that stores the saved games files.
@@ -34,6 +29,7 @@ namespace GameOfLife
             _mainEngine = mainEngine;
             FilePath = AppDomain.CurrentDomain.BaseDirectory + StringConstants.SavedGamesFolderName;
             MultipleGamesModeFilePath = AppDomain.CurrentDomain.BaseDirectory + StringConstants.MultipleGamesModeSavedGamesFolderName;
+            _stringList = new List<string>();
         }
 
         /// <summary>
