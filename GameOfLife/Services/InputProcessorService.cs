@@ -385,9 +385,11 @@ namespace GameOfLife
         /// <returns>Returns the number of the Saved Game file to load.</returns>
         public int HandleInputSavedGameMenu(int numberOfFiles)
         {
+            var inputDetails =
             string userInput;
             int chosenFile = -1;
             userInput = Console.ReadLine();
+
             if (int.TryParse(userInput, out var fileNumber) && fileNumber > 0 && fileNumber <= numberOfFiles)
             {
                 chosenFile = fileNumber;

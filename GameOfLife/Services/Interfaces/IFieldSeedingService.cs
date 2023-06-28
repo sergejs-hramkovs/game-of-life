@@ -5,11 +5,6 @@ namespace GameOfLife.Interfaces
 {
     public interface IFieldSeedingService
     {
-        int CoordinateX { get; set; }
-
-        int CoordinateY { get; set; }
-
-        bool StopDataInput { get; set; }
 
         /// <summary>
         /// Method to populate a field manually by entering cell cordinates manually.

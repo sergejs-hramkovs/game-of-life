@@ -11,11 +11,6 @@ namespace GameOfLife
     public class FieldSeedingService : IFieldSeedingService
     {
         private readonly IRenderingService _renderingService;
-        //private readonly IInputProcessorService _inputProcessorService;
-
-        public int CoordinateX { get; set; }
-        public int CoordinateY { get; set; }
-        public bool StopDataInput { get; set; }
 
         public FieldSeedingService(IRenderingService renderingService)
         {
@@ -28,29 +23,31 @@ namespace GameOfLife
         /// <param name="multipleGames">A MultipleGamesModel object that contains the list of Game Fields.</param>
         public void PopulateFieldManually(GameModel game)
         {
+            var inputDetails = game.InputDetails;
+
             while (true)
             {
                 Console.Clear();
-                //if (!_inputProcessorService.WrongInput)
-                //{
-                //    _renderingService.RenderGridOfFields(game);
-                //}
-                //else if (_inputProcessorService.WrongInput)
-                //{
-                //    _renderingService.RenderGridOfFields(game);
-                //    Console.WriteLine("\n" + StringConstants.WrongInputPhrase);
-                //    _inputProcessorService.WrongInput = false;
-                //}
+                if (!inputDetails.WrongInput)
+                {
+                    _renderingService.RenderGridOfFields(game);
+                }
+                else if (inputDetails.WrongInput)
+                {
+                    _renderingService.RenderGridOfFields(game);
+                    Console.WriteLine("\n" + StringConstants.WrongInputPhrase);
+                    inputDetails.WrongInput = false;
+                }
 
-                //if (!_inputProcessorService.EnterCoordinates(game))
-                //{
-                //    _inputProcessorService.WrongInput = true;
-                //    continue;
-                //}
-                //else
-                //{
-                //    _inputProcessorService.WrongInput = false;
-                //}
+                if (!_inputProcessorService.EnterCoordinates(game))
+                {
+                    inputDetails.WrongInput = true;
+                    continue;
+                }
+                else
+                {
+                    inputDetails.WrongInput = false;
+                }
 
                 if (!StopDataInput)
                 {
