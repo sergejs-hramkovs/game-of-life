@@ -139,15 +139,15 @@ namespace GameOfLife
         /// Method to save the Single Game Field state to a text file.
         /// </summary>
         /// <param name="gameField">An instance of the GameFieldModel class that stores the game field and its properties.</param>
-        public void SaveGameFieldToFile(SingleGameField gameField)
+        public void SaveGameFieldToFile(GameModel game)
         {
             EnsureDirectoryExists(FilePath);
             CountFiles(FilePath);
-            StreamWriter writer = new(FilePath + $"game{NumberOfFiles + 1}.txt");
-            ConvertGameFieldToArrayOfRows(gameField);
-            writer.WriteLine($"Generation: {gameField.Generation}");
-            writer.WriteLine($"Alive cells: {gameField.AliveCellsNumber}({(int)Math.Round(gameField.AliveCellsNumber / (double)gameField.Area * 100.0)}%)");
-            writer.WriteLine($"Dead cells: {gameField.DeadCellsNumber}");
+            StreamWriter writer = new(FilePath + $"game{game.FileDetails.NumberOfFiles + 1}.txt");
+            ConvertGameFieldToArrayOfRows(game.SingleGame);
+            writer.WriteLine($"Generation: {game.SingleGame.Generation}");
+            writer.WriteLine($"Alive cells: {game.SingleGame.AliveCellsNumber}({(int)Math.Round(game.SingleGame.AliveCellsNumber / (double)game.SingleGame.Area * 100.0)}%)");
+            writer.WriteLine($"Dead cells: {game.SingleGame.DeadCellsNumber}");
             writer.WriteLine();
             foreach (string line in _stringField)
             {

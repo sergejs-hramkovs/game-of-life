@@ -207,7 +207,50 @@ namespace GameOfLife
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
-                    _fieldSeedingService.PopulateFieldManually(game);
+
+                    // Former _fieldSeedingService.PopulateFieldManually()
+                    // Move this somewhere else later.
+                    while (true)
+                    {
+                        Console.Clear();
+                        if (!inputDetails.WrongInput)
+                        {
+                            _renderingService.RenderGridOfFields(game);
+                        }
+                        else if (inputDetails.WrongInput)
+                        {
+                            _renderingService.RenderGridOfFields(game);
+                            Console.WriteLine("\n" + StringConstants.WrongInputPhrase);
+                            inputDetails.WrongInput = false;
+                        }
+
+                        if (EnterCoordinates(game))
+                        {
+                            inputDetails.WrongInput = true;
+                            continue;
+                        }
+                        else
+                        {
+                            inputDetails.WrongInput = false;
+                        }
+
+                        if (!game.InputDetails.StopDataInput)
+                        {
+                            if (game.MultipleGamesField.ListOfGames[0].GameField[game.InputDetails.CoordinateX, game.InputDetails.CoordinateY] == StringConstants.DeadCellSymbol)
+                            {
+                                game.MultipleGamesField.ListOfGames[0].GameField[game.InputDetails.CoordinateX, game.InputDetails.CoordinateY] = StringConstants.AliveCellSymbol;
+                            }
+                            else
+                            {
+                                game.MultipleGamesField.ListOfGames[0].GameField[game.InputDetails.CoordinateX, game.InputDetails.CoordinateY] = StringConstants.DeadCellSymbol;
+                            }
+                        }
+                        else
+                        {
+                            game.InputDetails.StopDataInput = false;
+                            break;
+                        }
+                    }
                     break;
 
                 case ConsoleKey.D2:
@@ -215,7 +258,16 @@ namespace GameOfLife
                     break;
 
                 case ConsoleKey.D3:
-                    _fieldSeedingService.PopulateFieldFromLibrary(game);
+
+                    // Former _fieldSeedingService.PopulateFieldFromLibrary(game)
+                    // Move this somewhere else later.
+                    do
+                    {
+                        Console.Clear();
+                        _renderingService.RenderGridOfFields(game);
+                        _renderingService.RenderMenu(MenuViews.LibraryMenu, game.InputDetails.WrongInput, clearScreen: false);
+                        game.InputDetails.WrongInput = false;
+                    } while (HandleInputLibraryMenu(game));
                     break;
 
                 case ConsoleKey.Escape:
@@ -314,20 +366,20 @@ namespace GameOfLife
             var inputCoordinate = Console.ReadLine();
             if (inputCoordinate == StringConstants.StopWord)
             {
-                _fieldSeedingService.StopDataInput = true;
+                game.InputDetails.StopDataInput = true;
             }
             else if (int.TryParse(inputCoordinate, out var resultX) && resultX >= 0 && resultX < game.SingleGame.Length)
             {
-                _fieldSeedingService.CoordinateX = resultX;
+                game.InputDetails.CoordinateX = resultX;
                 Console.Write(StringConstants.EnterYPhrase);
                 inputCoordinate = Console.ReadLine();
                 if (inputCoordinate == StringConstants.StopWord)
                 {
-                    _fieldSeedingService.StopDataInput = true;
+                    game.InputDetails.StopDataInput = true;
                 }
                 else if (int.TryParse(inputCoordinate, out var resultY) && resultY >= 0 && resultY < game.SingleGame.Width)
                 {
-                    _fieldSeedingService.CoordinateY = resultY;
+                    game.InputDetails.CoordinateY = resultY;
                 }
                 else
                 {
@@ -385,22 +437,23 @@ namespace GameOfLife
         /// <returns>Returns the number of the Saved Game file to load.</returns>
         public int HandleInputSavedGameMenu(int numberOfFiles)
         {
-            var inputDetails =
-            string userInput;
-            int chosenFile = -1;
-            userInput = Console.ReadLine();
+            //var inputDetails =
+            //string userInput;
+            //int chosenFile = -1;
+            //userInput = Console.ReadLine();
 
-            if (int.TryParse(userInput, out var fileNumber) && fileNumber > 0 && fileNumber <= numberOfFiles)
-            {
-                chosenFile = fileNumber;
-                WrongInput = false;
-            }
-            else
-            {
-                WrongInput = true;
-            }
+            //if (int.TryParse(userInput, out var fileNumber) && fileNumber > 0 && fileNumber <= numberOfFiles)
+            //{
+            //    chosenFile = fileNumber;
+            //    WrongInput = false;
+            //}
+            //else
+            //{
+            //    WrongInput = true;
+            //}
 
-            return chosenFile;
+            //return chosenFile;
+            return 1;
         }
 
         /// <summary>
@@ -563,7 +616,7 @@ namespace GameOfLife
         /// </summary>
         private void HandleInputMultipleGameNumbersMenu(GameModel game)
         {
-            WrongInput = false;
+            game.InputDetails.WrongInput = false;
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
@@ -587,7 +640,7 @@ namespace GameOfLife
                     break;
 
                 default:
-                    WrongInput = true;
+                    game.InputDetails.WrongInput = true;
                     break;
             }
         }
@@ -597,7 +650,7 @@ namespace GameOfLife
         /// </summary>
         public void HandleInputMultipleGamesMenuFieldSize(GameModel game)
         {
-            WrongInput = false;
+            game.InputDetails.WrongInput = false;
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
@@ -629,7 +682,7 @@ namespace GameOfLife
                     break;
 
                 default:
-                    WrongInput = true;
+                    game.InputDetails.WrongInput = true;
                     break;
             }
         }
@@ -643,7 +696,7 @@ namespace GameOfLife
             Console.CursorVisible = true;
             while (true)
             {
-                _renderingService.RenderMenu(MenuViews.MultipleGamesModeGamesQuantityMenu, newLine: false, wrongInput: WrongInput);
+                _renderingService.RenderMenu(MenuViews.MultipleGamesModeGamesQuantityMenu, newLine: false, wrongInput: game.InputDetails.WrongInput);
                 if (int.TryParse(Console.ReadLine(), out var totalNumberOfGames) && totalNumberOfGames >= 24 && totalNumberOfGames <= 1000)
                 {
                     game.MultipleGamesField.TotalNumberOfGames = totalNumberOfGames;
@@ -651,11 +704,11 @@ namespace GameOfLife
                 }
                 else
                 {
-                    WrongInput = true;
+                    game.InputDetails.WrongInput = true;
                 }
             }
 
-            WrongInput = false;
+            game.InputDetails.WrongInput = false;
             Console.CursorVisible = false;
         }
 

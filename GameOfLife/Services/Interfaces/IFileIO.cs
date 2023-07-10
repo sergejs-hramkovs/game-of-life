@@ -10,20 +10,6 @@ namespace GameOfLife.Interfaces
     /// </summary>
     public interface IFileIO
     {
-        bool FileReadingError { get; set; }
-
-        bool FileLoaded { get; set; }
-
-        bool NoSavedGames { get; set; }
-
-        string FilePath { get; }
-
-        string MultipleGamesModeFilePath { get; }
-
-        int NumberOfFiles { get; }
-
-        int FileNumber { get; set; }
-
         /// <summary>
         /// Method to save the Single Game Field state to a text file.
         /// </summary>
