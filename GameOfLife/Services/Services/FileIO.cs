@@ -142,7 +142,7 @@ namespace GameOfLife
         public void SaveGameFieldToFile(GameModel game)
         {
             EnsureDirectoryExists(FilePath);
-            CountFiles(FilePath);
+            CountFiles(game, FilePath);
             StreamWriter writer = new(FilePath + $"game{game.FileDetails.NumberOfFiles + 1}.txt");
             ConvertGameFieldToArrayOfRows(game.SingleGame);
             writer.WriteLine($"Generation: {game.SingleGame.Generation}");
@@ -176,7 +176,7 @@ namespace GameOfLife
             }
             catch
             {
-                FileReadingError = true;
+                game.FileDetails.FileReadingError = true;
             }
 
             ConvertListOfRowsToGameField(game, _stringList);
@@ -186,13 +186,13 @@ namespace GameOfLife
         /// Method to count the number of files in the folder.
         /// </summary>
         /// <param name="path">Parameter that stores the path to the folder.</param>
-        private void CountFiles(string path)
+        private void CountFiles(GameModel game, string path)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(path);
-            NumberOfFiles = directoryInfo.GetFiles().Length;
-            if (NumberOfFiles == 0)
+            game.FileDetails.NumberOfFiles = directoryInfo.GetFiles().Length;
+            if (game.FileDetails.NumberOfFiles == 0)
             {
-                NoSavedGames = true;
+                game.FileDetails.NoSavedGames = true;
             }
         }
 
@@ -213,17 +213,17 @@ namespace GameOfLife
             }
 
             EnsureDirectoryExists(path);
-            CountFiles(path);
-            if (NoSavedGames)
+            CountFiles(game, path);
+            if (game.FileDetails.NoSavedGames)
             {
                 _mainEngine.StartGame(false);
                 //_inputController.CorrectKeyPressed = true;
             }
             else
             {
-                if (NumberOfFiles == 1)
+                if (game.FileDetails.NumberOfFiles == 1)
                 {
-                    FileNumber = 1;
+                    game.FileDetails.FileNumber = 1;
                 }
                 else
                 {
@@ -241,16 +241,16 @@ namespace GameOfLife
 
                 if (!loadMultipleGames)
                 {
-                    LoadGameFieldFromFile(game, FileNumber);
+                    LoadGameFieldFromFile(game, game.FileDetails.FileNumber);
                 }
                 else
                 {
-                    LoadMultipleGamesFromFile(game, FileNumber);
+                    LoadMultipleGamesFromFile(game, game.FileDetails.FileNumber);
                 }
 
-                if (!FileReadingError)
+                if (!game.FileDetails.FileReadingError)
                 {
-                    FileLoaded = true;
+                    game.FileDetails.FileLoaded = true;
                     game.GameDetails.ReadGeneration = true;
                     //_inputController.CorrectKeyPressed = true;
                 }
@@ -261,11 +261,11 @@ namespace GameOfLife
         /// Method to save all the games in the Multiple Games Mode to a file.
         /// </summary>
         /// <param name="multipleGames">An object that contains a list of Multiple Games.</param>
-        public void SaveMultipleGamesToFile(MultipleGamesField multipleGames)
+        public void SaveMultipleGamesToFile(GameModel game, MultipleGamesField multipleGames)
         {
             EnsureDirectoryExists(MultipleGamesModeFilePath);
-            CountFiles(MultipleGamesModeFilePath);
-            using (Stream stream = File.Open(MultipleGamesModeFilePath + $"games{NumberOfFiles + 1}.bin", FileMode.Create))
+            CountFiles(game, MultipleGamesModeFilePath);
+            using (Stream stream = File.Open(MultipleGamesModeFilePath + $"games{game.FileDetails.NumberOfFiles + 1}.bin", FileMode.Create))
             {
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 binaryFormatter.Serialize(stream, multipleGames);
