@@ -1,6 +1,6 @@
 ﻿namespace GameOfLife.Entities.Enums
 {
-    public enum MenuTypes
+    public enum MenuType
     {
         MainMenu = 1,
         SingleGameMenu = 2,

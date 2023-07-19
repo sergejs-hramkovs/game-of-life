@@ -13,6 +13,6 @@ namespace GameOfLife.Entities.Models
         public int Delay { get; set; } = 1000;
         public bool IsGameOver { get; set; }
         public bool InvalidMenuInput { get; set; }
-        public MenuTypes MenuType { get; set; }
+        public MenuType MenuType { get; set; }
     }
 }

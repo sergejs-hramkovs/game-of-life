@@ -1,4 +1,5 @@
-﻿using GameOfLife.Entities.Models;
+﻿using GameOfLife.Entities.Enums;
+using GameOfLife.Entities.Models;
 using GameOfLife.Interfaces;
 using GameOfLife.Models;
 
@@ -15,24 +16,7 @@ namespace GameOfLife
 
         }
 
-        /// <summary>
-        /// Method to iterate through an array of UI menu lines and to dispaly them.
-        /// </summary>
-        /// <param name="menuLines">An array of UI menu lines.</param>
-        /// <param name="wrongInput">Parameter that shows if the was wrong input attempt, 'false' by default.</param>
-        /// <param name="noSavedGames">Parameter that shows if the Saved Games files are missing, ''false' by default.</param>
-        /// <param name="clearScreen">Parameter that states if the screen is to be cleared, 'false' by default.</param>
-        /// <param name="isMultipleGamesMode">Parameter that shows if the Multiple Games Mode is enabled, 'false' by default.</param>
-        /// <param name="newLine">Parameter to disable jumping to a new line during input, 'true' by default.</param>
-        /// <param name="gameOver">Parameter that represents if the 'Game Over' state has been reached, 'false' by default.</param>
-        public void RenderMenu(
-            string[] menuLines,
-            bool wrongInput = false,
-            bool noSavedGames = false,
-            bool clearScreen = false,
-            bool isMultipleGamesMode = false,
-            bool newLine = true,
-            bool gameOver = false)
+        public void RenderMenu(MenuType menuType)
         {
             if (clearScreen)
             {
