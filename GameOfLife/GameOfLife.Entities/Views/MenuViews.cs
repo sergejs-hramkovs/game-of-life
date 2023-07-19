@@ -6,8 +6,6 @@
     public static class MenuViews
     {
         public static string[] MainMenu { get; } = {
-            StringConstants.WrongInputPhrase,
-            StringConstants.NoSavedGamesPhrase,
             " ### Welcome to the Game of Life! ###",
             "\n # Choose the game mode:",
             "\n 1. Single game",
@@ -19,7 +17,6 @@
         };
 
         public static string[] SingleGameMenu { get; } = {
-            StringConstants.WrongInputPhrase,
             " ### Single Game Mode ###",
             "\n # Choose the field size:",
             " 1. 3x3",
@@ -32,7 +29,6 @@
         };
 
         public static string[] SeedingTypeMenu { get; } = {
-            StringConstants.WrongInputPhrase,
             "\n ### Choose the field seeding type ###",
             "\n 1. Seed the field manually",
             " 2. Seed the field automatically and randomly",
@@ -40,10 +36,7 @@
             "\n # Press 'Esc' to go back to the main menu"
         };
 
-
-
         public static string[] LibraryMenu { get; } = {
-            StringConstants.WrongInputPhrase,
             "\n ### Choose an object from the library ###",
             "\n 1. Spawn a glider",
             " 2. Spawn a light-weight spaceship",
@@ -53,7 +46,6 @@
         };
 
         public static string[] GliderGunModeMenu { get; } = {
-            StringConstants.WrongInputPhrase,
             " ### The Glider Gun Mode ###",
             "\n Choose the type of the glider gun:",
             "\n 1. Gosper's glider gun",
@@ -102,14 +94,12 @@
         };
 
         public static string[] MultipleGamesModeMenu { get; } = {
-            StringConstants.WrongInputPhrase,
             " ### Multiple Games Mode ###",
             "\n # 1. Enter numbers manually",
             " # 2. First 'n' fields"
         };
 
         public static string[] MultipleGamesModeFieldSizeChoiceMenu { get; } = {
-            StringConstants.WrongInputPhrase,
             " ### Multiple Games Mode ###",
             "\n # Choose the field size:",
             "\n 1. 10x10 - 24 fields on the screen",
@@ -120,13 +110,11 @@
         };
 
         public static string[] MultipleGamesModeGamesQuantityMenu { get; } = {
-            StringConstants.WrongInputPhrase,
             " ### Multiple Games Mode ###",
             "\n # Enter how many games to run (24-1000): "
         };
 
         public static string[] LoadGameMenu { get; } = {
-            StringConstants.WrongInputPhrase,
             " ### Game loading menu ###",
             "\n # Choose what kind of games to load",
             "\n 1. Single game",
